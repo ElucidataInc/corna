@@ -1,3 +1,7 @@
+# chemicalFormulas.py
+#
+# Copyright (c) 2003, 2007, Paul McGuire
+
 """Define possible schema for a chemical formula"""
 import pyparsing
 import constants as constants

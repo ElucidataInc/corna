@@ -1,4 +1,5 @@
 from formula import Formula
+import helpers as hl
 
 class Ion():
     def __init__(self, name, formula, charge):
@@ -28,3 +29,10 @@ class Ion():
             return num_atoms
         except KeyError:
             raise KeyError("Element not in formula", element)
+
+    def get_mol_weight(self):
+        parsed_formula = self.get_formula()
+        mw=0
+        for sym,qty in parsed_formula.iteritems():
+            mw = mw + hl.get_atomic_weight(sym)*qty
+        return mw
