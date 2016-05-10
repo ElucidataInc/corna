@@ -2,6 +2,7 @@ from __future__ import print_function
 import pytest
 
 from corna.model import Ion
+from corna.model import Label
 
 class TestIonClass:
 
@@ -30,3 +31,16 @@ class TestIonClass:
     def test_molecular_weight_wildcard(self):
         with pytest.raises(KeyError):
             self.ion_err.get_mol_weight()
+
+class TestLabelClass:
+
+    @classmethod
+    def setup_class(cls):
+        cls.label = Label({'C':2,'N':3})
+
+    @classmethod
+    def teardown_class(cls):
+        del cls.label
+
+    def test_get_number_of_labeled_atoms(self):
+        self.label.get_num_labeled_atoms('C')
