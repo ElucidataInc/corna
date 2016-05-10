@@ -37,10 +37,22 @@ class TestLabelClass:
     @classmethod
     def setup_class(cls):
         cls.label = Label({'C':2,'N':3})
+        cls.err_label = Label({'C':0})
 
     @classmethod
     def teardown_class(cls):
         del cls.label
+        del cls.err_label
 
     def test_get_number_of_labeled_atoms(self):
-        self.label.get_num_labeled_atoms('C')
+        assert self.label.get_num_labeled_atoms('C') == 2
+
+    def test_get_number_of_labeled_atoms_wildcard(self):
+        with pytest.raises(KeyError) as err:
+            self.label.get_num_labeled_atoms('Na')
+        assert err.value.message == 'Element not labeled'
+
+    def test_check_for_number_atoms_zero(self):
+        with pytest.raises(ValueError) as err:
+            self.err_label.get_num_labeled_atoms('C')
+        assert err.value.message == 'Number of atoms cant be zero'

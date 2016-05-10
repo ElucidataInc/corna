@@ -43,7 +43,11 @@ class Label():
 
     def get_num_labeled_atoms(self, element):
         try:
-            return self.label_dict[element]
+            num_atoms = self.label_dict[element]
+            if num_atoms == 0:
+                raise ValueError('Number of atoms cant be zero')
+            else:
+                return num_atoms
         except KeyError:
             raise KeyError('Element not labeled')
 
