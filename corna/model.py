@@ -47,3 +47,23 @@ class Label():
         except KeyError:
             raise KeyError('Element not labeled')
 
+
+class Fragment(Ion, Label):
+    def __init__(self, name, formula, charge, label_dict):
+        Ion.__init__(self, name, formula, charge)
+        Label.__init__(self, label_dict)
+
+    def sensible_label(self):
+        formula = self.get_formula()
+        for ele, qty in self.label_dict.iteritems():
+            try:
+                print ele
+                if 0 < qty <= formula[ele]:
+                    pass
+                else:
+                    raise OverflowError('Number of labeled atoms must be '
+                                        'less than total number of atoms '
+                                        'and greater than zero')
+            except KeyError:
+                raise KeyError('Labeled element not in formula')
+        return True
