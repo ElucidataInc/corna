@@ -4,6 +4,7 @@ import pytest
 from corna.model import Ion
 from corna.model import Label
 from corna.model import Fragment
+from corna.model import LabelmetabIon
 
 class TestIonClass:
 
@@ -50,9 +51,10 @@ class TestLabelClass:
 class TestFragmentClass:
     @classmethod
     def setup_class(cls):
-        cls.fragment = Fragment('Glucose', 'C6H12O6', -1, {'C':2})
-        cls.fragment_err_lab_ele = Fragment('Glucose', 'C6H12O6', -1, {'C':2, 'N':3})
-        cls.fragment_err_lab_number = Fragment('Glucose', 'C6H12O6', -1, {'C':7})
+        cls.glu = LabelmetabIon()
+        cls.fragment = Fragment('Glucose', 'C6H12O6', -1, {'C':2}, cls.glu)
+        cls.fragment_err_lab_ele = Fragment('Glucose', 'C6H12O6', -1, {'C':2, 'N':3}, cls.glu)
+        cls.fragment_err_lab_number = Fragment('Glucose', 'C6H12O6', -1, {'C':7}, cls.glu)
 
     @classmethod
     def teardown_class(cls):
