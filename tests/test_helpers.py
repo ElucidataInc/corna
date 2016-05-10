@@ -8,3 +8,8 @@ def test_get_atomic_weight_wildcard():
     with pytest.raises(KeyError) as err:
         help.get_atomic_weight('R')
     assert err.value.message == 'Element doesnt exist'
+
+def test_read_file():
+	path = ''
+	with pytest.raises(IOError):
+		file_in = help.read_file(path)
