@@ -60,12 +60,12 @@ class MavenParser():
 
 
 
-path_input = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/maven_output.csv'
+path_input = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/maven_output.xls'
 path_metadata = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/metadata.csv'
 input_data = MavenParser(path_input).read_input_data(path_input)
 print input_data
 metadata = MavenParser(path_metadata).read_metadata(path_metadata)
-print metadata
+#print metadata
 
 # To do:
 # read input read_file csv/ xlsx

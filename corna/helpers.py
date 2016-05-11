@@ -12,12 +12,11 @@ def get_atomic_weight(element):
         raise KeyError('Element doesnt exist')
 
 
-
 def read_file(path):
 
-	input_file = pd.DataFrame()
+	excel = ['.xls', '.xlsx']
 
-	if os.path.splitext(path)[1] == '.xlsx':
+	if os.path.splitext(path)[1] in excel:
 		input_file = pd.read_excel(path)
 
 	elif os.path.splitext(path)[1] == '.csv':
