@@ -38,12 +38,14 @@ class Ion():
         return mw
 
 class Label():
-    def __init__(self, label_dict):
-        self.label_dict = label_dict
+    def __init__(self, isotope_dict):
+        self.isotope_dict = isotope_dict
+        #create a constant dict for isotopes
+        #isotope -> mass
 
-    def get_num_labeled_atoms(self, element):
+    def get_num_labeled_atoms(self, element, label_dict):
         try:
-            num_atoms = self.label_dict[element]
+            num_atoms = label_dict[element]
             if num_atoms == 0:
                 raise ValueError('Number of atoms cant be zero')
             else:
