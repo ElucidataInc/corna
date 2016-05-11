@@ -99,7 +99,6 @@ def const_lower():
     constant_obj = PyConstObj(lower_case="abcdefghijklmnopqrstuvwxyz")
     return constant_obj.LOWER_CASE
 
-
 def const_digit():
     """Constant for digits"""
     constant_obj = PyConstObj(digits="0123456789")
@@ -155,3 +154,10 @@ def const_enzyme_name():
                    'ICDH':'ICDH','Glut_exc':'Glut_exc'}
     const_obj = PyConstObj(enzyme_name=enzyme_name)
     return  const_obj.ENZYME_NAME
+
+def const_isotope_na_mass():
+    isotope_na_mass = { 'C12': {'NA':0.9893, 'mol_mass':12, 'nat_form': 'C12'},
+                    'C13': {'NA':0.0107, 'mol_mass':13.0033548378, 'nat_form': 'C12'},
+                    'N15': {'NA':0.00364, 'mol_mass':15.0001088982, 'nat_form': 'N14'}}
+    const_obj = PyConstObj(isotope_na_mass=isotope_na_mass)
+    return const_obj.ISOTOPE_NA_MASS

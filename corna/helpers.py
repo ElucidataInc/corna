@@ -4,6 +4,7 @@ import pandas as pd
 import constants as cs
 
 ELE_ATOMIC_WEIGHTS = cs.const_element_mol_weight_dict()
+ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
 
 def get_atomic_weight(element):
     try:
@@ -11,6 +12,20 @@ def get_atomic_weight(element):
     except KeyError:
         raise KeyError('Element doesnt exist')
 
+def get_isotope(iso):
+    try:
+        return ISOTOPE_NA_MASS[iso]
+    except KeyError:
+        raise KeyError('Check available isotope list')
+
+def get_isotope_mass(iso):
+    return get_isotope(iso)['mol_mass']
+
+def get_isotope_na(iso):
+    return get_isotope(iso)['NA']
+
+def get_isotope_natural(iso):
+    return get_isotope(iso)['nat_form']
 
 def read_file(path):
 
