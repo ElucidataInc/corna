@@ -36,3 +36,20 @@ class Ion():
         for sym,qty in parsed_formula.iteritems():
             mw = mw + hl.get_atomic_weight(sym)*qty
         return mw
+
+class Label():
+    def __init__(self, isotope_dict):
+        self.isotope_dict = isotope_dict
+        #create a constant dict for isotopes
+        #isotope -> mass
+
+    def get_num_labeled_atoms(self, element, label_dict):
+        try:
+            num_atoms = label_dict[element]
+            if num_atoms == 0:
+                raise ValueError('Number of atoms cant be zero')
+            else:
+                return num_atoms
+        except KeyError:
+            raise KeyError('Element not labeled')
+

@@ -2,6 +2,7 @@ from __future__ import print_function
 import pytest
 
 from corna.model import Ion
+from corna.model import Label
 
 class TestIonClass:
 
@@ -30,3 +31,26 @@ class TestIonClass:
     def test_molecular_weight_wildcard(self):
         with pytest.raises(KeyError):
             self.ion_err.get_mol_weight()
+
+class TestLabelClass:
+
+    @classmethod
+    def setup_class(cls):
+        cls.label = Label(['C','N'])
+
+    @classmethod
+    def teardown_class(cls):
+        del cls.label
+
+    def test_get_number_of_labeled_atoms(self):
+        assert self.label.get_num_labeled_atoms('C', {'C':2, 'N':3}) == 2
+
+    def test_get_number_of_labeled_atoms_wildcard(self):
+        with pytest.raises(KeyError) as err:
+            self.label.get_num_labeled_atoms('Na', {'C':2, 'N':3})
+        assert err.value.message == 'Element not labeled'
+
+    def test_check_for_number_atoms_zero(self):
+        with pytest.raises(ValueError) as err:
+            self.label.get_num_labeled_atoms('C', {'C':0})
+        assert err.value.message == 'Number of atoms cant be zero'
