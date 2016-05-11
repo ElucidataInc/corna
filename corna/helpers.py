@@ -15,15 +15,16 @@ def get_atomic_weight(element):
 
 def read_file(path):
 
-	try:
-		if os.path.splitext(path)[1] == '.xlsx':
-			input_file = pd.read_excel(path)
+	input_file = pd.DataFrame()
 
-		elif os.path.splitext(path)[1] == '.csv':
-			input_file = pd.read_csv(path)
+	if os.path.splitext(path)[1] == '.xlsx':
+		input_file = pd.read_excel(path)
 
-	except IOError:
-		raise KeyError('csv/xls file not found at the given path')
+	elif os.path.splitext(path)[1] == '.csv':
+		input_file = pd.read_csv(path)
+
+	else:
+		raise IOError('only csv/xls/xlsx extensions are allowed')
 
 	return input_file
 
