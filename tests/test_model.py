@@ -3,6 +3,8 @@ import pytest
 
 from corna.model import Ion
 from corna.model import Label
+from corna.model import Fragment
+from corna.model import LabelmetabIon
 
 class TestIonClass:
 
@@ -54,3 +56,34 @@ class TestLabelClass:
         with pytest.raises(ValueError) as err:
             self.label.get_num_labeled_atoms('C', {'C':0})
         assert err.value.message == 'Number of atoms cant be zero'
+        self.label.get_num_labeled_atoms('C')
+
+
+class TestFragmentClass:
+    @classmethod
+    def setup_class(cls):
+        cls.glu = LabelmetabIon()
+        cls.fragment = Fragment('Glucose', 'C6H12O6', -1, {'C':2}, cls.glu)
+        cls.fragment_err_lab_ele = Fragment('Glucose', 'C6H12O6', -1, {'C':2, 'N':3}, cls.glu)
+        cls.fragment_err_lab_number = Fragment('Glucose', 'C6H12O6', -1, {'C':7}, cls.glu)
+
+    @classmethod
+    def teardown_class(cls):
+        del cls.fragment
+        del cls.fragment_err_lab_ele
+        del cls.fragment_err_lab_number
+
+    def test_fragment_sensible_label(self):
+        assert self.fragment.sensible_label() == True
+
+    def test_fragment_sensible_label_wildcard(self):
+        with pytest.raises(KeyError) as err:
+            self.fragment_err_lab_ele.sensible_label()
+        assert err.value.message == 'Labeled element not in formula'
+
+    def test_fragment_sensible_label_number(self):
+        with pytest.raises(OverflowError) as err:
+            self.fragment_err_lab_number.sensible_label()
+        assert err.value.message == 'Number of labeled atoms must be' \
+                                    ' less than total number of atoms' \
+                                    ' and greater than zero'
