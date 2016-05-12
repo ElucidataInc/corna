@@ -27,6 +27,13 @@ def get_isotope_na(iso):
 def get_isotope_natural(iso):
     return get_isotope(iso)['nat_form']
 
+def label_dict_to_key(label_dict):
+    key = ''
+    for ele, num in label_dict.iteritems():
+        key = ele + '_' + str(num) + '_' + key
+    key = key.strip('_')
+    return key
+
 def read_file(path):
 
 	excel = ['.xls', '.xlsx']
