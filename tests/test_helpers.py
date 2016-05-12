@@ -26,6 +26,9 @@ def test_get_isotope_keyerror():
         help.get_isotope('Ind5')
     assert err.value.args == ('Check available isotope list', 'Ind5')
 
+def test_label_dict_to_key():
+    assert help.label_dict_to_key({'C13':2, 'N14':4}) == 'N14_4_C13_2'
+
 def test_read_file():
 	path = 'incorrectpath.xlsx'
 	with pytest.raises(IOError):
