@@ -66,6 +66,7 @@ class Label():
         number_label = int(round((isotopic_mass - molecular_mass)/atom_excess_mass))
         return number_label
 
+
 class Fragment(Ion, Label):
     def __init__(self, name, formula, parent=None):
         Ion.__init__(self, name, formula)
@@ -106,3 +107,8 @@ class Fragment(Ion, Label):
         else:
             raise TypeError('Only two modes possible -> pos/neg')
         return eff_mol_mass
+
+    def create_label_dict_from_mass(self, isotope, isotopic_mass, mode):
+        molecular_mass = self.effective_mol_mass(mode)
+        num = self.get_label_from_mass(isotope, molecular_mass, isotopic_mass)
+        return {isotope: num}
