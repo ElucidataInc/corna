@@ -6,10 +6,9 @@ import helpers as hl
 
 
 class Ion():
-    def __init__(self, name, formula, charge):
+    def __init__(self, name, formula):
         self.name = name
         self.formula = formula
-        self.charge = charge
 
     def get_formula(self):
         """Parsing formula to store as an element -> number of atoms dictionary"""
@@ -68,8 +67,8 @@ class Label():
         return number_label
 
 class Fragment(Ion, Label):
-    def __init__(self, name, formula, charge, parent=None):
-        Ion.__init__(self, name, formula, charge)
+    def __init__(self, name, formula, parent=None):
+        Ion.__init__(self, name, formula)
         self.parent = parent
 
     def get_elem_num(self, label_dict):
@@ -98,3 +97,12 @@ class Fragment(Ion, Label):
             except KeyError:
                 raise KeyError('Labeled element not in formula')
         return True
+
+    def effective_mol_mass(self, mode):
+        if mode == 'pos':
+            eff_mol_mass = self.get_mol_weight() + 1
+        elif mode == 'neg':
+            eff_mol_mass = self.get_mol_weight() - 1
+        else:
+            raise TypeError('Only two modes possible -> pos/neg')
+        return eff_mol_mass
