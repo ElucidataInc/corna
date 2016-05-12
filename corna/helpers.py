@@ -37,8 +37,11 @@ def read_file(path):
 	elif os.path.splitext(path)[1] == '.csv':
 		input_file = pd.read_csv(path, header = 0)
 
+	elif os.path.splitext(path)[1] == '.txt':
+		input_file = pd.read_table(path, header = 0)
+
 	else:
-		raise IOError('only csv/xls/xlsx extensions are allowed')
+		raise IOError('only csv/xls/xlsx/txt extensions are allowed')
 
 	return input_file
 

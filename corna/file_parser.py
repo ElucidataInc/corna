@@ -1,6 +1,8 @@
+import os
 import helpers as hl
 import pandas as pd
 import json
+
 
 
 
@@ -89,7 +91,21 @@ def maven_merge_dfs(df1, df2, left_on="variable", right_on="sample"):
     return merged_df
 
 
+    def read_multiquant(mq_dir):
+        mq_txt_files = []
+        mq_txt_files += [each for each in os.listdir(path_mq) if each.endswith('.txt')]
+        df_list= []
+        for files in mq_txt_files:
+            df_list.append(read_input_data(path_mq + files))
 
+        mq_df = pd.concat(df_list)
+
+
+
+concat_df = pd.concat(df_list)
+
+
+path_mq = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/data/mq/'
 
 path_input = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/maven_output.csv'
 path_metadata = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/metadata.csv'
@@ -97,6 +113,11 @@ input_data = read_input_data(path_input)
 metadata = read_metadata(path_metadata)
 merged_df = maven_merge_dfs(input_data, metadata)
 filter_df = hl.filter_df(merged_df, 'sample_name', 'sample_1')
+
+#mq:
+#path_mq = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/data/mq/TA_2Sept15_G2_5_5_7_part1.txt'
+#input_mq = read_input_data(path_mq)
+#print input_mq.columns.values
 
 
 
