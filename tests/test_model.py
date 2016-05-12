@@ -4,7 +4,6 @@ import pytest
 from corna.model import Ion
 from corna.model import Label
 from corna.model import Fragment
-from corna.model import LabelmetabIon
 
 class TestIonClass:
 
@@ -71,28 +70,25 @@ class TestLabelClass:
 class TestFragmentClass:
     @classmethod
     def setup_class(cls):
-        cls.glu = LabelmetabIon()
-        cls.fragment = Fragment('Glucose', 'C6H12O6', -1, {'C':2}, cls.glu)
-        cls.fragment_err_lab_ele = Fragment('Glucose', 'C6H12O6', -1, {'C':2, 'N':3}, cls.glu)
-        cls.fragment_err_lab_number = Fragment('Glucose', 'C6H12O6', -1, {'C':7}, cls.glu)
+        cls.fragment = Fragment('Glucose', 'C6H12O6', 1)
 
     @classmethod
     def teardown_class(cls):
         del cls.fragment
-        del cls.fragment_err_lab_ele
-        del cls.fragment_err_lab_number
+
+    def test_fragment_elem_label(self):
+        assert self.fragment.get_elem_num({'C12':3, 'C13':2, 'N15':2}) == {'C':5, 'N':2}
 
     def test_fragment_sensible_label(self):
-        assert self.fragment.sensible_label() == True
+        assert self.fragment.check_if_valid_label({'C12':3, 'C13':2}) == True
 
-    def test_fragment_sensible_label_wildcard(self):
+    def test_valid_label_wildcard(self):
         with pytest.raises(KeyError) as err:
-            self.fragment_err_lab_ele.sensible_label()
+            self.fragment.check_if_valid_label({'C12':3, 'C13':2, 'N15':2})
         assert err.value.message == 'Labeled element not in formula'
 
     def test_fragment_sensible_label_number(self):
-        with pytest.raises(OverflowError) as err:
-            self.fragment_err_lab_number.sensible_label()
-        assert err.value.message == 'Number of labeled atoms must be' \
-                                    ' less than total number of atoms' \
-                                    ' and greater than zero'
+         with pytest.raises(OverflowError) as err:
+             self.fragment.check_if_valid_label({'C12':3, 'C13':4})
+         assert err.value.message == 'Number of labeled atoms must be ' \
+                                     'less than/equal to total number of atoms'

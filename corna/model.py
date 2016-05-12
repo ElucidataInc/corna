@@ -1,5 +1,6 @@
 import numpy as np
 
+from formulaschema import FormulaSchema
 from formula import Formula
 import helpers as hl
 
@@ -66,32 +67,34 @@ class Label():
         number_label = int(round((isotopic_mass - molecular_mass)/atom_excess_mass))
         return number_label
 
-
-
-class LabelmetabIon():
-    pass
-
 class Fragment(Ion, Label):
-    def __init__(self, name, formula, charge, label_dict, parent):
+    def __init__(self, name, formula, charge, parent=None):
         Ion.__init__(self, name, formula, charge)
-        Label.__init__(self, label_dict)
-        try:
-            assert isinstance(parent, LabelmetabIon)
-        except AssertionError:
-            raise AssertionError('Parent should belong to LabelMetabIon')
         self.parent = parent
 
-    def sensible_label(self):
-        formula = self.get_formula()
-        for ele, qty in self.label_dict.iteritems():
+    def get_elem_num(self, label_dict):
+        polyatomschema = FormulaSchema().create_polyatom_schema()
+        elem_num = {}
+        for iso in label_dict.keys():
+            polyatomdata = polyatomschema.parseString(iso)
+            polyatom = polyatomdata[0]
             try:
-                print ele
-                if 0 < qty <= formula[ele]:
-                    pass
+                elem_num[polyatom.element] = elem_num[polyatom.element] + label_dict[iso]
+            except KeyError:
+                elem_num[polyatom.element] = label_dict[iso]
+
+        return elem_num
+
+    def check_if_valid_label(self, label_dict):
+        elem_num = self.get_elem_num(label_dict)
+        formula = self.get_formula()
+        for ele, num in elem_num.iteritems():
+            try:
+                if 0 <= num <= formula[ele]:
+                        pass
                 else:
-                    raise OverflowError('Number of labeled atoms must be '
-                                        'less than total number of atoms '
-                                        'and greater than zero')
+                        raise OverflowError('Number of labeled atoms must be '
+                                        'less than/equal to total number of atoms')
             except KeyError:
                 raise KeyError('Labeled element not in formula')
         return True

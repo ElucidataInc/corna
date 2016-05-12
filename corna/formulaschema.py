@@ -21,7 +21,6 @@ class FormulaSchema(object):
     def __init__(self):
         """Initialise class with no arguments"""
 
-        self.chemicalformula_schema = self.create_chemicalformula_schema()
         self.elements_and_molecular_weights = constants.const_element_mol_weight_dict()
 
     @staticmethod

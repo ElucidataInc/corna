@@ -22,7 +22,7 @@ class Formula(object):
         Returns:
             formula_data : group of polyatoms
         """
-        chemformula_schema = self.schema_obj.chemicalformula_schema
+        chemformula_schema = self.schema_obj.create_chemicalformula_schema()
         formula_data = chemformula_schema.parseString(self.formula)
         return formula_data
 
