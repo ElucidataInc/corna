@@ -32,13 +32,23 @@ def read_file(path):
 	excel = ['.xls', '.xlsx']
 
 	if os.path.splitext(path)[1] in excel:
-		input_file = pd.read_excel(path)
+		input_file = pd.read_excel(path, header = 0)
 
 	elif os.path.splitext(path)[1] == '.csv':
-		input_file = pd.read_csv(path)
+		input_file = pd.read_csv(path, header = 0)
 
 	else:
 		raise IOError('only csv/xls/xlsx extensions are allowed')
 
 	return input_file
+
+
+def filter_df(df, column_name, column_value):
+
+	filtered_df = df[df[str(column_name)] == column_value]
+
+	if filtered_df.empty == 'TRUE':
+		raise ValueError('column value does not exist in dataframe', column_value)
+
+	return filtered_df
 
