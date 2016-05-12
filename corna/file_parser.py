@@ -73,20 +73,19 @@ class MavenParser():
 
 
 
+
+
+
+
+
 path_input = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/maven_output.csv'
 path_metadata = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/metadata.csv'
 input_data = MavenParser().read_input_data(path_input)
 metadata = MavenParser().read_metadata(path_metadata)
 merged_df = MavenParser().melt_merge_df(input_data, metadata)
-print  merged_df
-#print input_data.columns.tolist()
-#print metadata
 
-# To do:
-# read input read_file csv/ xlsx
-# read metadata file csv/ xlsx
-# combine both dfs
-# std form spotfire as output file
+filter_df = hl.filter_df(merged_df, 'sample_name', 'sample_1')
+print filter_df
 
 # input dict : input file + metadata file - convert them to pandas df
 # input json : input file + metadata file - convert them to pandas df + combine + output format
