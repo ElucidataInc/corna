@@ -45,7 +45,6 @@ class Label():
         if isinstance(isotope_list, str):
             isotope_list = [isotope_list,]
         for iso in isotope_list:
-                print iso
                 hl.get_isotope(iso)
         return True
 
