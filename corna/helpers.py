@@ -17,10 +17,10 @@ def read_file(path):
 	excel = ['.xls', '.xlsx']
 
 	if os.path.splitext(path)[1] in excel:
-		input_file = pd.read_excel(path)
+		input_file = pd.read_excel(path, header = 0)
 
 	elif os.path.splitext(path)[1] == '.csv':
-		input_file = pd.read_csv(path)
+		input_file = pd.read_csv(path, header = 0)
 
 	else:
 		raise IOError('only csv/xls/xlsx extensions are allowed')
