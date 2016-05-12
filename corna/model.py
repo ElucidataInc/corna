@@ -1,5 +1,8 @@
+import numpy as np
+
 from formula import Formula
 import helpers as hl
+
 
 class Ion():
     def __init__(self, name, formula, charge):
@@ -38,24 +41,33 @@ class Ion():
         return mw
 
 class Label():
-    def __init__(self, isotope_tracers):
-        self.isotope_tracers = isotope_tracers
-        #create a constant dict for isotopes
-        #isotope -> mass
+    def check_if_valid_isotope(self, isotope_list):
+        if isinstance(isotope_list, str):
+            isotope_list = [isotope_list,]
+        for iso in isotope_list:
+                print iso
+                hl.get_isotope(iso)
+        return True
 
     def get_num_labeled_atoms(self, isotope, label_dict):
+        self.check_if_valid_isotope(isotope)
+        if isotope == hl.get_isotope_natural(isotope):
+            return 0
         try:
-            num_atoms = label_dict[isotope]
-            if num_atoms == 0:
-                raise ValueError('Number of atoms cant be zero')
-            else:
-                return num_atoms
+            return label_dict[isotope]
         except KeyError:
-            raise KeyError('Element not labeled')
+            raise KeyError('Isotope not present in label dictionary')
 
     def get_label_from_mass(self, isotope, molecular_mass, isotopic_mass):
-        int(isotopic_mass - molecular_mass)
-        int(hl.get_isotope_mass(isotope))
+        self.check_if_valid_isotope(isotope)
+        nat_iso = hl.get_isotope_natural(isotope)
+        if nat_iso == isotope:
+            return 0
+        atom_excess_mass = hl.get_isotope_mass(isotope) - hl.get_isotope_mass(nat_iso)
+        number_label = int(round((isotopic_mass - molecular_mass)/atom_excess_mass))
+        return number_label
+
+
 
 class LabelmetabIon():
     pass

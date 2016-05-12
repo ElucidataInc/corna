@@ -1,5 +1,4 @@
 import pytest
-import pandas as pd
 import corna.helpers as help
 
 def test_get_atomic_weight():
@@ -25,7 +24,7 @@ def test_get_isotope_natural():
 def test_get_isotope_keyerror():
     with pytest.raises(KeyError) as err:
         help.get_isotope('Ind5')
-    assert err.value.message == 'Check available isotope list'
+    assert err.value.args == ('Check available isotope list', 'Ind5')
 
 def test_read_file():
 	path = 'incorrectpath.xlsx'
