@@ -27,9 +27,13 @@ def read_file(path):
 
 	return input_file
 
+
 def filter_df(df, column_name, column_value):
 
-	filtered_df = df[df[str(column_name)] == str(column_value)]
+	filtered_df = df[df[str(column_name)] == column_value]
+
+	if filtered_df.empty == 'TRUE':
+		raise ValueError('column value does not exist in dataframe', column_value)
 
 	return filtered_df
 

@@ -20,5 +20,13 @@ def test_read_file_ext():
 	with pytest.raises(IOError):
 		file_in = help.read_file(path)
 
+def test_filter_df():
+	df = pd.DataFrame({'col1': [1, 2, 3], 'col2': [2, 2, 2]})
+	with pytest.raises(KeyError):
+		filter_df = help.filter_df(df, 'col_1', 10)
+
+
+
+
 
 
