@@ -70,7 +70,7 @@ class TestLabelClass:
 class TestFragmentClass:
     @classmethod
     def setup_class(cls):
-        cls.fragment = Fragment('Glucose', 'C6H12O6', 1)
+        cls.fragment = Fragment('Glucose', 'C6H12O6')
 
     @classmethod
     def teardown_class(cls):
@@ -92,3 +92,10 @@ class TestFragmentClass:
              self.fragment.check_if_valid_label({'C12':3, 'C13':4})
          assert err.value.message == 'Number of labeled atoms must be ' \
                                      'less than/equal to total number of atoms'
+
+    def test_effective_mol_mass(self):
+        assert self.fragment.effective_mol_mass('pos') == 181.15588
+
+    def test_effective_mol_mass_error(self):
+        with pytest.raises(TypeError):
+            self.fragment.effective_mol_mass('neutral')
