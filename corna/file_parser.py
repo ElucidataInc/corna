@@ -1,5 +1,6 @@
 import helpers as hl
 import pandas as pd
+import json
 
 
 
@@ -36,6 +37,26 @@ def read_metadata(path):
     metadata = hl.read_file(path)
 
     return metadata
+
+
+def json_to_df(json_input):
+    """
+    This function takes input data in the form of json format and converts
+    it in pandas dataframe
+
+    Args:
+        json_input : input data in form of json format
+
+    Returns:
+        json_to_df : pandas dataframe
+
+    """
+    #this should be the format of json input
+    json_input = json.dumps(input_data.to_dict())
+
+    json_df = pd.read_json(json_input)
+
+    return json_df
 
 
 
@@ -77,7 +98,7 @@ metadata = read_metadata(path_metadata)
 merged_df = maven_merge_dfs(input_data, metadata)
 filter_df = hl.filter_df(merged_df, 'sample_name', 'sample_1')
 
-print filter_df
 
-# input dict : input file + metadata file - convert them to pandas df
-# input json : input file + metadata file - convert them to pandas df + combine + output format
+
+
+
