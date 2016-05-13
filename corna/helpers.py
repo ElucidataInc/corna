@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 
 import constants as cs
 
@@ -61,4 +62,10 @@ def filter_df(df, column_name, column_value):
 		raise ValueError('column value does not exist in dataframe', column_value)
 
 	return filtered_df
+
+def get_unique_values(df, column_name):
+
+    unique_val_list = np.unique(df[[str(column_name)]])
+
+    return unique_val_list
 
