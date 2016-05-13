@@ -9,8 +9,8 @@ class TestIonClass:
 
     @classmethod
     def setup_class(cls):
-        cls.ion = Ion('Glucose', 'C6H12O6', -1)
-        cls.ion_err = Ion('OrganicCompund', 'CH2R', 0)
+        cls.ion = Ion('Glucose', 'C6H12O6')
+        cls.ion_err = Ion('OrganicCompund', 'CH2R')
 
     @classmethod
     def teardown_class(cls):
@@ -67,6 +67,7 @@ class TestLabelClass:
     def test_number_of_label_from_mass_natural_form(self):
         assert self.label.get_label_from_mass('C12', 192, 192) == 0
 
+
 class TestFragmentClass:
     @classmethod
     def setup_class(cls):
@@ -99,3 +100,6 @@ class TestFragmentClass:
     def test_effective_mol_mass_error(self):
         with pytest.raises(TypeError):
             self.fragment.effective_mol_mass('neutral')
+
+    def test_label_dict_from_mass(self):
+        assert self.fragment.create_label_dict_from_mass('C13', isotopic_mass=182, mode='neg') == {'C13': 3}

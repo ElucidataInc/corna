@@ -14,6 +14,9 @@ def create_isotopomer_label(frag_dict, label_dict):
     label = {label_key: label_dict}
     return {frag_key: label}, frag_dict
 
+def get_label_dict_mass(frag, isotope, isotope_mass, mode):
+    return frag.create_label_dict_from_mass(isotope, isotope_mass, mode)
+
 def add_data_isotopomers(frag_key, label_dict, intensity):
     label_key = label_dict_to_key(label_dict)
     try:
@@ -22,3 +25,4 @@ def add_data_isotopomers(frag_key, label_dict, intensity):
         raise AssertionError('intensity should be numpy array')
     label_intensity = {label_key: intensity}
     return {frag_key: label_intensity}
+
