@@ -1,5 +1,6 @@
 import pytest
 import corna.helpers as help
+import pandas as pd
 
 def test_get_atomic_weight():
     assert help.get_atomic_weight('Al') == 26.981538
