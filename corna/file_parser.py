@@ -112,7 +112,7 @@ def concat_mq_txts(mq_txt_files):
 
     return mq_df
 
-def merge_mq_metadata(mq_df, mq_metdata):
+#def merge_mq_metadata(mq_df, mq_metdata):
 
 
 
@@ -137,6 +137,10 @@ mq_txt_files = get_mq_txts(mq_dir)
 mq_df = concat_mq_txts(mq_txt_files)
 mq_met_path = mq_dir + 'metadata.xlsx'
 mq_metdata = read_input_data(mq_met_path)
+merged_df.to_csv(mq_dir + 'mvn.csv')
+mq_df.to_csv(mq_dir + 'mq.csv')
+
+#get name, formula from df
 
 
 
