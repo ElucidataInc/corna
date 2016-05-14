@@ -41,7 +41,7 @@ def read_metadata(path):
     return metadata
 
 
-def json_to_df(json_input):
+def json_to_df(json_input, input_data):
     """
     This function takes input data in the form of json format and converts
     it in pandas dataframe
@@ -100,7 +100,7 @@ def get_mq_txts(mq_dir):
     return mq_txt_files
 
 
-def concat_mq_txts(mq_txt_files):
+def concat_mq_txts(mq_dir, mq_txt_files):
 
     df_list= []
 
@@ -113,33 +113,6 @@ def concat_mq_txts(mq_txt_files):
     return mq_df
 
 #def merge_mq_metadata(mq_df, mq_metdata):
-
-
-
-
-
-
-
-
-
-# maven
-path_input = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/maven_output.csv'
-path_metadata = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/metadata.csv'
-input_data = read_input_data(path_input)
-metadata = read_metadata(path_metadata)
-merged_df = maven_merge_dfs(input_data, metadata)
-filter_df = hl.filter_df(merged_df, 'sample_name', 'sample_1')
-
-
-#mq:
-mq_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/data/mq/'
-mq_txt_files = get_mq_txts(mq_dir)
-mq_df = concat_mq_txts(mq_txt_files)
-mq_met_path = mq_dir + 'metadata.xlsx'
-mq_metdata = read_input_data(mq_met_path)
-merged_df.to_csv(mq_dir + 'mvn.csv')
-mq_df.to_csv(mq_dir + 'mq.csv')
-
 #get name, formula from df
 
 
