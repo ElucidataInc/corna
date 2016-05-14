@@ -62,3 +62,14 @@ def filter_df(df, column_name, column_value):
 
 	return filtered_df
 
+def create_dict_from_isotope_label_list(isonumlist):
+    label_dict = {}
+    for i in xrange(0,len(isonumlist),2):
+        try:
+            get_isotope(isonumlist[i])
+            label_dict.update({isonumlist[i]: int(isonumlist[i+1])})
+        except KeyError:
+            raise KeyError('The key must be an isotope')
+        except ValueError:
+            raise ValueError('The number of labels should be integer')
+    return label_dict
