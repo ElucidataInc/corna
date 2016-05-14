@@ -7,6 +7,7 @@ import json
 
 
 
+
 def read_input_data(path):
     """
     This function reads the input data file. The file can be
@@ -91,28 +92,75 @@ def maven_merge_dfs(df1, df2, left_on="variable", right_on="sample"):
     return merged_df
 
 
-def get_mq_txts(mq_dir):
+
+
+
+
+
+def concat_mq_txts(mq_dir):
 
     mq_txt_files = []
 
     mq_txt_files += [each for each in os.listdir(mq_dir) if each.endswith('.txt')]
-
-    return mq_txt_files
-
-
-def concat_mq_txts(mq_dir, mq_txt_files):
 
     df_list= []
 
     for files in mq_txt_files:
         df_list.append(read_input_data(mq_dir + files))
 
-    # check if to put axis = 1
     mq_df = pd.concat(df_list)
 
     return mq_df
 
-#def merge_mq_metadata(mq_df, mq_metdata):
+
+
+# get values from filtered maven df
+def mvn_met_names(filtered_df, col_name = 'Name'):
+
+    met_names = hl.get_unique_values(filtered_df, col_name)
+
+    return met_names
+
+def mvn_met_formula(filtered_df, col_name = 'Formula'):
+
+    met_formula = hl.get_unique_values(filtered_df, col_name)
+
+    return met_formula
+
+
+# label_dict = {C13:1, N15: 1}
+
+# get values from filtered mq df
+
+
+
+
+
+
+# maven
+path_input = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/maven_output.csv'
+path_metadata = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/metadata.csv'
+input_data = read_input_data(path_input)
+metadata = read_metadata(path_metadata)
+merged_df = maven_merge_dfs(input_data, metadata)
+filter_df = hl.filter_df(merged_df, 'sample_name', 'sample_1')
+met_name = mvn_met_names(filter_df, col_name = 'Name')
+met_formula = mvn_met_formula(filter_df, col_name = 'Formula')
+
+
+
+
+
+
+
+#mq:
+mq_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/data/mq/'
+mq_df = concat_mq_txts(mq_dir)
+mq_met_path = mq_dir + 'metadata.xlsx'
+mq_metdata = read_input_data(mq_met_path)
+merged_df.to_csv(mq_dir + 'mvn.csv')
+mq_df.to_csv(mq_dir + 'mq.csv')
+
 #get name, formula from df
 
 
