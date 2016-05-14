@@ -25,8 +25,21 @@ def add_data_isotopomers(frag_key, label_dict, intensity):
     label_intensity = {label_key: intensity}
     return {frag_key: label_intensity}
 
-def parse_label_mass(label):
-    pass
+def parse_label_mass(label_mass):
+    massdata = label_mass.split('_')
+    try:
+        isotracer = massdata[0]
+        hl.get_isotope(isotracer)
+        parent_mass = float(massdata[1])
+        daughter_mass = float(massdata[2])
+    except IndexError:
+        raise IndexError('The key should have three components, isotope, parent mass '
+                         'and daughter mass separated by _ in the same order')
+    except KeyError:
+        raise KeyError('First part of the key must be an isotope')
+    except ValueError:
+        raise ValueError('Masses should be convertible to floats')
+    return {'tracer': isotracer, 'parent_mass': parent_mass, 'daughter_mass': daughter_mass}
 
 def parse_label_number(label_number):
     return hl.create_dict_from_isotope_label_list(label_number.split('_'))
