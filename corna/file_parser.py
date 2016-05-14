@@ -92,23 +92,18 @@ def maven_merge_dfs(df1, df2, left_on="variable", right_on="sample"):
     return merged_df
 
 
-def get_mq_txts(mq_dir):
+
+def concat_mq_txts(mq_dir):
 
     mq_txt_files = []
 
     mq_txt_files += [each for each in os.listdir(mq_dir) if each.endswith('.txt')]
-
-    return mq_txt_files
-
-
-def concat_mq_txts(mq_txt_files):
 
     df_list= []
 
     for files in mq_txt_files:
         df_list.append(read_input_data(mq_dir + files))
 
-    # check if to put axis = 1
     mq_df = pd.concat(df_list)
 
     return mq_df
@@ -155,8 +150,7 @@ met_formula = mvn_met_formula(filter_df, col_name = 'Formula')
 
 #mq:
 mq_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/data/mq/'
-mq_txt_files = get_mq_txts(mq_dir)
-mq_df = concat_mq_txts(mq_txt_files)
+mq_df = concat_mq_txts(mq_dir)
 mq_met_path = mq_dir + 'metadata.xlsx'
 mq_metdata = read_input_data(mq_met_path)
 merged_df.to_csv(mq_dir + 'mvn.csv')
