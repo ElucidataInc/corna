@@ -27,6 +27,9 @@ def test_get_isotope_keyerror():
         help.get_isotope('Ind5')
     assert err.value.args == ('Check available isotope list', 'Ind5')
 
+def test_label_dict_to_key():
+    assert help.label_dict_to_key({'C13':2, 'N14':4}) == 'N14_4_C13_2'
+
 def test_read_file():
 	path = 'incorrectpath.xlsx'
 	with pytest.raises(IOError):
@@ -42,8 +45,18 @@ def test_filter_df():
 	with pytest.raises(KeyError):
 		filter_df = help.filter_df(df, 'col_1', 10)
 
+def test_create_dict_from_isotope_label_list():
+    assert help.create_dict_from_isotope_label_list(['C13',2,'N15',5]) == {'C13': 2, 'N15': 5}
 
+def test_create_dict_from_isotope_label_list_missing_number():
+    with pytest.raises(ValueError) as err:
+        help.create_dict_from_isotope_label_list(['C13','N15',5])
+    assert err.value.message == 'The number of labels should be integer'
 
+def test_create_dict_from_isotope_label_list_no_isotope():
+    with pytest.raises(KeyError) as err:
+        help. create_dict_from_isotope_label_list([6, 'C13','N15',5])
+    assert err.value.message == 'The key must be an isotope'
 
 
 
