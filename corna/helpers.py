@@ -74,21 +74,20 @@ def json_to_df(json_input, input_data):
     return json_df
 
 
-def concat_txts_into_df(dir):
+def concat_txts_into_df(direc):
 
     txt_files = []
 
-    txt_files += [each for each in os.listdir(mq_dir) if each.endswith('.txt')]
+    txt_files += [each for each in os.listdir(direc) if each.endswith('.txt')]
 
     df_list= []
 
     for files in txt_files:
-        df_list.append(read_input_data(mq_dir + files))
+        df_list.append(read_file(direc + files))
 
     concat_df = pd.concat(df_list)
 
     return concat_df
-
 
 
 def filter_df(df, column_name, column_value):

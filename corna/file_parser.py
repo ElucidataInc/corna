@@ -36,11 +36,6 @@ def maven_merge_dfs(df1, df2, left_on="variable", right_on="sample"):
     return merged_df
 
 
-
-
-
-
-# get values from filtered maven df
 def mvn_met_names(filtered_df, col_name = 'Name'):
 
     met_names = hl.get_unique_values(filtered_df, col_name)
@@ -54,23 +49,13 @@ def mvn_met_formula(filtered_df, col_name = 'Formula'):
     return met_formula
 
 
-# label_dict = {C13:1, N15: 1}
-
-# get values from filtered mq df
 
 
 
 
 
-#mq:
-mq_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/data/mq/'
-mq_df = concat_mq_txts(mq_dir)
-mq_met_path = mq_dir + 'metadata.xlsx'
-mq_metdata = read_input_data(mq_met_path)
-merged_df.to_csv(mq_dir + 'mvn.csv')
-mq_df.to_csv(mq_dir + 'mq.csv')
 
-#get name, formula from df
+
 
 
 
