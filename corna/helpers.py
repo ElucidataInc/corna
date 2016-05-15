@@ -90,6 +90,23 @@ def concat_txts_into_df(direc):
     return concat_df
 
 
+
+def merge_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
+
+    merged_df = pd.merge(df1, df2, how= how, left_on=left_on,
+                             right_on=right_on)
+
+    #merged_df.drop(right_on, axis=0, inplace=True)
+    merged_df.drop(right_on, axis=1, inplace=True)
+
+
+    merged_df.fillna(0, inplace = True)
+
+    return merged_df
+
+
+
+
 def filter_df(df, column_name, column_value):
 
     #write test if col name not string

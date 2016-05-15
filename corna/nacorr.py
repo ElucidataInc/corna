@@ -32,10 +32,12 @@ mq_met_path = mq_dir + 'metadata.xlsx'
 mq_metdata = hl.read_file(mq_met_path)
 
 # combine mq_data + metadata
-#col_neglect = ['']
-#list_col_vals = value = [x for x in df1.columns.tolist() if x not in col_neglect]
-merged_data = mq_df.merge(mq_metdata, how = 'left', left_on = 'Component Name', right_on = 'Component Name')
-merged_data.to_csv(mq_dir + 'merg_mq_met.csv')
+merged_data = fp.mq_merge_dfs(mq_df, mq_metdata)
+#merged_data = hl.merge_dfs(mq_df, mq_metdata, how= 'inner', left_on = 'Component Name', right_on = 'Fragment')
+#merged_data.rename(columns={"Component Name":"Name", "Area":"Intensity"}, inplace=True)
+#print merged_data
+merged_data.to_csv(mq_dir + 'mvn_met.csv')
+
 
 
 

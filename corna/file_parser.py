@@ -6,7 +6,7 @@ import helpers as hl
 
 
 
-def maven_merge_dfs(df1, df2, left_on="variable", right_on="sample"):
+def maven_merge_dfs(df1, df2):
     """
     This function combines the input file dataframe and the metadata
     file dataframe
@@ -26,12 +26,9 @@ def maven_merge_dfs(df1, df2, left_on="variable", right_on="sample"):
 
     long_form = pd.melt(df1, id_vars=id, value_vars=value)
 
-    merged_df = pd.merge(long_form, df2, how="left", left_on=left_on,
-                             right_on=right_on)
+    merged_df = hl.merge_dfs(long_form, df2, how = 'left', left_on = 'variable', right_on = 'sample')
 
-    merged_df.drop(right_on, axis=1, inplace=True)
-
-    merged_df.rename(columns={"variable":"sample_name"}, inplace=True)
+    merged_df.rename(columns={"variable":"sample_name", "value":"Intensity"}, inplace=True)
 
     return merged_df
 
@@ -47,6 +44,20 @@ def mvn_met_formula(filtered_df, col_name = 'Formula'):
     met_formula = hl.get_unique_values(filtered_df, col_name)
 
     return met_formula
+
+
+def mq_merge_dfs(df1, df2):
+    merged_df = hl.merge_dfs(df1, df2, how= 'inner', left_on = 'Component Name', right_on = 'Fragment')
+    #subset problem
+    merged_df[merged_df['Sample Name'].str.contains("std") == False]
+
+    #combine 2 cols to label colum - problem
+    #merged_df['Label'] = '%s_%s' % (merged_df['Isotopic Tracer'], merged_df['Mass Info'])
+
+    merged_df.rename(columns={"Component Name":"Name", "Area":"Intensity"}, inplace=True)
+
+
+    return merged_df
 
 
 
