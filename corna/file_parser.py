@@ -28,7 +28,8 @@ def maven_merge_dfs(df1, df2):
 
     merged_df = hl.merge_dfs(long_form, df2, how = 'left', left_on = 'variable', right_on = 'sample')
 
-    merged_df.rename(columns={"variable":"sample_name", "value":"Intensity"}, inplace=True)
+    merged_df['Parent'] = merged_df['Name']
+    merged_df.rename(columns={"variable":"Sample Name", "value":"Intensity"}, inplace=True)
 
     return merged_df
 
@@ -46,18 +47,48 @@ def mvn_met_formula(filtered_df, col_name = 'Formula'):
     return met_formula
 
 
+
+
 def mq_merge_dfs(df1, df2):
+
+    #df2['Parent_Formula'] =
     merged_df = hl.merge_dfs(df1, df2, how= 'inner', left_on = 'Component Name', right_on = 'Fragment')
-    #subset problem
-    merged_df[merged_df['Sample Name'].str.contains("std") == False]
+    merged_df['Mass Info'] = merged_df['Mass Info'].str.replace(' / ', "_")
+    remove_stds = merged_df[merged_df['Sample Name'].str.contains("std") == False]
+    remove_stds['Label'] = remove_stds['Isotopic Tracer'] + "_" + remove_stds['Mass Info']
 
-    #combine 2 cols to label colum - problem
-    #merged_df['Label'] = '%s_%s' % (merged_df['Isotopic Tracer'], merged_df['Mass Info'])
+    remove_stds.pop('Mass Info')
+    remove_stds.pop('Isotopic Tracer')
+    remove_stds.rename(columns={"Component Name":"Name", "Area":"Intensity"}, inplace=True)
+    return remove_stds
 
-    merged_df.rename(columns={"Component Name":"Name", "Area":"Intensity"}, inplace=True)
 
 
-    return merged_df
+def standard_model(df, parent = 'true'):
+    if parent == 'true':
+        df["tups"] = df.apply(lambda x : tuple([x["Name"], x["Formula"], x["Parent_Formula"]]), axis=1)
+    else:
+        df["tups"] = df.apply(lambda x : tuple([x["Name"], x["Formula"]]), axis=1)
+
+    unq_tups = df["tups"].unique().tolist()
+    outer_dict = {}
+
+    for tups in unq_tups:
+        df_subset = df[df["tups"] == tups]
+        unq_labels = df_subset["Label"].unique().tolist()
+        tup_dict = {}
+        for label in unq_labels:
+            df_subset_on_labels = df_subset[df_subset["Label"] == label]
+            label_frame = df_subset_on_labels.groupby("Sample Name")["Intensity"].apply(lambda x: x.tolist())
+            label_dict = label_frame.to_dict()
+            tup_dict[label] = label_dict
+        outer_dict[tups] = tup_dict
+
+    return outer_dict
+
+
+
+
 
 
 
