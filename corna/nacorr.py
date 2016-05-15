@@ -18,10 +18,11 @@ input_data = hl.read_file(path_input)
 metadata = hl.read_file(path_metadata)
 merged_df = fp.maven_merge_dfs(input_data, metadata)
 
-std_model = fp.standard_model(merged_df)
+#std_model = fp.standard_model_mvn(merged_df)
+std_model = fp.standard_model(merged_df, parent = 'False')
 print std_model
 
-filter_df = hl.filter_df(merged_df, 'sample_name', 'sample_1')
+filter_df = hl.filter_df(merged_df, 'Sample Name', 'sample_1')
 met_name = fp.mvn_met_names(filter_df, col_name = 'Name')
 met_formula = fp.mvn_met_formula(filter_df, col_name = 'Formula')
 
@@ -40,7 +41,9 @@ mq_metdata = hl.read_file(mq_met_path)
 
 # combine mq_data + metadata
 merged_data = fp.mq_merge_dfs(mq_df, mq_metdata)
-std_model_mq = fp.standard_model(merged_data)
+#print merged_data
+# standard model mq
+std_model_mq = fp.standard_model(merged_data, parent = 'true')
 print std_model_mq
 merged_data.to_csv(mq_dir + 'mq_met.csv')
 merged_df.to_csv(mq_dir + 'mvn_met.csv')
