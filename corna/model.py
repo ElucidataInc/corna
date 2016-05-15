@@ -76,16 +76,16 @@ class Fragment(Ion, Label):
         if kwargs.has_key('label_dict'):
             self.label_dict = kwargs['label_dict']
         elif kwargs.has_key('isotracer') and kwargs.has_key('isotope_mass'):
-            isotope = kwargs['isotracer']
+            self.isotope = kwargs['isotracer']
             self.isotope_mass = kwargs['isotope_mass']
             if kwargs.has_key('molecular_mass'):
                 mol_mass = kwargs['molecular_mass']
-                self.label_dict = self.create_label_dict_given_mol_mass(isotope, self.isotope_mass, mol_mass)
+                self.label_dict = self.create_label_dict_given_mol_mass(self.isotope, self.isotope_mass, mol_mass)
             elif kwargs.has_key('mode'):
                 mode = kwargs['mode']
-                self.label_dict = self.create_label_dict_from_mass(isotope, self.isotope_mass, mode)
+                self.label_dict = self.create_label_dict_from_mass(self.isotope, self.isotope_mass, mode)
             else:
-                self.label_dict = self.create_label_dict_from_mass(isotope, self.isotope_mass)
+                self.label_dict = self.create_label_dict_from_mass(self.isotope, self.isotope_mass)
         else:
             raise KeyError('Fragment should contain label information')
         self.check_if_valid_label(self.label_dict)
@@ -145,3 +145,6 @@ class Fragment(Ion, Label):
             if not (hl.get_isotope_natural(key) == key or value == 0):
                 return False
         return True
+
+    def get_num_labeled_atoms_tracer(self):
+        return self.get_num_labeled_atoms(self.isotope, self.label_dict)
