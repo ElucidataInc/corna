@@ -28,6 +28,7 @@ def maven_merge_dfs(df1, df2):
 
     merged_df = hl.merge_dfs(long_form, df2, how = 'left', left_on = 'variable', right_on = 'sample')
 
+    merged_df['Parent'] = merged_df['Name']
     merged_df.rename(columns={"variable":"sample_name", "value":"Intensity"}, inplace=True)
 
     return merged_df
@@ -48,16 +49,12 @@ def mvn_met_formula(filtered_df, col_name = 'Formula'):
 
 def mq_merge_dfs(df1, df2):
     merged_df = hl.merge_dfs(df1, df2, how= 'inner', left_on = 'Component Name', right_on = 'Fragment')
-    #subset problem
-    merged_df[merged_df['Sample Name'].str.contains("std") == False]
-
-    #combine 2 cols to label colum - problem
-    #merged_df['Label'] = '%s_%s' % (merged_df['Isotopic Tracer'], merged_df['Mass Info'])
-
-    merged_df.rename(columns={"Component Name":"Name", "Area":"Intensity"}, inplace=True)
-
-
-    return merged_df
+    remove_stds = merged_df[merged_df['Sample Name'].str.contains("std") == False]
+    remove_stds['Label'] = remove_stds['Isotopic Tracer'] + " " + remove_stds['Mass Info']
+    remove_stds.pop('Mass Info')
+    remove_stds.pop('Isotopic Tracer')
+    remove_stds.rename(columns={"Component Name":"Name", "Area":"Intensity"}, inplace=True)
+    return remove_stds
 
 
 

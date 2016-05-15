@@ -129,13 +129,12 @@ def create_dict_from_isotope_label_list(isonumlist):
             raise ValueError('The number of labels should be integer')
     return label_dict
 
+
 def get_unique_values(df, column_name):
 
     unique_val_list = np.unique(df[[str(column_name)]])
 
     return unique_val_list
 
-def save_to_csv(df, filename):
 
-    return df.to_csv(path)
 
