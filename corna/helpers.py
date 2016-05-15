@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 
 import constants as cs
 
@@ -53,8 +54,58 @@ def read_file(path):
 	return input_file
 
 
+def json_to_df(json_input, input_data):
+    """
+    This function takes input data in the form of json format and converts
+    it in pandas dataframe
+
+    Args:
+        json_input : input data in form of json format
+
+    Returns:
+        json_to_df : pandas dataframe
+
+    """
+    #this should be the format of json input
+    #json_input = json.dumps(input_data.to_dict())
+
+    json_df = pd.read_json(json_input)
+
+    return json_df
+
+
+def concat_txts_into_df(direc):
+
+    txt_files = []
+
+    txt_files += [each for each in os.listdir(direc) if each.endswith('.txt')]
+
+    df_list= []
+
+    for files in txt_files:
+        df_list.append(read_file(direc + files))
+
+    concat_df = pd.concat(df_list)
+
+    return concat_df
+
+def merge_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
+
+    merged_df = pd.merge(df1, df2, how= how, left_on=left_on,
+                             right_on=right_on)
+
+    #merged_df.drop(right_on, axis=0, inplace=True)
+    merged_df.drop(right_on, axis=1, inplace=True)
+
+
+    merged_df.fillna(0, inplace = True)
+
+    return merged_df
+
+
 def filter_df(df, column_name, column_value):
 
+    #write test if col name not string
 	filtered_df = df[df[str(column_name)] == column_value]
 
 	if filtered_df.empty == 'TRUE':
@@ -73,3 +124,14 @@ def create_dict_from_isotope_label_list(isonumlist):
         except ValueError:
             raise ValueError('The number of labels should be integer')
     return label_dict
+
+def get_unique_values(df, column_name):
+
+    unique_val_list = np.unique(df[[str(column_name)]])
+
+    return unique_val_list
+
+def save_to_csv(df, filename):
+
+    return df.to_csv(path)
+

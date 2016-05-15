@@ -1,68 +1,12 @@
 import os
-import helpers as hl
-import pandas as pd
 import json
+import pandas as pd
+import helpers as hl
 
 
 
 
-
-def read_input_data(path):
-    """
-    This function reads the input data file. The file can be
-    csv or xlsx
-
-    Args:
-        path to input data file
-
-    Returns:
-        input data in the form of pandas dataframe
-    """
-
-    input_data = hl.read_file(path)
-
-    return input_data
-
-
-def read_metadata(path):
-    """
-    This function reads the metadata file. The file can be
-    csv or xlsx
-
-    Args:
-        path to metadata file
-
-    Returns:
-        metadata in the form of pandas dataframe
-    """
-
-    metadata = hl.read_file(path)
-
-    return metadata
-
-
-def json_to_df(json_input):
-    """
-    This function takes input data in the form of json format and converts
-    it in pandas dataframe
-
-    Args:
-        json_input : input data in form of json format
-
-    Returns:
-        json_to_df : pandas dataframe
-
-    """
-    #this should be the format of json input
-    json_input = json.dumps(input_data.to_dict())
-
-    json_df = pd.read_json(json_input)
-
-    return json_df
-
-
-
-def maven_merge_dfs(df1, df2, left_on="variable", right_on="sample"):
+def maven_merge_dfs(df1, df2):
     """
     This function combines the input file dataframe and the metadata
     file dataframe
@@ -77,70 +21,52 @@ def maven_merge_dfs(df1, df2, left_on="variable", right_on="sample"):
     """
     id = ["Name", "Formula", "Label"] #column names to go in config
 
+    # put in functions - combinig dfs
     value = [x for x in df1.columns.tolist() if x not in id]
 
     long_form = pd.melt(df1, id_vars=id, value_vars=value)
 
-    merged_df = pd.merge(long_form, df2, how="left", left_on=left_on,
-                             right_on=right_on)
+    merged_df = hl.merge_dfs(long_form, df2, how = 'left', left_on = 'variable', right_on = 'sample')
 
-    merged_df.drop(right_on, axis=1, inplace=True)
-
-    merged_df.rename(columns={"variable":"sample_name"}, inplace=True)
+    merged_df.rename(columns={"variable":"sample_name", "value":"Intensity"}, inplace=True)
 
     return merged_df
 
 
-def get_mq_txts(mq_dir):
+def mvn_met_names(filtered_df, col_name = 'Name'):
 
-    mq_txt_files = []
+    met_names = hl.get_unique_values(filtered_df, col_name)
 
-    mq_txt_files += [each for each in os.listdir(mq_dir) if each.endswith('.txt')]
+    return met_names
 
-    return mq_txt_files
+def mvn_met_formula(filtered_df, col_name = 'Formula'):
 
+    met_formula = hl.get_unique_values(filtered_df, col_name)
 
-def concat_mq_txts(mq_txt_files):
-
-    df_list= []
-
-    for files in mq_txt_files:
-        df_list.append(read_input_data(mq_dir + files))
-
-    # check if to put axis = 1
-    mq_df = pd.concat(df_list)
-
-    return mq_df
-
-#def merge_mq_metadata(mq_df, mq_metdata):
+    return met_formula
 
 
+def mq_merge_dfs(df1, df2):
+    merged_df = hl.merge_dfs(df1, df2, how= 'inner', left_on = 'Component Name', right_on = 'Fragment')
+    #subset problem
+    merged_df[merged_df['Sample Name'].str.contains("std") == False]
+
+    #combine 2 cols to label colum - problem
+    #merged_df['Label'] = '%s_%s' % (merged_df['Isotopic Tracer'], merged_df['Mass Info'])
+
+    merged_df.rename(columns={"Component Name":"Name", "Area":"Intensity"}, inplace=True)
 
 
-
+    return merged_df
 
 
 
 
-# maven
-path_input = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/maven_output.csv'
-path_metadata = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_Correction/Data/metadata.csv'
-input_data = read_input_data(path_input)
-metadata = read_metadata(path_metadata)
-merged_df = maven_merge_dfs(input_data, metadata)
-filter_df = hl.filter_df(merged_df, 'sample_name', 'sample_1')
 
 
-#mq:
-mq_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/data/mq/'
-mq_txt_files = get_mq_txts(mq_dir)
-mq_df = concat_mq_txts(mq_txt_files)
-mq_met_path = mq_dir + 'metadata.xlsx'
-mq_metdata = read_input_data(mq_met_path)
-merged_df.to_csv(mq_dir + 'mvn.csv')
-mq_df.to_csv(mq_dir + 'mq.csv')
 
-#get name, formula from df
+
+
 
 
 
