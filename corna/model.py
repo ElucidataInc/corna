@@ -68,9 +68,23 @@ class Label():
 
 
 class Fragment(Ion, Label):
-    def __init__(self, name, formula, parent=None):
+    def __init__(self, name, formula, parent, **kwargs):
         Ion.__init__(self, name, formula)
         self.parent = parent
+        if kwargs.has_key('label_dict'):
+            self.label_dict = kwargs['label_dict']
+        elif kwargs.has_key('isotracer') and kwargs.has_key('isotope_mass'):
+            isotope = kwargs['isotracer']
+            isotope_mass = kwargs['isotope_mass']
+            if kwargs.has_key('molecular_mass'):
+                mol_mass = kwargs['molecular_mass']
+                self.label_dict = self.create_label_dict_given_mol_mass(isotope, isotope_mass, mol_mass)
+            elif kwargs.has_key('mode'):
+                mode = kwargs['mode']
+                self.label_dict = self.create_label_dict_from_mass(isotope, isotope_mass, mode)
+        else:
+            raise KeyError('Fragment should contain label information')
+        self.check_if_valid_label(self.label_dict)
 
     def get_elem_num(self, label_dict):
         polyatomschema = FormulaSchema().create_polyatom_schema()
@@ -111,4 +125,8 @@ class Fragment(Ion, Label):
     def create_label_dict_from_mass(self, isotope, isotopic_mass, mode):
         molecular_mass = self.effective_mol_mass(mode)
         num = self.get_label_from_mass(isotope, molecular_mass, isotopic_mass)
+        return {isotope: num}
+
+    def create_label_dict_given_mol_mass(self, isotope, isotopic_mass, mol_mass):
+        num = self.get_label_from_mass(isotope, mol_mass, isotopic_mass)
         return {isotope: num}

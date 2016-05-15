@@ -135,3 +135,6 @@ def save_to_csv(df, filename):
 
     return df.to_csv(path)
 
+def get_key_from_single_value_dict(inputdict):
+    key, value = inputdict.items()[0]
+    return key
