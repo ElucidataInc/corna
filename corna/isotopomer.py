@@ -2,13 +2,13 @@ from model import Fragment
 import helpers as hl
 import numpy as np
 
-def create_fragment_from_mass(name, formula, parent, isotope, isotope_mass, molecular_mass=None, mode=None):
+def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
     if molecular_mass != None:
-        frag = Fragment(name, formula, parent, isotracer=isotope, isotope_mass=isotope_mass, molecular_mass=molecular_mass)
+        frag = Fragment(name, formula, isotracer=isotope, isotope_mass=isotope_mass, molecular_mass=molecular_mass)
     elif mode != None:
-        frag = Fragment(name, formula, parent, isotracer=isotope, isotope_mass=isotope_mass, mode=mode)
+        frag = Fragment(name, formula, isotracer=isotope, isotope_mass=isotope_mass, mode=mode)
     else:
-        frag = Fragment(name, formula, parent, isotracer=isotope, isotope_mass=isotope_mass)
+        frag = Fragment(name, formula, isotracer=isotope, isotope_mass=isotope_mass)
     return {name:frag}
 
 def create_fragment_from_number(name, formula, parent, label_dict):
@@ -30,16 +30,7 @@ def add_data_fragment(fragment_dict, data):
     frag_key, frag = fragment_dict.items()[0]
     assert isinstance(data, dict)
     validate_data(data)
-    return {frag_key : [frag, data]}
-
-def add_data_isotopomers(frag_key, label_dict, intensity):
-    label_key = hl.label_dict_to_key(label_dict)
-    try:
-        assert isinstance(intensity, np.ndarray)
-    except AssertionError:
-        raise AssertionError('intensity should be numpy array')
-    label_intensity = {label_key: intensity}
-    return {frag_key: label_intensity}
+    return {frag_key: [frag, data]}
 
 def parse_label_mass(label_mass):
     massdata = label_mass.split('_')
@@ -60,23 +51,32 @@ def parse_label_mass(label_mass):
 def parse_label_number(label_number):
     return hl.create_dict_from_isotope_label_list(label_number.split('_'))
 
-def parse_label_data_to_fragment(frag_data_dict, mass=False, number=False, mode=None):
-    fragment_info, data = frag_data_dict.items()[0]
-    label, sample_dict = data.items()[0]
-    name = fragment_info[0]
-    formula = fragment_info[1]
-    parent = fragment_info[2]
+def insert_data_to_fragment(frag_info, label, sample_dict, mass, number, mode):
     if mass == True:
             label_mass_dict = parse_label_mass(label)
+            name = frag_info[0]
+            daughter_formula = frag_info[1]
+            parent_formula = frag_info[2]
             isotope = label_mass_dict['tracer']
             parent_mass = label_mass_dict['parent_mass']
+            parent_name = name + '_' + str(parent_mass)
             daughter_mass = label_mass_dict['daughter_mass']
-            parent_frag = create_fragment_from_mass(name, formula, parent, isotope, parent_mass, mode=mode)
-            daughter_frag = create_fragment_from_mass(name, formula, parent, isotope, daughter_mass, mode=mode)
+            daughter_name = name + '_' + str(daughter_mass)
+            parent_frag = create_fragment_from_mass(name, parent_formula, isotope, parent_mass, mode=mode)
+            daughter_frag = create_fragment_from_mass(name, daughter_formula, isotope, daughter_mass, mode=mode)
             frag = create_combined_fragment(parent_frag, daughter_frag)
     elif number == True:
             label_number_dict = parse_label_number(label)
-            frag = create_fragment_from_number(name, formula, parent, label_number_dict)
+            name = frag_info[0]
+            formula = frag_info[1]
+            frag = create_fragment_from_number(name, formula, label_number_dict)
     else:
         raise TypeError('Labels in data should be deducable from mass or number')
     return add_data_fragment(frag, sample_dict)
+
+def bulk_insert_data_to_fragment(frag_data_dict, mass=False, number=False, mode=None):
+    frag_info, list_data_dict = frag_data_dict.items()[0]
+    fragment_dict = {}
+    for key, value in list_data_dict.iteritems():
+        fragment_dict.update(insert_data_to_fragment(frag_info, key, value, mass, number, mode))
+    return fragment_dict

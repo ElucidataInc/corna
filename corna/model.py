@@ -70,10 +70,9 @@ class Label():
 
 
 class Fragment(Ion, Label):
-    def __init__(self, name, formula, parent, **kwargs):
+    def __init__(self, name, formula, **kwargs):
         #TODO: create function to get isotope mass
         Ion.__init__(self, name, formula)
-        self.parent = parent
         if kwargs.has_key('label_dict'):
             self.label_dict = kwargs['label_dict']
         elif kwargs.has_key('isotracer') and kwargs.has_key('isotope_mass'):
