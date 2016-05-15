@@ -148,3 +148,6 @@ def get_value_from_single_value_dict(inputdict):
     else:
         raise OverflowError('Dictionary not single key, value pair')
     return value
+
+def check_if_all_elems_same_type(inputlist, classname):
+    return all(isinstance(x, classname) for x in inputlist)
