@@ -84,6 +84,7 @@ class Fragment(Ion, Label):
                 self.label_dict = self.create_label_dict_from_mass(isotope, isotope_mass, mode)
         else:
             raise KeyError('Fragment should contain label information')
+        self.check_if_valid_label(self.label_dict)
 
     def get_elem_num(self, label_dict):
         polyatomschema = FormulaSchema().create_polyatom_schema()

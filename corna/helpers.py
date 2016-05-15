@@ -73,3 +73,7 @@ def create_dict_from_isotope_label_list(isonumlist):
         except ValueError:
             raise ValueError('The number of labels should be integer')
     return label_dict
+
+def get_key_from_single_value_dict(inputdict):
+    key, value = inputdict.items()[0]
+    return key

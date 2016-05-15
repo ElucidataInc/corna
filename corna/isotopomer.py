@@ -11,9 +11,15 @@ def create_fragment_from_mass(name, formula, parent, isotope, isotope_mass, mole
         raise IOError('One of molecular mass/mode is required to create fragment from mass')
     return {name:frag}
 
-def create_fragment_number(name, formula, parent, label_dict):
+def create_fragment_from_number(name, formula, parent, label_dict):
     frag = Fragment(name, formula, parent, label_dict)
     return {name:frag}
+
+def create_combined_fragment(parent_fragment_dict, daughter_fragment_dict):
+    parent_key = hl.get_key_from_single_value_dict(parent_fragment_dict)
+    daughter_key = hl.get_key_from_single_value_dict(daughter_fragment_dict)
+    return {(parent_key, daughter_key): [parent_fragment_dict[parent_key],
+                                         daughter_fragment_dict[daughter_key]]}
 
 def create_isotopomer_label(frag_dict, label_dict):
     frag_key, frag = frag_dict.items()[0]
