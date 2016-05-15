@@ -2,9 +2,18 @@ from model import Fragment
 import helpers as hl
 import numpy as np
 
-def create_fragment(name, formula, parent):
-    frag = Fragment(name, formula, parent)
-    return {name: frag}
+def create_fragment_from_mass(name, formula, parent, isotope, isotope_mass, molecular_mass=None, mode=None):
+    if molecular_mass != None:
+        frag = Fragment(name, formula, parent, isotracer=isotope, isotope_mass=isotope_mass, molecular_mass=molecular_mass)
+    elif mode != None:
+        frag = Fragment(name, formula, parent, isotracer=isotope, isotope_mass=isotope_mass, mode=mode)
+    else:
+        raise IOError('One of molecular mass/mode is required to create fragment from mass')
+    return {name:frag}
+
+def create_fragment_number(name, formula, parent, label_dict):
+    frag = Fragment(name, formula, parent, label_dict)
+    return {name:frag}
 
 def create_isotopomer_label(frag_dict, label_dict):
     frag_key, frag = frag_dict.items()[0]
