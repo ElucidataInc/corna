@@ -62,7 +62,6 @@ def insert_data_to_fragment(frag_info, label, sample_dict, mass, number, mode):
             parent_name = name + '_' + str(parent_mass)
             daughter_mass = label_mass_dict['daughter_mass']
             daughter_name = name + '_' + str(daughter_mass)
-            print name
             parent_frag = create_fragment_from_mass(parent_name, parent_formula, isotope, parent_mass, mode=mode)
             daughter_frag = create_fragment_from_mass(daughter_name, daughter_formula, isotope, daughter_mass, mode=mode)
             frag = create_combined_fragment(parent_frag, daughter_frag)
