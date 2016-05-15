@@ -58,5 +58,15 @@ def test_create_dict_from_isotope_label_list_no_isotope():
         help. create_dict_from_isotope_label_list([6, 'C13','N15',5])
     assert err.value.message == 'The key must be an isotope'
 
+def test_get_key_from_single_value_dict():
+    assert help.get_key_from_single_value_dict({'C13':1}) == 'C13'
+
+def test_get_value_from_single_value_dict():
+    assert help.get_value_from_single_value_dict({'C13':1}) == 1
+
+def test_get_key_from_single_value_dict_len_error():
+    with pytest.raises(OverflowError):
+        help.get_key_from_single_value_dict({'C13':1, 'C14':2})
+
 
 
