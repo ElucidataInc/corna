@@ -139,3 +139,9 @@ class Fragment(Ion, Label):
         polyatomdata = polyatomschema.parseString(isotope)
         polyatom = polyatomdata[0]
         return self.number_of_atoms(polyatom.element)
+
+    def check_if_unlabel(self):
+        for key, value in self.label_dict.iteritems():
+            if not (hl.get_isotope_natural(key) == key or value == 0):
+                return False
+        return True

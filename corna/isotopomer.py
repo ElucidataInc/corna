@@ -26,11 +26,11 @@ def validate_data(data):
     if not hl.check_if_all_elems_same_type(data.values(), np.ndarray):
         raise TypeError('Intensities should be of type numpy arrays')
 
-def add_data_fragment(fragment_dict, data):
+def add_data_fragment(fragment_dict, data, label_info):
     frag_key, frag = fragment_dict.items()[0]
     assert isinstance(data, dict)
     validate_data(data)
-    return {frag_key: [frag, data]}
+    return {frag_key: [frag, data, label_info]}
 
 def parse_label_mass(label_mass):
     massdata = label_mass.split('_')
@@ -65,14 +65,16 @@ def insert_data_to_fragment(frag_info, label, sample_dict, mass, number, mode):
             parent_frag = create_fragment_from_mass(name, parent_formula, isotope, parent_mass, mode=mode)
             daughter_frag = create_fragment_from_mass(name, daughter_formula, isotope, daughter_mass, mode=mode)
             frag = create_combined_fragment(parent_frag, daughter_frag)
+            label_info = parent_frag.check_if_unlabel()
     elif number == True:
             label_number_dict = parse_label_number(label)
             name = frag_info[0]
             formula = frag_info[1]
             frag = create_fragment_from_number(name, formula, label_number_dict)
+            label_info = frag.check_if_unlabel()
     else:
         raise TypeError('Labels in data should be deducable from mass or number')
-    return add_data_fragment(frag, sample_dict)
+    return add_data_fragment(frag, sample_dict, label_info)
 
 def bulk_insert_data_to_fragment(frag_data_dict, mass=False, number=False, mode=None):
     frag_info, list_data_dict = frag_data_dict.items()[0]
