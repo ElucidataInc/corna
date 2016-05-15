@@ -71,11 +71,10 @@ class TestLabelClass:
 class TestFragmentClass:
     @classmethod
     def setup_class(cls):
-        cls.fragment = Fragment('Glucose', 'C6H12O6', 'Glucose', label_dict={'C13':5})
-        cls.fragment_mass = Fragment('Glucose', 'C6H12O6', 'Glucose',
-                                     isotracer='C13', isotope_mass=181, molecular_mass=180)
-        cls.fragment_mode = Fragment('Glucose', 'C6H12O6', 'Glucose',
-                                     isotracer='C13', isotope_mass=181, mode='pos')
+        cls.fragment = Fragment('Glucose', 'C6H12O6', label_dict={'C13':5})
+        cls.fragment_mass = Fragment('Glucose', 'C6H12O6', isotracer='C13', isotope_mass=181, molecular_mass=180)
+        cls.fragment_mode = Fragment('Glucose', 'C6H12O6', isotracer='C13', isotope_mass=181, mode='pos')
+        cls.fragment_unlabel_nat = Fragment('Glucose', 'C6H12O6', label_dict={'C12':5})
 
     @classmethod
     def teardown_class(cls):
@@ -112,3 +111,12 @@ class TestFragmentClass:
 
     def test_get_number_of_atoms_isotope(self):
         assert self.fragment.get_number_of_atoms_isotope('C13') == 6
+
+    def test_check_if_unlabel_mass(self):
+        assert self.fragment_mode.check_if_unlabel() == True
+
+    def test_check_if_unlabel_nat(self):
+        assert self.fragment_unlabel_nat.check_if_unlabel() == True
+
+    def test_check_if_unlabel_label(self):
+        assert self.fragment.check_if_unlabel() == False
