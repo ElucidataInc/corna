@@ -4,7 +4,7 @@ import pytest
 import corna.isotopomer as iso
 from corna.model import Fragment
 
-class TestFragmentClass:
+class TestIsotopomerClass:
     @classmethod
     def setup_class(cls):
         cls.fragment = Fragment('Glucose', 'C6H12O6')
@@ -39,3 +39,34 @@ class TestFragmentClass:
         with pytest.raises(AssertionError) as err:
             iso.add_data_isotopomers(self.frag_key, self.label_dict, self.intensity_err)
         assert err.value.message == 'intensity should be numpy array'
+
+def test_parse_label_number():
+    assert iso.parse_label_number('C13_1_N15_2') == {'C13':1, 'N15':2}
+
+def test_parse_label_number_isotope_error():
+    with pytest.raises(KeyError):
+     iso.parse_label_number('C131_N15_2')
+
+def test_parse_label_number_num_error():
+    with pytest.raises(ValueError):
+     iso.parse_label_number('C13_N15')
+
+def test_parse_label_mass():
+    assert iso.parse_label_mass('C13_191_111') == {'tracer': 'C13', 'parent_mass': 191, 'daughter_mass': 111}
+
+def test_parse_label_mass_indexerror():
+    with pytest.raises(IndexError) as err:
+        iso.parse_label_mass('C13')
+    assert err.value.message == 'The key should have three components,' \
+                                ' isotope, parent mass and daughter mass' \
+                                ' separated by _ in the same order'
+
+def test_parse_label_mass_value_error():
+    with pytest.raises(ValueError) as err:
+        iso.parse_label_mass('C13_N15_11')
+    assert err.value.message == 'Masses should be convertible to floats'
+
+def test_parse_label_mass_key_error():
+    with pytest.raises(KeyError) as err:
+        iso.parse_label_mass('191_111')
+    assert err.value.message == 'First part of the key must be an isotope'

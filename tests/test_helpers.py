@@ -45,8 +45,18 @@ def test_filter_df():
 	with pytest.raises(KeyError):
 		filter_df = help.filter_df(df, 'col_1', 10)
 
+def test_create_dict_from_isotope_label_list():
+    assert help.create_dict_from_isotope_label_list(['C13',2,'N15',5]) == {'C13': 2, 'N15': 5}
 
+def test_create_dict_from_isotope_label_list_missing_number():
+    with pytest.raises(ValueError) as err:
+        help.create_dict_from_isotope_label_list(['C13','N15',5])
+    assert err.value.message == 'The number of labels should be integer'
 
+def test_create_dict_from_isotope_label_list_no_isotope():
+    with pytest.raises(KeyError) as err:
+        help. create_dict_from_isotope_label_list([6, 'C13','N15',5])
+    assert err.value.message == 'The key must be an isotope'
 
 
 
