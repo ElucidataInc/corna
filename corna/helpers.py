@@ -117,6 +117,7 @@ def filter_df(df, column_name, column_value):
 
 	return filtered_df
 
+
 def create_dict_from_isotope_label_list(isonumlist):
     label_dict = {}
     for i in xrange(0,len(isonumlist),2):
