@@ -1,7 +1,8 @@
 import file_parser as fp
-import helpers as hl
 import os
 import sys
+
+import helpers as hl
 
 
 # setting relative path
@@ -20,6 +21,7 @@ merged_df = fp.maven_merge_dfs(input_data, metadata)
 
 # std model maven
 std_model = fp.standard_model(merged_df, parent = 'False')
+print std_model
 
 # filter df
 filter_df = hl.filter_df(merged_df, 'Sample Name', 'sample_1')
@@ -28,7 +30,7 @@ filter_df = hl.filter_df(merged_df, 'Sample Name', 'sample_1')
 # MultiQuant
 
 # read files
-mq_df = hl.concat_txts_into_df(data_dir)
+mq_df = hl.concat_txts_into_df(data_dir + '/')
 mq_metdata = hl.read_file(data_dir + '/mq_metadata.xlsx')
 
 # merge mq_data + metadata
@@ -36,6 +38,10 @@ merged_data = fp.mq_merge_dfs(mq_df, mq_metdata)
 
 # standard model mq
 std_model_mq = fp.standard_model(merged_data, parent = 'true')
+
+
+
+
 
 
 
