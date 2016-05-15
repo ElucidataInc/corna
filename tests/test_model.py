@@ -71,11 +71,17 @@ class TestLabelClass:
 class TestFragmentClass:
     @classmethod
     def setup_class(cls):
-        cls.fragment = Fragment('Glucose', 'C6H12O6')
+        cls.fragment = Fragment('Glucose', 'C6H12O6', 'Glucose', label_dict={'C13':5})
+        cls.fragment_mass = Fragment('Glucose', 'C6H12O6', 'Glucose',
+                                     isotracer='C13', isotope_mass=181, molecular_mass=180)
+        cls.fragment_mode = Fragment('Glucose', 'C6H12O6', 'Glucose',
+                                     isotracer='C13', isotope_mass=181, mode='pos')
 
     @classmethod
     def teardown_class(cls):
         del cls.fragment
+        del cls.fragment_mass
+        del cls.fragment_mode
 
     def test_fragment_elem_label(self):
         assert self.fragment.get_elem_num({'C12':3, 'C13':2, 'N15':2}) == {'C':5, 'N':2}
@@ -103,3 +109,6 @@ class TestFragmentClass:
 
     def test_label_dict_from_mass(self):
         assert self.fragment.create_label_dict_from_mass('C13', isotopic_mass=182, mode='neg') == {'C13': 3}
+
+    def test_get_number_of_atoms_isotope(self):
+        assert self.fragment.get_number_of_atoms_isotope('C13') == 6

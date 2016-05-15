@@ -5,14 +5,16 @@ from formula import Formula
 import helpers as hl
 
 
+polyatomschema = FormulaSchema().create_polyatom_schema()
+
 class Ion():
     def __init__(self, name, formula):
         self.name = name
-        self.formula = formula
+        self.formula = self.get_formula(formula)
 
-    def get_formula(self):
+    def get_formula(self, formula):
         """Parsing formula to store as an element -> number of atoms dictionary"""
-        parsed_formula = Formula(self.formula).parse_formula_to_elem_numatoms()
+        parsed_formula = Formula(formula).parse_formula_to_elem_numatoms()
         return parsed_formula
 
     def number_of_atoms(self, element):
@@ -26,7 +28,7 @@ class Ion():
             KeyError : if element doesn't exist in the
                 formula
         """
-        parsed_formula = self.get_formula()
+        parsed_formula = self.formula
         try:
             num_atoms = parsed_formula[element]
             return num_atoms
@@ -34,7 +36,7 @@ class Ion():
             raise KeyError("Element not in formula", element)
 
     def get_mol_weight(self):
-        parsed_formula = self.get_formula()
+        parsed_formula = self.formula
         mw=0
         for sym,qty in parsed_formula.iteritems():
             mw = mw + hl.get_atomic_weight(sym)*qty
@@ -69,6 +71,7 @@ class Label():
 
 class Fragment(Ion, Label):
     def __init__(self, name, formula, parent, **kwargs):
+        #TODO: create function to get isotope mass
         Ion.__init__(self, name, formula)
         self.parent = parent
         if kwargs.has_key('label_dict'):
@@ -87,7 +90,6 @@ class Fragment(Ion, Label):
         self.check_if_valid_label(self.label_dict)
 
     def get_elem_num(self, label_dict):
-        polyatomschema = FormulaSchema().create_polyatom_schema()
         elem_num = {}
         for iso in label_dict.keys():
             polyatomdata = polyatomschema.parseString(iso)
@@ -101,12 +103,10 @@ class Fragment(Ion, Label):
 
     def check_if_valid_label(self, label_dict):
         elem_num = self.get_elem_num(label_dict)
-        formula = self.get_formula()
+        formula = self.formula
         for ele, num in elem_num.iteritems():
             try:
-                if 0 <= num <= formula[ele]:
-                        pass
-                else:
+                if not (0 <= num <= formula[ele]):
                         raise OverflowError('Number of labeled atoms must be '
                                         'less than/equal to total number of atoms')
             except KeyError:
@@ -130,3 +130,8 @@ class Fragment(Ion, Label):
     def create_label_dict_given_mol_mass(self, isotope, isotopic_mass, mol_mass):
         num = self.get_label_from_mass(isotope, mol_mass, isotopic_mass)
         return {isotope: num}
+
+    def get_number_of_atoms_isotope(self, isotope):
+        polyatomdata = polyatomschema.parseString(isotope)
+        polyatom = polyatomdata[0]
+        return self.number_of_atoms(polyatom.element)
