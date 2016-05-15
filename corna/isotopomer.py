@@ -8,18 +8,21 @@ def create_fragment_from_mass(name, formula, parent, isotope, isotope_mass, mole
     elif mode != None:
         frag = Fragment(name, formula, parent, isotracer=isotope, isotope_mass=isotope_mass, mode=mode)
     else:
-        raise IOError('One of molecular mass/mode is required to create fragment from mass')
+        frag = Fragment(name, formula, parent, isotracer=isotope, isotope_mass=isotope_mass)
     return {name:frag}
 
 def create_fragment_from_number(name, formula, parent, label_dict):
-    frag = Fragment(name, formula, parent, label_dict)
+    frag = Fragment(name, formula, parent, label_dict=label_dict)
     return {name:frag}
 
 def create_combined_fragment(parent_fragment_dict, daughter_fragment_dict):
-    parent_key = hl.get_key_from_single_value_dict(parent_fragment_dict)
-    daughter_key = hl.get_key_from_single_value_dict(daughter_fragment_dict)
-    return {(parent_key, daughter_key): [parent_fragment_dict[parent_key],
-                                         daughter_fragment_dict[daughter_key]]}
+    parent_key, parent_fragment = parent_fragment_dict.ietms()[0]
+    daughter_key, daughter_fragment = daughter_fragment_dict.items()[0]
+    return {(parent_key, daughter_key): [parent_fragment, daughter_fragment]}
+
+def add_data_fragment(fragment_dict, data):
+    frag_key, frag = fragment_dict.items()[0]
+    return {frag_key : [frag, data]}
 
 def create_isotopomer_label(frag_dict, label_dict):
     frag_key, frag = frag_dict.items()[0]
@@ -58,3 +61,24 @@ def parse_label_mass(label_mass):
 
 def parse_label_number(label_number):
     return hl.create_dict_from_isotope_label_list(label_number.split('_'))
+
+def parse_label_data_to_fragment(frag_data_dict, mass=False, number=False, mode=None):
+    fragment_info, data = frag_data_dict.items()[0]
+    label, sample_dict = data.items()[0]
+    name = fragment_info[0]
+    formula = fragment_info[1]
+    parent = fragment_info[2]
+    if mass == True:
+            label_mass_dict = parse_label_mass(label)
+            isotope = label_mass_dict['tracer']
+            parent_mass = label_mass_dict['parent_mass']
+            daughter_mass = label_mass_dict['daughter_mass']
+            parent_frag = create_fragment_from_mass(name, formula, parent, isotope, parent_mass, mode=mode)
+            daughter_frag = create_fragment_from_mass(name, formula, parent, isotope, daughter_mass, mode=mode)
+            frag = create_combined_fragment(parent_frag, daughter_frag)
+    elif number == True:
+            label_number_dict = parse_label_number(label)
+            frag = create_fragment_from_number(name, formula, parent, label_number_dict)
+    else:
+        raise TypeError('Labels in data should be deducable from mass or number')
+    return add_data_fragment(frag, sample_dict)

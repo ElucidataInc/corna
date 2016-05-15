@@ -78,13 +78,15 @@ class Fragment(Ion, Label):
             self.label_dict = kwargs['label_dict']
         elif kwargs.has_key('isotracer') and kwargs.has_key('isotope_mass'):
             isotope = kwargs['isotracer']
-            isotope_mass = kwargs['isotope_mass']
+            self.isotope_mass = kwargs['isotope_mass']
             if kwargs.has_key('molecular_mass'):
                 mol_mass = kwargs['molecular_mass']
-                self.label_dict = self.create_label_dict_given_mol_mass(isotope, isotope_mass, mol_mass)
+                self.label_dict = self.create_label_dict_given_mol_mass(isotope, self.isotope_mass, mol_mass)
             elif kwargs.has_key('mode'):
                 mode = kwargs['mode']
-                self.label_dict = self.create_label_dict_from_mass(isotope, isotope_mass, mode)
+                self.label_dict = self.create_label_dict_from_mass(isotope, self.isotope_mass, mode)
+            else:
+                self.label_dict = self.create_label_dict_from_mass(isotope, self.isotope_mass)
         else:
             raise KeyError('Fragment should contain label information')
         self.check_if_valid_label(self.label_dict)
@@ -122,8 +124,11 @@ class Fragment(Ion, Label):
             raise TypeError('Only two modes possible -> pos/neg')
         return eff_mol_mass
 
-    def create_label_dict_from_mass(self, isotope, isotopic_mass, mode):
-        molecular_mass = self.effective_mol_mass(mode)
+    def create_label_dict_from_mass(self, isotope, isotopic_mass, mode=None):
+        if mode != None:
+            molecular_mass = self.effective_mol_mass(mode)
+        else:
+            molecular_mass = self.get_mol_weight()
         num = self.get_label_from_mass(isotope, molecular_mass, isotopic_mass)
         return {isotope: num}
 
