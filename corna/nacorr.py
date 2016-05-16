@@ -58,7 +58,8 @@ preprocess_data = preproc.background('A. [13C-glc] G2.5 0min', fragments_dict[('
 
 # post processing - replace negative values by zero
 # tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
-post_processed_dict = postpro.replace_negative_to_zero(std_model_mq, replace_negative = True)
+post_processed_dict = postpro.replace_negative_to_zero(std_model_mvn, replace_negative = True)
+print post_processed_dict
 
 
 # output: convert nested dictionary to pandas data frame and add columns from merged df
