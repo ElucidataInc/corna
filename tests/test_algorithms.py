@@ -360,14 +360,31 @@ glutamate_146_41_output_dict[(148.0, 43.0)] = glutamate_146_41[('Glutamate 148/4
 
 
 def test_na_correct_mimosa():
-    assert algo.na_correct_mimosa(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],
+    assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
+                                  input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
                                   2055, 40820, 0, 'C13', 0.011) == 798.3600000000001
 
 def test_na_correct_mimosa_zero():
-    assert algo.na_correct_mimosa(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],
+    assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
+                                  input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
                                   769, 87550, 0, 'C13', 0.011) == 0
+
+def test_na_correct_mimosa_array():
+    assert numpy.array_equal(algo.na_correct_mimosa_algo_array(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
+                                            input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
+                                      numpy.array([45060, 31710, 87550,	0, 60980, 38700]), numpy.zeros(6),
+                                      numpy.zeros(6), 'C13', 0.011), numpy.array([ 47042.64,  33105.24,  91402.2,
+                                                                       0., 63663.12,  40402.8]))
 
 def test_arrange_fragments_by_mass():
     test_dict = algo.arrange_fragments_by_mass(glutamate_146_41)
     for key, value in glutamate_146_41_output_dict.iteritems():
         assert test_dict[key] == value
+
+def test_na_correction_mimosa_by_fragment():
+    test_dict = algo.na_correction_mimosa_by_fragment(glutamate_146_41)
+    test_data = test_dict[(147.0, 42.0)][1]
+    print test_data['F. [13C-glc] G2.5 120min']
+    #assert numpy.array_equal(test_data['F. [13C-glc] G2.5 120min'], numpy.array([0.00E+00,	0.00E+00,
+    #                                                             8.93E+02,	0.00E+00,
+    #                                                             0.00E+00,	2.36E+02]))
