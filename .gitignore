@@ -62,8 +62,5 @@ Thumbs.db
 
 #data formats#
 #############
-*.xlsx
-*.xls
 *.cdat
-*.csv
 *.xml

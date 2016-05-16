@@ -23,8 +23,8 @@ def create_combined_fragment(parent_fragment_dict, daughter_fragment_dict):
 def validate_data(data):
     if not hl.check_if_all_elems_same_type(data.keys(), str):
         raise TypeError('Sample names should be of type string')
-    #if not hl.check_if_all_elems_same_type(data.values(), np.ndarray):
-    #    raise TypeError('Intensities should be of type numpy arrays')
+    if not hl.check_if_all_elems_same_type(data.values(), np.ndarray):
+        raise TypeError('Intensities should be of type numpy arrays')
 
 def add_data_fragment(fragment_dict, data, label_info):
     frag_key, frag = fragment_dict.items()[0]

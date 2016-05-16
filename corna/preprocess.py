@@ -1,6 +1,10 @@
-from scipy.misc import comb
 import math
+
+import numpy
+from scipy.misc import comb
+
 import helpers as hl
+
 
 def background_noise(parent_label, na, daughter_atoms, unlabel_intensity):
     if parent_label <= daughter_atoms:
@@ -31,3 +35,13 @@ def background(sample_name, input_fragment_value, unlabeled_fragment_value):
         background = backround_subtraction(input_intensities[i], noise)
         background_list.append(background)
     return background_list
+
+def background_correction(bacground_list, sample_data):
+    background = max(bacground_list)
+    corrected_sample_data = {}
+    for key, value in sample_data.iteritems():
+        new_value = value - background
+        new_value[new_value<0]=0
+        corrected_sample_data[key] = new_value
+
+    return corrected_sample_data
