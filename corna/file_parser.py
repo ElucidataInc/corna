@@ -1,5 +1,4 @@
-import os
-import json
+import numpy
 import pandas as pd
 import helpers as hl
 
@@ -65,7 +64,7 @@ def mq_merge_dfs(df1, df2):
 
 def standard_model(df, parent = True):
     if parent == True:
-        df["frag_keys"] = df.apply(lambda x : tuple([x["Name"], x["Formula"], x["Parent_Formula"]]), axis=1)
+        df["frag_keys"] = df.apply(lambda x : tuple([x["Name"], x["Formula"], x["Parent"], x["Parent_Formula"]]), axis=1)
     elif parent == False:
         df["frag_keys"] = df.apply(lambda x : tuple([x["Name"], x["Formula"]]), axis=1)
 
@@ -78,7 +77,7 @@ def standard_model(df, parent = True):
         lab_dict = {}
         for label in unq_labels:
             df_subset_on_labels = df_subset[df_subset["Label"] == label]
-            label_frame = df_subset_on_labels.groupby("Sample Name")["Intensity"].apply(lambda x: x.tolist())
+            label_frame = df_subset_on_labels.groupby("Sample Name")["Intensity"].apply(lambda x: numpy.array(x.tolist()))
             label_dict = label_frame.to_dict()
             lab_dict[label] = label_dict
         std_model_dict[frags] = lab_dict

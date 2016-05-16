@@ -46,12 +46,20 @@ std_model_mq = fp.standard_model(merged_data, parent = True)
 # integrating isotopomer and parser (input is standardised model in form of nested dictionaries)
 fragments_dict = {}
 for frag_name, label_dict in std_model_mq.iteritems():
-	 fragments_dict.update(iso.bulk_insert_data_to_fragment(frag_name, label_dict, mass=True, number=False, mode=None))
+    if frag_name[2] == 'Glutamate 146/41':
+        new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
+        fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
 
-# preprocessing : correction for background noise
-preprocess_data = preproc.background('A. [13C-glc] G2.5 0min', fragments_dict[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],\
- fragments_dict[('Glutamate 146/41_146.0', 'Glutamate 146/41_41.0')])
+#preprocessing : correction for background noise
+#preprocess_data = preproc.background('A. [13C-glc] G2.5 0min', fragments_dict[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],\
+# fragments_dict[('Glutamate 146/41_146.0', 'Glutamate 146/41_41.0')])
 
+#preprocessing for a given metabolite
+preproc.bulk_background_correction(fragments_dict, ['A. [13C-glc] G2.5 0min', 'B. [13C-glc] G2.5 5min',
+                                                    'C. [13C-glc] G2.5 15min', 'D. [13C-glc] G2.5 30min',
+                                                    'E. [13C-glc] G2.5 60min', 'F. [13C-glc] G2.5 120min',
+                                                    'G. [13C-glc] G2.5 240min', 'H. [6,6-DD-glc] G2.5 240min'],
+                                   'A. [13C-glc] G2.5 0min')
 
 # na correction
 #code from algorithm.py

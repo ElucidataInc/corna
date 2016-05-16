@@ -43,5 +43,27 @@ def background_correction(bacground_list, sample_data):
         new_value = value - background
         new_value[new_value<0]=0
         corrected_sample_data[key] = new_value
-
     return corrected_sample_data
+
+
+def bulk_background_correction(fragment_dict, list_of_samples, background_sample):
+    input_fragments = []
+    unlabeled_fragment = []
+    corrected_fragments = []
+    for key, value in fragment_dict.iteritems():
+        unlabel = value[2]
+        if unlabel:
+            unlabeled_fragment.append(value)
+        else:
+            input_fragments.append(value)
+    assert len(unlabeled_fragment) == 1
+    for input_fragment in input_fragments:
+        background_list = background(background_sample, input_fragment, unlabeled_fragment[0])
+        sample_data = {}
+        data = input_fragment[1]
+        for sample_name in list_of_samples:
+            sample_data[sample_name] = data[sample_name]
+        corrected_sample_data = background_correction(background_list, sample_data)
+        input_fragment[1] = corrected_sample_data
+        corrected_fragments.append(input_fragment)
+    return corrected_fragments
