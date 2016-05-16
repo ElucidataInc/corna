@@ -52,5 +52,9 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
 		return corrected_dict
 
 
+def calculate_enrichment():
+	print 'h'
+
+
 
 

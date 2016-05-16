@@ -7,6 +7,8 @@ import isotopomer as iso
 import preprocess as preproc
 import postprocess as postpro
 
+import pandas as pd
+
 
 # setting relative path
 basepath = os.path.dirname(__file__)
@@ -59,15 +61,41 @@ preprocess_data = preproc.background('A. [13C-glc] G2.5 0min', fragments_dict[('
 # post processing - replace negative values by zero
 # tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
 post_processed_dict = postpro.replace_negative_to_zero(std_model_mvn, replace_negative = True)
-print post_processed_dict
 
 
 # output: convert nested dictionary to pandas data frame and add columns from merged df
 
+output_df = pd.DataFrame()
 
+#output_df['Name'] = std_model_mvn.ke
 
+name = []
+formula = []
+lab = []
+samp = []
 
+#for frag_name, label_dict in std_model_mvn.iteritems():
+	#name.append(frag_name[0])
+	#formula.append(frag_name[1])
+	#for label, samp_dict in label_dict.iteritems():
+		#lab.append(label)
+		#df_t = pd.DataFrame(samp_dict).transpose()
+		#df_t['label'] =label
+		#for sample, intensity_list in samp_dict.iteritems():
 
+#print df_t
+#print pd.DataFrame(std_model_mvn)
+frames = []
+labels = []
+for frag_name, label_dict in std_model_mvn.iteritems():
+	name.append(frag_name)
+	frames.append(pd.DataFrame.from_dict(label_dict, orient='index'))
+	#for label, samp_dict in label_dict.iteritems():
+		#labels.append(label)
+		#frames.append(pd.DataFrame.from_dict(samp_dict, orient='index'))
+
+#print frames
+print pd.concat(frames, keys=name).reset_index()
 
 
 
