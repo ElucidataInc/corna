@@ -5,6 +5,7 @@ import helpers as hl
 import file_parser as fp
 import isotopomer as iso
 import preprocess as preproc
+import postprocess as postpro
 
 
 # setting relative path
@@ -25,7 +26,8 @@ merged_df = fp.maven_merge_dfs(input_data, metadata)
 filter_df = hl.filter_df(merged_df, 'Sample Name', 'sample_1')
 
 # std model maven
-std_model = fp.standard_model(merged_df, parent = False)
+std_model_mvn = fp.standard_model(merged_df, parent = False)
+
 
 
 # MultiQuant
@@ -43,12 +45,34 @@ std_model_mq = fp.standard_model(merged_data, parent = True)
 
 # integrating isotopomer and parser (input is standardised model in form of nested dictionaries)
 fragments_dict = {}
-for key, value in std_model_mq.iteritems():
-	 fragments_dict.update(iso.bulk_insert_data_to_fragment(key, value, mass=True, number=False, mode=None))
+for frag_name, label_dict in std_model_mq.iteritems():
+	 fragments_dict.update(iso.bulk_insert_data_to_fragment(frag_name, label_dict, mass=True, number=False, mode=None))
 
 # preprocessing : correction for background noise
 preprocess_data = preproc.background('A. [13C-glc] G2.5 0min', fragments_dict[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],\
  fragments_dict[('Glutamate 146/41_146.0', 'Glutamate 146/41_41.0')])
+
+
+# na correction
+#code from algorithm.py
+
+# post processing - replace negative values by zero
+# tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
+post_processed_dict = postpro.replace_negative_to_zero(std_model_mvn, replace_negative = True)
+print post_processed_dict
+
+
+# output: convert nested dictionary to pandas data frame and add columns from merged df
+
+
+
+
+
+
+
+
+
+
 
 
 
