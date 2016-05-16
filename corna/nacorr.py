@@ -43,18 +43,6 @@ merged_data.to_csv(data_dir + '/merged_mq.csv')
 # standard model mq
 std_model_mq = fp.standard_model(merged_data, parent = True)
 
-# Pyruvate 87/87 - C3H3O3/C3H3O3
-# Lactate 89/89 - C3H5O3/C3H5O3
-# Citrate 191/67 - C6H7O7/C4H3O
-# Citrate 191/111 - C6H7O7/C5H3O3
-# Glutamate 146/128 - C5H8NO4/C5H6NO3
-# Glutamate 146/41 - C5H8NO4/C2H4O
-# Succinate 117/99 - C4H5O4/C4H3O3
-# Succinate 117/73 - C4H5O4/C3H5O2
-# Malate 133/115 - C4H5O5/C4H3O4
-# PEP 167/79 - C3H4O6P/O3P
-# Taurine 124/80 - C2H6NO3S/O3S
-
 # integrating isotopomer and parser (input is standardised model in form of nested dictionaries)
 fragments_dict = {}
 for frag_name, label_dict in std_model_mq.iteritems():
@@ -62,7 +50,7 @@ for frag_name, label_dict in std_model_mq.iteritems():
         new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
         fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
 
-# preprocessing : correction for background noise
+#preprocessing : correction for background noise
 #preprocess_data = preproc.background('A. [13C-glc] G2.5 0min', fragments_dict[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],\
 # fragments_dict[('Glutamate 146/41_146.0', 'Glutamate 146/41_41.0')])
 
