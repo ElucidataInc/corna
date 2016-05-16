@@ -134,7 +134,6 @@ def get_unique_values(df, column_name):
     return unique_val_list
 
 
-
 def get_key_from_single_value_dict(inputdict):
     if len(inputdict) == 1:
         key, value = inputdict.items()[0]

@@ -1,4 +1,6 @@
-import numpy
+import os
+import json
+import numpy as np
 import pandas as pd
 import helpers as hl
 
@@ -77,7 +79,8 @@ def standard_model(df, parent = True):
         lab_dict = {}
         for label in unq_labels:
             df_subset_on_labels = df_subset[df_subset["Label"] == label]
-            label_frame = df_subset_on_labels.groupby("Sample Name")["Intensity"].apply(lambda x: numpy.array(x.tolist()))
+
+            label_frame = df_subset_on_labels.groupby("Sample Name")["Intensity"].apply(lambda x: np.array(x.tolist()))
             label_dict = label_frame.to_dict()
             lab_dict[label] = label_dict
         std_model_dict[frags] = lab_dict
