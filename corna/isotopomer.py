@@ -11,20 +11,20 @@ def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_ma
         frag = Fragment(name, formula, isotracer=isotope, isotope_mass=isotope_mass)
     return {name:frag}
 
-def create_fragment_from_number(name, formula, parent, label_dict):
-    frag = Fragment(name, formula, parent, label_dict=label_dict)
+def create_fragment_from_number(name, formula, label_dict):
+    frag = Fragment(name, formula, label_dict=label_dict)
     return {name:frag}
 
 def create_combined_fragment(parent_fragment_dict, daughter_fragment_dict):
-    parent_key, parent_fragment = parent_fragment_dict.ietms()[0]
+    parent_key, parent_fragment = parent_fragment_dict.items()[0]
     daughter_key, daughter_fragment = daughter_fragment_dict.items()[0]
     return {(parent_key, daughter_key): [parent_fragment, daughter_fragment]}
 
 def validate_data(data):
     if not hl.check_if_all_elems_same_type(data.keys(), str):
         raise TypeError('Sample names should be of type string')
-    if not hl.check_if_all_elems_same_type(data.values(), np.ndarray):
-        raise TypeError('Intensities should be of type numpy arrays')
+    #if not hl.check_if_all_elems_same_type(data.values(), np.ndarray):
+    #    raise TypeError('Intensities should be of type numpy arrays')
 
 def add_data_fragment(fragment_dict, data, label_info):
     frag_key, frag = fragment_dict.items()[0]
@@ -57,28 +57,29 @@ def insert_data_to_fragment(frag_info, label, sample_dict, mass, number, mode):
             name = frag_info[0]
             daughter_formula = frag_info[1]
             parent_formula = frag_info[2]
-            isotope = label_mass_dict['tracer']
+            isotope = str(label_mass_dict['tracer'])
             parent_mass = label_mass_dict['parent_mass']
             parent_name = name + '_' + str(parent_mass)
             daughter_mass = label_mass_dict['daughter_mass']
             daughter_name = name + '_' + str(daughter_mass)
-            parent_frag = create_fragment_from_mass(name, parent_formula, isotope, parent_mass, mode=mode)
-            daughter_frag = create_fragment_from_mass(name, daughter_formula, isotope, daughter_mass, mode=mode)
+            parent_frag = create_fragment_from_mass(parent_name, parent_formula, isotope, parent_mass, mode=mode)
+            daughter_frag = create_fragment_from_mass(daughter_name, daughter_formula, isotope, daughter_mass, mode=mode)
             frag = create_combined_fragment(parent_frag, daughter_frag)
-            label_info = parent_frag.check_if_unlabel()
+            parent_frag_key, parent_frag_value = parent_frag.items()[0]
+            label_info = parent_frag_value.check_if_unlabel()
     elif number == True:
             label_number_dict = parse_label_number(label)
-            name = frag_info[0]
+            name = frag_info[0] + '_' + label
             formula = frag_info[1]
             frag = create_fragment_from_number(name, formula, label_number_dict)
-            label_info = frag.check_if_unlabel()
+            frag_key, frag_value = frag.items()[0]
+            label_info = frag_value.check_if_unlabel()
     else:
         raise TypeError('Labels in data should be deducable from mass or number')
     return add_data_fragment(frag, sample_dict, label_info)
 
-def bulk_insert_data_to_fragment(frag_data_dict, mass=False, number=False, mode=None):
-    frag_info, list_data_dict = frag_data_dict.items()[0]
-    fragment_dict = {}
+def bulk_insert_data_to_fragment(frag_info, list_data_dict, mass=False, number=False, mode=None):
+    fragment_list = {}
     for key, value in list_data_dict.iteritems():
-        fragment_dict.update(insert_data_to_fragment(frag_info, key, value, mass, number, mode))
-    return fragment_dict
+        fragment_list.update(insert_data_to_fragment(frag_info, key, value, mass, number, mode))
+    return fragment_list

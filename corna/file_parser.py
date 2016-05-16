@@ -48,7 +48,6 @@ def mvn_met_formula(filtered_df, col_name = 'Formula'):
 
 
 
-
 def mq_merge_dfs(df1, df2):
 
     #df2['Parent_Formula'] =
@@ -64,27 +63,27 @@ def mq_merge_dfs(df1, df2):
 
 
 
-def standard_model(df, parent = 'true'):
-    if parent == 'true':
-        df["tups"] = df.apply(lambda x : tuple([x["Name"], x["Formula"], x["Parent_Formula"]]), axis=1)
-    else:
-        df["tups"] = df.apply(lambda x : tuple([x["Name"], x["Formula"]]), axis=1)
+def standard_model(df, parent = True):
+    if parent == True:
+        df["frag_keys"] = df.apply(lambda x : tuple([x["Name"], x["Formula"], x["Parent_Formula"]]), axis=1)
+    elif parent == False:
+        df["frag_keys"] = df.apply(lambda x : tuple([x["Name"], x["Formula"]]), axis=1)
 
-    unq_tups = df["tups"].unique().tolist()
-    outer_dict = {}
+    unique_frags = df["frag_keys"].unique().tolist()
+    std_model_dict = {}
 
-    for tups in unq_tups:
-        df_subset = df[df["tups"] == tups]
+    for frags in unique_frags:
+        df_subset = df[df["frag_keys"] == frags]
         unq_labels = df_subset["Label"].unique().tolist()
-        tup_dict = {}
+        lab_dict = {}
         for label in unq_labels:
             df_subset_on_labels = df_subset[df_subset["Label"] == label]
             label_frame = df_subset_on_labels.groupby("Sample Name")["Intensity"].apply(lambda x: x.tolist())
             label_dict = label_frame.to_dict()
-            tup_dict[label] = label_dict
-        outer_dict[tups] = tup_dict
+            lab_dict[label] = label_dict
+        std_model_dict[frags] = lab_dict
 
-    return outer_dict
+    return std_model_dict
 
 
 

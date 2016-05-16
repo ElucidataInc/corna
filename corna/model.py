@@ -103,6 +103,7 @@ class Fragment(Ion, Label):
         return elem_num
 
     def check_if_valid_label(self, label_dict):
+
         elem_num = self.get_elem_num(label_dict)
         formula = self.formula
         for ele, num in elem_num.iteritems():
