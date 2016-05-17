@@ -63,26 +63,25 @@ def filter_df(merged_data, colname, colvalue):
 
 
 # # standard model mq
-# std_model_mq = fp.standard_model(merged_data, parent = True)
+def std_data_model(dataframe):
+	std_model_mq = fp.standard_model(dataframe, parent = True)
+	return std_model_mq
 
 
-# # integrating isotopomer and parser (input is standardised model in form of nested dictionaries)
-# fragments_dict = {}
-# for frag_name, label_dict in std_model_mq.iteritems():
-#     if frag_name[2] == 'Citrate 191/67':
-#         new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
-#         fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
+def met_background_correction(metabolite, merged_data, background_sample, list_of_samples):
+    std_model_mq = fp.standard_model(merged_data, parent = True)
+    fragments_dict = {}
+    for frag_name, label_dict in std_model_mq.iteritems():
+        if frag_name[2] == metabolite:
+        	new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
+        	fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
+    preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample)
+    return preprocessed_dict
 
-# #preprocessing : correction for background noise
-# #preprocess_data = preproc.background('A. [13C-glc] G2.5 0min', fragments_dict[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],\
-# # fragments_dict[('Glutamate 146/41_146.0', 'Glutamate 146/41_41.0')])
 
-# #preprocessing for a given metabolite
-# preprocessed_dict = preproc.bulk_background_correction(fragments_dict, ['A. [13C-glc] G2.5 0min', 'B. [13C-glc] G2.5 5min',
-#                                                      'C. [13C-glc] G2.5 15min', 'D. [13C-glc] G2.5 30min',
-#                                                      'E. [13C-glc] G2.5 60min', 'F. [13C-glc] G2.5 120min',
-#                                                      'G. [13C-glc] G2.5 240min', 'H. [6,6-DD-glc] G2.5 240min'],
-#                                     'A. [13C-glc] G2.5 0min')
+def na_correction_mimosa(preprocessed_output):
+    na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output)
+    return na_corrected_out
 
 # # na correction
 # na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
