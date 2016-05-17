@@ -331,11 +331,11 @@ for i in range(len(list_of_frag_info_tuples)):
     glutamate_146_41.update(iso.bulk_insert_data_to_fragment(list_of_frag_info_tuples[i],
                                                              list_of_label_dict[i], mass=True, number=False, mode=None))
 
-def test_background_noise_label_less():
-    assert round(preproc.background_noise(2, 0.011, 5, 100), 3) == 0.121
+def test_background_noise_label_daughter_unlabel():
+    assert round(preproc.background_noise(31710, 0.011, 5, 1, 2, 0), 3) == 1046.43
 
-def test_background_noise_label_more():
-    assert preproc.background_noise(5, 0.011, 2, 100) == 1.6105099999999996e-08
+def test_background_noise_label_daughter_unlabel():
+    assert preproc.background_noise(31710, 0.011, 5, 1, 2, 1) == 697.62
 
 def test_backround_subtraction():
     assert preproc.backround_subtraction(27800, 2.29E+03) == 25510.0
@@ -352,8 +352,10 @@ unlabeled_fragment = iso.insert_data_to_fragment(('Glutamate 146/41', 'C2HO', 'C
                                                                                               32608.4505, 60981.034, 38701.986])}, mass=True, number=False, mode=None)
 
 def test_background():
-    assert preproc.background('A. [13C-glc] G2.5 0min', input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],
-                       unlabeled_fragment[('Glutamate 146/41_146.0', 'Glutamate 146/41_41.0')]) == [191.31336829999998, 731.09878379999998, 876.83452499999999, 586.58765930000004, 237.4648724000001, 714.30299960000002]
+    assert numpy.array_equal(numpy.around(preproc.background('A. [13C-glc] G2.5 0min', input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],
+                       unlabeled_fragment[('Glutamate 146/41_146.0', 'Glutamate 146/41_41.0')]),8),
+                             numpy.around(numpy.array([0, 363.29546099999993, 239.47687500000029, 208.3296335, 0, 265.359962]),8))
+
 
 background_list = [1.23E+02, 3.81E+02, 0.00E+00, 3.85E+02, 2.43E+02, 0.00E+00]
 sample_data = {'A. [13C-glc] G2.5 0min' : numpy.array([128.9, 385.1, 0, 385.2, 250.6, 0]),
@@ -385,5 +387,8 @@ def test_bulk_background_correction():
                                                      'G. [13C-glc] G2.5 240min', 'H. [6,6-DD-glc] G2.5 240min'],
                                     'A. [13C-glc] G2.5 0min')
     test_data = test_dict[('Glutamate 147/42_147.0', 'Glutamate 147/42_42.0')][1]
-    assert numpy.array_equal(numpy.around(test_data['F. [13C-glc] G2.5 120min'],9), numpy.around(numpy.array([566.8868407, 48.11697718,
-                                                              2365.4368407, 0., 1212.0958407, 1468.1873407]),9))
+    assert numpy.array_equal(numpy.around(test_data['F. [13C-glc] G2.5 120min'],9), numpy.around(numpy.array([586.451911,
+                                                                                                              67.68204748,
+                                                                                                              2385.001911,
+                                                                                                              0., 1231.660911,
+                                                                                                              1487.752411]),9))

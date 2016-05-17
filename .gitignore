@@ -9,6 +9,7 @@
 *.pyc
 *.py~
 *.swp
+*.ipynb
 
 # Virtual Environment #
 #######################
@@ -50,6 +51,7 @@ Thumbs.db
 *.out
 *.*~
 *.sh*
+
 #data base files#
 ################
 *.db
