@@ -157,7 +157,7 @@ def const_enzyme_name():
 
 def const_isotope_na_mass():
     isotope_na_mass = {'C12': {'NA':0.9893, 'mol_mass':12, 'nat_form': 'C12'},
-                       'C13': {'NA':0.0107, 'mol_mass':13.0033548378, 'nat_form': 'C12'},
+                       'C13': {'NA':0.011, 'mol_mass':13, 'nat_form': 'C12'},
                        'N15': {'NA':0.00364, 'mol_mass':15.0001088982, 'nat_form': 'N14'},
                        'C14': {'NA':0, 'mol_mass':14.003241989, 'nat_form': 'C12'}}
     const_obj = PyConstObj(isotope_na_mass=isotope_na_mass)
