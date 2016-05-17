@@ -10,10 +10,7 @@ def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intens
 
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
-    if corrected_intensity>0:
-        return corrected_intensity
-    else:
-        return 0
+    return corrected_intensity
 
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                       isotope, na):
@@ -23,7 +20,6 @@ def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, 
     n = daughter_frag_n.get_num_labeled_atoms_tracer()
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
-    corrected_intensity[corrected_intensity<0] = 0
     return corrected_intensity
 
 def arrange_fragments_by_mass(fragments_dict):
