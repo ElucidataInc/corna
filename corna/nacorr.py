@@ -48,7 +48,6 @@ fragments_dict = {}
 for frag_name, label_dict in std_model_mq.iteritems():
     if frag_name[2] == 'Glutamate 146/41':
         new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
-        print label_dict
         fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
 
 
