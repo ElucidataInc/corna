@@ -7,6 +7,7 @@ import isotopomer as iso
 import preprocess as preproc
 import algorithms as algo
 import postprocess as postpro
+import output as out
 
 
 
@@ -105,6 +106,25 @@ def na_correction_mimosa_all(preprocessed_output_all):
     for key, value in preprocessed_output_all:
         na_corrected_output[key] = algo.na_correction_mimosa_by_fragment(value)
     return na_corrected_output
+
+def replace_negatives(na_corr_dict):
+	na_corr_dict_std_model = iso.fragment_dict_to_std_model(na_corr_dict, mass=True, number=False)
+	post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict_std_model, replace_negative = True)
+	return post_processed_dict
+
+def fractional_enrichment(dict_std_model):
+	frac_enrichment = postpro.enrichment(dict_std_model)
+	return frac_enrichment
+
+def convert_to_df(dict_output):
+	std_model =  iso.fragment_dict_to_std_model(dict_output, mass=True, number=False)
+	model_to_df = out.convert_dict_df(std_model, parent = True)
+	return model_to_df
+
+def save_to_csv(df, path):
+	df.to_csv(path)
+
+
 
 
 # # na correction

@@ -26,11 +26,11 @@ def validate_data(data):
     if not hl.check_if_all_elems_same_type(data.values(), np.ndarray):
         raise TypeError('Intensities should be of type numpy arrays')
 
-def add_data_fragment(fragment_dict, data, label_info):
+def add_data_fragment(fragment_dict, data, label_info, name):
     frag_key, frag = fragment_dict.items()[0]
     assert isinstance(data, dict)
     validate_data(data)
-    return {frag_key: [frag, data, label_info]}
+    return {frag_key: [frag, data, label_info, name]}
 
 def parse_label_mass(label_mass):
     massdata = label_mass.split('_')
@@ -69,17 +69,44 @@ def insert_data_to_fragment(frag_info, label, sample_dict, mass, number, mode):
             label_info = parent_frag_value.check_if_unlabel()
     elif number == True:
             label_number_dict = parse_label_number(label)
-            name = frag_info[0] + '_' + label
+            name = frag_info[0]
+            frag_name = frag_info[0] + '_' + label
             formula = frag_info[1]
-            frag = create_fragment_from_number(name, formula, label_number_dict)
+            frag = create_fragment_from_number(frag_name, formula, label_number_dict)
             frag_key, frag_value = frag.items()[0]
             label_info = frag_value.check_if_unlabel()
     else:
         raise TypeError('Labels in data should be deducable from mass or number')
-    return add_data_fragment(frag, sample_dict, label_info)
+    return add_data_fragment(frag, sample_dict, label_info, name)
 
 def bulk_insert_data_to_fragment(frag_info, list_data_dict, mass=False, number=False, mode=None):
     fragment_list = {}
     for key, value in list_data_dict.iteritems():
         fragment_list.update(insert_data_to_fragment(frag_info, key, value, mass, number, mode))
     return fragment_list
+
+def fragment_to_input_model(fragment, mass, number):
+    if mass == True:
+        parent_frag, daughter_frag = fragment[0]
+        parent_formula = parent_frag.formula
+        daughter_formula = daughter_frag.formula
+        name = fragment[3]
+        key_tuple = (name, daughter_formula, parent_formula)
+        label_dict_key = str(parent_frag.isotope) + '_' + \
+                     str(parent_frag.isotope_mass) + '_' + \
+                     str(daughter_frag.isotope_mass)
+        label_dict_value = fragment[1]
+    elif number == True:
+        frag = fragment[0]
+        frag_formula = frag.formula
+        name = fragment[3]
+        key_tuple = (name, frag_formula)
+        label_dict_key = hl.label_dict_to_key(frag.label_dict)
+        label_dict_value = fragment[1]
+    return {key_tuple:{label_dict_key:label_dict_value}}
+
+def fragment_dict_to_std_model(fragment_dict, mass=False, number=False):
+    output_fragment_dict = {}
+    for key, value in fragment_dict.iteritems():
+        output_fragment_dict.update(fragment_to_input_model(value, mass, number))
+    return output_fragment_dict

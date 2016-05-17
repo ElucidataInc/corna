@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy
 
 
 def zero_if_negative(num):
@@ -71,7 +72,7 @@ def enrichment(fragments_dict):
 	   fractional_data = {}
 	   for sample_name, intensity in data.iteritems():
 	      fractional_data[sample_name] = intensity/sum_dict[sample_name]
-	   fragments_fractional[key] = [value[0], fractional_data, value[2]]
+	   fragments_fractional[key] = [value[0], fractional_data, value[2], value[3]]
 
 	return fragments_fractional
 

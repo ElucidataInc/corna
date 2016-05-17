@@ -1,13 +1,13 @@
 import os
 import sys
-<<<<<<< HEAD
-import numpy
-=======
+
+#import numpy
+
 
 import numpy as np
 import collections
 
->>>>>>> enrichment
+
 import helpers as hl
 import file_parser as fp
 import isotopomer as iso
@@ -82,21 +82,19 @@ preprocessed_dict = preproc.bulk_background_correction(fragments_dict, ['A. [13C
 
 # na correction
 na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
-#print na_corrected_dict
-# na_corrected_dict[(194.0, 69.0)][1]['F. [13C-glc] G2.5 120min']
-
-print iso.fragment_dict_to_std_model(na_corrected_dict,mass=True,number=False)
-
-#frac_enrichment = postpro.enrichment(preprocessed_dict)
-#print frac_enrichment
+na_corr_dict_std_model =  iso.fragment_dict_to_std_model(na_corrected_dict,mass=True,number=False)
 
 # post processing - replace negative values by zero
 # tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
-post_processed_dict = postpro.replace_negative_to_zero(std_model_mvn, replace_negative = True)
+post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict_std_model, replace_negative = True)
 
 
-dict_to_df = out.convert_dict_df(std_model_mq, parent = True)
-print dict_to_df
+frac_enrichment = postpro.enrichment(preprocessed_dict)
+frac_enr_dict_std_model =  iso.fragment_dict_to_std_model(frac_enrichment,mass=True,number=False)
+
+
+dict_to_df = out.convert_dict_df(frac_enr_dict_std_model, parent = True)
+
 
 
 

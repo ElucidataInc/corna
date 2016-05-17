@@ -17,8 +17,18 @@ list_of_samples = ['A. [13C-glc] G2.5 0min', 'B. [13C-glc] G2.5 5min', 'C. [13C-
 
 background_corr = corna.met_background_correction('Citrate 191/111', \
 					filtered_df, 'A. [13C-glc] G2.5 0min', list_of_samples)
+background_corr_df = corna.convert_to_df(background_corr)
 
 na_correction = corna.na_correction_mimosa(background_corr)
+na_corr_df = corna.convert_to_df(na_correction)
+
+post_processing = corna.replace_negatives(na_correction)
+post_pro_df = corna.convert_to_df(post_processing)
+
+fractional_enr = fractional_enrichment(post_processing)
+fractional_enr_df = corna.convert_to_df(fractional_enr)
+
+#save_dfs = corna.save_to_csv(fractional_enr_df, path)
 
 
 
