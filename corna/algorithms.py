@@ -21,13 +21,6 @@ def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, 
     d = daughter_frag_n.get_number_of_atoms_isotope(isotope)
     m = parent_frag_m.get_num_labeled_atoms_tracer()
     n = daughter_frag_n.get_num_labeled_atoms_tracer()
-    #print parent_frag_m.isotope_mass
-    #print daughter_frag_n.isotope_mass
-    if parent_frag_m.isotope_mass==147.0 and daughter_frag_n.isotope_mass==42.0:
-         print 'mn', intensity_m_n
-         print 'm-1n', intensity_m_1_n
-         print 'm-1n-1', intensity_m_1_n_1
-         print 'p', p, 'd', d, 'm', m, 'n', n
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
     corrected_intensity[corrected_intensity<0] = 0
@@ -44,11 +37,8 @@ def na_correction_mimosa_by_fragment(fragments_dict):
     fragment_dict_mass = arrange_fragments_by_mass(fragments_dict)
     corrected_dict_mass = {}
     for key, value in fragment_dict_mass.iteritems():
-        print key
         m_1_n = (key[0]-1, key[1])
-        print m_1_n
         m_1_n_1 = (key[0]-1, key[1]-1)
-        print m_1_n_1
         parent_frag_m, daughter_frag_n = value[0]
         isotope = parent_frag_m.isotope
         na = hl.get_isotope_na(isotope)
@@ -57,15 +47,12 @@ def na_correction_mimosa_by_fragment(fragments_dict):
         for sample_name, intensity_m_n in data.iteritems():
             try:
                 intensity_m_1_n = fragment_dict_mass[m_1_n][1][sample_name]
-                try:
-                    intensity_m_1_n_1 = fragment_dict_mass[m_1_n_1][1][sample_name]
-                    if sample_name == 'F. [13C-glc] G2.5 120min':
-                        print intensity_m_1_n_1
-                    print fragment_dict_mass[(146.0, 41.0)][1]['F. [13C-glc] G2.5 120min']
-                except KeyError:
-                    intensity_m_1_n_1 = np.zeros(len(intensity_m_n))
             except KeyError:
                 intensity_m_1_n = np.zeros(len(intensity_m_n))
+            try:
+                intensity_m_1_n_1 = fragment_dict_mass[m_1_n_1][1][sample_name]
+            except KeyError:
+                intensity_m_1_n_1 = np.zeros(len(intensity_m_n))
             corrected_data[sample_name] = na_correct_mimosa_algo_array(parent_frag_m,
                                         daughter_frag_n, intensity_m_n, intensity_m_1_n,
                                         intensity_m_1_n_1, isotope, na)

@@ -384,7 +384,6 @@ def test_arrange_fragments_by_mass():
 def test_na_correction_mimosa_by_fragment():
     test_dict = algo.na_correction_mimosa_by_fragment(glutamate_146_41)
     test_data = test_dict[(147.0, 42.0)][1]
-    print test_data['F. [13C-glc] G2.5 120min']
-    #assert numpy.array_equal(test_data['F. [13C-glc] G2.5 120min'], numpy.array([0.00E+00,	0.00E+00,
-    #                                                             8.93E+02,	0.00E+00,
-    #                                                             0.00E+00,	2.36E+02]))
+    assert numpy.array_equal(numpy.around(test_data['F. [13C-glc] G2.5 120min'],8), numpy.around(numpy.array([991.7099655, 522.23934132,
+                                                                                 2790.3025836, 0., 1768.9036688,
+                                                                                 2126.6667507 ]),8))
