@@ -29,6 +29,8 @@ def convert_dict_df(nest_dict, parent = True):
 
 			df_list.append(df)
 	final_df = pd.concat(df_list)
+	final_df.rename(columns={"level_0":"Label", 0:"Sample Name", 1:'Intensity'}, inplace=True)
+	final_df.pop('level_1')
 	return final_df
 
 

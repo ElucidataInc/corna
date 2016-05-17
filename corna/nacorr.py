@@ -86,8 +86,8 @@ preprocessed_dict = preproc.bulk_background_correction(fragments_dict, ['A. [13C
 post_processed_dict = postpro.replace_negative_to_zero(std_model_mvn, replace_negative = True)
 
 
-dict_to_df = out.convert_dict_df(std_model_mvn, parent = False)
-
+dict_to_df = out.convert_dict_df(std_model_mq, parent = True)
+print dict_to_df
 #merged_df.rename(columns={"variable":"Sample Name", "value":"Intensity"}, inplace=True)
 
 #dict_to_df[]
