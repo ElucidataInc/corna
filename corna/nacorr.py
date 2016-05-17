@@ -80,7 +80,7 @@ na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
 #print na_corrected_dict
 # na_corrected_dict[(194.0, 69.0)][1]['F. [13C-glc] G2.5 120min']
 
-
+print iso.fragment_dict_to_std_model(na_corrected_dict,mass=True,number=False)
 # post processing - replace negative values by zero
 # tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
 

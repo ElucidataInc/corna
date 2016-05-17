@@ -67,5 +67,5 @@ def bulk_background_correction(fragment_dict, list_of_samples, background_sample
             sample_data[sample_name] = data[sample_name]
         corrected_sample_data = background_correction(background_list, sample_data)
         corrected_fragments_dict[input_fragment[0]] = [input_fragment[1][0], corrected_sample_data,
-                                                       input_fragment[1][2]]
+                                                       input_fragment[1][2], input_fragment[1][3]]
     return corrected_fragments_dict
