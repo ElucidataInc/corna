@@ -64,3 +64,4 @@ Thumbs.db
 #############
 *.cdat
 *.xml
+*.ipynb
