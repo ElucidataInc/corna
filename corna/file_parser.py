@@ -63,6 +63,10 @@ def mq_merge_dfs(df1, df2):
     return remove_stds
 
 
+def get_sample_names(df):
+    sample_list = df['Sample Name'].unique().tolist()
+    return sample_list
+
 
 def standard_model(df, parent = True):
     if parent == True:

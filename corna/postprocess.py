@@ -52,31 +52,33 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
 		return corrected_dict
 
 
-def convert_dict_df(nest_dict):
-	frames = []
-	labels = []
-	name = []
-	for frag_name, label_dict in nest_dict.iteritems():
-		name.append(frag_name)
-		frames.append(pd.DataFrame.from_dict(label_dict, orient='index'))
+def enrichment(fragments_dict):
 
-		#for label, samp_dict in label_dict.iteritems():
-			#labels.append(label)
-			#frames.append(pd.DataFrame.from_dict(samp_dict, orient='index'))
+	all_values = fragments_dict.values()
+	sample_names = all_values[1][1].keys()
+	sum_dict = {}
+	for sample_name in sample_names:
+	   curr_arr = numpy.zeros(len(all_values[1][1][sample_name]))
+	   for value in all_values:
+	      curr_arr = curr_arr + value[1][sample_name]
+	   sum_dict[sample_name] = curr_arr
 
-	#print frames
-	dict_to_df = pd.concat(frames, keys=name).reset_index()
-	#print dict_to_df.sum()
-	all_cols = dict_to_df.columns.tolist()
-	level_cols = ['level_0', 'level_1', 'level_2']
-	sample_cols = []
-	for cols in all_cols:
-		if not cols in level_cols:
-			sample_cols.append(cols)
 
-	#df_sum = dict_to_df.groupby('level_1')[sample_cols].apply(lambda x :
-	#print dict_to_df
-	#print df_sum
+	fragments_fractional = {}
+
+	for key, value in fragments_dict.iteritems():
+	   data = value[1]
+	   fractional_data = {}
+	   for sample_name, intensity in data.iteritems():
+	      fractional_data[sample_name] = intensity/sum_dict[sample_name]
+	   fragments_fractional[key] = [value[0], fractional_data, value[2]]
+
+	return fragments_fractional
+
+
+
+
+
 
 
 
