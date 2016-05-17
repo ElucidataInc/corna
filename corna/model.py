@@ -28,7 +28,7 @@ class Ion():
             KeyError : if element doesn't exist in the
                 formula
         """
-        parsed_formula = self.get_formula(self.formula)
+        parsed_formula = self.get_formula()
         try:
             num_atoms = parsed_formula[element]
             return num_atoms
@@ -36,7 +36,7 @@ class Ion():
             raise KeyError("Element not in formula", element)
 
     def get_mol_weight(self):
-        parsed_formula = self.get_formula(self.formula)
+        parsed_formula = self.get_formula()
         mw=0
         for sym,qty in parsed_formula.iteritems():
             mw = mw + hl.get_atomic_weight(sym)*qty
@@ -105,7 +105,7 @@ class Fragment(Ion, Label):
     def check_if_valid_label(self, label_dict):
 
         elem_num = self.get_elem_num(label_dict)
-        formula = self.get_formula(self.formula)
+        formula = self.get_formula()
         for ele, num in elem_num.iteritems():
             try:
                 if not (0 <= num <= formula[ele]):

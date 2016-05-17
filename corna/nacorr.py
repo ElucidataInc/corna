@@ -59,6 +59,7 @@ std_model_mq = fp.standard_model(merged_data, parent = True)
 
 # integrating isotopomer and parser (input is standardised model in form of nested dictionaries)
 fragments_dict = {}
+print std_model_mq
 for frag_name, label_dict in std_model_mq.iteritems():
     if frag_name[2] == 'Citrate 191/67':
         new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
@@ -80,7 +81,7 @@ na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
 #print na_corrected_dict
 # na_corrected_dict[(194.0, 69.0)][1]['F. [13C-glc] G2.5 120min']
 
-
+print iso.fragment_dict_to_std_model(na_corrected_dict,mass=True,number=False)
 # post processing - replace negative values by zero
 # tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
 

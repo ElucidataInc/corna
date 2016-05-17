@@ -86,8 +86,27 @@ def bulk_insert_data_to_fragment(frag_info, list_data_dict, mass=False, number=F
     return fragment_list
 
 def fragment_to_input_model(fragment, mass, number):
-    [[], data, true/false]
-    ('name','formula', 'parent_formula')
     if mass == True:
         parent_frag, daughter_frag = fragment[0]
-        parent_frag.formula
+        parent_formula = parent_frag.formula
+        daughter_formula = daughter_frag.formula
+        name = fragment[3]
+        key_tuple = (name, daughter_formula, parent_formula)
+        label_dict_key = str(parent_frag.isotope) + '_' + \
+                     str(parent_frag.isotope_mass) + '_' + \
+                     str(daughter_frag.isotope_mass)
+        label_dict_value = fragment[1]
+    elif number == True:
+        frag = fragment[0]
+        frag_formula = frag.formula
+        name = fragment[3]
+        key_tuple = (name, frag_formula)
+        label_dict_key = hl.label_dict_to_key(frag.label_dict)
+        label_dict_value = fragment[1]
+    return {key_tuple:{label_dict_key:label_dict_value}}
+
+def fragment_dict_to_std_model(fragment_dict, mass=False, number=False):
+    output_fragment_dict = {}
+    for key, value in fragment_dict.iteritems():
+        output_fragment_dict.update(fragment_to_input_model(value, mass, number))
+    print output_fragment_dict
