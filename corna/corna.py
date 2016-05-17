@@ -81,19 +81,27 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
 def met_background_correction_all(merged_data, background_sample, list_of_samples):
     metab_names = hl.get_unique_values(merged_data, "Parent")
     std_model_mq = fp.standard_model(merged_data, parent = True)
-    output_dict = {}
+    preprocessed_output_dict = {}
     for metabolite in metab_names:
         fragments_dict = {}
         for frag_name, label_dict in std_model_mq.iteritems():
             if frag_name[2] == metabolite:
         	    new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
-        	    fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
-        output_dict[metabolite] = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample)
-    return output_dict
+        	    fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True,
+                                                                       number=False, mode=None))
+        preprocessed_output_dict[metabolite] = preproc.bulk_background_correction(fragments_dict, list_of_samples,
+                                                                                  background_sample)
+    return preprocessed_output_dict
 
 def na_correction_mimosa(preprocessed_output):
     na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output)
     return na_corrected_out
+
+def na_correction_mimosa_all(preprocessed_output_all):
+    na_corrected_output = {}
+    for key, value in preprocessed_output_all:
+        na_corrected_output[key] = algo.na_correction_mimosa_by_fragment(value)
+    return na_corrected_output
 
 # # na correction
 # na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
