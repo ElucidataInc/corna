@@ -53,19 +53,32 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
 
 
 def enrichment(fragments_dict):
-	{ parent : { fragment1 : {s1 : [i1,i2,i3], s2 : [i1,i2,i3]},
-   				fragment2 : {s1 : [i1,i2,i3], s2 : [i1,i2,i3]} } }
+
+	all_values = fragments_dict.values()
+	sample_names = all_values[1][1].keys()
+	sum_dict = {}
+	for sample_name in sample_names:
+	   curr_arr = numpy.zeros(len(all_values[1][1][sample_name]))
+	   for value in all_values:
+	      curr_arr = curr_arr + value[1][sample_name]
+	   sum_dict[sample_name] = curr_arr
+
+
+	fragments_fractional = {}
+
+	for key, value in fragments_dict.iteritems():
+	   data = value[1]
+	   fractional_data = {}
+	   for sample_name, intensity in data.iteritems():
+	      fractional_data[sample_name] = intensity/sum_dict[sample_name]
+	   fragments_fractional[key] = [value[0], fractional_data, value[2]]
+
+	return fragments_fractional
 
 
 
 
 
-	#for key, value:
-			#parent_dict[fragment1][1][s1] = [i1,i2,i3]
-			#parent_dict[fragment2][s1] = [i1,i2,i3]
-
-			#parent_dict[sum][s1] = [2i1,2i2,2i3]
-			#parent_dict[fragment1][s1]/parent_dict[sum][s1]
 
 
 

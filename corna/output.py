@@ -1,32 +1,34 @@
-#to convert nested dict back to pandas dataframe in standardised format
+import pandas as pd
 
-def convert_dict_df(nest_dict):
-	frames = []
-	labels = []
-	name = []
 
+def convert_dict_df(nest_dict, parent = True):
+	new_dict = {}
+	df_list = []
 	for frag_name, label_dict in nest_dict.iteritems():
-		name.append(frag_name)
-		frames.append(pd.DataFrame.from_dict(label_dict, orient='index'))
+		name = []
+		formula = []
+		parent = []
+		lab = []
+		frames = []
+		for key, value in label_dict.iteritems():
+			tup = []
+			for k, v in value.iteritems():
+				for intensity in v:
+					tup.append((k, intensity))
+					name.append(frag_name[0])
+					formula.append(frag_name[1])
+					if parent == True:
+						parent.append(frag_name[2])
+			lab.append(key)
+			frames.append(pd.DataFrame(tup))
+			df = pd.concat(frames, keys=lab).reset_index()
+			df['name'] = name
+			df['formula'] = formula
+			if parent == True:
+				df['parent'] = parent
 
-		#for label, samp_dict in label_dict.iteritems():
-			#labels.append(label)
-			#frames.append(pd.DataFrame.from_dict(samp_dict, orient='index'))
-
-	#print frames
-	dict_to_df = pd.concat(frames, keys=name).reset_index()
-	#print dict_to_df.sum()
-	all_cols = dict_to_df.columns.tolist()
-	level_cols = ['level_0', 'level_1', 'level_2']
-	sample_cols = []
-	for cols in all_cols:
-		if not cols in level_cols:
-			sample_cols.append(cols)
+			df_list.append(df)
+	final_df = pd.concat(df_list)
+	return final_df
 
 
-	df_sum = dict_to_df.groupby('level_2')[sample_cols].sum()
-	#print df_sum
-	#print dict_to_df
-	#print df_sum
-
-	#TOBECOMPLETED
