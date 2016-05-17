@@ -1,0 +1,751 @@
+Original Filename	Sample Name	Component Name	Mass Info	Area
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	taurine	124.0 / 80.0	120.0625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	D4-taurine	128.0 / 80.0	137321.35
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	Pyruvate 87/87	87.0 / 87.0	756348.872336289
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	Pyruvate 88/88	88.0 / 88.0	20088.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	Pyruvate 89/89	89.0 / 89.0	8295.16114954859
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	Lactate 89/89	89.0 / 89.0	5955.6625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	Lactate 90/90	90.0 / 90.0	675.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	Lactate 91/91	91.0 / 91.0	1072.575
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 191)	A. std 1mm glu 100uM PEP	Lactate 92/92	92.0 / 92.0	270.075
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	taurine	124.0 / 80.0	150
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	D4-taurine	128.0 / 80.0	203174.7125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	Pyruvate 87/87	87.0 / 87.0	323198.99380013
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	Pyruvate 88/88	88.0 / 88.0	10307.0736242056
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	Pyruvate 89/89	89.0 / 89.0	2010.3125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	Lactate 89/89	89.0 / 89.0	35255.7875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	Lactate 90/90	90.0 / 90.0	1680.3375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	Lactate 91/91	91.0 / 91.0	824.999999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 192)	B. std 500uM glu 50uM PEP	Lactate 92/92	92.0 / 92.0	330.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	taurine	124.0 / 80.0	105.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	D4-taurine	128.0 / 80.0	200561.7625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	Pyruvate 87/87	87.0 / 87.0	193146.226395453
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	Pyruvate 88/88	88.0 / 88.0	6812.91024708964
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	Lactate 89/89	89.0 / 89.0	6930.4875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	Lactate 90/90	90.0 / 90.0	344.999999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	Lactate 91/91	91.0 / 91.0	1102.5
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 193)	C. std 250uM glu 25uM PEP	Lactate 92/92	92.0 / 92.0	307.55
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	taurine	124.0 / 80.0	150.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	D4-taurine	128.0 / 80.0	192023.5
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	Pyruvate 87/87	87.0 / 87.0	128010.546047357
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	Lactate 89/89	89.0 / 89.0	12902.3
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	Lactate 90/90	90.0 / 90.0	517.6375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	Lactate 91/91	91.0 / 91.0	907.500000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 194)	D. std 125uM glu 12.5uM PEP	Lactate 92/92	92.0 / 92.0	435.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	taurine	124.0 / 80.0	60.0250000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	D4-taurine	128.0 / 80.0	192270.1
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 87/87	87.0 / 87.0	73244.036143333
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	Lactate 89/89	89.0 / 89.0	11867.05
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	Lactate 90/90	90.0 / 90.0	750.162499999995
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	Lactate 91/91	91.0 / 91.0	1305.25
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 195)	E. std 62.5uM glu 6.25uM PEP	Lactate 92/92	92.0 / 92.0	359.999999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	taurine	124.0 / 80.0	135.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	D4-taurine	128.0 / 80.0	195413.1875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 87/87	87.0 / 87.0	47809.1640324789
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	Lactate 89/89	89.0 / 89.0	5475.88749999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	Lactate 90/90	90.0 / 90.0	712.6625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	Lactate 91/91	91.0 / 91.0	1470.275
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 196)	F. std 31.25uM glu 3.13uM PEP	Lactate 92/92	92.0 / 92.0	360.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	taurine	124.0 / 80.0	75.0125000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	D4-taurine	128.0 / 80.0	192834.75
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 87/87	87.0 / 87.0	20661.0590471008
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	Lactate 89/89	89.0 / 89.0	4035.75
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	Lactate 90/90	90.0 / 90.0	1035.3
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	Lactate 91/91	91.0 / 91.0	1027.6375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 197)	G. std 15.63uM glu 1.57uM PEP	Lactate 92/92	92.0 / 92.0	315.149999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	taurine	124.0 / 80.0	135.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	D4-taurine	128.0 / 80.0	199510.1125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	Pyruvate 87/87	87.0 / 87.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	Lactate 89/89	89.0 / 89.0	3420.6625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	Lactate 90/90	90.0 / 90.0	555.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	Lactate 91/91	91.0 / 91.0	945.1375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 198)	H. std 0	Lactate 92/92	92.0 / 92.0	300.037499999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	taurine	124.0 / 80.0	120.024999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	D4-taurine	128.0 / 80.0	143604.6625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	Pyruvate 87/87	87.0 / 87.0	683456.056318593
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	Pyruvate 88/88	88.0 / 88.0	26778.2215412954
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	Pyruvate 89/89	89.0 / 89.0	5978.7899566486
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	Lactate 89/89	89.0 / 89.0	5415.65
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	Lactate 90/90	90.0 / 90.0	892.65
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	Lactate 91/91	91.0 / 91.0	1635.3
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 199)	A. std 1mm glu 100uM PEP	Lactate 92/92	92.0 / 92.0	322.525
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	taurine	124.0 / 80.0	90.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	D4-taurine	128.0 / 80.0	209734.1625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	Pyruvate 87/87	87.0 / 87.0	337851.573689473
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	Pyruvate 88/88	88.0 / 88.0	11659.2930408034
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	Lactate 89/89	89.0 / 89.0	46552.4125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	Lactate 90/90	90.0 / 90.0	2858.0625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	Lactate 91/91	91.0 / 91.0	2017.925
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 200)	B. std 500uM glu 50uM PEP	Lactate 92/92	92.0 / 92.0	300.05
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	taurine	124.0 / 80.0	120.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	D4-taurine	128.0 / 80.0	209043.3
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	Pyruvate 87/87	87.0 / 87.0	217105.125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	Pyruvate 88/88	88.0 / 88.0	7731.48645070102
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	Lactate 89/89	89.0 / 89.0	4365.775
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	Lactate 90/90	90.0 / 90.0	299.999999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	Lactate 91/91	91.0 / 91.0	1110.2375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 201)	C. std 250uM glu 25uM PEP	Lactate 92/92	92.0 / 92.0	315.050000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	taurine	124.0 / 80.0	59.9999999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	D4-taurine	128.0 / 80.0	213146.4
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	Pyruvate 87/87	87.0 / 87.0	144502.8125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	Pyruvate 88/88	88.0 / 88.0	4996.94063281045
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	Lactate 89/89	89.0 / 89.0	5985.75
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	Lactate 90/90	90.0 / 90.0	375.112499999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	Lactate 91/91	91.0 / 91.0	1305.525
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 202)	D. std 125uM glu 12.5uM PEP	Lactate 92/92	92.0 / 92.0	240.0625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	taurine	124.0 / 80.0	90.0249999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	D4-taurine	128.0 / 80.0	204540.925
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 87/87	87.0 / 87.0	80611.9468364499
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	Lactate 89/89	89.0 / 89.0	4246.03750000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	Lactate 90/90	90.0 / 90.0	525.1375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	Lactate 91/91	91.0 / 91.0	1110.125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 203)	E. std 62.5uM glu 6.25uM PEP	Lactate 92/92	92.0 / 92.0	540.050000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	taurine	124.0 / 80.0	105.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	D4-taurine	128.0 / 80.0	208921.9875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 87/87	87.0 / 87.0	44347.4701755163
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	Lactate 89/89	89.0 / 89.0	7621.9375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	Lactate 90/90	90.0 / 90.0	675.1
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	Lactate 91/91	91.0 / 91.0	1065
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 204)	F. std 31.25uM glu 3.13uM PEP	Lactate 92/92	92.0 / 92.0	375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	taurine	124.0 / 80.0	90.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	D4-taurine	128.0 / 80.0	210943.1
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 87/87	87.0 / 87.0	33059.9246321275
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	Lactate 89/89	89.0 / 89.0	3480.31250000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	Lactate 90/90	90.0 / 90.0	405.099999999997
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	Lactate 91/91	91.0 / 91.0	922.625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 205)	G. std 15.63uM glu 1.57uM PEP	Lactate 92/92	92.0 / 92.0	315.124999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	taurine	124.0 / 80.0	120.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	D4-taurine	128.0 / 80.0	207034.05
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	Pyruvate 87/87	87.0 / 87.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	Lactate 89/89	89.0 / 89.0	2640.55000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	Lactate 90/90	90.0 / 90.0	495.087499999998
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	Lactate 91/91	91.0 / 91.0	810.000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 206)	H. std 0	Lactate 92/92	92.0 / 92.0	330.062499999998
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	taurine	124.0 / 80.0	105
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	D4-taurine	128.0 / 80.0	144089.275
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	Pyruvate 87/87	87.0 / 87.0	740850.307734153
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	Pyruvate 88/88	88.0 / 88.0	25780.8028998336
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	Pyruvate 89/89	89.0 / 89.0	7478.4786774068
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	Lactate 89/89	89.0 / 89.0	7366.52499999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	Lactate 90/90	90.0 / 90.0	420
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	Lactate 91/91	91.0 / 91.0	1192.7
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 207)	A. std 1mm glu 100uM PEP	Lactate 92/92	92.0 / 92.0	510.075
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	taurine	124.0 / 80.0	105.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	D4-taurine	128.0 / 80.0	221924.375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	Pyruvate 87/87	87.0 / 87.0	372867.131520157
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	Pyruvate 88/88	88.0 / 88.0	11806.5464304602
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	Lactate 89/89	89.0 / 89.0	39036.5625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	Lactate 90/90	90.0 / 90.0	1320.225
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	Lactate 91/91	91.0 / 91.0	847.624999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 208)	B. std 500uM glu 50uM PEP	Lactate 92/92	92.0 / 92.0	390.0875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	taurine	124.0 / 80.0	75.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	D4-taurine	128.0 / 80.0	217994.9125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	Pyruvate 87/87	87.0 / 87.0	223498.488518812
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	Pyruvate 88/88	88.0 / 88.0	11815.4161910043
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	Lactate 89/89	89.0 / 89.0	11221.125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	Lactate 90/90	90.0 / 90.0	765.200000000002
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	Lactate 91/91	91.0 / 91.0	1125.175
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 209)	C. std 250uM glu 25uM PEP	Lactate 92/92	92.0 / 92.0	300.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	taurine	124.0 / 80.0	195.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	D4-taurine	128.0 / 80.0	221037.3
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	Pyruvate 87/87	87.0 / 87.0	146362.577014199
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	Pyruvate 88/88	88.0 / 88.0	4969.33480794772
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	Lactate 89/89	89.0 / 89.0	28130.05
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	Lactate 90/90	90.0 / 90.0	877.6375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	Lactate 91/91	91.0 / 91.0	825.000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 210)	D. std 125uM glu 12.5uM PEP	Lactate 92/92	92.0 / 92.0	390.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	taurine	124.0 / 80.0	90.0374999999997
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	D4-taurine	128.0 / 80.0	221330.75
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 87/87	87.0 / 87.0	88013.4337046533
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	Lactate 89/89	89.0 / 89.0	4193.05000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	Lactate 90/90	90.0 / 90.0	667.500000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	Lactate 91/91	91.0 / 91.0	1072.49999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 211)	E. std 62.5uM glu 6.25uM PEP	Lactate 92/92	92.0 / 92.0	390.050000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	taurine	124.0 / 80.0	105.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	D4-taurine	128.0 / 80.0	215212.8
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 87/87	87.0 / 87.0	56593.1012370194
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	Lactate 89/89	89.0 / 89.0	3697.9
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	Lactate 90/90	90.0 / 90.0	645.162500000002
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	Lactate 91/91	91.0 / 91.0	720
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 212)	F. std 31.25uM glu 3.13uM PEP	Lactate 92/92	92.0 / 92.0	270
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	taurine	124.0 / 80.0	75.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	D4-taurine	128.0 / 80.0	224083.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 87/87	87.0 / 87.0	27120.8655252605
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	Lactate 89/89	89.0 / 89.0	2310.59999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	Lactate 90/90	90.0 / 90.0	900.049999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	Lactate 91/91	91.0 / 91.0	719.999999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 213)	G. std 15.63uM glu 1.57uM PEP	Lactate 92/92	92.0 / 92.0	540.0625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	taurine	124.0 / 80.0	90.0375000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	D4-taurine	128.0 / 80.0	215220.975
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	Pyruvate 87/87	87.0 / 87.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	Lactate 89/89	89.0 / 89.0	4051.1625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	Lactate 90/90	90.0 / 90.0	427.5
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	Lactate 91/91	91.0 / 91.0	1155.1125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 214)	H. std 0	Lactate 92/92	92.0 / 92.0	389.999999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	taurine	124.0 / 80.0	120
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	D4-taurine	128.0 / 80.0	146654.2625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	Pyruvate 87/87	87.0 / 87.0	762635.754331756
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	Pyruvate 88/88	88.0 / 88.0	31078.9868316961
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	Lactate 89/89	89.0 / 89.0	8806.02500000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	Lactate 90/90	90.0 / 90.0	847.675000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	Lactate 91/91	91.0 / 91.0	825.224999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 215)	A. std 1mm glu 100uM PEP	Lactate 92/92	92.0 / 92.0	285.125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	taurine	124.0 / 80.0	75.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	D4-taurine	128.0 / 80.0	245351.4375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	Pyruvate 87/87	87.0 / 87.0	368417.785702128
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	Pyruvate 88/88	88.0 / 88.0	15248.4180043916
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	Lactate 89/89	89.0 / 89.0	41001.1125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	Lactate 90/90	90.0 / 90.0	1905.1875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	Lactate 91/91	91.0 / 91.0	1455.225
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 216)	B. std 500uM glu 50uM PEP	Lactate 92/92	92.0 / 92.0	172.537499999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	taurine	124.0 / 80.0	105
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	D4-taurine	128.0 / 80.0	221008.8375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	Pyruvate 87/87	87.0 / 87.0	247425.395680774
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	Pyruvate 88/88	88.0 / 88.0	11513.1317597716
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	Lactate 89/89	89.0 / 89.0	21722.85
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	Lactate 90/90	90.0 / 90.0	765.125000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	Lactate 91/91	91.0 / 91.0	1065.1125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 217)	C. std 250uM glu 25uM PEP	Lactate 92/92	92.0 / 92.0	315
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	taurine	124.0 / 80.0	75.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	D4-taurine	128.0 / 80.0	211070.6125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	Pyruvate 87/87	87.0 / 87.0	151784.49723374
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	Lactate 89/89	89.0 / 89.0	4920.925
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	Lactate 90/90	90.0 / 90.0	450.162499999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	Lactate 91/91	91.0 / 91.0	937.737500000002
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 218)	D. std 125uM glu 12.5uM PEP	Lactate 92/92	92.0 / 92.0	285.05
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	taurine	124.0 / 80.0	120.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	D4-taurine	128.0 / 80.0	216700.725
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 87/87	87.0 / 87.0	87498.1916458216
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	Lactate 89/89	89.0 / 89.0	5978.75
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	Lactate 90/90	90.0 / 90.0	427.662500000002
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	Lactate 91/91	91.0 / 91.0	630.525
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 219)	E. std 62.5uM glu 6.25uM PEP	Lactate 92/92	92.0 / 92.0	330.0875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	taurine	124.0 / 80.0	150.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	D4-taurine	128.0 / 80.0	213706.225
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 87/87	87.0 / 87.0	55280.8338007954
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	Lactate 89/89	89.0 / 89.0	3855.75
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	Lactate 90/90	90.0 / 90.0	622.712500000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	Lactate 91/91	91.0 / 91.0	1380.125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 220)	F. std 31.25uM glu 3.13uM PEP	Lactate 92/92	92.0 / 92.0	405
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	taurine	124.0 / 80.0	60.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	D4-taurine	128.0 / 80.0	213543.3625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 87/87	87.0 / 87.0	24956.125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	Lactate 89/89	89.0 / 89.0	4598.0625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	Lactate 90/90	90.0 / 90.0	585.187500000002
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	Lactate 91/91	91.0 / 91.0	1140.2125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 221)	G. std 15.63uM glu 1.57uM PEP	Lactate 92/92	92.0 / 92.0	255.037499999998
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	taurine	124.0 / 80.0	75.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	D4-taurine	128.0 / 80.0	214797.2375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	Pyruvate 87/87	87.0 / 87.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	Lactate 89/89	89.0 / 89.0	2318.24999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	Lactate 90/90	90.0 / 90.0	682.687499999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	Lactate 91/91	91.0 / 91.0	802.5375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 222)	H. std 0	Lactate 92/92	92.0 / 92.0	525.137500000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	taurine	124.0 / 80.0	90.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	D4-taurine	128.0 / 80.0	4125.425
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	Pyruvate 87/87	87.0 / 87.0	271487.1125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	Pyruvate 88/88	88.0 / 88.0	9652.84726009114
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	Lactate 89/89	89.0 / 89.0	65043.5625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	Lactate 90/90	90.0 / 90.0	2686.02863961586
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 223)	A. [13C-glc] G9 0min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	taurine	124.0 / 80.0	135.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	D4-taurine	128.0 / 80.0	201625.8375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	Pyruvate 87/87	87.0 / 87.0	76724.640614179
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	Pyruvate 88/88	88.0 / 88.0	6066.10383294906
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	Pyruvate 89/89	89.0 / 89.0	4859.30746184746
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	Pyruvate 90/90	90.0 / 90.0	123245.939083188
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	Lactate 89/89	89.0 / 89.0	56799.575
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	Lactate 90/90	90.0 / 90.0	2810.99378112838
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 224)	B. [13C-glc] G9 5min	Lactate 92/92	92.0 / 92.0	12661.775
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	taurine	124.0 / 80.0	90.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	D4-taurine	128.0 / 80.0	181595.7375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	Pyruvate 87/87	87.0 / 87.0	46704.6963458623
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	Pyruvate 88/88	88.0 / 88.0	1849.65813985844
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	Pyruvate 89/89	89.0 / 89.0	5196.70239862285
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	Pyruvate 90/90	90.0 / 90.0	144697.442184875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	Lactate 89/89	89.0 / 89.0	31078.2798500317
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 225)	C. [13C-glc] G9 15min	Lactate 92/92	92.0 / 92.0	16652.2625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	taurine	124.0 / 80.0	165
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	D4-taurine	128.0 / 80.0	157233.8125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	Pyruvate 87/87	87.0 / 87.0	66783.0978295869
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	Pyruvate 88/88	88.0 / 88.0	7088.08924521869
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	Pyruvate 89/89	89.0 / 89.0	11575.1373776955
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	Pyruvate 90/90	90.0 / 90.0	204196.896324036
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	Lactate 89/89	89.0 / 89.0	49147.875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	Lactate 90/90	90.0 / 90.0	1852.7625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 226)	D. [13C-glc] G9 30min	Lactate 92/92	92.0 / 92.0	21138.4
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	taurine	124.0 / 80.0	90.0500000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	D4-taurine	128.0 / 80.0	164285.268595036
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	Pyruvate 87/87	87.0 / 87.0	63442.3359528133
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	Pyruvate 88/88	88.0 / 88.0	5999.13505102155
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	Pyruvate 89/89	89.0 / 89.0	13677.8609579543
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	Pyruvate 90/90	90.0 / 90.0	210535.725302529
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	Lactate 89/89	89.0 / 89.0	45651.5625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	Lactate 90/90	90.0 / 90.0	2180.20445928675
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 227)	E. [13C-glc] G9 60min	Lactate 92/92	92.0 / 92.0	24476.425
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	taurine	124.0 / 80.0	150
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	D4-taurine	128.0 / 80.0	181118.2875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	Pyruvate 87/87	87.0 / 87.0	50289.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	Pyruvate 88/88	88.0 / 88.0	8946.85928033437
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	Pyruvate 89/89	89.0 / 89.0	13990.654701956
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	Pyruvate 90/90	90.0 / 90.0	191402.61252285
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	Lactate 89/89	89.0 / 89.0	41646.1375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	Lactate 90/90	90.0 / 90.0	1950.3125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 228)	F. [13C-glc] G9 120min	Lactate 92/92	92.0 / 92.0	20185.825
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	taurine	124.0 / 80.0	135
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	D4-taurine	128.0 / 80.0	130214.4
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	42904.2315345143
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	9728.62499999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	11721.2144133609
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	181771.928746783
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	Lactate 89/89	89.0 / 89.0	30045.0688695382
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	Lactate 90/90	90.0 / 90.0	1451.65100469571
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 229)	G. [13C-glc] G9 240min	Lactate 92/92	92.0 / 92.0	21258.5125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	taurine	124.0 / 80.0	90.0374999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	D4-taurine	128.0 / 80.0	214467.0875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	363147.532648432
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	56489.5654878433
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	38407.9279895296
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	1850.92210236477
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	Lactate 89/89	89.0 / 89.0	57319.3591989613
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	Lactate 90/90	90.0 / 90.0	7028.96249999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	Lactate 91/91	91.0 / 91.0	10389.2875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 230)	H. [6,6-DD-glc] G9 240min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	taurine	124.0 / 80.0	75.0500000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	D4-taurine	128.0 / 80.0	4471.08750000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	Pyruvate 87/87	87.0 / 87.0	324006.275
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	Pyruvate 88/88	88.0 / 88.0	9947.04350905467
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	Pyruvate 89/89	89.0 / 89.0	2040.1
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	Lactate 89/89	89.0 / 89.0	60188.975
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	Lactate 90/90	90.0 / 90.0	1905.35932828283
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 231)	A. [13C-glc] G9 0min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	taurine	124.0 / 80.0	150.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	D4-taurine	128.0 / 80.0	216701.7
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	Pyruvate 87/87	87.0 / 87.0	88808.6045585395
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	Pyruvate 88/88	88.0 / 88.0	2715.6
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	Pyruvate 89/89	89.0 / 89.0	7339.28533730581
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	Pyruvate 90/90	90.0 / 90.0	155186.225
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	Lactate 89/89	89.0 / 89.0	47293.7388886684
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	Lactate 90/90	90.0 / 90.0	2582.71740897265
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 232)	B. [13C-glc] G9 5min	Lactate 92/92	92.0 / 92.0	12339.4
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	taurine	124.0 / 80.0	120.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	D4-taurine	128.0 / 80.0	174623.325
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	Pyruvate 87/87	87.0 / 87.0	47160.5880471842
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	Pyruvate 89/89	89.0 / 89.0	5693.5
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	Pyruvate 90/90	90.0 / 90.0	144128.125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	Lactate 89/89	89.0 / 89.0	27109.35
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 233)	C. [13C-glc] G9 15min	Lactate 92/92	92.0 / 92.0	13179.35
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	taurine	124.0 / 80.0	75.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	D4-taurine	128.0 / 80.0	112600.7625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	Pyruvate 87/87	87.0 / 87.0	32863.6077311359
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	Pyruvate 88/88	88.0 / 88.0	2542.12261463282
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	Pyruvate 89/89	89.0 / 89.0	6434.05962391151
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	Pyruvate 90/90	90.0 / 90.0	101196.537591842
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	Lactate 89/89	89.0 / 89.0	17905.2625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 234)	D. [13C-glc] G9 30min	Lactate 92/92	92.0 / 92.0	14687.125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	taurine	124.0 / 80.0	75.0250000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	D4-taurine	128.0 / 80.0	124000.6375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	Pyruvate 87/87	87.0 / 87.0	36680.7875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	Pyruvate 88/88	88.0 / 88.0	7067.3811093062
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	Pyruvate 89/89	89.0 / 89.0	11744.1430656447
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	Pyruvate 90/90	90.0 / 90.0	125434.635127001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	Lactate 89/89	89.0 / 89.0	20718.1625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 235)	E. [13C-glc] G9 60min	Lactate 92/92	92.0 / 92.0	16802.7
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	taurine	124.0 / 80.0	60.0375000000003
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	D4-taurine	128.0 / 80.0	112161.7
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	Pyruvate 87/87	87.0 / 87.0	27287.650869812
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	Pyruvate 88/88	88.0 / 88.0	2453.1125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	Pyruvate 89/89	89.0 / 89.0	10048.7229844094
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	Pyruvate 90/90	90.0 / 90.0	119110.568147467
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	Lactate 89/89	89.0 / 89.0	14983.1364031879
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	Lactate 90/90	90.0 / 90.0	615.199999999998
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 236)	F. [13C-glc] G9 120min	Lactate 92/92	92.0 / 92.0	15415.845278297
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	taurine	124.0 / 80.0	90.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	D4-taurine	128.0 / 80.0	176271.675
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	50536.2125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	7981.4
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	17691.0372434192
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	209322.487131191
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	Lactate 89/89	89.0 / 89.0	36155.8375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	Lactate 90/90	90.0 / 90.0	1665.19462516476
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 237)	G. [13C-glc] G9 240min	Lactate 92/92	92.0 / 92.0	29918.955
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	taurine	124.0 / 80.0	135
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	D4-taurine	128.0 / 80.0	122608.5375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	166644.375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	22215.2238427306
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	13901.0401990146
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	Lactate 89/89	89.0 / 89.0	20373.675
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	Lactate 90/90	90.0 / 90.0	3313.90649839302
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	Lactate 91/91	91.0 / 91.0	4608.41812048027
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 238)	H. [6,6-DD-glc] G9 240min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	taurine	124.0 / 80.0	90.0375000000003
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	D4-taurine	128.0 / 80.0	4140.75
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	Pyruvate 87/87	87.0 / 87.0	211990.207199354
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	Pyruvate 88/88	88.0 / 88.0	9981.60222481153
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	Pyruvate 89/89	89.0 / 89.0	2551.88687726897
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	Pyruvate 90/90	90.0 / 90.0	202.5
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	Lactate 89/89	89.0 / 89.0	35638.5375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	Lactate 90/90	90.0 / 90.0	1832.97028443526
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 239)	A. [13C-glc] G9 0min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	taurine	124.0 / 80.0	90.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	D4-taurine	128.0 / 80.0	135852.95
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	Pyruvate 87/87	87.0 / 87.0	47796.975
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	Pyruvate 89/89	89.0 / 89.0	2565.3375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	Pyruvate 90/90	90.0 / 90.0	101527.7125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	Lactate 89/89	89.0 / 89.0	26382.2849122274
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 240)	B. [13C-glc] G9 5min	Lactate 92/92	92.0 / 92.0	9248.24120493352
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	taurine	124.0 / 80.0	105.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	D4-taurine	128.0 / 80.0	139767.7375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	Pyruvate 87/87	87.0 / 87.0	29330.45
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	Pyruvate 88/88	88.0 / 88.0	3976.4333025113
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	Pyruvate 89/89	89.0 / 89.0	4335.7625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	Pyruvate 90/90	90.0 / 90.0	120299.334734189
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	Lactate 89/89	89.0 / 89.0	11152.1263182316
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 241)	C. [13C-glc] G9 15min	Lactate 92/92	92.0 / 92.0	9946.66249999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	taurine	124.0 / 80.0	90.0124999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	D4-taurine	128.0 / 80.0	125573
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	Pyruvate 87/87	87.0 / 87.0	35540.1877341041
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	Pyruvate 88/88	88.0 / 88.0	2235.4
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	Pyruvate 89/89	89.0 / 89.0	6932.00781025539
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	Pyruvate 90/90	90.0 / 90.0	136911.857479309
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	Lactate 89/89	89.0 / 89.0	14616.5684426245
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 242)	D. [13C-glc] G9 30min	Lactate 92/92	92.0 / 92.0	15521.1756767192
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	taurine	124.0 / 80.0	45
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	D4-taurine	128.0 / 80.0	221572.05
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	Pyruvate 87/87	87.0 / 87.0	56770.2134797834
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	Pyruvate 88/88	88.0 / 88.0	7229.39472067139
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	Pyruvate 89/89	89.0 / 89.0	16112.15
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	Pyruvate 90/90	90.0 / 90.0	234789.853304551
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	Lactate 89/89	89.0 / 89.0	35467.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 243)	E. [13C-glc] G9 60min	Lactate 92/92	92.0 / 92.0	26164.4625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	taurine	124.0 / 80.0	75.0250000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	D4-taurine	128.0 / 80.0	116364.8125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	Pyruvate 87/87	87.0 / 87.0	25872.07026122
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	Pyruvate 88/88	88.0 / 88.0	1620.2375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	Pyruvate 89/89	89.0 / 89.0	7666.78542844173
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	Pyruvate 90/90	90.0 / 90.0	100223.403379783
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	Lactate 89/89	89.0 / 89.0	15077.5875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 244)	F. [13C-glc] G9 120min	Lactate 92/92	92.0 / 92.0	11744.101382021
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	taurine	124.0 / 80.0	30
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	D4-taurine	128.0 / 80.0	238409.35
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	72639.1913472783
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	11082.7978721061
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	22960.8475567029
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	338417.028648478
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	Lactate 89/89	89.0 / 89.0	46349.0875825594
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	Lactate 90/90	90.0 / 90.0	2760.3
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	Lactate 91/91	91.0 / 91.0	2543.2
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 245)	G. [13C-glc] G9 240min	Lactate 92/92	92.0 / 92.0	32510.7853645573
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	taurine	124.0 / 80.0	90.0249999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	D4-taurine	128.0 / 80.0	213418.675
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	254650.906992791
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	44831.9908780239
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	21277.6179137379
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	Lactate 89/89	89.0 / 89.0	65579.1663114428
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	Lactate 90/90	90.0 / 90.0	5887.76733870906
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	Lactate 91/91	91.0 / 91.0	10428.0050721308
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 246)	H. [6,6-DD-glc] G9 240min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	taurine	124.0 / 80.0	150
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	D4-taurine	128.0 / 80.0	5326.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	Pyruvate 87/87	87.0 / 87.0	170811.292498962
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	Pyruvate 88/88	88.0 / 88.0	6317.53050509709
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	Pyruvate 89/89	89.0 / 89.0	2737.29254157072
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	Lactate 89/89	89.0 / 89.0	28129.8625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	Lactate 90/90	90.0 / 90.0	1620.325
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 247)	A. [13C-glc] G9 0min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	taurine	124.0 / 80.0	150.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	D4-taurine	128.0 / 80.0	196605.3
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	Pyruvate 87/87	87.0 / 87.0	122653.222809808
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	Pyruvate 88/88	88.0 / 88.0	6108.26012294036
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	Pyruvate 89/89	89.0 / 89.0	8107.75391100802
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	Pyruvate 90/90	90.0 / 90.0	170867.15585173
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	Lactate 89/89	89.0 / 89.0	38208.9391424397
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	Lactate 90/90	90.0 / 90.0	1425.225
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 248)	B. [13C-glc] G9 5min	Lactate 92/92	92.0 / 92.0	10767.6181957371
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	taurine	124.0 / 80.0	180.0625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	D4-taurine	128.0 / 80.0	258941.55
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	Pyruvate 87/87	87.0 / 87.0	87636.7890306135
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	Pyruvate 89/89	89.0 / 89.0	10702.5473657568
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	Pyruvate 90/90	90.0 / 90.0	286305.749550811
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	Lactate 89/89	89.0 / 89.0	31490.3
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	Lactate 90/90	90.0 / 90.0	1410.2375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 249)	C. [13C-glc] G9 15min	Lactate 92/92	92.0 / 92.0	19503.175
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	taurine	124.0 / 80.0	90.0249999999999
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	D4-taurine	128.0 / 80.0	240402.1375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	Pyruvate 87/87	87.0 / 87.0	59664.6125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	Pyruvate 88/88	88.0 / 88.0	6557.33051267192
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	Pyruvate 89/89	89.0 / 89.0	15332.775
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	Pyruvate 90/90	90.0 / 90.0	245463.955527849
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	Lactate 89/89	89.0 / 89.0	32840
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	Lactate 90/90	90.0 / 90.0	2100.2125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 250)	D. [13C-glc] G9 30min	Lactate 92/92	92.0 / 92.0	24501.7710741337
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	taurine	124.0 / 80.0	90.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	D4-taurine	128.0 / 80.0	235758.9625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	Pyruvate 87/87	87.0 / 87.0	61622.2375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	Pyruvate 88/88	88.0 / 88.0	9527.58307603122
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	Pyruvate 89/89	89.0 / 89.0	17871.683916043
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	Pyruvate 90/90	90.0 / 90.0	258127.360850996
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	Lactate 89/89	89.0 / 89.0	40280.6907728443
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	Lactate 90/90	90.0 / 90.0	2116.00418386243
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 251)	E. [13C-glc] G9 60min	Lactate 92/92	92.0 / 92.0	26951.5875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	taurine	124.0 / 80.0	90.0000000000001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	D4-taurine	128.0 / 80.0	192356.3625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	Pyruvate 87/87	87.0 / 87.0	52620.4992756625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	Pyruvate 88/88	88.0 / 88.0	5736.30910596075
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	Pyruvate 89/89	89.0 / 89.0	17545.15
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	Pyruvate 90/90	90.0 / 90.0	219002.187643164
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	Lactate 89/89	89.0 / 89.0	36111.2125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	Lactate 90/90	90.0 / 90.0	1582.7625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 252)	F. [13C-glc] G9 120min	Lactate 92/92	92.0 / 92.0	25558.2638886685
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	taurine	124.0 / 80.0	120
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	D4-taurine	128.0 / 80.0	256418.4125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	82363.2391881126
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	12624.225
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	26240.1662204582
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	325673.195319476
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	Lactate 89/89	89.0 / 89.0	44471.2993617756
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	Lactate 90/90	90.0 / 90.0	1298.27090728639
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	Lactate 91/91	91.0 / 91.0	2364.35685007305
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 253)	G. [13C-glc] G9 240min	Lactate 92/92	92.0 / 92.0	31152.4625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	taurine	124.0 / 80.0	120.0625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	D4-taurine	128.0 / 80.0	248203.0875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	410955.216306691
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	58269.975
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	36635.7205096358
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	Lactate 89/89	89.0 / 89.0	62726.3125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	Lactate 90/90	90.0 / 90.0	7621.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	Lactate 91/91	91.0 / 91.0	11514.9660070307
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 254)	H. [6,6-DD-glc] G9 240min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	taurine	124.0 / 80.0	135
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	D4-taurine	128.0 / 80.0	12917.2
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	Pyruvate 87/87	87.0 / 87.0	342661.647537177
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	Pyruvate 88/88	88.0 / 88.0	12496.8875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	Lactate 89/89	89.0 / 89.0	48584.7
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	Lactate 90/90	90.0 / 90.0	1712.77929673251
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 255)	A. [13C-glc] G9 0min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	taurine	124.0 / 80.0	90
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	D4-taurine	128.0 / 80.0	219421.5375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	Pyruvate 87/87	87.0 / 87.0	97852.6174145992
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	Pyruvate 88/88	88.0 / 88.0	6541.74388977125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	Pyruvate 89/89	89.0 / 89.0	8939.95244788077
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	Pyruvate 90/90	90.0 / 90.0	174627.862614099
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	Lactate 89/89	89.0 / 89.0	37608.7579547737
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	Lactate 90/90	90.0 / 90.0	1269.30682939278
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 256)	B. [13C-glc] G9 5min	Lactate 92/92	92.0 / 92.0	10136.639333988
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	taurine	124.0 / 80.0	105.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	D4-taurine	128.0 / 80.0	220730.6
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	Pyruvate 87/87	87.0 / 87.0	59408.8625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	Pyruvate 89/89	89.0 / 89.0	6720.9625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	Pyruvate 90/90	90.0 / 90.0	209608.437854538
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	Lactate 89/89	89.0 / 89.0	26355.4189013574
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 257)	C. [13C-glc] G9 15min	Lactate 92/92	92.0 / 92.0	18696.6975175184
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	taurine	124.0 / 80.0	120.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	D4-taurine	128.0 / 80.0	219077.9875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	Pyruvate 87/87	87.0 / 87.0	50906.2360209046
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	Pyruvate 88/88	88.0 / 88.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	Pyruvate 89/89	89.0 / 89.0	8554.90189312502
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	Pyruvate 90/90	90.0 / 90.0	182704.274258316
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	Lactate 89/89	89.0 / 89.0	18916.9125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 258)	D. [13C-glc] G9 30min	Lactate 92/92	92.0 / 92.0	20118.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	taurine	124.0 / 80.0	150.0375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	D4-taurine	128.0 / 80.0	242582.85
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	Pyruvate 87/87	87.0 / 87.0	50611.217344836
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	Pyruvate 88/88	88.0 / 88.0	7419.56606692751
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	Pyruvate 89/89	89.0 / 89.0	14979.241722016
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	Pyruvate 90/90	90.0 / 90.0	210394.929195858
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	Lactate 89/89	89.0 / 89.0	31100.8691904979
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 259)	E. [13C-glc] G9 60min	Lactate 92/92	92.0 / 92.0	26858.6736073435
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	taurine	124.0 / 80.0	45
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	D4-taurine	128.0 / 80.0	173532.1375
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	Pyruvate 87/87	87.0 / 87.0	42434.85
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	Pyruvate 88/88	88.0 / 88.0	4963.36312157004
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	Pyruvate 89/89	89.0 / 89.0	13555.8534431024
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	Pyruvate 90/90	90.0 / 90.0	160256.52165195
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	Lactate 89/89	89.0 / 89.0	27164.3506731017
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	Lactate 90/90	90.0 / 90.0	645.324999999998
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 260)	F. [13C-glc] G9 120min	Lactate 92/92	92.0 / 92.0	21980.9054640053
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	taurine	124.0 / 80.0	165.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	D4-taurine	128.0 / 80.0	206012.9625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	43765.7438129919
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	6484.42708786147
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	15656.0066453729
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	206482.574337947
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	Lactate 89/89	89.0 / 89.0	29794.175
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	Lactate 91/91	91.0 / 91.0	3060.3125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 261)	G. [13C-glc] G9 240min	Lactate 92/92	92.0 / 92.0	23350.7875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	taurine	124.0 / 80.0	105.025
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	D4-taurine	128.0 / 80.0	172948.35
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	Pyruvate 87/87	87.0 / 87.0	230525.604024046
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	Pyruvate 88/88	88.0 / 88.0	33550.0428789049
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	Pyruvate 89/89	89.0 / 89.0	16071.9553857737
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	Lactate 89/89	89.0 / 89.0	39628.7
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	Lactate 90/90	90.0 / 90.0	5568.69471897001
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	Lactate 91/91	91.0 / 91.0	9186.54529929362
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 262)	H. [6,6-DD-glc] G9 240min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	taurine	124.0 / 80.0	105
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	D4-taurine	128.0 / 80.0	12242.2625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	Pyruvate 87/87	87.0 / 87.0	300969.552300853
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	Pyruvate 88/88	88.0 / 88.0	11319.1125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	Pyruvate 89/89	89.0 / 89.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	Pyruvate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	Lactate 89/89	89.0 / 89.0	54008.9625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	Lactate 90/90	90.0 / 90.0	2496.84540390922
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 263)	A. [13C-glc] G9 0min	Lactate 92/92	92.0 / 92.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	taurine	124.0 / 80.0	105.0125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	D4-taurine	128.0 / 80.0	235006.4625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	Pyruvate 87/87	87.0 / 87.0	93089.376374297
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	Pyruvate 88/88	88.0 / 88.0	5630.37543758267
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	Pyruvate 89/89	89.0 / 89.0	8105.93301261934
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	Pyruvate 90/90	90.0 / 90.0	166462.328471267
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	Lactate 89/89	89.0 / 89.0	39140.5597293645
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	Lactate 90/90	90.0 / 90.0	2505.35
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 264)	B. [13C-glc] G9 5min	Lactate 92/92	92.0 / 92.0	11971.875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	taurine	124.0 / 80.0	60
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	D4-taurine	128.0 / 80.0	247068.3625
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	Pyruvate 87/87	87.0 / 87.0	60654.6875
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	Pyruvate 88/88	88.0 / 88.0	2245.80655224178
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	Pyruvate 89/89	89.0 / 89.0	8852.18789439593
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	Pyruvate 90/90	90.0 / 90.0	224946.59950673
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	Lactate 89/89	89.0 / 89.0	35841.125
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	Lactate 90/90	90.0 / 90.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	Lactate 91/91	91.0 / 91.0	N/A
+TA_13C-glucose with varying [glc]_2Sept13.wiff (sample 265)	C. [13C-glc] G9 15min	Lactate 92/92	92.0 / 92.0	18767.8625
