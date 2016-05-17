@@ -15,10 +15,7 @@ def background_noise(unlabel_intensity, na, parent_atoms, parent_label, daughter
 
 def backround_subtraction(input_intensity, noise):
     intensity = input_intensity - noise
-    if intensity < 0:
-        return 0
-    else:
-        return intensity
+    return intensity
 
 def background(sample_name, input_fragment_value, unlabeled_fragment_value):
     parent_frag, daughter_frag = input_fragment_value[0]
@@ -44,7 +41,6 @@ def background_correction(background_list, sample_data):
     corrected_sample_data = {}
     for key, value in sample_data.iteritems():
         new_value = value - background
-        new_value[new_value<0]=0
         corrected_sample_data[key] = new_value
     return corrected_sample_data
 
