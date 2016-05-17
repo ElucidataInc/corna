@@ -52,31 +52,20 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
 		return corrected_dict
 
 
-def convert_dict_df(nest_dict):
-	frames = []
-	labels = []
-	name = []
-	for frag_name, label_dict in nest_dict.iteritems():
-		name.append(frag_name)
-		frames.append(pd.DataFrame.from_dict(label_dict, orient='index'))
+def enrichment(fragments_dict):
+	{ parent : { fragment1 : {s1 : [i1,i2,i3], s2 : [i1,i2,i3]},
+   				fragment2 : {s1 : [i1,i2,i3], s2 : [i1,i2,i3]} } }
 
-		#for label, samp_dict in label_dict.iteritems():
-			#labels.append(label)
-			#frames.append(pd.DataFrame.from_dict(samp_dict, orient='index'))
 
-	#print frames
-	dict_to_df = pd.concat(frames, keys=name).reset_index()
-	#print dict_to_df.sum()
-	all_cols = dict_to_df.columns.tolist()
-	level_cols = ['level_0', 'level_1', 'level_2']
-	sample_cols = []
-	for cols in all_cols:
-		if not cols in level_cols:
-			sample_cols.append(cols)
 
-	#df_sum = dict_to_df.groupby('level_1')[sample_cols].apply(lambda x :
-	#print dict_to_df
-	#print df_sum
+
+
+	#for key, value:
+			#parent_dict[fragment1][1][s1] = [i1,i2,i3]
+			#parent_dict[fragment2][s1] = [i1,i2,i3]
+
+			#parent_dict[sum][s1] = [2i1,2i2,2i3]
+			#parent_dict[fragment1][s1]/parent_dict[sum][s1]
 
 
 
