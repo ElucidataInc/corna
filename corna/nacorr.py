@@ -59,7 +59,6 @@ std_model_mq = fp.standard_model(merged_data, parent = True)
 
 # integrating isotopomer and parser (input is standardised model in form of nested dictionaries)
 fragments_dict = {}
-print std_model_mq
 for frag_name, label_dict in std_model_mq.iteritems():
     if frag_name[2] == 'Citrate 191/67':
         new_frag_name = (frag_name[0], frag_name[1], frag_name[3])

@@ -109,4 +109,4 @@ def fragment_dict_to_std_model(fragment_dict, mass=False, number=False):
     output_fragment_dict = {}
     for key, value in fragment_dict.iteritems():
         output_fragment_dict.update(fragment_to_input_model(value, mass, number))
-    print output_fragment_dict
+    return output_fragment_dict
