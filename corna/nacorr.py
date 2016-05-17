@@ -5,6 +5,7 @@ import helpers as hl
 import file_parser as fp
 import isotopomer as iso
 import preprocess as preproc
+import algorithms as algo
 import postprocess as postpro
 
 
@@ -59,7 +60,7 @@ print std_model_mq
 # integrating isotopomer and parser (input is standardised model in form of nested dictionaries)
 fragments_dict = {}
 for frag_name, label_dict in std_model_mq.iteritems():
-    if frag_name[2] == 'Glutamate 146/41':
+    if frag_name[2] == 'Citrate 191/67':
         new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
         fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
 
@@ -68,14 +69,16 @@ for frag_name, label_dict in std_model_mq.iteritems():
 # fragments_dict[('Glutamate 146/41_146.0', 'Glutamate 146/41_41.0')])
 
 #preprocessing for a given metabolite
-preproc.bulk_background_correction(fragments_dict, ['A. [13C-glc] G2.5 0min', 'B. [13C-glc] G2.5 5min',
-                                                    'C. [13C-glc] G2.5 15min', 'D. [13C-glc] G2.5 30min',
-                                                    'E. [13C-glc] G2.5 60min', 'F. [13C-glc] G2.5 120min',
-                                                    'G. [13C-glc] G2.5 240min', 'H. [6,6-DD-glc] G2.5 240min'],
-                                   'A. [13C-glc] G2.5 0min')
+preprocessed_dict = preproc.bulk_background_correction(fragments_dict, ['A. [13C-glc] G2.5 0min', 'B. [13C-glc] G2.5 5min',
+                                                     'C. [13C-glc] G2.5 15min', 'D. [13C-glc] G2.5 30min',
+                                                     'E. [13C-glc] G2.5 60min', 'F. [13C-glc] G2.5 120min',
+                                                     'G. [13C-glc] G2.5 240min', 'H. [6,6-DD-glc] G2.5 240min'],
+                                    'A. [13C-glc] G2.5 0min')
 
 # na correction
-#code from algorithm.py
+na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
+
+print na_corrected_dict[(193.0, 68.0)][1]['F. [13C-glc] G2.5 120min']
 
 # post processing - replace negative values by zero
 # tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
