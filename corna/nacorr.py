@@ -1,6 +1,6 @@
 import os
 import sys
-
+import numpy
 import helpers as hl
 import file_parser as fp
 import isotopomer as iso
@@ -41,8 +41,8 @@ std_model_mvn = fp.standard_model(merged_df, parent = False)
 # MultiQuant
 
 # read files
-#mq_df = hl.concat_txts_into_df(data_dir + '/')
-mq_df = hl.concat_txts_into_df('/Users/sininagpal/OneDrive/Elucidata_Sini/Na_corr_demo/data/')
+mq_df = hl.concat_txts_into_df(data_dir + '/')
+#mq_df = hl.concat_txts_into_df('/Users/sininagpal/OneDrive/Elucidata_Sini/Na_corr_demo/data/')
 #print mq_df
 mq_metdata = hl.read_file(data_dir + '/mq_metadata.xlsx')
 
@@ -77,20 +77,22 @@ preprocessed_dict = preproc.bulk_background_correction(fragments_dict, ['A. [13C
 
 # na correction
 na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
-print na_corrected_dict
-#print na_corrected_dict[(193.0, 68.0)][1]['F. [13C-glc] G2.5 120min']
+#print na_corrected_dict
+# na_corrected_dict[(194.0, 69.0)][1]['F. [13C-glc] G2.5 120min']
+
 
 # post processing - replace negative values by zero
 # tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
 
-post_processed_dict = postpro.replace_negative_to_zero(std_model_mvn, replace_negative = True)
+#post_processed_dict = postpro.replace_negative_to_zero(std_model_mvn, replace_negative = True)
 
 
 # calculate mean_enrichment
-mean_enrich_df = postpro.convert_dict_df(std_model_mvn)
+#mean_enrich_df = postpro.convert_dict_df(std_model_mvn)
 
 
 # output data frame with added metadat columns
+
 
 
 
