@@ -1,1 +1,1 @@
-from corna import read_multiquant, read_multiquant_metadata, merge_mq_metadata, filter_df, std_data_model, met_background_correction, na_correction_mimosa, met_background_correction_all, na_correction_mimosa_all, convert_to_df, replace_negatives, fractional_enrichment, save_to_csv
+from corna import read_multiquant, read_multiquant_metadata, merge_mq_metadata, std_data_model, met_background_correction, na_correction_mimosa, met_background_correction_all, na_correction_mimosa_all, filtering_df, convert_to_df, replace_negatives, fractional_enrichment, save_to_csv

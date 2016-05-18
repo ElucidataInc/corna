@@ -58,10 +58,10 @@ def merge_mq_metadata(mq_df, metdata):
     return merged_data
 
 
-def filter_df(merged_data, colname, colvalue):
-    filtered_df = hl.filter_df(merged_data, colname, colvalue)
-    return filtered_df
 
+def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = []):
+	filtered_df = hl.filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = [])
+	return filtered_df
 
 # # standard model mq
 def std_data_model(dataframe):
