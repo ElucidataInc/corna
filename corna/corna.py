@@ -1,5 +1,6 @@
 import os
 import sys
+import warnings
 
 import helpers as hl
 import file_parser as fp
@@ -11,7 +12,7 @@ import output as out
 
 
 
-
+warnings.simplefilter(action = "ignore")
 # setting relative path
 #basepath = os.path.dirname(__file__)
 #data_dir = os.path.abspath(os.path.join(basepath, "..", "data"))
