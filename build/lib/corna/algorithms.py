@@ -57,5 +57,5 @@ def na_correction_mimosa_by_fragment(fragments_dict):
                                         daughter_frag_n, intensity_m_n, intensity_m_1_n,
                                         intensity_m_1_n_1, isotope, na)
 
-        corrected_dict_mass[key] = [value[0], corrected_data, value[2]]
+        corrected_dict_mass[key] = [value[0], corrected_data, value[2], value[3]]
     return corrected_dict_mass

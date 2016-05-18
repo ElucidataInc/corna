@@ -114,6 +114,18 @@ def filter_df(df, column_name, column_value):
 	return filtered_df
 
 
+def filtering_df(df, num_col=3, col1='col1', list_col1_vals=[], col2='col2', list_col2_vals=[], col3='col3', list_col3_vals=[]):
+    if num_col==1:
+        filtered_df = df[(df[str(col1)].isin(list_col1_vals))]
+
+    elif num_col==2:
+        filtered_df = df[(df[str(col1)].isin(list_col1_vals)) & (df[str(col2)].isin(list_col2_vals))]
+
+    elif num_col==3:
+        filtered_df = df[(df[str(col1)].isin(list_col1_vals)) & (df[str(col2)].isin(list_col2_vals)) & (df[str(col3)].isin(list_col3_vals))]
+
+    return filtered_df
+
 def create_dict_from_isotope_label_list(isonumlist):
     label_dict = {}
     for i in xrange(0,len(isonumlist),2):
@@ -150,3 +162,6 @@ def get_value_from_single_value_dict(inputdict):
 
 def check_if_all_elems_same_type(inputlist, classname):
     return all(isinstance(x, classname) for x in inputlist)
+
+def concatentate_dataframes_by_col(df_list):
+    return pd.concat(df_list)

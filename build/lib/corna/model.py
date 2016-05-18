@@ -10,11 +10,11 @@ polyatomschema = FormulaSchema().create_polyatom_schema()
 class Ion():
     def __init__(self, name, formula):
         self.name = name
-        self.formula = self.get_formula(formula)
+        self.formula = formula
 
-    def get_formula(self, formula):
+    def get_formula(self):
         """Parsing formula to store as an element -> number of atoms dictionary"""
-        parsed_formula = Formula(formula).parse_formula_to_elem_numatoms()
+        parsed_formula = Formula(self.formula).parse_formula_to_elem_numatoms()
         return parsed_formula
 
     def number_of_atoms(self, element):
@@ -28,7 +28,7 @@ class Ion():
             KeyError : if element doesn't exist in the
                 formula
         """
-        parsed_formula = self.formula
+        parsed_formula = self.get_formula()
         try:
             num_atoms = parsed_formula[element]
             return num_atoms
@@ -36,7 +36,7 @@ class Ion():
             raise KeyError("Element not in formula", element)
 
     def get_mol_weight(self):
-        parsed_formula = self.formula
+        parsed_formula = self.get_formula()
         mw=0
         for sym,qty in parsed_formula.iteritems():
             mw = mw + hl.get_atomic_weight(sym)*qty
@@ -105,7 +105,7 @@ class Fragment(Ion, Label):
     def check_if_valid_label(self, label_dict):
 
         elem_num = self.get_elem_num(label_dict)
-        formula = self.formula
+        formula = self.get_formula()
         for ele, num in elem_num.iteritems():
             try:
                 if not (0 <= num <= formula[ele]):

@@ -110,3 +110,8 @@ def fragment_dict_to_std_model(fragment_dict, mass=False, number=False):
     for key, value in fragment_dict.iteritems():
         output_fragment_dict.update(fragment_to_input_model(value, mass, number))
     return output_fragment_dict
+
+# def all_metab_to_std_model(all_metab_dict, mass=False, number=False):
+#     all_metab_output = {}
+#     for key, value in all_metab_dict.iteritems():
+#         all_metab_output.update(fragment_dict_to_std_model(value,mass,number))
