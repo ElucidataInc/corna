@@ -67,3 +67,9 @@ Thumbs.db
 *.cdat
 *.xml
 *.ipynb
+*.ipynb_checkpoints
+
+dist/**
+corna.egg-info/**
+build/**
+
