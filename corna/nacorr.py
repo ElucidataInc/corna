@@ -1,13 +1,9 @@
 import os
 import sys
-<<<<<<< HEAD
-import numpy
-=======
 
 import numpy as np
 import collections
 
->>>>>>> enrichment
 import helpers as hl
 import file_parser as fp
 import isotopomer as iso
