@@ -114,14 +114,14 @@ def filter_df(df, column_name, column_value):
 	return filtered_df
 
 
-def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = []):
+def filtering_df(df, num_col=3, col1='col1', list_col1_vals=[], col2='col2', list_col2_vals=[], col3='col3', list_col3_vals=[]):
     if num_col==1:
         filtered_df = df[(df[str(col1)].isin(list_col1_vals))]
 
-    elif num_col ==2:
+    elif num_col==2:
         filtered_df = df[(df[str(col1)].isin(list_col1_vals)) & (df[str(col2)].isin(list_col2_vals))]
 
-    elif num_col == 3:
+    elif num_col==3:
         filtered_df = df[(df[str(col1)].isin(list_col1_vals)) & (df[str(col2)].isin(list_col2_vals)) & (df[str(col3)].isin(list_col3_vals))]
 
     return filtered_df

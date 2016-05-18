@@ -58,9 +58,8 @@ def merge_mq_metadata(mq_df, metdata):
     return merged_data
 
 
-
 def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = []):
-	filtered_df = hl.filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = [])
+	filtered_df = hl.filtering_df(df, num_col, col1, list_col1_vals, col2, list_col2_vals, col3, list_col3_vals)
 	return filtered_df
 
 # # standard model mq
@@ -69,9 +68,9 @@ def std_data_model(dataframe):
     return std_model_mq
 
 
-def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all=True):
-    filtered_df = filter_df(merged_data, "Name", metabolite)
-    if all==True:
+def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all_samples=True):
+    filtered_df = hl.filter_df(merged_data, "Name", metabolite)
+    if all_samples:
         list_of_samples = fp.get_sample_names(filtered_df)
     else:
         list_of_samples = list_of_samples
@@ -85,8 +84,8 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
     return preprocessed_dict
 
 
-def met_background_correction_all(merged_data, background_sample, list_of_samples=[], all=True):
-    if all==True:
+def met_background_correction_all(merged_data, background_sample, list_of_samples=[], all_samples=True):
+    if all_samples:
         list_of_samples = fp.get_sample_names(merged_data)
     else:
         list_of_samples = list_of_samples
@@ -94,21 +93,22 @@ def met_background_correction_all(merged_data, background_sample, list_of_sample
     preprocessed_output_dict = {}
     for metabolite in metab_names:
         preprocessed_output_dict[metabolite] = met_background_correction(metabolite, merged_data,
-                                                                         background_sample, list_of_samples, all)
+                                                                         background_sample, list_of_samples, all_samples)
     return preprocessed_output_dict
 
-def na_correction_mimosa(preprocessed_output):
-    na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output)
+
+def na_correction_mimosa(preprocessed_output, all=False):
+    if all:
+        na_corrected_out = {}
+        for key, value in preprocessed_output.iteritems():
+            na_corrected_out[key] = algo.na_correction_mimosa_by_fragment(value)
+    else:
+        na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output)
     return na_corrected_out
 
-def na_correction_mimosa_all(preprocessed_output_all):
-    na_corrected_output = {}
-    for key, value in preprocessed_output_all.iteritems():
-        na_corrected_output[key] = algo.na_correction_mimosa_by_fragment(value)
-    return na_corrected_output
 
-def replace_negatives(na_corr_dict, all=True):
-    if all==True:
+def replace_negatives(na_corr_dict, all=False):
+    if all:
         post_processed_dict = {}
         for metabolite, fragment_dict in na_corr_dict.iteritems():
             post_processed_dict[metabolite] = postpro.replace_negative_to_zero(fragment_dict, replace_negative = True)
@@ -116,8 +116,8 @@ def replace_negatives(na_corr_dict, all=True):
         post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict, replace_negative = True)
     return post_processed_dict
 
-def fractional_enrichment(post_processed_out, all=True):
-    if all == True:
+def fractional_enrichment(post_processed_out, all=False):
+    if all:
         frac_enrichment_dict = {}
         for metabolite, fragment_dict in post_processed_out.iteritems():
             frac_enrichment_dict[metabolite] = postpro.enrichment(fragment_dict)
@@ -125,8 +125,8 @@ def fractional_enrichment(post_processed_out, all=True):
         frac_enrichment_dict = postpro.enrichment(post_processed_out)
     return frac_enrichment_dict
 
-def convert_to_df(dict_output, all=True):
-    if all==True:
+def convert_to_df(dict_output, all=False):
+    if all:
         df_list = []
         for metabolite, fragment_dict in dict_output.iteritems():
             std_model = iso.fragment_dict_to_std_model(fragment_dict, mass=True, number=False)
