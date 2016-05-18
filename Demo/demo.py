@@ -29,16 +29,4 @@ postprocessed_out_df = corna.convert_to_df(postprocessed_out, all = True, colnam
 frac_enrichment = corna.fractional_enrichment(postprocessed_out, all=True)
 frac_enr_df = corna.convert_to_df(frac_enrichment, all = True, colname = 'Frac Enrichment')
 
-
-
-
-
-
-#
-# fractional_enr = corna.fractional_enrichment(post_processing)
-# fractional_enr_df = corna.convert_to_df(fractional_enr)
-#
-# #save_dfs = corna.save_to_csv(fractional_enr_df, path)
-#
-#
-#
+save_dfs = corna.save_to_csv(frac_enr_df, path_dir + 'frac_enrichment.csv')
