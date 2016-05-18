@@ -1,7 +1,7 @@
 import corna
 
 # path to directory where multiquant text data files are present
-path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data/splitfilesmq/'
+path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_correction/Demo/data/'
 
 # read multiquant data files and combine them
 mq_files = corna.read_multiquant(path_dir)
@@ -15,12 +15,23 @@ merge_mq_metdata = corna.merge_mq_metadata(mq_files, mq_metadata)
 
 # filter merged data as per requirement
 citrate_G7 = corna.filtering_df(merge_mq_metdata, num_col=2, col1="Name",
-                                list_col1_vals=['Citrate 196/71', 'Citrate 191/67', 'Citrate 197/71' ], col2="Glucose Concentration",
-                                list_col2_vals=["G7"])
+                                list_col1_vals=['Citrate 196/71', 'Citrate 191/67', 'Citrate 197/71' ], col2="Glucose Concentration", list_col2_vals=["G7"])
+
+# filter by two columns
+filtered_data = corna.filtering_df(merge_mq_metdata, num_col=2, col1="Time",
+                                list_col1_vals=['0min','30min'], col2="Glucose Concentration", list_col2_vals=["G7"])
 
 
 # background noise correction on filtered data
-background_corr = corna.met_background_correction_all(citrate_G7, 'Q. [13C-glc] G7 0min')
+background_corr = corna.met_background_correction_all(filtered_data, 'Q. [13C-glc] G7 0min')
+
+# background noise correction for all labels of a fragmnent
+background_corr = corna.met_background_correction('Citrate 191/67', merge_mq_metdata, 'Q. [13C-glc] G7 0min')
+
+# background noise correction by list of given samples
+list_of_samples = ['Q. [13C-glc] G7 0min', 'R. [13C-glc] G7 5min', 'S. [13C-glc] G7 15min']
+background_corr = corna.met_background_correction('Citrate 191/67', merge_mq_metdata, 'Q. [13C-glc] G7 0min', list_of_samples, all_samples=False)
+
 # convert background noise corrected dictionary to dataframe
 background_corr_df = corna.convert_to_df(background_corr, all = True, colname = 'Background correction')
 

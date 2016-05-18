@@ -37,18 +37,15 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
     if replace_negative==True:
 
         post_proc_dict = {}
-
         for frag_key, frag_info in corrected_dict.iteritems():
             data = frag_info[1]
             new_data = {}
             for sample, intensity_list in data.iteritems():
                 intensity_list = map(zero_if_negative, intensity_list)
-                new_data[sample] = intensity_list
+                new_data[sample] = numpy.array(intensity_list)
             post_proc_dict[frag_key] = [frag_info[0], new_data, frag_info[2], frag_info[3]]
         return post_proc_dict
-
     elif replace_negative==False:
-
         return corrected_dict
 
 

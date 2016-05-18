@@ -14,7 +14,6 @@ corna/nacorr.py
 corna/output.py
 corna/postprocess.py
 corna/preprocess.py
-corna.egg-info/.DS_Store
 corna.egg-info/PKG-INFO
 corna.egg-info/SOURCES.txt
 corna.egg-info/dependency_links.txt
