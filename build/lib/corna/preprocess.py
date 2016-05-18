@@ -58,12 +58,18 @@ def bulk_background_correction(fragment_dict, list_of_samples, background_sample
             unlabeled_fragment.append((key,value))
         else:
             input_fragments.append((key,value))
-    assert len(unlabeled_fragment) == 1
+        print unlabeled_fragment
+        print input_fragments
+    try:
+        assert len(unlabeled_fragment) == 1
+    except AssertionError:
+        raise AssertionError('The input should contain unlabeled fragment data')
     for input_fragment in input_fragments:
         background_list = background(background_sample, input_fragment[1], unlabeled_fragment[0][1])
         sample_data = {}
         data = input_fragment[1][1]
         for sample_name in list_of_samples:
+            print sample_name
             sample_data[sample_name] = data[sample_name]
         corrected_sample_data = background_correction(background_list, sample_data)
         corrected_fragments_dict[input_fragment[0]] = [input_fragment[1][0], corrected_sample_data,

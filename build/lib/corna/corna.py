@@ -79,6 +79,7 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
     for frag_name, label_dict in std_model_mq.iteritems():
         if frag_name[2] == metabolite:
             new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
+            print new_frag_name
             fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
     preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample)
     return preprocessed_dict
@@ -92,6 +93,7 @@ def met_background_correction_all(merged_data, background_sample, list_of_sample
     metab_names = hl.get_unique_values(merged_data, "Parent")
     std_model_mq = fp.standard_model(merged_data, parent = True)
     preprocessed_output_dict = {}
+    print metab_names
     for metabolite in metab_names:
         fragments_dict = {}
         for frag_name, label_dict in std_model_mq.iteritems():
@@ -123,8 +125,11 @@ def fractional_enrichment(post_processed_out):
     frac_enrichment = postpro.enrichment(post_processed_out)
     return frac_enrichment
 
-def convert_to_df(dict_output):
-    std_model =  iso.fragment_dict_to_std_model(dict_output, mass=True, number=False)
+def convert_to_df(dict_output, all=False):
+    if all==True:
+        std_model = iso.all_metab_to_std_model(dict_output, mass=True, number=False)
+    else:
+        std_model =  iso.fragment_dict_to_std_model(dict_output, mass=True, number=False)
     model_to_df = out.convert_dict_df(std_model, parent = True)
     return model_to_df
 

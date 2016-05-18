@@ -61,7 +61,8 @@ def bulk_background_correction(fragment_dict, list_of_samples, background_sample
     try:
         assert len(unlabeled_fragment) == 1
     except AssertionError:
-        raise AssertionError('The input should contain unlabeled fragment data')
+        raise AssertionError('The input should contain atleast and only one unlabeled fragment data'
+                             'Please check metadata or raw data files')
     for input_fragment in input_fragments:
         background_list = background(background_sample, input_fragment[1], unlabeled_fragment[0][1])
         sample_data = {}
