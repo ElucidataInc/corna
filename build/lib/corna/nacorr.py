@@ -1,11 +1,9 @@
 import os
 import sys
-
-#import numpy
-
+import warnings
 
 import numpy as np
-import collections
+import pandas as pd
 
 
 import helpers as hl
@@ -18,6 +16,7 @@ import output as out
 
 
 
+warnings.simplefilter(action = "ignore")
 # setting relative path
 basepath = os.path.dirname(__file__)
 data_dir = os.path.abspath(os.path.join(basepath, "..", "data"))
@@ -56,8 +55,7 @@ mq_metdata = hl.read_file(data_dir + '/mq_metadata.xlsx')
 
 # merge mq_data + metadata
 merged_data = fp.mq_merge_dfs(mq_df, mq_metdata)
-#print merged_data
-
+#print merged_data[(merged_data['Name'].isin(['Citrate 197/71','Citrate 191/67'])) & (merged_data['Sample Name'].isin(['A. [13C-glc] G2.5 0min', 'B. [13C-glc] G2.5 5min']))]
 #merged_data.to_csv(data_dir + '/merged_mq.csv')
 
 # standard model mq
@@ -86,7 +84,7 @@ na_corr_dict_std_model =  iso.fragment_dict_to_std_model(na_corrected_dict,mass=
 
 # post processing - replace negative values by zero
 # tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
-post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict_std_model, replace_negative = True)
+#post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict_std_model, replace_negative = True)
 
 
 frac_enrichment = postpro.enrichment(preprocessed_dict)
@@ -94,19 +92,4 @@ frac_enr_dict_std_model =  iso.fragment_dict_to_std_model(frac_enrichment,mass=T
 
 
 dict_to_df = out.convert_dict_df(frac_enr_dict_std_model, parent = True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

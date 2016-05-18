@@ -6,7 +6,6 @@ import helpers as hl
 
 
 
-
 def maven_merge_dfs(df1, df2):
     """
     This function combines the input file dataframe and the metadata
