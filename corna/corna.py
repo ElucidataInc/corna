@@ -138,7 +138,6 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
         #return hl.concatentate_dataframes_by_col(df_list)
     else:
         std_model = iso.fragment_dict_to_std_model(dict_output, mass=True, number=False)
-        print std_model
         model_to_df = out.convert_dict_df(std_model, parent = True)
 
     model_to_df.rename(columns={"Intensity": str(colname)}, inplace=True)

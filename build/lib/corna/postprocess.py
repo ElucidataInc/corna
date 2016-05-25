@@ -1,6 +1,5 @@
-import decimal as deci
 
-import numpy
+import numpy as np
 
 
 def zero_if_negative(num):
@@ -43,7 +42,7 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
             new_data = {}
             for sample, intensity_list in data.iteritems():
                 intensity_list = map(zero_if_negative, intensity_list)
-                new_data[sample] = numpy.array(intensity_list)
+                new_data[sample] = np.array(intensity_list)
             post_proc_dict[frag_key] = [frag_info[0], new_data, frag_info[2], frag_info[3]]
         return post_proc_dict
     elif replace_negative==False:
@@ -51,12 +50,11 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
 
 
 def enrichment(fragments_dict, decimals):
-    deci.getcontext().prec = decimals
     all_values = fragments_dict.values()
     sample_names = all_values[1][1].keys()
     sum_dict = {}
     for sample_name in sample_names:
-       curr_arr = numpy.zeros(len(all_values[1][1][sample_name]))
+       curr_arr = np.zeros(len(all_values[1][1][sample_name]))
        for value in all_values:
           curr_arr = curr_arr + value[1][sample_name]
        sum_dict[sample_name] = curr_arr
@@ -67,7 +65,7 @@ def enrichment(fragments_dict, decimals):
        data = value[1]
        fractional_data = {}
        for sample_name, intensity in data.iteritems():
-          fractional_data[sample_name] = numpy.array(deci.Decimal(x) for x in intensity/sum_dict[sample_name])
+          fractional_data[sample_name] = np.around(intensity/sum_dict[sample_name], decimals)
        fragments_fractional[key] = [value[0], fractional_data, value[2], value[3]]
 
     return fragments_fractional
