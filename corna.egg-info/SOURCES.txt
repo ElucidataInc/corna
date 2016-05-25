@@ -23,6 +23,7 @@ corna.egg-info/top_level.txt
 tests/__init__.py
 tests/test_algorithms.py
 tests/test_constants.py
+tests/test_demo.py
 tests/test_file_parser.py
 tests/test_formula.py
 tests/test_formulaschema.py

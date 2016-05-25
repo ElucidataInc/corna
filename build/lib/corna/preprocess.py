@@ -1,16 +1,15 @@
 import math
 
-import numpy
+import numpy as np
 from scipy.misc import comb
 
 import helpers as hl
 
-
 def background_noise(unlabel_intensity, na, parent_atoms, parent_label, daughter_atoms, daughter_label):
-    if daughter_label == 0:
-        noise = unlabel_intensity*math.pow(na, parent_label)*comb(parent_atoms - daughter_atoms, parent_label)
-    else:
-        noise = unlabel_intensity*math.pow(na, daughter_label)*comb(daughter_atoms, daughter_label)
+    noise = unlabel_intensity*math.pow(na, parent_label-daughter_label)\
+            *comb(parent_atoms - daughter_atoms, parent_label - daughter_label)\
+            *math.pow(na, daughter_label)\
+            *comb(daughter_atoms, daughter_label)
     return noise
 
 def backround_subtraction(input_intensity, noise):
@@ -36,15 +35,15 @@ def background(sample_name, input_fragment_value, unlabeled_fragment_value):
         background_list.append(background)
     return background_list
 
-def background_correction(background_list, sample_data):
+def background_correction(background_list, sample_data, decimals):
     background = max(background_list)
     corrected_sample_data = {}
     for key, value in sample_data.iteritems():
-        new_value = value - background
+        new_value = np.around(value - background, decimals)
         corrected_sample_data[key] = new_value
     return corrected_sample_data
 
-def bulk_background_correction(fragment_dict, list_of_samples, background_sample):
+def bulk_background_correction(fragment_dict, list_of_samples, background_sample, decimals):
     input_fragments = []
     unlabeled_fragment = []
     corrected_fragments_dict = {}
@@ -52,6 +51,7 @@ def bulk_background_correction(fragment_dict, list_of_samples, background_sample
         unlabel = value[2]
         if unlabel:
             unlabeled_fragment.append((key,value))
+            input_fragments.append((key,value))
         else:
             input_fragments.append((key,value))
     try:
@@ -65,7 +65,7 @@ def bulk_background_correction(fragment_dict, list_of_samples, background_sample
         data = input_fragment[1][1]
         for sample_name in list_of_samples:
             sample_data[sample_name] = data[sample_name]
-        corrected_sample_data = background_correction(background_list, sample_data)
+        corrected_sample_data = background_correction(background_list, sample_data, decimals)
         corrected_fragments_dict[input_fragment[0]] = [input_fragment[1][0], corrected_sample_data,
                                                        input_fragment[1][2], input_fragment[1][3]]
     return corrected_fragments_dict
