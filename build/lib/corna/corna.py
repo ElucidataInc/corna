@@ -102,7 +102,7 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     if all:
         na_corrected_out = {}
         for key, value in preprocessed_output.iteritems():
-            na_corrected_out[key] = algo.na_correction_mimosa_by_fragment(value)
+            na_corrected_out[key] = algo.na_correction_mimosa_by_fragment(value, decimals)
     else:
         na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output, decimals)
     return na_corrected_out
@@ -138,6 +138,7 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
         #return hl.concatentate_dataframes_by_col(df_list)
     else:
         std_model = iso.fragment_dict_to_std_model(dict_output, mass=True, number=False)
+        print std_model
         model_to_df = out.convert_dict_df(std_model, parent = True)
 
     model_to_df.rename(columns={"Intensity": str(colname)}, inplace=True)

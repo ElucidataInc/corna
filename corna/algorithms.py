@@ -1,11 +1,9 @@
-import decimal as deci
 
 import numpy as np
 import helpers as hl
 
 def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                       isotope, na, decimals):
-    deci.getcontext().prec = decimals
     p = parent_frag_m.get_number_of_atoms_isotope(isotope)
     d = daughter_frag_n.get_number_of_atoms_isotope(isotope)
     m = parent_frag_m.get_num_labeled_atoms_tracer()
@@ -13,20 +11,18 @@ def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intens
 
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
-    return deci.Decimal(corrected_intensity)
+    return np.around(corrected_intensity, decimals)
 
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                       isotope, na, decimals):
-    deci.getcontext().prec = decimals
     p = parent_frag_m.get_number_of_atoms_isotope(isotope)
     d = daughter_frag_n.get_number_of_atoms_isotope(isotope)
     m = parent_frag_m.get_num_labeled_atoms_tracer()
     n = daughter_frag_n.get_num_labeled_atoms_tracer()
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
-    corrected_intensity_decimals = np.array([deci.Decimal(x) for x in corrected_intensity])
 
-    return corrected_intensity_decimals
+    return np.around(corrected_intensity, decimals)
 
 def arrange_fragments_by_mass(fragments_dict):
     fragment_dict_mass = {}

@@ -52,19 +52,23 @@ na_corr_out_malate = corna.filtering_df(na_corr_out, num_col=1, col1='name',
 
 # NA correction method on background noise corrected data
 nacorr_dict = corna.na_correction_mimosa(postprocessed_out_malate, all = False)
-na_corr_df_malate = corna.convert_to_df(nacorr_dict, all=False, colname = 'NA corrected')
+na_postprocessed_out_malate = corna.replace_negatives(nacorr_dict, all=False)
+na_corr_df_malate = corna.convert_to_df(na_postprocessed_out_malate, all=False, colname = 'NA corrected')
+
 
 corna.save_to_csv(na_corr_df_malate, path_dir + '/our_out_malate_na.csv')
 corna.save_to_csv(na_corr_out_malate, path_dir + '/excel_out_malate_na.csv')
 
 
-# # Replace negative values by zero on NA corrected data - optional
-# postprocessed_out = corna.replace_negatives(nacorr_dict, all=True)
-# postprocessed_out_df = corna.convert_to_df(postprocessed_out, all = True, colname =  'Replaced negatives')
-#
 # # calculate fractional enrichment on post processed data
-# frac_enrichment = corna.fractional_enrichment(postprocessed_out, all=True)
-# frac_enr_df = corna.convert_to_df(frac_enrichment, all = True, colname = 'Frac Enrichment')
-#
-# # save any dataframe at given path
-# save_dfs = corna.save_to_csv(frac_enr_df, path_dir + 'frac_enrichment.csv')
+frac_enrichment = corna.fractional_enrichment(na_postprocessed_out_malate, all=False)
+frac_enr_df_malate = corna.convert_to_df(frac_enrichment, all = False, colname = 'Frac Enrichment')
+
+frac_enr_out = pd.read_excel(path_dir + '/test_demo_output.xlsx', 'FractionalEnrichment')
+frac_enr_out_malate = corna.filtering_df(frac_enr_out, num_col=1, col1='name',
+                                                list_col1_vals=['Malate 133/115', 'Malate 134/116',
+                                                                'Malate 135/117', 'Malate 136/118',
+                                                                'Malate 137/119'])
+
+corna.save_to_csv(frac_enr_df_malate, path_dir + '/our_out_malate_ape.csv')
+corna.save_to_csv(frac_enr_out_malate, path_dir + '/excel_out_malate_ape.csv')
