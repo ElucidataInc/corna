@@ -21,6 +21,7 @@ citrate_G7 = corna.filtering_df(merge_mq_metdata, num_col=2, col1="Name",
 filtered_data = corna.filtering_df(merge_mq_metdata, num_col=2, col1="Time",
                                 list_col1_vals=['0min','30min'], col2="Glucose Concentration", list_col2_vals=["G7"])
 
+background_corr = corna.met_background_correction_all(citrate_G7, 'Q. [13C-glc] G7 0min')
 
 # background noise correction on filtered data
 background_corr = corna.met_background_correction_all(filtered_data, 'Q. [13C-glc] G7 0min')

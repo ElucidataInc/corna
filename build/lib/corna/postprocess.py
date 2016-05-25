@@ -1,4 +1,5 @@
-import pandas as pd
+import decimal as deci
+
 import numpy
 
 
@@ -49,8 +50,8 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
         return corrected_dict
 
 
-def enrichment(fragments_dict):
-
+def enrichment(fragments_dict, decimals):
+    deci.getcontext().prec = decimals
     all_values = fragments_dict.values()
     sample_names = all_values[1][1].keys()
     sum_dict = {}
@@ -60,14 +61,13 @@ def enrichment(fragments_dict):
           curr_arr = curr_arr + value[1][sample_name]
        sum_dict[sample_name] = curr_arr
 
-
     fragments_fractional = {}
 
     for key, value in fragments_dict.iteritems():
        data = value[1]
        fractional_data = {}
        for sample_name, intensity in data.iteritems():
-          fractional_data[sample_name] = intensity/sum_dict[sample_name]
+          fractional_data[sample_name] = numpy.array(deci.Decimal(x) for x in intensity/sum_dict[sample_name])
        fragments_fractional[key] = [value[0], fractional_data, value[2], value[3]]
 
     return fragments_fractional

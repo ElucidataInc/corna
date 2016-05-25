@@ -1,8 +1,11 @@
+import decimal as deci
+
 import numpy as np
 import helpers as hl
 
 def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
-                      isotope, na):
+                      isotope, na, decimals):
+    deci.getcontext().prec = decimals
     p = parent_frag_m.get_number_of_atoms_isotope(isotope)
     d = daughter_frag_n.get_number_of_atoms_isotope(isotope)
     m = parent_frag_m.get_num_labeled_atoms_tracer()
@@ -10,17 +13,20 @@ def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intens
 
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
-    return corrected_intensity
+    return deci.Decimal(corrected_intensity)
 
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
-                      isotope, na):
+                      isotope, na, decimals):
+    deci.getcontext().prec = decimals
     p = parent_frag_m.get_number_of_atoms_isotope(isotope)
     d = daughter_frag_n.get_number_of_atoms_isotope(isotope)
     m = parent_frag_m.get_num_labeled_atoms_tracer()
     n = daughter_frag_n.get_num_labeled_atoms_tracer()
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
-    return corrected_intensity
+    corrected_intensity_decimals = np.array([deci.Decimal(x) for x in corrected_intensity])
+
+    return corrected_intensity_decimals
 
 def arrange_fragments_by_mass(fragments_dict):
     fragment_dict_mass = {}
@@ -29,7 +35,7 @@ def arrange_fragments_by_mass(fragments_dict):
         fragment_dict_mass[(parent_frag.isotope_mass, daughter_frag.isotope_mass)] = value
     return fragment_dict_mass
 
-def na_correction_mimosa_by_fragment(fragments_dict):
+def na_correction_mimosa_by_fragment(fragments_dict, decimals):
     fragment_dict_mass = arrange_fragments_by_mass(fragments_dict)
     corrected_dict_mass = {}
     for key, value in fragment_dict_mass.iteritems():
@@ -51,7 +57,7 @@ def na_correction_mimosa_by_fragment(fragments_dict):
                 intensity_m_1_n_1 = np.zeros(len(intensity_m_n))
             corrected_data[sample_name] = na_correct_mimosa_algo_array(parent_frag_m,
                                         daughter_frag_n, intensity_m_n, intensity_m_1_n,
-                                        intensity_m_1_n_1, isotope, na)
+                                        intensity_m_1_n_1, isotope, na, decimals)
 
         corrected_dict_mass[key] = [value[0], corrected_data, value[2], value[3]]
     return corrected_dict_mass

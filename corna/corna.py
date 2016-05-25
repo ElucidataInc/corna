@@ -69,7 +69,7 @@ def std_data_model(dataframe):
     return std_model_mq
 
 
-def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all_samples=True):
+def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
     filtered_df = hl.filter_df(merged_data, "Name", metabolite)
     if all_samples:
         list_of_samples = fp.get_sample_names(filtered_df)
@@ -81,11 +81,11 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
         if frag_name[2] == metabolite:
             new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
             fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
-    preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample)
+    preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample, decimals)
     return preprocessed_dict
 
 
-def met_background_correction_all(merged_data, background_sample, list_of_samples=[], all_samples=True):
+def met_background_correction_all(merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
     if all_samples:
         list_of_samples = fp.get_sample_names(merged_data)
     else:
@@ -94,17 +94,17 @@ def met_background_correction_all(merged_data, background_sample, list_of_sample
     preprocessed_output_dict = {}
     for metabolite in metab_names:
         preprocessed_output_dict[metabolite] = met_background_correction(metabolite, merged_data,
-                                                                         background_sample, list_of_samples, all_samples)
+                                                                         background_sample, list_of_samples, all_samples, decimals)
     return preprocessed_output_dict
 
 
-def na_correction_mimosa(preprocessed_output, all=False):
+def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     if all:
         na_corrected_out = {}
         for key, value in preprocessed_output.iteritems():
             na_corrected_out[key] = algo.na_correction_mimosa_by_fragment(value)
     else:
-        na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output)
+        na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output, decimals)
     return na_corrected_out
 
 
@@ -117,13 +117,13 @@ def replace_negatives(na_corr_dict, all=False):
         post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict, replace_negative = True)
     return post_processed_dict
 
-def fractional_enrichment(post_processed_out, all=False):
+def fractional_enrichment(post_processed_out, all=False, decimals=4):
     if all:
         frac_enrichment_dict = {}
         for metabolite, fragment_dict in post_processed_out.iteritems():
-            frac_enrichment_dict[metabolite] = postpro.enrichment(fragment_dict)
+            frac_enrichment_dict[metabolite] = postpro.enrichment(fragment_dict, decimals)
     else:
-        frac_enrichment_dict = postpro.enrichment(post_processed_out)
+        frac_enrichment_dict = postpro.enrichment(post_processed_out, decimals)
     return frac_enrichment_dict
 
 def convert_to_df(dict_output, all=False, colname = 'col_name'):
