@@ -1,26 +1,22 @@
-import decimal as deci
 import math
 
+import numpy as np
 from scipy.misc import comb
 
 import helpers as hl
 
-def background_noise(unlabel_intensity, na, parent_atoms, parent_label, daughter_atoms, daughter_label, decimals):
-    local_prec = deci.getcontext().copy()
-    local_prec.prec = decimals
+def background_noise(unlabel_intensity, na, parent_atoms, parent_label, daughter_atoms, daughter_label):
     noise = unlabel_intensity*math.pow(na, parent_label-daughter_label)\
             *comb(parent_atoms - daughter_atoms, parent_label - daughter_label)\
             *math.pow(na, daughter_label)\
             *comb(daughter_atoms, daughter_label)
-    return local_prec.create_decimal(float(noise))
+    return noise
 
-def backround_subtraction(input_intensity, noise, decimals):
-    local_prec = deci.getcontext().copy()
-    local_prec.prec = decimals
-    intensity = local_prec.create_decimal(float(input_intensity)) - local_prec.create_decimal(float(noise))
-    return local_prec.create_decimal(float(intensity))
+def backround_subtraction(input_intensity, noise):
+    intensity = input_intensity - noise
+    return intensity
 
-def background(sample_name, input_fragment_value, unlabeled_fragment_value, decimals):
+def background(sample_name, input_fragment_value, unlabeled_fragment_value):
     parent_frag, daughter_frag = input_fragment_value[0]
     data = input_fragment_value[1]
     parent_label = parent_frag.get_num_labeled_atoms_tracer()
@@ -34,18 +30,16 @@ def background(sample_name, input_fragment_value, unlabeled_fragment_value, deci
     background_list = []
     for i in range(len(input_intensities)):
         noise = background_noise(unlabeled_intensities[i], na, parent_atoms,
-                                 parent_label, daughter_atoms, daughter_label, decimals)
-        background = backround_subtraction(input_intensities[i], noise, decimals)
+                                 parent_label, daughter_atoms, daughter_label)
+        background = backround_subtraction(input_intensities[i], noise)
         background_list.append(background)
     return background_list
 
 def background_correction(background_list, sample_data, decimals):
-    local_prec = deci.getcontext().copy()
-    local_prec.prec = decimals
-    background = local_prec.create_decimal(float(max(background_list)))
+    background = max(background_list)
     corrected_sample_data = {}
     for key, value in sample_data.iteritems():
-        new_value = [(local_prec.create_decimal(float(x)) - background) for x in value]
+        new_value = np.around(value - background, decimals)
         corrected_sample_data[key] = new_value
     return corrected_sample_data
 
@@ -57,6 +51,7 @@ def bulk_background_correction(fragment_dict, list_of_samples, background_sample
         unlabel = value[2]
         if unlabel:
             unlabeled_fragment.append((key,value))
+            input_fragments.append((key,value))
         else:
             input_fragments.append((key,value))
     try:
@@ -65,7 +60,7 @@ def bulk_background_correction(fragment_dict, list_of_samples, background_sample
         raise AssertionError('The input should contain atleast and only one unlabeled fragment data'
                              'Please check metadata or raw data files')
     for input_fragment in input_fragments:
-        background_list = background(background_sample, input_fragment[1], unlabeled_fragment[0][1], decimals)
+        background_list = background(background_sample, input_fragment[1], unlabeled_fragment[0][1])
         sample_data = {}
         data = input_fragment[1][1]
         for sample_name in list_of_samples:

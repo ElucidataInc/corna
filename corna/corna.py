@@ -102,7 +102,7 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     if all:
         na_corrected_out = {}
         for key, value in preprocessed_output.iteritems():
-            na_corrected_out[key] = algo.na_correction_mimosa_by_fragment(value)
+            na_corrected_out[key] = algo.na_correction_mimosa_by_fragment(value, decimals)
     else:
         na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output, decimals)
     return na_corrected_out

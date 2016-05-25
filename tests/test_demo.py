@@ -22,11 +22,13 @@ merge_mq_metdata = corna.merge_mq_metadata(mq_files, mq_metadata)
 
 
 # filter merged data as per requirement
-malate = corna.filtering_df(merge_mq_metdata, num_col=1, col1="Parent",
-                                list_col1_vals=['Malate 133/115'])
-
+malate = corna.filtering_df(merge_mq_metdata, num_col=2, col1="Parent",
+                                list_col1_vals=['Malate 133/115'],
+                            col2="Glucose Concentration", list_col2_vals=["G9"])
+corna.save_to_csv(malate, '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/malate_in.csv')
 glutamate = corna.filtering_df(merge_mq_metdata, num_col=1, col1="Parent",
-                                list_col1_vals=['Glutamate 146/128'])
+                                list_col1_vals=['Glutamate 146/128'],
+                               col2="Glucose Concentration", list_col2_vals=["G7"])
 
 background_corr_malate = corna.met_background_correction('Malate 133/115', malate, 'A. [13C-glc] G9 0min')
 postprocessed_out_malate = corna.replace_negatives(background_corr_malate, all=False)
@@ -35,30 +37,27 @@ background_corr_df_malate = corna.convert_to_df(postprocessed_out_malate, all = 
 #output file
 background_corr_out = pd.read_excel(path_dir + '/test_demo_output.xlsx', 'BackgroundCorrection')
 background_corr_out_malate = corna.filtering_df(background_corr_out, num_col=1, col1='name',
-                                                list_col1_vals=['Malate 133/115'])
+                                                list_col1_vals=['Malate 133/115', 'Malate 134/116',
+                                                                'Malate 135/117', 'Malate 136/118',
+                                                                'Malate 137/119'])
 
-print background_corr_df_malate.equals(background_corr_out_malate)
+corna.save_to_csv(background_corr_df_malate, path_dir + '/our_out_malate_bg.csv')
+corna.save_to_csv(background_corr_out_malate, path_dir + '/excel_out_malate_bg.csv')
 
-corna.save_to_csv(background_corr_df_malate, '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/our_out.csv')
-corna.save_to_csv(background_corr_out_malate, '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/excel_out.csv')
-# background noise correction on filtered data
-# background_corr = corna.met_background_correction_all(filtered_data, 'Q. [13C-glc] G7 0min')
-#
-# # background noise correction for all labels of a fragmnent
-# background_corr = corna.met_background_correction('Citrate 191/67', merge_mq_metdata, 'Q. [13C-glc] G7 0min')
-#
-# # background noise correction by list of given samples
-# list_of_samples = ['Q. [13C-glc] G7 0min', 'R. [13C-glc] G7 5min', 'S. [13C-glc] G7 15min']
-# background_corr = corna.met_background_correction('Citrate 191/67', merge_mq_metdata, 'Q. [13C-glc] G7 0min', list_of_samples, all_samples=False)
-#
-# # convert background noise corrected dictionary to dataframe
-# background_corr_df = corna.convert_to_df(background_corr, all = True, colname = 'Background correction')
-#
-#
-# # NA correction method on background noise corrected data
-# nacorr_dict = corna.na_correction_mimosa(background_corr, all = True)
-# na_corr_df = corna.convert_to_df(nacorr_dict, all=True, colname = 'NA corrected')
-#
+na_corr_out = pd.read_excel(path_dir + '/test_demo_output.xlsx', 'NACorrection')
+na_corr_out_malate = corna.filtering_df(na_corr_out, num_col=1, col1='name',
+                                                list_col1_vals=['Malate 133/115', 'Malate 134/116',
+                                                                'Malate 135/117', 'Malate 136/118',
+                                                                'Malate 137/119'])
+
+# NA correction method on background noise corrected data
+nacorr_dict = corna.na_correction_mimosa(postprocessed_out_malate, all = False)
+na_corr_df_malate = corna.convert_to_df(nacorr_dict, all=False, colname = 'NA corrected')
+
+corna.save_to_csv(na_corr_df_malate, path_dir + '/our_out_malate_na.csv')
+corna.save_to_csv(na_corr_out_malate, path_dir + '/excel_out_malate_na.csv')
+
+
 # # Replace negative values by zero on NA corrected data - optional
 # postprocessed_out = corna.replace_negatives(nacorr_dict, all=True)
 # postprocessed_out_df = corna.convert_to_df(postprocessed_out, all = True, colname =  'Replaced negatives')
