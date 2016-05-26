@@ -39,9 +39,20 @@ warnings.simplefilter(action = "ignore")
 
 
 
-# # MultiQuant
 
-# # read files
+
+# read files:
+
+# Maven
+def read_maven(path):
+    maven_output = hl.read_file(path)
+    return maven_output
+
+def read_mvn_metadata(path):
+    mvn_metadata = hl.read_file(path)
+    return mvn_metadata
+
+# Multiquant
 def read_multiquant(dir_path):
     #mq_df = hl.concat_txts_into_df(data_dir + '/')
     mq_df = hl.concat_txts_into_df(dir_path)

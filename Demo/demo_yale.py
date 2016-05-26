@@ -1,7 +1,7 @@
 import corna
 
 # path to directory where multiquant text data files are present
-path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_correction/Demo/data/'
+path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_correction/Demo/data_yale/'
 
 # read multiquant data files and combine them
 mq_files = corna.read_multiquant(path_dir)
