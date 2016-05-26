@@ -332,16 +332,13 @@ for i in range(len(list_of_frag_info_tuples)):
                                                              list_of_label_dict[i], mass=True, number=False, mode=None))
 
 def test_background_noise_label_daughter_unlabel():
-    assert round(preproc.background_noise(31710, 0.011, 5, 1, 2, 0), 3) == 1046.43
+    assert preproc.background_noise(31710, 0.011, 5, 1, 2, 0) == 1046.43
 
-def test_background_noise_label_daughter_unlabel():
-    assert preproc.background_noise(31710, 0.011, 5, 1, 2, 1) == 697.62
+def test_background_noise_label_daughter_label():
+     assert preproc.background_noise(31710, 0.011, 5, 1, 2, 1) == 697.62
 
 def test_backround_subtraction():
     assert preproc.backround_subtraction(27800, 2.29E+03) == 25510.0
-
-def test_backround_subtraction_negative():
-    assert preproc.backround_subtraction(2.29E+03, 27800) == 0.0
 
 
 input_fragment = iso.insert_data_to_fragment(('Glutamate 147/41', 'C2HO', 'C5H8NO4'), 'C13_147.0_41.0', {'A. [13C-glc] G2.5 0min':
@@ -387,8 +384,8 @@ def test_bulk_background_correction():
                                                      'G. [13C-glc] G2.5 240min', 'H. [6,6-DD-glc] G2.5 240min'],
                                     'A. [13C-glc] G2.5 0min')
     test_data = test_dict[('Glutamate 147/42_147.0', 'Glutamate 147/42_42.0')][1]
-    assert numpy.array_equal(numpy.around(test_data['F. [13C-glc] G2.5 120min'],9), numpy.around(numpy.array([586.451911,
+    assert numpy.array_equal(test_data['F. [13C-glc] G2.5 120min'], numpy.around(numpy.array([586.451911,
                                                                                                               67.68204748,
                                                                                                               2385.001911,
                                                                                                               0., 1231.660911,
-                                                                                                              1487.752411]),9))
+                                                                                                              1487.752411]),2))
