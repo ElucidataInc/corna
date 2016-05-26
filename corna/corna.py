@@ -64,17 +64,27 @@ def read_multiquant_metadata(path):
 
     return mq_metdata
 
+# Merge input + metadata files
 
+# Maven
+def merge_mvn_metadata(mv_df, metadata):
+    merged_data = fp.maven_merge_dfs(mv_df, metadata)
+    return merged_data
+
+
+# Multiquant
 def merge_mq_metadata(mq_df, metdata):
     merged_data = fp.mq_merge_dfs(mq_df, metdata)
     return merged_data
 
 
+# Filtering data
 def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = []):
 	filtered_df = hl.filtering_df(df, num_col, col1, list_col1_vals, col2, list_col2_vals, col3, list_col3_vals)
 	return filtered_df
 
-# # standard model mq
+# Standard data model
+# mq
 def std_data_model(dataframe):
     std_model_mq = fp.standard_model(dataframe, parent = True)
     return std_model_mq
