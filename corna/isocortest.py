@@ -1,5 +1,6 @@
 import re
 import numpy
+from scipy import optimize
 
 def parse_formula(f):
     """
@@ -33,6 +34,15 @@ def calc_mdv(el_dict_meta, el_dict_der):
             result = numpy.convolve(result, data[el])
 
     return list(result)
+
+def cost_function(mid, v_mes, mat_cor):
+    """
+    Cost function used for BFGS minimization.
+        return : (sum(v_mes - mat_cor * mid)^2, gradient)
+    """
+    x = v_mes - numpy.dot(mat_cor,mid)
+    # calculate sum of square differences and gradient
+    return (numpy.dot(x,x), numpy.dot(mat_cor.transpose(),x)*-2)
 
 # data_iso / isotop
 data = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
@@ -68,12 +78,24 @@ for i in range(nAtom_cor+1):
     correction_matrix[:,i] = column
 
 
-
+mid, residuum = [], [float('inf')]
 mid_ini = numpy.zeros(nAtom_cor+1)
+v_measured = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
+v_mes = numpy.array(v_measured).transpose()
+mid, r, d = optimize.fmin_l_bfgs_b(cost_function, mid_ini, fprime=None, approx_grad=0,\
+                                   args=(v_mes, correction_matrix), factr=1000, pgtol=1e-10,\
+                                   bounds=[(0.,float('inf'))]*len(mid_ini))
+resi = v_mes - numpy.dot(correction_matrix, mid)
 
-#self.v_mes = numpy.array(v_measured).transpose()
-#mid, r, d = optimize.fmin_l_bfgs_b(self.cost_function, mid_ini, fprime=None, approx_grad=0,\
-#                                   args=(self.v_mes, self.correction_matrix), factr=1000, pgtol=1e-10,\
-#                                   bounds=[(0.,float('inf'))]*len(mid_ini))
-#resi = self.v_mes - numpy.dot(self.correction_matrix, mid)
+# normalize mid and residuum between 0-1
+sum_p = sum(mid)
+if sum_p != 0:
+    mid = [p/sum_p for p in mid]
+sum_m = sum(v_measured)
+if sum_m != 0:
+    residuum = [v/sum_m for v in resi]
+
+# mean enrichment
+enr_calc = sum(p*i for i,p in enumerate(mid))/nAtom_cor
+print enr_calc
 
