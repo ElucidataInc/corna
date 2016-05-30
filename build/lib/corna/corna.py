@@ -84,12 +84,18 @@ def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'co
 	return filtered_df
 
 # Standard data model
-# mq
-def std_data_model(dataframe):
-    std_model_mq = fp.standard_model(dataframe, parent = True)
-    return std_model_mq
+# # Maven
+# def mvn_data_model(dataframe):
+#     std_model_mq = fp.standard_model(dataframe, parent = False)
+#     return std_model_mq
 
 
+# # Multiquant
+# def std_data_model(dataframe):
+#     std_model_mq = fp.standard_model(dataframe, parent = True)
+#     return std_model_mq
+
+# Background correction for multiquant
 def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
     filtered_df = hl.filter_df(merged_data, "Name", metabolite)
     if all_samples:
@@ -119,6 +125,8 @@ def met_background_correction_all(merged_data, background_sample, list_of_sample
     return preprocessed_output_dict
 
 
+# NA correction
+# Multiquant
 def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     if all:
         na_corrected_out = {}
@@ -129,6 +137,7 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     return na_corrected_out
 
 
+# Post processing: Replacing negatives by zero
 def replace_negatives(na_corr_dict, all=False):
     if all:
         post_processed_dict = {}
@@ -138,6 +147,7 @@ def replace_negatives(na_corr_dict, all=False):
         post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict, replace_negative = True)
     return post_processed_dict
 
+# Fractional Enrichment
 def fractional_enrichment(post_processed_out, all=False, decimals=4):
     if all:
         frac_enrichment_dict = {}
@@ -147,6 +157,7 @@ def fractional_enrichment(post_processed_out, all=False, decimals=4):
         frac_enrichment_dict = postpro.enrichment(post_processed_out, decimals)
     return frac_enrichment_dict
 
+# Convert nested dict to dataframe for visualization
 def convert_to_df(dict_output, all=False, colname = 'col_name'):
     if all:
         df_list = []
@@ -165,6 +176,7 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
 
     return model_to_df
 
+# Save any dataframe to csv
 def save_to_csv(df, path):
     df.to_csv(path)
 
