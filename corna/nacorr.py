@@ -14,28 +14,26 @@ import output as out
 warnings.simplefilter(action = "ignore")
 # setting relative path
 basepath = os.path.dirname(__file__)
-data_dir = os.path.abspath(os.path.join(basepath, "..", "data"))
-
+#data_dir = os.path.abspath(os.path.join(basepath, "..", "data"))
+data_dir ='/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agios/'
 
 # Maven
 
 # read files
-
 input_data = hl.read_file(data_dir + '/maven_output.csv')
 
-
-
-#print input_data
+# metadata
 metadata = hl.read_file(data_dir + '/metadata.csv')
-#print metadata
+
 # merge data file and metadata
 merged_df = fp.maven_merge_dfs(input_data, metadata)
-#print merged_df
+
 # filter df if reqd , given example
 filter_df = hl.filter_df(merged_df, 'Sample Name', 'sample_1')
 
 # std model maven
 std_model_mvn = fp.standard_model(merged_df, parent = False)
+
 
 
 

@@ -39,9 +39,20 @@ warnings.simplefilter(action = "ignore")
 
 
 
-# # MultiQuant
 
-# # read files
+
+# read files:
+
+# Maven
+def read_maven(path):
+    maven_output = hl.read_file(path)
+    return maven_output
+
+def read_mvn_metadata(path):
+    mvn_metadata = hl.read_file(path)
+    return mvn_metadata
+
+# Multiquant
 def read_multiquant(dir_path):
     #mq_df = hl.concat_txts_into_df(data_dir + '/')
     mq_df = hl.concat_txts_into_df(dir_path)
@@ -53,22 +64,38 @@ def read_multiquant_metadata(path):
 
     return mq_metdata
 
+# Merge input + metadata files
 
+# Maven
+def merge_mvn_metadata(mv_df, metadata):
+    merged_data = fp.maven_merge_dfs(mv_df, metadata)
+    return merged_data
+
+
+# Multiquant
 def merge_mq_metadata(mq_df, metdata):
     merged_data = fp.mq_merge_dfs(mq_df, metdata)
     return merged_data
 
 
+# Filtering data
 def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = []):
 	filtered_df = hl.filtering_df(df, num_col, col1, list_col1_vals, col2, list_col2_vals, col3, list_col3_vals)
 	return filtered_df
 
-# # standard model mq
-def std_data_model(dataframe):
-    std_model_mq = fp.standard_model(dataframe, parent = True)
-    return std_model_mq
+# Standard data model
+# # Maven
+# def mvn_data_model(dataframe):
+#     std_model_mq = fp.standard_model(dataframe, parent = False)
+#     return std_model_mq
 
 
+# # Multiquant
+# def std_data_model(dataframe):
+#     std_model_mq = fp.standard_model(dataframe, parent = True)
+#     return std_model_mq
+
+# Background correction for multiquant
 def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
     filtered_df = hl.filter_df(merged_data, "Name", metabolite)
     if all_samples:
@@ -98,6 +125,8 @@ def met_background_correction_all(merged_data, background_sample, list_of_sample
     return preprocessed_output_dict
 
 
+# NA correction
+# Multiquant
 def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     if all:
         na_corrected_out = {}
@@ -108,6 +137,7 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     return na_corrected_out
 
 
+# Post processing: Replacing negatives by zero
 def replace_negatives(na_corr_dict, all=False):
     if all:
         post_processed_dict = {}
@@ -117,6 +147,7 @@ def replace_negatives(na_corr_dict, all=False):
         post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict, replace_negative = True)
     return post_processed_dict
 
+# Fractional Enrichment
 def fractional_enrichment(post_processed_out, all=False, decimals=4):
     if all:
         frac_enrichment_dict = {}
@@ -126,6 +157,7 @@ def fractional_enrichment(post_processed_out, all=False, decimals=4):
         frac_enrichment_dict = postpro.enrichment(post_processed_out, decimals)
     return frac_enrichment_dict
 
+# Convert nested dict to dataframe for visualization
 def convert_to_df(dict_output, all=False, colname = 'col_name'):
     if all:
         df_list = []
@@ -144,6 +176,7 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
 
     return model_to_df
 
+# Save any dataframe to csv
 def save_to_csv(df, path):
     df.to_csv(path)
 
