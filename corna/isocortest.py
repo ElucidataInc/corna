@@ -1,4 +1,5 @@
 import re
+import numpy
 
 def parse_formula(f):
     """
@@ -24,23 +25,27 @@ def calc_mdv(el_dict_meta, el_dict_der):
     """
     result = [1.]
     for el,n in el_dict_meta.iteritems():
-        if el not in [self.el_cor, self.el_excluded]:
+        if el not in [el_cor, el_excluded]:
             for i in range(n):
-                result = numpy.convolve(result, self.data[el])
+                result = numpy.convolve(result, data[el])
     for el,n in el_dict_der.iteritems():
         for i in range(n):
-            result = numpy.convolve(result, self.data[el])
+            result = numpy.convolve(result, data[el])
+
     return list(result)
 
 # data_iso / isotop
-data = {'C': {0: 0.99, 1: 0.011}, 'H' : {0: 0.99, 1: 0.00015 }}
+data = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015]}
+#chemical formulaof metabolite
 f = 'C6H12'
-der = 'C6H12'
+der = ''
+# no of atoms in chemical formula
 el_dict_meta = parse_formula(f)
 el_dict_der = parse_formula(der)
-
-
-el_cor = 'C'
-el_excluded = 'H'
+# isotopic tracer
+el_cor = ['C']
+# elements not to be included for correction
+el_excluded = ['H']
+# mass distribution vector
 result = calc_mdv(el_dict_meta, el_dict_der)
 print result
