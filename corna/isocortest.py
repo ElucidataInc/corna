@@ -32,10 +32,15 @@ def calc_mdv(el_dict_meta, el_dict_der):
             result = numpy.convolve(result, self.data[el])
     return list(result)
 
-
+# data_iso / isotop
 data = {'C': {0: 0.99, 1: 0.011}, 'H' : {0: 0.99, 1: 0.00015 }}
 f = 'C6H12'
-der = ''
+der = 'C6H12'
 el_dict_meta = parse_formula(f)
-el_dict_der = parse_formula()
-print el_dict_meta
+el_dict_der = parse_formula(der)
+
+
+el_cor = 'C'
+el_excluded = 'H'
+result = calc_mdv(el_dict_meta, el_dict_der)
+print result
