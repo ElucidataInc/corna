@@ -44,73 +44,59 @@ def cost_function(mid, v_mes, mat_cor):
     # calculate sum of square differences and gradient
     return (numpy.dot(x,x), numpy.dot(mat_cor.transpose(),x)*-2)
 
-# data_iso / isotop , isotopic proportions at natural abundance
+# data_iso / isotop
 data = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
+
 #chemical formulaof metabolite
-f = 'C4H4O5'
+f = 'C4H5O5'
+#f_mida = 'C2H4O2'
 der = ''
 # no of atoms in chemical formula
 el_dict_meta = parse_formula(f)
 el_dict_der = parse_formula(der)
-
-# CHANGE
 # isotopic tracer
-el_cor = ['C', 'H']
+el_cor = 'C'
 # elements not to be included for correction
-el_excluded = ['O']
+#el_excluded = ['H', 'O']
+el_excluded = []
 # number of atoms to be corrected - takes only 1 , allow to take as list
-
-#CHANGE
-#nAtom_cor = el_dict_meta[el_cor]
-nAtom_cor = []
-for elem in el_cor:
-    nAtom_cor.append(el_dict_meta[elem])
-
+nAtom_cor = el_dict_meta[el_cor]
 # mass distribution vector
 correction_vector = calc_mdv(el_dict_meta, el_dict_der)
-
-
+#correction_vector = [0.97300, 0.02277, 0.00413, 0.00009, 0.0000046, 0.000000093,  0.00000000055, 0.000000000000000032, 0.000000000000000074]
 c_size = len(correction_vector)
+
 #length of measured vector
 m_size = 5
 # purity of the tracer - NA abundance
 el_pur = [0.01, 0.99]
 
-#CHANGE
+#print correction_vector
+
 # creating a correction matrix:
-#correction_matrix = numpy.zeros((m_size, nAtom_cor+1))
-cor_list = []
-for num in nAtom_cor:
-    correction_matrix = numpy.zeros((m_size, num+1))
-    #for i in range(nAtom_cor+1):
-    for i in range(num+1):
-        column = correction_vector[:m_size]
-        for na in range(i):
-            column = numpy.convolve(column, el_pur)[:m_size]
-        if el_excluded != el_cor:
-            for nb in range(num-i):
-            #for nb in range(nAtom_cor-i):
-                #CHANGE
-                for elem in el_cor:
-                    column = numpy.convolve(column, data[elem])[:m_size]
-                    #column = numpy.convolve(column, data[el_cor])[:m_size]
-        correction_matrix[:,i] = column
-    cor_list.append(correction_matrix)
+correction_matrix = numpy.zeros((m_size, nAtom_cor+1))
 
+for i in range(nAtom_cor+1):
+    column = correction_vector[:m_size]
+    for na in range(i):
+        column = numpy.convolve(column, el_pur)[:m_size]
 
-print cor_list
+    if el_excluded != el_cor:
+        for nb in range(nAtom_cor-i):
+            column = numpy.convolve(column, data[el_cor])[:m_size]
+
+    correction_matrix[:,i] = column
+
+print 'mat'
+print correction_matrix
+
 mid, residuum = [], [float('inf')]
-
+mid_ini = numpy.zeros(nAtom_cor+1)
 v_measured = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
 v_mes = numpy.array(v_measured).transpose()
-
-for num in nAtom_cor:
-    mid_ini = numpy.zeros(num+1)
-    mid, r, d = optimize.fmin_l_bfgs_b(cost_function, mid_ini, fprime=None, approx_grad=0,\
-                                       args=(v_mes, correction_matrix), factr=1000, pgtol=1e-10,\
-                                       bounds=[(0.,float('inf'))]*len(mid_ini))
-#print numpy.dot(correction_matrix, mid)
-
+mid, r, d = optimize.fmin_l_bfgs_b(cost_function, mid_ini, fprime=None, approx_grad=0,\
+                                   args=(v_mes, correction_matrix), factr=1000, pgtol=1e-10,\
+                                   bounds=[(0.,float('inf'))]*len(mid_ini))
 resi = v_mes - numpy.dot(correction_matrix, mid)
 
 
@@ -121,8 +107,10 @@ if sum_p != 0:
 sum_m = sum(v_measured)
 if sum_m != 0:
     residuum = [v/sum_m for v in resi]
-
+#print 'mid'
+#print mid
+#print 'residual'
+#print residuum
 # mean enrichment
 enr_calc = sum(p*i for i,p in enumerate(mid))/nAtom_cor
 #print enr_calc
-
