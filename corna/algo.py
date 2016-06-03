@@ -1,64 +1,16 @@
 import numpy
 import math
-
-formula = 'C2H4O2'
-
-#formula = abundance(i) = fact( sum (freq(i)) ) * prod( p(i)** f(i) / fact(f(i)) )
-
-# tested correction values comparing to mida 8 yrs paper - correct
-#matrix for C2:
-#for M1 c13(1):
-f = [1,1]
-p = [0.011, 0.99]
-corr_C_m1 = math.factorial(sum(f)) * ((p[0] ** f[0]) / math.factorial(f[0])) * ((p[1] ** f[1]) / math.factorial(f[1]))
-
-#for M0 c12(2):
-f = [0,2]
-p = [0.011, 0.99]
-corr_C_m1 = math.factorial(sum(f)) * ((p[0] ** f[0]) / math.factorial(f[0])) * ((p[1] ** f[1]) / math.factorial(f[1]))
+from scipy import optimize
 
 
-#for M2 c13(2):
-f = [2,0]
-p = [0.011, 0.99]
-corr_C_m2 = math.factorial(sum(f)) * ((p[0] ** f[0]) / math.factorial(f[0])) * ((p[1] ** f[1]) / math.factorial(f[1]))
-
-
-
-
-# checking for convolution:
-c2 = [0.97832, 0.02156, 0.00012]
-h4 = [0.99938, 0.00062, 0.00000015, 0.000000000015, 0.00000000000000059]
-o2 = [0.995186, 0.000738, 0.00407, 0.00000151, 0.000000416]
-c2h4 = numpy.convolve(c2, h4)
-c2h4o2 = numpy.convolve(c2h4, o2)[:9]
-#correction vector
-correction_vector = c2h4o2
-
-
-
-
-
-#correction matrix:
-#len_tracer_data = 3
-#no_atom_tracer = 2
-len_tracer_data = 5
-no_atom_tracer = 4
-el_excluded = []
-iso_tracer = 'C'
-na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
-#formula_dict = {'C':2, 'H':4, 'O':2}
-formula_dict = {'C':4, 'H':5, 'O':5}
-elem_corr = ['H', 'O']
-intensities = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
 
 
 def excluded_elements(formula_dict, elem_corr):
-	el_excluded = []
-	for key, value in formula_dict.iteritems():
-		if key not in elem_corr:
-			el_excluded.append(key)
-	return el_excluded
+    el_excluded = []
+    for key, value in formula_dict.iteritems():
+        if key not in elem_corr:
+            el_excluded.append(key)
+    return el_excluded
 
 
 def calc_mdv(formula_dict, iso_tracer, elem_corr):
@@ -79,39 +31,46 @@ def calc_mdv(formula_dict, iso_tracer, elem_corr):
     return list(correction_vector)
 
 
-def correction_matrix(formula_dict, elem_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict):
-	el_excluded = excluded_elements(formula_dict, elem_corr)
-	correction_matrix = numpy.zeros((len_tracer_data, no_atom_tracer+1))
+def corr_matrix(formula_dict, elem_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict):
 
-	for i in range(no_atom_tracer+1):
-	    column = correction_vector[:len_tracer_data]
-	    if el_excluded != iso_tracer:
-	        for nb in range(no_atom_tracer-i):
-	        	column = numpy.convolve(column, na_dict[iso_tracer])[:len_tracer_data]
+    el_excluded = excluded_elements(formula_dict, elem_corr)
+    correction_matrix = numpy.zeros((len_tracer_data, no_atom_tracer+1))
+    el_pur = na_dict[iso_tracer]
+    el_pur.reverse()
 
-		correction_matrix[:,i] = column
+    for i in range(no_atom_tracer+1):
+        column = correction_vector[:len_tracer_data]
+        #for na in range(i):
+            #column = numpy.convolve(column, el_pur)[:len_tracer_data]
+        if el_excluded != iso_tracer:
+            for nb in range(no_atom_tracer-i):
+                column = numpy.convolve(column, na_dict[iso_tracer])[:len_tracer_data]
 
-	return correction_matrix
+        correction_matrix[:,i] = column
 
-
-def na_correction(correction_matrix, intensities, optimization = False):
-
-	if optimization = False:
-		matrix = numpy.array(correction_matrix)
-		mat_inverse = numpy.linalg.inv(matrix)
-		inten_trasp = numpy.array(intensities).transpose()
-		corrected_intensites = numpy.dot(mat_inverse, inten_trasp)
-
-	else:
-		corrected_intensites, residuum = [], [float('inf')]
-		icorr_ini = numpy.zeros(nAtom_cor+1)
-		inten_trasp = numpy.array(intensities).transpose()
-		corrected_intensites, r, d = optimize.fmin_l_bfgs_b(cost_function, icorr_ini, fprime=None, approx_grad=0,\
-		                                   args=(inten_trasp, correction_matrix), factr=1000, pgtol=1e-10,\
-		                                   bounds=[(0.,float('inf'))]*len(icorr_ini))
+    return correction_matrix
 
 
-	return corrected_intensites
+
+
+def na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False):
+
+    if optimization == False:
+        matrix = numpy.array(correction_matrix)
+        mat_inverse = numpy.linalg.inv(matrix)
+        inten_trasp = numpy.array(intensities).transpose()
+        corrected_intensites = numpy.dot(mat_inverse, inten_trasp)
+
+    else:
+        corrected_intensites, residuum = [], [float('inf')]
+        icorr_ini = numpy.zeros(no_atom_tracer+1)
+        inten_trasp = numpy.array(intensities).transpose()
+        corrected_intensites, r, d = optimize.fmin_l_bfgs_b(cost_function, icorr_ini, fprime=None, approx_grad=0,\
+                                           args=(inten_trasp, correction_matrix), factr=1000, pgtol=1e-10,\
+                                           bounds=[(0.,float('inf'))]*len(icorr_ini))
+
+
+    return corrected_intensites
 
 
 def cost_function(corrected_intensites, intensities, mat_cor):
@@ -124,10 +83,33 @@ def cost_function(corrected_intensites, intensities, mat_cor):
     return (numpy.dot(x,x), numpy.dot(correction_matrix.transpose(),x)*-2)
 
 
+
+len_tracer_data = 5
+
+no_atom_tracer = 4
+
+el_excluded = []
+
+iso_tracer = 'C'
+iso_tracers = ['C', 'H']
+
+na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
+
+formula_dict = {'C':4, 'H':5, 'O':5}
+
+elem_corr = ['H', 'O']
+
+intensities = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
+
 correction_vector = calc_mdv(formula_dict, iso_tracer, elem_corr)
-print correction_vector
-corr_matrix = correction_matrix(formula_dict, elem_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict)
-print corr_matrix
+
+correction_matrix = corr_matrix(formula_dict, elem_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict)
+
+icorr1 = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+icorr2 = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False)
+
+
+print len(iso_tracers)
 
 
 

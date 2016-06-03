@@ -46,6 +46,7 @@ def cost_function(mid, v_mes, mat_cor):
 
 # data_iso / isotop
 data = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
+#wrong - data = {'C': [0.011, 0.99], 'H' : [0.00015, 0.99], 'O': [0.00205, 0.00038, 0.99757]}
 
 #chemical formulaof metabolite
 f = 'C4H5O5'
@@ -78,22 +79,22 @@ correction_matrix = numpy.zeros((m_size, nAtom_cor+1))
 
 for i in range(nAtom_cor+1):
     column = correction_vector[:m_size]
-    for na in range(i):
-        column = numpy.convolve(column, el_pur)[:m_size]
-
+    #for na in range(i):
+        #column = numpy.convolve(column, el_pur)[:m_size]
     if el_excluded != el_cor:
         for nb in range(nAtom_cor-i):
             column = numpy.convolve(column, data[el_cor])[:m_size]
 
     correction_matrix[:,i] = column
 print correction_matrix
-
+#print type(correction_matrix)
 #inverse of matrix * uncorrected intensities gives same ans
 test_mat = numpy.array(correction_matrix)
 inverse = numpy.linalg.inv(test_mat)
 v_measured = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
 v_mes = numpy.array(v_measured).transpose()
 prod = numpy.dot(inverse, v_mes)
+print prod
 
 mid, residuum = [], [float('inf')]
 mid_ini = numpy.zeros(nAtom_cor+1)
@@ -103,7 +104,7 @@ mid, r, d = optimize.fmin_l_bfgs_b(cost_function, mid_ini, fprime=None, approx_g
                                    args=(v_mes, correction_matrix), factr=1000, pgtol=1e-10,\
                                    bounds=[(0.,float('inf'))]*len(mid_ini))
 resi = v_mes - numpy.dot(correction_matrix, mid)
-
+print mid
 # normalize mid and residuum between 0-1
 sum_p = sum(mid)
 if sum_p != 0:
