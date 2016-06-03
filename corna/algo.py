@@ -90,8 +90,8 @@ no_atom_tracer = 4
 
 el_excluded = []
 
-iso_tracer = 'C'
-iso_tracers = ['C', 'H']
+#iso_tracer = 'C'
+iso_tracers = ['C', 'H', 'O']
 
 na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
 
@@ -101,6 +101,34 @@ elem_corr = ['H', 'O']
 
 intensities = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
 
+# multiple tracer
+if len(iso_tracers) == 1:
+	iso_tracer = iso_tracers[0]
+
+elif len(iso_tracers) > 1:
+	for i in range(0, len(iso_tracers)):
+		iso_tracer = iso_tracers[i]
+
+		correction_vector = calc_mdv(formula_dict, iso_tracer, elem_corr)
+		print 'tracer'
+		print iso_tracer
+		print 'vect'
+		print correction_vector
+		correction_matrix = corr_matrix(formula_dict, elem_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict)
+		print 'iter'
+		print i
+		print 'intensities'
+		print intensities
+		icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+		print 'icorr'
+		print icorr
+		intensities = icorr
+print 'final'
+print icorr
+
+
+
+# single tracer - works correctly
 correction_vector = calc_mdv(formula_dict, iso_tracer, elem_corr)
 
 correction_matrix = corr_matrix(formula_dict, elem_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict)
@@ -109,7 +137,8 @@ icorr1 = na_correction(correction_matrix, intensities, no_atom_tracer, optimizat
 icorr2 = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False)
 
 
-print len(iso_tracers)
+
+
 
 
 
