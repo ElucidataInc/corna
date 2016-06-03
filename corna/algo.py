@@ -36,36 +36,68 @@ c2h4o2 = numpy.convolve(c2h4, o2)[:9]
 correction_vector = c2h4o2
 
 
+
+
+
 #correction matrix:
-m_size = 3
-nAtom_cor = 2
+#len_tracer_data = 3
+#no_atom_tracer = 2
+len_tracer_data = 5
+no_atom_tracer = 4
 el_excluded = []
 iso_tracer = 'C'
-data = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
-formula_dict = {'C':2, 'H':4, 'O':2}
-elem_corr = ['C', 'H', 'O']
+na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
+#formula_dict = {'C':2, 'H':4, 'O':2}
+formula_dict = {'C':4, 'H':5, 'O':5}
+elem_corr = ['H', 'O']
 
-def correction_matrix(correction_vector, m_size, nAtom_cor, iso_tracer, data):
-	correction_matrix = numpy.zeros((m_size, nAtom_cor+1))
 
-	for i in range(nAtom_cor+1):
-	    column = correction_vector[:m_size]
-        for nb in range(nAtom_cor-i):
-        	column = numpy.convolve(column, data[iso_tracer])[:m_size]
+def excluded_elements(formula_dict, elem_corr):
+	el_excluded = []
+	for key, value in formula_dict.iteritems():
+		if key not in elem_corr:
+			el_excluded.append(key)
+	return el_excluded
+
+
+def calc_mdv(formula_dict, iso_tracer, elem_corr):
+    """
+    Calculate a mass distribution vector (at natural abundancy),
+    based on the elemental compositions of both metabolite's and
+    derivative's moieties.
+    The element corresponding to the isotopic tracer is not taken
+    into account in the metabolite moiety.
+    """
+    el_excluded = excluded_elements(formula_dict, elem_corr)
+    correction_vector = [1.]
+    for el,n in formula_dict.iteritems():
+        if el not in [iso_tracer, el_excluded]:
+            for i in range(n):
+                correction_vector = numpy.convolve(correction_vector, na_dict[el])
+
+    return list(correction_vector)
+
+
+def correction_matrix(formula_dict, elem_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict):
+	el_excluded = excluded_elements(formula_dict, elem_corr)
+	correction_matrix = numpy.zeros((len_tracer_data, no_atom_tracer+1))
+
+	for i in range(no_atom_tracer+1):
+	    column = correction_vector[:len_tracer_data]
+	    if el_excluded != iso_tracer:
+	        for nb in range(no_atom_tracer-i):
+	        	column = numpy.convolve(column, na_dict[iso_tracer])[:len_tracer_data]
+
 		correction_matrix[:,i] = column
+
 	return correction_matrix
 
-def correction_vector(formula_dict, elem_corr, data):
-	correction_vector = []
-	for key, value in formula_dict.iteritems():
-		if key in elem_corr:
-			for i in range(0, len(data[key])):
-				print key, data[key][i]
-
-			#math.factorial(sum(f)) * ((p[0] ** f[0]) / math.factorial(f[0])) * ((p[1] ** f[1]) / math.factorial(f[1]))
 
 
-correction_vector(formula_dict, elem_corr, data)
+correction_vector = calc_mdv(formula_dict, iso_tracer, elem_corr)
+print correction_vector
+corr_matrix = correction_matrix(formula_dict, elem_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict)
+print corr_matrix
 
 
 

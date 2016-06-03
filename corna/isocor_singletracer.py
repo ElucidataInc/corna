@@ -71,7 +71,7 @@ m_size = 5
 # purity of the tracer - NA abundance
 el_pur = [0.01, 0.99]
 
-#print correction_vector
+
 
 # creating a correction matrix:
 correction_matrix = numpy.zeros((m_size, nAtom_cor+1))
@@ -86,6 +86,7 @@ for i in range(nAtom_cor+1):
             column = numpy.convolve(column, data[el_cor])[:m_size]
 
     correction_matrix[:,i] = column
+print correction_matrix
 
 #inverse of matrix * uncorrected intensities gives same ans
 test_mat = numpy.array(correction_matrix)
