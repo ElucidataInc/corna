@@ -34,23 +34,8 @@ def maven_merge_dfs(df1, df2):
     return merged_df
 
 
-def mvn_met_names(filtered_df, col_name = 'Name'):
-
-    met_names = hl.get_unique_values(filtered_df, col_name)
-
-    return met_names
-
-def mvn_met_formula(filtered_df, col_name = 'Formula'):
-
-    met_formula = hl.get_unique_values(filtered_df, col_name)
-
-    return met_formula
-
-
-
 def mq_merge_dfs(df1, df2):
 
-    #df2['Parent_Formula'] =
     merged_df = hl.merge_dfs(df1, df2, how= 'inner', left_on = 'Component Name', right_on = 'Fragment')
     merged_df['Mass Info'] = merged_df['Mass Info'].str.replace(' / ', "_")
     remove_stds = merged_df[merged_df['Sample Name'].str.contains("std") == False]
