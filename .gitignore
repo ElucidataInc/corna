@@ -68,6 +68,9 @@ Thumbs.db
 *.xml
 *.ipynb
 *.ipynb_checkpoints
+*.csv
+*.xls
+*.xlsx
 
 dist/**
 corna.egg-info/**
