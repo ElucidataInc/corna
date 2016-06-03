@@ -8,8 +8,9 @@ from scipy import optimize
 def excluded_elements(iso_tracer, formula_dict, eleme_corr):
     el_excluded = []
     for key, value in formula_dict.iteritems():
-        if key not in eleme_corr[iso_tracer]:
-            el_excluded.append(key)
+        if iso_tracer in eleme_corr.keys():
+            if key not in eleme_corr[iso_tracer]:
+                el_excluded.append(key)
     return el_excluded
 
 
@@ -22,29 +23,36 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr):
     into account in the metabolite moiety.
     """
     el_excluded = excluded_elements(iso_tracer, formula_dict, eleme_corr)
+
     correction_vector = [1.]
     for el,n in formula_dict.iteritems():
-        if el not in [iso_tracer, el_excluded]:
+        #if el not in [iso_tracer, el_excluded]:
+
+        if not el == iso_tracer and el not in el_excluded:
+        #if el not in el_excluded
+
             for i in range(n):
                 correction_vector = numpy.convolve(correction_vector, na_dict[el])
 
     return list(correction_vector)
 
 
-def corr_matrix(formula_dict, eleme_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict):
+def corr_matrix(formula_dict, eleme_corr, correction_vector, iso_tracer, na_dict):
 
+    no_atom_tracer = formula_dict[iso_tracer]
     el_excluded = excluded_elements(iso_tracer,formula_dict, eleme_corr)
-    correction_matrix = numpy.zeros((len_tracer_data, no_atom_tracer+1))
+    correction_matrix = numpy.zeros((no_atom_tracer+1, no_atom_tracer+1))
     el_pur = na_dict[iso_tracer]
     el_pur.reverse()
 
     for i in range(no_atom_tracer+1):
-        column = correction_vector[:len_tracer_data]
+        column = correction_vector[:no_atom_tracer+1]
         #for na in range(i):
             #column = numpy.convolve(column, el_pur)[:len_tracer_data]
         if el_excluded != iso_tracer:
             for nb in range(no_atom_tracer-i):
-                column = numpy.convolve(column, na_dict[iso_tracer])[:len_tracer_data]
+                column = numpy.convolve(column, na_dict[iso_tracer])[:no_atom_tracer+1]
+
 
         correction_matrix[:,i] = column
 
@@ -55,6 +63,7 @@ def corr_matrix(formula_dict, eleme_corr,correction_vector, len_tracer_data, no_
 
 def na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False):
 
+    no_atom_tracer = 20
     if optimization == False:
         matrix = numpy.array(correction_matrix)
         mat_inverse = numpy.linalg.inv(matrix)
@@ -84,50 +93,56 @@ def cost_function(corrected_intensites, intensities, mat_cor):
 
 
 
-len_tracer_data = 5
+#len_tracer_data = 5
 
-no_atom_tracer = 4
+#no_atom_tracer = 4
 
-el_excluded = []
+#el_excluded = []
 
 #iso_tracer = 'C'
-iso_tracers = ['C', 'H']
+#iso_tracers = ['C', 'H']
+iso_tracers = ['C']
 
-na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
+na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205], 'N': [], 'S': []}
 
-formula_dict = {'C':4, 'H':5, 'O':5}
+#C5H10NO2S
+#formula_dict = {'C':5, 'H':10, 'O':2, 'N': 1, 'S':1}
+formula_dict = {'C':4, 'H':4, 'O':4}
+
 
 #elem_corr = ['H', 'O']
-eleme_corr = {'C': ['H', 'O'], 'H' : [], 'O' : []}
+#eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
+eleme_corr = {'C': ['H', 'O']}
 
 intensities = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
 
 # multiple tracer
 if len(iso_tracers) == 1:
     iso_tracer = iso_tracers[0]
+    correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr)
+    print correction_vector
+    correction_matrix = corr_matrix(formula_dict, eleme_corr,correction_vector, iso_tracer, na_dict)
+
+    no_atom_tracer = formula_dict[iso_tracer]
+    icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+
+    intensities = icorr
+
+
 
 elif len(iso_tracers) > 1:
     for i in range(0, len(iso_tracers)):
         iso_tracer = iso_tracers[i]
 
         correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr)
-        print 'tracer'
-        print iso_tracer
-        print 'ele corr'
-        print eleme_corr[str(iso_tracer)]
-        print 'vect'
         print correction_vector
-        correction_matrix = corr_matrix(formula_dict, eleme_corr,correction_vector, len_tracer_data, no_atom_tracer, iso_tracer, na_dict)
-        print 'iter'
-        print i
-        print 'intensities'
-        print intensities
+        correction_matrix = corr_matrix(formula_dict, eleme_corr,correction_vector, iso_tracer, na_dict)
+
+        no_atom_tracer = formula_dict[iso_tracer] + 1
         icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
-        print 'icorr'
-        print icorr
+
         intensities = icorr
-print 'final'
-print icorr
+
 
 
 
@@ -141,7 +156,9 @@ print icorr
 
 
 
-
+#Todo
+#1) eleme_corr[iso_tracer] wont work if isotracer not in ele corr dict
+#2) len tracer data to be automated ( hard coded right now)
 
 
 

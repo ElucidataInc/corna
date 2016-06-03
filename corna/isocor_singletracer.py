@@ -49,17 +49,17 @@ data = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.002
 #wrong - data = {'C': [0.011, 0.99], 'H' : [0.00015, 0.99], 'O': [0.00205, 0.00038, 0.99757]}
 
 #chemical formulaof metabolite
-f = 'C4H5O5'
+f = 'C4H4O5'
 #f_mida = 'C2H4O2'
 der = ''
 # no of atoms in chemical formula
 el_dict_meta = parse_formula(f)
 el_dict_der = parse_formula(der)
 # isotopic tracer
-el_cor = 'C'
+el_cor = 'H'
 # elements not to be included for correction
 #el_excluded = ['H', 'O']
-el_excluded = []
+el_excluded = ['C', 'O']
 # number of atoms to be corrected - takes only 1 , allow to take as list
 nAtom_cor = el_dict_meta[el_cor]
 # mass distribution vector
@@ -70,9 +70,9 @@ c_size = len(correction_vector)
 #length of measured vector
 m_size = 5
 # purity of the tracer - NA abundance
-el_pur = [0.01, 0.99]
+el_pur = [0.00015, 0.99]
 
-
+print correction_vector
 
 # creating a correction matrix:
 correction_matrix = numpy.zeros((m_size, nAtom_cor+1))
@@ -86,15 +86,15 @@ for i in range(nAtom_cor+1):
             column = numpy.convolve(column, data[el_cor])[:m_size]
 
     correction_matrix[:,i] = column
-print correction_matrix
-#print type(correction_matrix)
+
+
 #inverse of matrix * uncorrected intensities gives same ans
 test_mat = numpy.array(correction_matrix)
 inverse = numpy.linalg.inv(test_mat)
 v_measured = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
 v_mes = numpy.array(v_measured).transpose()
 prod = numpy.dot(inverse, v_mes)
-print prod
+
 
 mid, residuum = [], [float('inf')]
 mid_ini = numpy.zeros(nAtom_cor+1)
@@ -104,7 +104,7 @@ mid, r, d = optimize.fmin_l_bfgs_b(cost_function, mid_ini, fprime=None, approx_g
                                    args=(v_mes, correction_matrix), factr=1000, pgtol=1e-10,\
                                    bounds=[(0.,float('inf'))]*len(mid_ini))
 resi = v_mes - numpy.dot(correction_matrix, mid)
-print mid
+
 # normalize mid and residuum between 0-1
 sum_p = sum(mid)
 if sum_p != 0:
