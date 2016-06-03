@@ -87,8 +87,12 @@ for i in range(nAtom_cor+1):
 
     correction_matrix[:,i] = column
 
-print 'mat'
-print correction_matrix
+#inverse of matrix * uncorrected intensities gives same ans
+test_mat = numpy.array(correction_matrix)
+inverse = numpy.linalg.inv(test_mat)
+v_measured = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
+v_mes = numpy.array(v_measured).transpose()
+prod = numpy.dot(inverse, v_mes)
 
 mid, residuum = [], [float('inf')]
 mid_ini = numpy.zeros(nAtom_cor+1)
@@ -99,7 +103,6 @@ mid, r, d = optimize.fmin_l_bfgs_b(cost_function, mid_ini, fprime=None, approx_g
                                    bounds=[(0.,float('inf'))]*len(mid_ini))
 resi = v_mes - numpy.dot(correction_matrix, mid)
 
-
 # normalize mid and residuum between 0-1
 sum_p = sum(mid)
 if sum_p != 0:
@@ -107,10 +110,6 @@ if sum_p != 0:
 sum_m = sum(v_measured)
 if sum_m != 0:
     residuum = [v/sum_m for v in resi]
-#print 'mid'
-#print mid
-#print 'residual'
-#print residuum
-# mean enrichment
+
 enr_calc = sum(p*i for i,p in enumerate(mid))/nAtom_cor
-#print enr_calc
+

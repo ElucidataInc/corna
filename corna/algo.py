@@ -16,7 +16,7 @@ corr_C_m1 = math.factorial(sum(f)) * ((p[0] ** f[0]) / math.factorial(f[0])) * (
 f = [0,2]
 p = [0.011, 0.99]
 corr_C_m1 = math.factorial(sum(f)) * ((p[0] ** f[0]) / math.factorial(f[0])) * ((p[1] ** f[1]) / math.factorial(f[1]))
-print corr_C_m1
+
 
 #for M2 c13(2):
 f = [2,0]
@@ -40,22 +40,32 @@ correction_vector = c2h4o2
 m_size = 3
 nAtom_cor = 2
 el_excluded = []
-el_cor = 'C'
+iso_tracer = 'C'
 data = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205]}
+formula_dict = {'C':2, 'H':4, 'O':2}
+elem_corr = ['C', 'H', 'O']
 
-correction_matrix = numpy.zeros((m_size, nAtom_cor+1))
+def correction_matrix(correction_vector, m_size, nAtom_cor, iso_tracer, data):
+	correction_matrix = numpy.zeros((m_size, nAtom_cor+1))
 
-for i in range(nAtom_cor+1):
-    column = correction_vector[:m_size]
-    if el_excluded != el_cor:
+	for i in range(nAtom_cor+1):
+	    column = correction_vector[:m_size]
         for nb in range(nAtom_cor-i):
-        	column = numpy.convolve(column, data[el_cor])[:m_size]
+        	column = numpy.convolve(column, data[iso_tracer])[:m_size]
+		correction_matrix[:,i] = column
+	return correction_matrix
+
+def correction_vector(formula_dict, elem_corr, data):
+	correction_vector = []
+	for key, value in formula_dict.iteritems():
+		if key in elem_corr:
+			for i in range(0, len(data[key])):
+				print key, data[key][i]
+
+			#math.factorial(sum(f)) * ((p[0] ** f[0]) / math.factorial(f[0])) * ((p[1] ** f[1]) / math.factorial(f[1]))
 
 
-    correction_matrix[:,i] = column
-
-# correction vector
-
+correction_vector(formula_dict, elem_corr, data)
 
 
 
