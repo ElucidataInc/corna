@@ -50,6 +50,7 @@ na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.
 #formula_dict = {'C':2, 'H':4, 'O':2}
 formula_dict = {'C':4, 'H':5, 'O':5}
 elem_corr = ['H', 'O']
+intensities = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
 
 
 def excluded_elements(formula_dict, elem_corr):
@@ -92,6 +93,35 @@ def correction_matrix(formula_dict, elem_corr,correction_vector, len_tracer_data
 
 	return correction_matrix
 
+
+def na_correction(correction_matrix, intensities, optimization = False):
+
+	if optimization = False:
+		matrix = numpy.array(correction_matrix)
+		mat_inverse = numpy.linalg.inv(matrix)
+		inten_trasp = numpy.array(intensities).transpose()
+		corrected_intensites = numpy.dot(mat_inverse, inten_trasp)
+
+	else:
+		corrected_intensites, residuum = [], [float('inf')]
+		icorr_ini = numpy.zeros(nAtom_cor+1)
+		inten_trasp = numpy.array(intensities).transpose()
+		corrected_intensites, r, d = optimize.fmin_l_bfgs_b(cost_function, icorr_ini, fprime=None, approx_grad=0,\
+		                                   args=(inten_trasp, correction_matrix), factr=1000, pgtol=1e-10,\
+		                                   bounds=[(0.,float('inf'))]*len(icorr_ini))
+
+
+	return corrected_intensites
+
+
+def cost_function(corrected_intensites, intensities, mat_cor):
+    """
+    Cost function used for BFGS minimization.
+        return : (sum(v_mes - mat_cor * corrected_intensites)^2, gradient)
+    """
+    x = intensities - numpy.dot(correction_matrix, corrected_intensites)
+    # calculate sum of square differences and gradient
+    return (numpy.dot(x,x), numpy.dot(correction_matrix.transpose(),x)*-2)
 
 
 correction_vector = calc_mdv(formula_dict, iso_tracer, elem_corr)
