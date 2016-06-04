@@ -63,7 +63,7 @@ def corr_matrix(formula_dict, eleme_corr, correction_vector, iso_tracer, na_dict
 
 def na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False):
 
-    no_atom_tracer = 20
+
     if optimization == False:
         matrix = numpy.array(correction_matrix)
         mat_inverse = numpy.linalg.inv(matrix)
@@ -116,7 +116,7 @@ eleme_corr = {'C': ['H', 'O']}
 
 intensities = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
 
-# multiple tracer
+
 if len(iso_tracers) == 1:
     iso_tracer = iso_tracers[0]
     correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr)
@@ -129,7 +129,7 @@ if len(iso_tracers) == 1:
     intensities = icorr
 
 
-
+# multiple tracer
 elif len(iso_tracers) > 1:
     for i in range(0, len(iso_tracers)):
         iso_tracer = iso_tracers[i]
@@ -138,11 +138,12 @@ elif len(iso_tracers) > 1:
         print correction_vector
         correction_matrix = corr_matrix(formula_dict, eleme_corr,correction_vector, iso_tracer, na_dict)
 
-        no_atom_tracer = formula_dict[iso_tracer] + 1
+        no_atom_tracer = formula_dict[iso_tracer]
         icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
 
         intensities = icorr
 
+print icorr
 
 
 
