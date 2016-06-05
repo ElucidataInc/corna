@@ -122,19 +122,25 @@ for inv in inverse_sample:
 		sample_dict[sample_tr] = numpy.array([k])
 	dict_inverse[inv] = sample_dict
 
-print dict_inverse
 
-print fragments_dict
+#fragment dict model
 new_fragment_dict = {}
 for key, value in fragments_dict.iteritems():
 	new_fragment_dict[key] = [value[0], dict_inverse[value[0].get_num_labeled_atoms_isotope('C13')], value[2], value[3]]
 
-print new_fragment_dict
 
-std_model_back = iso.fragment_dict_to_std_model(new_fragment_dict, number=True)
+
+#std_model_back = iso.fragment_dict_to_std_model(new_fragment_dict, number=True)
 
 df = corna.convert_to_df(new_fragment_dict, all=False, colname = 'NAcorr')
 print df
+
+
+
+replace_neg =  postpro.replace_negative_to_zero(new_fragment_dict, replace_negative = True)
+
+erich =  postpro.enrichment(new_fragment_dict, decimals = 2)
+
 
 
 

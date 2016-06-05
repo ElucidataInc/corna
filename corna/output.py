@@ -10,7 +10,9 @@ def convert_dict_df(nest_dict, parent = True):
 		parent = []
 		lab = []
 		frames = []
+
 		for key, value in label_dict.iteritems():
+
 			tup = []
 			for k, v in value.iteritems():
 				for intensity in v:
@@ -19,7 +21,9 @@ def convert_dict_df(nest_dict, parent = True):
 					formula.append(frag_name[1])
 					if parent == True:
 						parent.append(frag_name[2])
+
 			lab.append(key)
+
 			frames.append(pd.DataFrame(tup))
 			df = pd.concat(frames, keys=lab).reset_index()
 			df['name'] = name

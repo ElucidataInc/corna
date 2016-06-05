@@ -148,20 +148,25 @@ def fractional_enrichment(post_processed_out, all=False, decimals=4):
     return frac_enrichment_dict
 
 # Convert nested dict to dataframe for visualization
-def convert_to_df(dict_output, all=False, colname = 'col_name'):
+def convert_to_df(dict_output, all=True, colname = 'col_name'):
     if all:
         df_list = []
+
         for metabolite, fragment_dict in dict_output.iteritems():
-            print metabolite
-            print fragment_dict
             std_model = iso.fragment_dict_to_std_model(fragment_dict, mass=False, number=True)
+
             model_to_df = out.convert_dict_df(std_model, parent = False)
             df_list.append(model_to_df)
 
         model_to_df = hl.concatentate_dataframes_by_col(df_list)
         #return hl.concatentate_dataframes_by_col(df_list)
     else:
+        #print 'dict_output'
+        #print dict_output
         std_model = iso.fragment_dict_to_std_model(dict_output, mass=False, number=True)
+        #print ''
+        #print 'std model'
+        #print std_model
         model_to_df = out.convert_dict_df(std_model, parent = False)
 
     model_to_df.rename(columns={"Intensity": str(colname)}, inplace=True)
