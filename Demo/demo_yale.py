@@ -39,6 +39,7 @@ background_corr_df = corna.convert_to_df(background_corr, all = True, colname = 
 
 # NA correction method on background noise corrected data
 nacorr_dict = corna.na_correction_mimosa(background_corr, all = True)
+print background_corr
 na_corr_df = corna.convert_to_df(nacorr_dict, all=True, colname = 'NA corrected')
 
 # Replace negative values by zero on NA corrected data - optional

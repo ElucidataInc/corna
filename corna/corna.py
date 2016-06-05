@@ -98,7 +98,7 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
             new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
             fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
     preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample, decimals)
-    print fragments_dict
+
     return preprocessed_dict
 
 

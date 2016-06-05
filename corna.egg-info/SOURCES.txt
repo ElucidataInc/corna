@@ -1,6 +1,8 @@
 README.rst
 setup.py
 corna/__init__.py
+corna/algo.py
+corna/algo_tested.py
 corna/algorithms.py
 corna/constants.py
 corna/corna.py
@@ -8,13 +10,16 @@ corna/file_parser.py
 corna/formula.py
 corna/formulaschema.py
 corna/helpers.py
+corna/isocor_singletracer.py
+corna/isocortest.py
 corna/isotopomer.py
+corna/mdv_test.py
 corna/model.py
 corna/nacorr.py
 corna/output.py
 corna/postprocess.py
 corna/preprocess.py
-corna.egg-info/.DS_Store
+corna/validate_isocor.py
 corna.egg-info/PKG-INFO
 corna.egg-info/SOURCES.txt
 corna.egg-info/dependency_links.txt

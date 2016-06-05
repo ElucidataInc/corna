@@ -56,10 +56,10 @@ der = ''
 el_dict_meta = parse_formula(f)
 el_dict_der = parse_formula(der)
 # isotopic tracer
-el_cor = 'H'
+el_cor = 'C'
 # elements not to be included for correction
 #el_excluded = ['H', 'O']
-el_excluded = ['C', 'O']
+el_excluded = ['H', 'O']
 # number of atoms to be corrected - takes only 1 , allow to take as list
 nAtom_cor = el_dict_meta[el_cor]
 # mass distribution vector
@@ -70,7 +70,7 @@ c_size = len(correction_vector)
 #length of measured vector
 m_size = 5
 # purity of the tracer - NA abundance
-el_pur = [0.00015, 0.99]
+el_pur = [0.011, 0.99]
 
 print correction_vector
 
@@ -79,8 +79,8 @@ correction_matrix = numpy.zeros((m_size, nAtom_cor+1))
 
 for i in range(nAtom_cor+1):
     column = correction_vector[:m_size]
-    #for na in range(i):
-        #column = numpy.convolve(column, el_pur)[:m_size]
+    for na in range(i):
+        column = numpy.convolve(column, el_pur)[:m_size]
     if el_excluded != el_cor:
         for nb in range(nAtom_cor-i):
             column = numpy.convolve(column, data[el_cor])[:m_size]
@@ -94,6 +94,7 @@ inverse = numpy.linalg.inv(test_mat)
 v_measured = [0.572503, 0.219132, 0.122481, 0.054081, 0.031800]
 v_mes = numpy.array(v_measured).transpose()
 prod = numpy.dot(inverse, v_mes)
+print prod
 
 
 mid, residuum = [], [float('inf')]
@@ -104,6 +105,7 @@ mid, r, d = optimize.fmin_l_bfgs_b(cost_function, mid_ini, fprime=None, approx_g
                                    args=(v_mes, correction_matrix), factr=1000, pgtol=1e-10,\
                                    bounds=[(0.,float('inf'))]*len(mid_ini))
 resi = v_mes - numpy.dot(correction_matrix, mid)
+print mid
 
 # normalize mid and residuum between 0-1
 sum_p = sum(mid)

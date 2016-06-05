@@ -73,6 +73,7 @@ preprocessed_dict = preproc.bulk_background_correction(fragments_dict, ['A. [13C
 
 # na correction
 na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
+print preprocessed_dict
 na_corr_dict_std_model =  iso.fragment_dict_to_std_model(na_corrected_dict,mass=True,number=False)
 
 # post processing - replace negative values by zero
