@@ -105,7 +105,7 @@ def fragment_to_input_model(fragment, mass, number):
         label_dict_value = fragment[1]
     return {key_tuple:{label_dict_key:label_dict_value}}
 
-def fragment_dict_to_std_model(fragment_dict, mass=False, number=False):
+def fragment_dict_to_std_model(fragment_dict, mass=False, number=True):
     output_fragment_dict = {}
     if mass == True:
         for key, value in fragment_dict.iteritems():

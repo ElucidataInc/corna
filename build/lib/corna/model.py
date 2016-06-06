@@ -149,3 +149,6 @@ class Fragment(Ion, Label):
 
     def get_num_labeled_atoms_tracer(self):
         return self.get_num_labeled_atoms(self.isotope, self.label_dict)
+
+    def get_num_labeled_atoms_isotope(self, isotope):
+        return self.get_num_labeled_atoms(isotope, self.label_dict)

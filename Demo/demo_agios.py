@@ -21,11 +21,21 @@ sample_1_data = corna.filtering_df(merge_mv_metdata, num_col=1, col1="Sample Nam
 filtered_data = corna.filtering_df(merge_mv_metdata, num_col=2, col1="Name",
                                 list_col1_vals=['L-Methionine'], col2="Label", list_col2_vals=['C13-label-1', 'C13-label-2'])
 
+# isotop
+iso_tracers = ['C']
+
+#element to be corrected
+eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
+
+#na dict
+na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205], 'N': [0.99636, 0.00364], 'S': [0.922297, 0.046832, 0.030872]}
 
 
-# NA correction method on background noise corrected data
-#nacorr_dict = corna.na_correction_mimosa(background_corr, all = True)
-#na_corr_df = corna.convert_to_df(nacorr_dict, all=True, colname = 'NA corrected')
+na_corr_dict = corna.na_correction_maven(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
+print na_corr_dict
+na_corr_df = corna.convert_to_df(na_corr_dict, all=False, colname = 'NA corrected')
+print na_corr_df
+
 
 # Replace negative values by zero on NA corrected data - optional
 #postprocessed_out = corna.replace_negatives(nacorr_dict, all=True)

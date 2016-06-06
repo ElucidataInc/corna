@@ -44,7 +44,7 @@ for frag_name, label_dict in std_model_mvn.iteritems():
 	fragments_dict.update(iso.bulk_insert_data_to_fragment(frag_name, label_dict, mass=False, number=True, mode=None))
 
 
-#key: { sample1: { 0 : val, 1: value }, sample2:
+#{ sample1: { 0 : val, 1: value }, sample2:
 universe_values = fragments_dict.values()
 sample_list = []
 for uv in universe_values:
