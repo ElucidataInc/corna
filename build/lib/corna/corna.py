@@ -83,17 +83,6 @@ def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'co
 	filtered_df = hl.filtering_df(df, num_col, col1, list_col1_vals, col2, list_col2_vals, col3, list_col3_vals)
 	return filtered_df
 
-# Standard data model
-# # Maven
-# def mvn_data_model(dataframe):
-#     std_model_mq = fp.standard_model(dataframe, parent = False)
-#     return std_model_mq
-
-
-# # Multiquant
-# def std_data_model(dataframe):
-#     std_model_mq = fp.standard_model(dataframe, parent = True)
-#     return std_model_mq
 
 # Background correction for multiquant
 def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
@@ -109,6 +98,7 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
             new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
             fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
     preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample, decimals)
+
     return preprocessed_dict
 
 
@@ -183,22 +173,6 @@ def save_to_csv(df, path):
 
 
 
-# # na correction
-# na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
-# print na_corrected_dict
-# #print na_corrected_dict[(193.0, 68.0)][1]['F. [13C-glc] G2.5 120min']
-
-# # post processing - replace negative values by zero
-# # tested on std_model_mvn and std_model_mq - same data format as output from algorithm.py
-
-# post_processed_dict = postpro.replace_negative_to_zero(std_model_mvn, replace_negative = True)
-
-
-# # calculate mean_enrichment
-# mean_enrich_df = postpro.convert_dict_df(std_model_mvn)
-
-
-# # output data frame with added metadat columns
 
 
 
