@@ -129,7 +129,7 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
 
 
 #NA correction maven
-def na_correction_maven(merged_df, iso_tracers, eleme_corr, na_dict):
+def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict):
     na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
     return na_corr_model
 

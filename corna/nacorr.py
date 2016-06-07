@@ -82,10 +82,7 @@ na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.
 #dict2 = {s1{0:v1, 1:v2}, s2 ...}
 dict2 = {}
 for key, value in outer_dict.iteritems():
-
 	intensities = numpy.concatenate(numpy.array((value).values()))
-	#dict2 = {}
-
 	if len(iso_tracers) == 1:
 	    iso_tracer = iso_tracers[0]
 
@@ -107,7 +104,6 @@ for key, value in outer_dict.iteritems():
 
 	dict2[key] = dict1
 
-
 univ_new = dict2.values()
 inverse_sample = []
 for un_new in univ_new:
@@ -122,23 +118,14 @@ for inv in inverse_sample:
 		sample_dict[sample_tr] = numpy.array([k])
 	dict_inverse[inv] = sample_dict
 
-
 #fragment dict model
 new_fragment_dict = {}
 for key, value in fragments_dict.iteritems():
 	new_fragment_dict[key] = [value[0], dict_inverse[value[0].get_num_labeled_atoms_isotope('C13')], value[2], value[3]]
-
-
-
 #std_model_back = iso.fragment_dict_to_std_model(new_fragment_dict, number=True)
-
-df = corna.convert_to_df(new_fragment_dict, all=False, colname = 'NAcorr')
-print df
-
-
+na_corr_df = corna.convert_to_df(new_fragment_dict, all=False, colname = 'NAcorr')
 
 replace_neg =  postpro.replace_negative_to_zero(new_fragment_dict, replace_negative = True)
-
 erich =  postpro.enrichment(new_fragment_dict, decimals = 2)
 
 

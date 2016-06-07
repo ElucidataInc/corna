@@ -31,7 +31,7 @@ eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
 na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205], 'N': [0.99636, 0.00364], 'S': [0.922297, 0.046832, 0.030872]}
 
 # na correction dictionary
-na_corr_dict = corna.na_correction_maven(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
+na_corr_dict = corna.na_corr_single_tracer_mvn(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
 na_corr_df = corna.convert_to_df(na_corr_dict, all=False, colname = 'NA corrected')
 
 
