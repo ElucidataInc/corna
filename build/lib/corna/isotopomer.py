@@ -105,10 +105,19 @@ def fragment_to_input_model(fragment, mass, number):
         label_dict_value = fragment[1]
     return {key_tuple:{label_dict_key:label_dict_value}}
 
-def fragment_dict_to_std_model(fragment_dict, mass=False, number=False):
+def fragment_dict_to_std_model(fragment_dict, mass=False, number=True):
     output_fragment_dict = {}
-    for key, value in fragment_dict.iteritems():
-        output_fragment_dict.update(fragment_to_input_model(value, mass, number))
+    if mass == True:
+        for key, value in fragment_dict.iteritems():
+            output_fragment_dict.update(fragment_to_input_model(value, mass, number))
+    elif number == True:
+        for key, value in fragment_dict.iteritems():
+            label_dict = fragment_to_input_model(value, mass, number)
+            curr_key = hl.get_key_from_single_value_dict(label_dict)
+            try:
+                output_fragment_dict[curr_key].update(label_dict[curr_key])
+            except KeyError:
+                output_fragment_dict.update(label_dict)
     return output_fragment_dict
 
 # def all_metab_to_std_model(all_metab_dict, mass=False, number=False):

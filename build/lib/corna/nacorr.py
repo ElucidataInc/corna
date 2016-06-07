@@ -1,6 +1,6 @@
 import os
 import warnings
-
+import numpy
 import helpers as hl
 import file_parser as fp
 import isotopomer as iso
@@ -8,8 +8,13 @@ import preprocess as preproc
 import algorithms as algo
 import postprocess as postpro
 import output as out
+#from collections import defaultdict
+from formulaschema import FormulaSchema
+import algo as al
+import corna
 
 
+polyatomschema = FormulaSchema().create_polyatom_schema()
 
 warnings.simplefilter(action = "ignore")
 # setting relative path
@@ -34,12 +39,133 @@ filter_df = hl.filter_df(merged_df, 'Sample Name', 'sample_1')
 # std model maven
 std_model_mvn = fp.standard_model(merged_df, parent = False)
 
+fragments_dict = {}
+for frag_name, label_dict in std_model_mvn.iteritems():
+	fragments_dict.update(iso.bulk_insert_data_to_fragment(frag_name, label_dict, mass=False, number=True, mode=None))
+
+
+#{ sample1: { 0 : val, 1: value }, sample2:
+universe_values = fragments_dict.values()
+sample_list = []
+for uv in universe_values:
+	samples = uv[1].keys()
+	sample_list.extend(samples)
+sample_list = list(set(sample_list))
+
+outer_dict = {}
+for s in sample_list:
+	dict_s = {}
+	for uv_new in universe_values:
+		num = uv_new[0].get_num_labeled_atoms_isotope('C13')
+		dict_s[num] = uv_new[1][s]
+	outer_dict[s] = dict_s
+#print outer_dict
+
+#iso_tracer
+iso_tracers = ['C']
+#polyatomdata = polyatomschema.parseString(iso_tracers[0])
+#polyatom = polyatomdata[0]
+#iso_tracer = polyatom.element
+
+# formula dict
+formula_dict = {}
+for key, value in fragments_dict.iteritems():
+	formula_dict =  value[0].get_formula()
+
+
+#element_correc
+eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
+
+#na dict
+na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205], 'N': [0.99636, 0.00364], 'S': [0.922297, 0.046832, 0.030872]}
+
+#dict2 = {s1{0:v1, 1:v2}, s2 ...}
+dict2 = {}
+for key, value in outer_dict.iteritems():
+
+	intensities = numpy.concatenate(numpy.array((value).values()))
+	#dict2 = {}
+
+	if len(iso_tracers) == 1:
+	    iso_tracer = iso_tracers[0]
+
+	    no_atom_tracer = formula_dict[iso_tracer]
+
+	    correction_vector = al.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+
+	    correction_matrix = al.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+
+	    icorr = al.na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+
+	    intensities = icorr
+
+	dict2[key] = icorr
+
+	dict1 = {}
+	for i in range(0, len(icorr)):
+		dict1[i] = icorr[i]
+
+	dict2[key] = dict1
+
+
+univ_new = dict2.values()
+inverse_sample = []
+for un_new in univ_new:
+	inverse_sample.extend(un_new.keys())
+inverse_sample = list(set(inverse_sample))
+
+dict_inverse = {}
+for inv in inverse_sample:
+	sample_dict = {}
+	for sample_tr in dict2.keys():
+		k = dict2[sample_tr][inv]
+		sample_dict[sample_tr] = numpy.array([k])
+	dict_inverse[inv] = sample_dict
+
+
+#fragment dict model
+new_fragment_dict = {}
+for key, value in fragments_dict.iteritems():
+	new_fragment_dict[key] = [value[0], dict_inverse[value[0].get_num_labeled_atoms_isotope('C13')], value[2], value[3]]
+
+
+
+#std_model_back = iso.fragment_dict_to_std_model(new_fragment_dict, number=True)
+
+df = corna.convert_to_df(new_fragment_dict, all=False, colname = 'NAcorr')
+print df
+
+
+
+replace_neg =  postpro.replace_negative_to_zero(new_fragment_dict, replace_negative = True)
+
+erich =  postpro.enrichment(new_fragment_dict, decimals = 2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 # MultiQuant
 
 # read files
+data_dir ='/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_yale/'
 mq_df = hl.concat_txts_into_df(data_dir + '/')
 #mq_df = hl.concat_txts_into_df('/Users/sininagpal/OneDrive/Elucidata_Sini/Na_corr_demo/data/')
 #print mq_df
@@ -73,7 +199,7 @@ preprocessed_dict = preproc.bulk_background_correction(fragments_dict, ['A. [13C
 
 # na correction
 na_corrected_dict = algo.na_correction_mimosa_by_fragment(preprocessed_dict)
-print preprocessed_dict
+
 na_corr_dict_std_model =  iso.fragment_dict_to_std_model(na_corrected_dict,mass=True,number=False)
 
 # post processing - replace negative values by zero
