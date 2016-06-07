@@ -20,7 +20,7 @@ warnings.simplefilter(action = "ignore")
 # setting relative path
 basepath = os.path.dirname(__file__)
 #data_dir = os.path.abspath(os.path.join(basepath, "..", "data"))
-data_dir ='/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agios/'
+data_dir ='/Users/raaisa/OneDrive/Elucidata/NA_correction/Demo/data_agios'
 
 # Maven
 
@@ -123,8 +123,8 @@ new_fragment_dict = {}
 for key, value in fragments_dict.iteritems():
 	new_fragment_dict[key] = [value[0], dict_inverse[value[0].get_num_labeled_atoms_isotope('C13')], value[2], value[3]]
 #std_model_back = iso.fragment_dict_to_std_model(new_fragment_dict, number=True)
-na_corr_df = corna.convert_to_df(new_fragment_dict, all=False, colname = 'NAcorr')
-
+na_corr_df = corna.convert_to_df(new_fragment_dict, colname = 'NAcorr')
+print na_corr_df
 replace_neg =  postpro.replace_negative_to_zero(new_fragment_dict, replace_negative = True)
 erich =  postpro.enrichment(new_fragment_dict, decimals = 2)
 
