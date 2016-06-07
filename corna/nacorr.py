@@ -110,6 +110,7 @@ for un_new in univ_new:
 	inverse_sample.extend(un_new.keys())
 inverse_sample = list(set(inverse_sample))
 
+#dict_inverse = {0 :{s1: [], s2: []}, 1: {s1: [], s2: []}}
 dict_inverse = {}
 for inv in inverse_sample:
 	sample_dict = {}
