@@ -238,7 +238,7 @@ def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimizatio
 
     trac_atoms = get_atoms_from_tracers(iso_tracers)
     # this onwards tracer C, N goes
-    iso_tracers = trac_atoms
+    #iso_tracers_el = trac_atoms
 
     formula_dict = formuladict(merged_df)
     fragments_dict = fragmentsdict_model(merged_df)
@@ -249,8 +249,8 @@ def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimizatio
 
         intensities = numpy.concatenate(numpy.array((label_dict).values()))
 
-        if len(iso_tracers) == 1:
-            iso_tracer = iso_tracers[0]
+        if len(trac_atoms) == 1:
+            iso_tracer = trac_atoms[0]
 
             no_atom_tracer = formula_dict[iso_tracer]
 
@@ -264,7 +264,7 @@ def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimizatio
     sample_list = check_samples_ouputdict(correc_inten_dict)
     # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
     lab_samp_dict = label_sample_dict(sample_list, correc_inten_dict)
-    nacorr_dict_model = fragmentdict_model(fragments_dict, lab_samp_dict)
+    nacorr_dict_model = fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
 
     return nacorr_dict_model
 
@@ -289,13 +289,17 @@ def label_sample_dict(sample_list, correc_inten_dict):
 
 
     #fragment dict model
-def fragmentdict_model(fragments_dict, lab_samp_dict):
+def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
     nacorr_fragment_dict = {}
     for key, value in fragments_dict.iteritems():
-        nacorr_fragment_dict[key] = [value[0], lab_samp_dict[value[0].get_num_labeled_atoms_isotope('C13')], value[2], value[3]]
+        if len(iso_tracers) == 1:
+            nacorr_fragment_dict[key] = [value[0], lab_samp_dict[value[0].get_num_labeled_atoms_isotope(iso_tracers[0])], value[2], value[3]]
+        elif len(iso_tracers) > 1:
+            tup_key = (value[0].get_num_labeled_atoms_isotope(iso_tracers[0]),
+                value[0].get_num_labeled_atoms_isotope(iso_tracers[1]))
+            nacorr_fragment_dict[key] = [value[0], lab_samp_dict[tup_key], value[2], value[3]]
 
     return nacorr_fragment_dict
-
 
 
 

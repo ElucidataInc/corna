@@ -98,14 +98,15 @@ def correction_tracer1_species2(merged_df, iso_tracers, eleme_corr, na_dict, opt
 def correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
 
     formula_dict = algo.formuladict(merged_df)
+    fragments_dict = algo.fragmentsdict_model(merged_df)
 
     correc_inten_dict1 = correction_tracer1_species1(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
 
     correc_inten_dict2 = correction_tracer1_species2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
 
     trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
-    iso_tracers = trac_atoms
-    iso_tracer = iso_tracers[1]
+    #iso_tracers = trac_atoms
+    iso_tracer = trac_atoms[1]
     no_atom_tracer = formula_dict[iso_tracer]
 
     corr_intensities_dict = {}
@@ -117,21 +118,34 @@ def correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization
             for orig_key, orig_value in correc_inten_dict2[samp_name].iteritems():
 
                 if corr_key == orig_key[0]:
-                    intens.append(((corr_key, corr_val), (orig_key, orig_value)))
+                    #intens.append([(corr_key, corr_val), (orig_key, orig_value)])
                     #if orig_key[1] == 0:
-                        #intens.append((orig_key, corr_val))
-                    #else:
-                        #intens.append((orig_key, orig_value))
-            #intens.sort(key = lambda x:x[0])
+                    intens.append((orig_key, corr_val))
+                else:
+                    intens.append((orig_key, orig_value))
+            intens.sort(key = lambda x:x[0])
             #for x in (intens):
+
             intensities = [intens[0][1], intens[1][1]]
-            print intensities
+            #print intensities
 
-            #icorr = algo.perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = True)
+            icorr = algo.perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = True)
 
-            #for i in range(0,len(icorr)):
-                #intens_idx_dict[(corr_key, i)] = icorr[i]
-        #corr_intensities_dict[samp_name] = intens_idx_dict
-    return intens
+            for i in range(0,len(icorr)):
+                intens_idx_dict[(corr_key, i)] = icorr[i]
+        corr_intensities_dict[samp_name] = intens_idx_dict
+
+    sample_list = algo.check_samples_ouputdict(corr_intensities_dict)
+    # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
+    lab_samp_dict = algo.label_sample_dict(sample_list, corr_intensities_dict)
+
+    nacorr_dict_model = algo.fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
+
+    return nacorr_dict_model
+
+
+
+
+
 
 
