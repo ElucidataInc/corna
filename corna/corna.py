@@ -186,9 +186,6 @@ def save_to_csv(df, path):
     df.to_csv(path)
 
 
-def test_sample_lab_dict(iso_tracers, merged_df):
-    sampledict = algo.samp_label_dcit(iso_tracers, merged_df)
-    return sampledict
 
 
 

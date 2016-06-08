@@ -66,7 +66,7 @@ for s in sample_list:
 		dict_s[tup] = uv_new[1][s]
 
 	outer_dict[s] = dict_s
-#print outer_dict
+print outer_dict
 
 
 #print outer_dict
