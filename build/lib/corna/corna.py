@@ -129,7 +129,7 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
 
 
 #NA correction maven
-def na_correction_maven(merged_df, iso_tracers, eleme_corr, na_dict):
+def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict):
     na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
     return na_corr_model
 
@@ -166,7 +166,7 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
         for metabolite, fragment_dict in dict_output.iteritems():
             std_model = iso.fragment_dict_to_std_model(fragment_dict, mass=False, number=True)
 
-            model_to_df = out.convert_dict_df(std_model, parent = False)
+            model_to_df = out.convert_dict_df(std_model, parent=False)
             df_list.append(model_to_df)
 
         model_to_df = hl.concatentate_dataframes_by_col(df_list)
@@ -174,8 +174,7 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
     else:
 
         std_model = iso.fragment_dict_to_std_model(dict_output, mass=False, number=True)
-
-        model_to_df = out.convert_dict_df(std_model, parent = False)
+        model_to_df = out.convert_dict_df(std_model, parent=False)
 
     model_to_df.rename(columns={"Intensity": str(colname)}, inplace=True)
 
@@ -185,6 +184,11 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
 # Save any dataframe to csv
 def save_to_csv(df, path):
     df.to_csv(path)
+
+
+def test_sample_lab_dict(iso_tracers, merged_df):
+    sampledict = algo.samp_label_dcit(iso_tracers, merged_df)
+    return sampledict
 
 
 

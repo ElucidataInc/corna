@@ -6,6 +6,11 @@ import math
 from scipy import optimize
 import file_parser as fp
 import isotopomer as iso
+from formulaschema import FormulaSchema
+
+
+
+polyatomschema = FormulaSchema().create_polyatom_schema()
 
 # MULTIQUANT
 def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
@@ -163,7 +168,7 @@ def fragmentsdict_model(merged_df):
     return fragments_dict
 
 
-def samp_label_dcit(merged_df):
+def unique_samples_for_dict(merged_df):
     fragments_dict = fragmentsdict_model(merged_df)
     universe_values = fragments_dict.values()
     sample_list = []
@@ -171,13 +176,29 @@ def samp_label_dcit(merged_df):
         samples = uv[1].keys()
         sample_list.extend(samples)
     sample_list = list(set(sample_list))
+    return sample_list
 
+
+
+def samp_label_dcit(iso_tracers, merged_df):
+    """
+    Dictionary of the form { sample1: { 0 : val, 1: value }, sample2: {}, ...}
+    """
+    sample_list = unique_samples_for_dict(merged_df)
+    fragments_dict = fragmentsdict_model(merged_df)
+    universe_values = fragments_dict.values()
     outer_dict = {}
     for s in sample_list:
         dict_s = {}
         for uv_new in universe_values:
-            num = uv_new[0].get_num_labeled_atoms_isotope('C13')
-            dict_s[num] = uv_new[1][s]
+            if len(iso_tracers) == 1:
+                lab_num = uv_new[0].get_num_labeled_atoms_isotope(iso_tracers[0])
+                #dict_s[lab_num] = uv_new[1][s]
+            elif len(iso_tracers) > 1:
+                lab_num = ()
+                for isotopes in iso_tracers:
+                    lab_num = lab_num + (uv_new[0].get_num_labeled_atoms_isotope(str(isotopes)),)
+            dict_s[lab_num] = uv_new[1][s]
         outer_dict[s] = dict_s
 
     return outer_dict
@@ -192,7 +213,17 @@ def formuladict(merged_df):
 
 
 def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict):
-    outer_dict = samp_label_dcit(merged_df)
+
+    outer_dict = samp_label_dcit(iso_tracers, merged_df)
+    iso_tracs = []
+    for i in range(0, len(iso_tracers)):
+        polyatomdata = polyatomschema.parseString(iso_tracers[i])
+        polyatom = polyatomdata[0]
+        iso_tracs.append(polyatom.element)
+
+    iso_tracers = iso_tracs
+    print iso_tracers
+
     formula_dict = formuladict(merged_df)
     fragments_dict = fragmentsdict_model(merged_df)
 
@@ -245,6 +276,8 @@ def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict):
         new_fragment_dict[key] = [value[0], dict_inverse[value[0].get_num_labeled_atoms_isotope('C13')], value[2], value[3]]
 
     return new_fragment_dict
+
+
 
 
 

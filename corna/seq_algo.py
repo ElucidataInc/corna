@@ -11,7 +11,7 @@ import postprocess as postpro
 import output as out
 #from collections import defaultdict
 from formulaschema import FormulaSchema
-import algo as al
+#import algo as al
 import corna
 
 
@@ -46,6 +46,8 @@ for frag_name, label_dict in std_model_mvn.iteritems():
 
 
 #{ sample1: { 0 : val, 1: value }, sample2:
+
+
 universe_values = fragments_dict.values()
 sample_list = []
 for uv in universe_values:
@@ -70,10 +72,13 @@ for s in sample_list:
 #print outer_dict
 
 #iso_tracer
-iso_tracers = ['C', 'N']
-#polyatomdata = polyatomschema.parseString(iso_tracers[0])
-#polyatom = polyatomdata[0]
-#iso_tracer = polyatom.element
+iso_trac = ['C13', 'N15']
+iso_tracers = []
+for i in range(0, len(iso_trac)):
+	polyatomdata = polyatomschema.parseString(iso_trac[i])
+	polyatom = polyatomdata[0]
+	iso_tracers.append(polyatom.element)
+print iso_tracers
 
 # formula dict
 formula_dict = {}
@@ -101,6 +106,8 @@ for key, value in outer_dict.iteritems():
 	keys_tracer1 = sorted_keys[:no_atom_tracer+1]
 	keys_tracer1.sort(key = lambda x: x[0])
 
+	#print list(set(sorted_keys) - set(keys_tracer1))
+
 	intens = []
 
 	for keys in keys_tracer1:
@@ -108,11 +115,11 @@ for key, value in outer_dict.iteritems():
 
 	intensities = numpy.concatenate(numpy.array(intens))
 
-	correction_vector = al.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+	correction_vector = algo.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
 
-	correction_matrix = al.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+	correction_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
-	icorr = al.na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+	icorr = algo.na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
 
 	#intensities = icorr
 
@@ -142,11 +149,11 @@ for key, value in dict2.iteritems():
 		#for x in (intens):
 		intensities = [intens[0][1], intens[1][1]]
 
-		correction_vector = al.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+		correction_vector = algo.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
 
-		correction_matrix = al.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+		correction_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
-		icorr = al.na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+		icorr = algo.na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
 
 		for i in range(0,len(icorr)):
 			final_dict1[(corr_key, i)] = icorr[i]
@@ -178,7 +185,8 @@ for key, value in fragments_dict.iteritems():
 #std_model_back = iso.fragment_dict_to_std_model(new_fragment_dict, number=True)
 na_corr_df = corna.convert_to_df(new_fragment_dict, all=False, colname = 'NAcorr')
 
-print na_corr_df
+#print na_corr_df
+
 
 
 
