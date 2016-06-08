@@ -221,7 +221,7 @@ def get_atoms_from_tracers(iso_tracers):
 
 
 
-def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities):
+def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = True):
 
     correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
 
@@ -232,67 +232,70 @@ def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_
     return icorr
 
 
-def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict):
-
+def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+    # tracer C13, N15 goes
     samp_lab_dict = samp_label_dcit(iso_tracers, merged_df)
 
     trac_atoms = get_atoms_from_tracers(iso_tracers)
-
+    # this onwards tracer C, N goes
     iso_tracers = trac_atoms
 
     formula_dict = formuladict(merged_df)
     fragments_dict = fragmentsdict_model(merged_df)
 
-    dict2 = {}
-    for key, value in samp_lab_dict.iteritems():
+    # { sample1: { 0 : val, 1: value }, sample2: {}, ...}
+    correc_inten_dict = {}
+    for samp_name, label_dict in samp_lab_dict.iteritems():
 
-        intensities = numpy.concatenate(numpy.array((value).values()))
-        #dict2 = {}
+        intensities = numpy.concatenate(numpy.array((label_dict).values()))
 
         if len(iso_tracers) == 1:
             iso_tracer = iso_tracers[0]
 
             no_atom_tracer = formula_dict[iso_tracer]
 
-            # correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
-
-            # correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
-
-            # icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
-
-            #intensities = icorr
-            icorr = perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities)
-
-        dict2[key] = icorr
-
-        dict1 = {}
+            icorr = perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = True)
+        # { 0 : val, 1: val, 2: val, ...}
+        inten_index_dict = {}
         for i in range(0, len(icorr)):
-            dict1[i] = icorr[i]
+            inten_index_dict[i] = icorr[i]
 
-        dict2[key] = dict1
+        correc_inten_dict[samp_name] = inten_index_dict
+    sample_list = check_samples_ouputdict(correc_inten_dict)
+    # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
+    lab_samp_dict = label_sample_dict(sample_list, correc_inten_dict)
+    nacorr_dict_model = fragmentdict_model(fragments_dict, lab_samp_dict)
+
+    return nacorr_dict_model
 
 
-    univ_new = dict2.values()
+def check_samples_ouputdict(correc_inten_dict):
+    univ_new = correc_inten_dict.values()
     inverse_sample = []
     for un_new in univ_new:
         inverse_sample.extend(un_new.keys())
     inverse_sample = list(set(inverse_sample))
+    return inverse_sample
 
-    dict_inverse = {}
-    for inv in inverse_sample:
+def label_sample_dict(sample_list, correc_inten_dict):
+    lab_samp_dict = {}
+    for inv in sample_list:
         sample_dict = {}
-        for sample_tr in dict2.keys():
-            k = dict2[sample_tr][inv]
+        for sample_tr in correc_inten_dict.keys():
+            k = correc_inten_dict[sample_tr][inv]
             sample_dict[sample_tr] = numpy.array([k])
-        dict_inverse[inv] = sample_dict
+        lab_samp_dict[inv] = sample_dict
+    return lab_samp_dict
 
 
     #fragment dict model
-    new_fragment_dict = {}
+def fragmentdict_model(fragments_dict, lab_samp_dict):
+    nacorr_fragment_dict = {}
     for key, value in fragments_dict.iteritems():
-        new_fragment_dict[key] = [value[0], dict_inverse[value[0].get_num_labeled_atoms_isotope('C13')], value[2], value[3]]
+        nacorr_fragment_dict[key] = [value[0], lab_samp_dict[value[0].get_num_labeled_atoms_isotope('C13')], value[2], value[3]]
 
-    return new_fragment_dict
+    return nacorr_fragment_dict
+
 
 
 

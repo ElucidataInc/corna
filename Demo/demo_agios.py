@@ -38,8 +38,10 @@ na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.
 #iso_tracers = ['C']
 na_corr_dict = corna.na_corr_single_tracer_mvn(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
 na_corr_df = corna.convert_to_df(na_corr_dict, all=False, colname = 'NA corrected')
-print na_corr_df
+#print na_corr_df
 
+na_corr_mult_dict = corna.na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
+print na_corr_mult_dict
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, all=False)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, all = False, colname =  'Intensities Replaced negatives')

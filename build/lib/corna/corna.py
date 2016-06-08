@@ -7,6 +7,7 @@ import file_parser as fp
 import isotopomer as iso
 import preprocess as preproc
 import algorithms as algo
+import sequential_algo as sqalgo
 import postprocess as postpro
 import output as out
 
@@ -127,15 +128,14 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     return na_corrected_out
 
 
-
 #NA correction maven
-def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict):
+def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
     na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
     return na_corr_model
 
-
-
-
+def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+    nacorr_multiple_model = sqalgo.correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
+    return nacorr_multiple_model
 
 
 # Post processing: Replacing negatives by zero

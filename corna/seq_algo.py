@@ -78,7 +78,7 @@ for i in range(0, len(iso_trac)):
 	polyatomdata = polyatomschema.parseString(iso_trac[i])
 	polyatom = polyatomdata[0]
 	iso_tracers.append(polyatom.element)
-print iso_tracers
+
 
 # formula dict
 formula_dict = {}
@@ -96,6 +96,8 @@ na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.
 dict2 = {}
 
 
+
+
 for key, value in outer_dict.iteritems():
 	iso_tracer = iso_tracers[0]
 
@@ -106,7 +108,8 @@ for key, value in outer_dict.iteritems():
 	keys_tracer1 = sorted_keys[:no_atom_tracer+1]
 	keys_tracer1.sort(key = lambda x: x[0])
 
-	#print list(set(sorted_keys) - set(keys_tracer1))
+	#x = list(set(sorted_keys) - set(keys_tracer1))
+
 
 	intens = []
 
@@ -121,13 +124,16 @@ for key, value in outer_dict.iteritems():
 
 	icorr = algo.na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
 
-	#intensities = icorr
+	#icorr = perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities)
 
 	dict1 = {}
 	for i in range(0, len(icorr)):
 		dict1[i] = icorr[i]
 
 	dict2[key] = dict1
+
+
+
 
 
 final_dict={}
@@ -154,6 +160,7 @@ for key, value in dict2.iteritems():
 		correction_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
 		icorr = algo.na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+		#icorr = perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities)
 
 		for i in range(0,len(icorr)):
 			final_dict1[(corr_key, i)] = icorr[i]
