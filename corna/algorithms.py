@@ -211,16 +211,34 @@ def formuladict(merged_df):
     return formula_dict
 
 
-def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict):
-
-    samp_lab_dict = samp_label_dcit(iso_tracers, merged_df)
-    iso_tracs = []
+def get_atoms_from_tracers(iso_tracers):
+    trac_atoms = []
     for i in range(0, len(iso_tracers)):
         polyatomdata = polyatomschema.parseString(iso_tracers[i])
         polyatom = polyatomdata[0]
-        iso_tracs.append(polyatom.element)
+        trac_atoms.append(polyatom.element)
+    return trac_atoms
 
-    iso_tracers = iso_tracs
+
+
+def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities):
+
+    correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+
+    correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+
+    icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+
+    return icorr
+
+
+def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict):
+
+    samp_lab_dict = samp_label_dcit(iso_tracers, merged_df)
+
+    trac_atoms = get_atoms_from_tracers(iso_tracers)
+
+    iso_tracers = trac_atoms
 
     formula_dict = formuladict(merged_df)
     fragments_dict = fragmentsdict_model(merged_df)
@@ -236,13 +254,14 @@ def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict):
 
             no_atom_tracer = formula_dict[iso_tracer]
 
-            correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+            # correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
 
-            correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+            # correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
-            icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+            # icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
 
-            intensities = icorr
+            #intensities = icorr
+            icorr = perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities)
 
         dict2[key] = icorr
 
