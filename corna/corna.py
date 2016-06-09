@@ -92,6 +92,10 @@ def convert_json_to_df(json_input):
     df = hl.json_to_df(json_input)
     return df
 
+def merge_dfs(df_list):
+    combined_dfs = reduce(lambda left,right: pd.merge(left,right, on= ['Label', 'Sample Name', 'name', 'formula']), df_list)
+    return combined_dfs
+
 
 
 # Filtering data
