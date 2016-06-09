@@ -88,6 +88,11 @@ def convert_inputdata_to_stdfrom(input_df):
     long_form.rename(columns={"variable":"Sample Name", "value":"Intensity"}, inplace=True)
     return long_form
 
+def convert_json_to_df(json_input):
+    df = hl.json_to_df(json_input)
+    return df
+
+
 
 # Filtering data
 def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = []):
