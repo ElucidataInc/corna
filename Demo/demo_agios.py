@@ -40,7 +40,7 @@ na_corr_dict = corna.na_corr_multiple_tracer(merge_mv_metdata, iso_tracers, elem
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 
 # Replace negative values by zero on NA corrected data - optional
-postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negatives = True)
+postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, colname =  'CorrIntensities-Replaced_negatives')
 
 
@@ -51,6 +51,7 @@ frac_enr_df = corna.convert_to_df(frac_enrichment, colname = 'Frac Enrichment')
 # combine results - dataframe with na correction column, frac enrichment column and post processed column
 df_list = [na_corr_df, postprocessed_out_df, frac_enr_df]
 merged_results_df = corna.merge_dfs(df_list)
+print merged_results_df
 
 # filter any dataframe as per requirement and save it to csv
 # filter by one column - sample name
@@ -65,7 +66,6 @@ filtered_data = corna.filtering_df(frac_enr_df, num_col=2, col1="name",
 filtered_data = corna.filtering_df(frac_enr_df, num_col=3, col1="name",
                                 list_col1_vals=['L-Methionine'], col2="Sample Name", list_col2_vals=['sample_1', 'sample_2'],\
                                 col3="Label", list_col3_vals = ['C13_1_N15_0', 'C13_2_N15_0'])
-
 
 # save any dataframe at given path
 save_dfs = corna.save_to_csv(merged_results_df, path_dir + 'results.csv')

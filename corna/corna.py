@@ -158,7 +158,7 @@ def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimiz
 
 
 # Post processing: Replacing negatives by zero
-def replace_negatives(na_corr_dict, all=False):
+def replace_negatives(na_corr_dict, replace_negative = True, all=False):
     if all:
         post_processed_dict = {}
         for metabolite, fragment_dict in na_corr_dict.iteritems():
