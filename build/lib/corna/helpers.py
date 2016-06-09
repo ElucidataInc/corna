@@ -6,6 +6,7 @@ import constants as cs
 
 ELE_ATOMIC_WEIGHTS = cs.const_element_mol_weight_dict()
 ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
+NA_DICT = cs.const_na_dict()
 
 def get_atomic_weight(element):
     try:
@@ -27,6 +28,12 @@ def get_isotope_na(iso):
 
 def get_isotope_natural(iso):
     return get_isotope(iso)['nat_form']
+
+def get_sub_na_dict(elements):
+    sub_na_dict = {}
+    for element in elements:
+        sub_na_dict[element] = NA_DICT[element]
+    return sub_na_dict
 
 def label_dict_to_key(label_dict):
     key = ''

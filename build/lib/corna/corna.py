@@ -205,10 +205,14 @@ def save_to_csv(df, path):
     df.to_csv(path)
 
 
-
-
-
-
+def get_na_dict(isotracers, eleme_corr):
+    ele_list = algo.get_atoms_from_tracers(isotracers)
+    for key, value in eleme_corr.iteritems():
+        ele_list.append(key)
+        for ele in value:
+            ele_list.append(ele)
+    ele_list = list(set(ele_list))
+    return hl.get_sub_na_dict(ele_list)
 
 
 

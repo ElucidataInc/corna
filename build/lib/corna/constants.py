@@ -155,13 +155,23 @@ def const_enzyme_name():
     const_obj = PyConstObj(enzyme_name=enzyme_name)
     return  const_obj.ENZYME_NAME
 
-
-
+def const_na_dict():
+    na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015],
+                'O': [0.99757, 0.00038, 0.00205], 'N': [0.99636, 0.00364],
+                'S': [0.922297, 0.046832, 0.030872]}
+    const_obj = PyConstObj(na_dict=na_dict)
+    return const_obj.NA_DICT
 
 def const_isotope_na_mass():
     isotope_na_mass = {'C12': {'NA':0.9893, 'mol_mass':12, 'nat_form': 'C12'},
                        'C13': {'NA':0.011, 'mol_mass':13, 'nat_form': 'C12'},
+                       'C14': {'NA':0, 'mol_mass':14.003241989, 'nat_form': 'C12'},
+                       'N14': {'NA':0.00364, 'mol_mass':14.003074, 'nat_form': 'N14'},
                        'N15': {'NA':0.00364, 'mol_mass':15.0001088982, 'nat_form': 'N14'},
-                       'C14': {'NA':0, 'mol_mass':14.003241989, 'nat_form': 'C12'}}
+                       'O16': {'NA':0.00364, 'mol_mass':15.994915, 'nat_form': 'O16'},
+                       'O17': {'NA':0.00364, 'mol_mass':16.999132, 'nat_form': 'O17'},
+                       'O18': {'NA':0.00364, 'mol_mass':17.999160, 'nat_form': 'O18'},
+                       'H1': {'NA':0.00364, 'mol_mass':1.007825, 'nat_form': 'H1'},
+                       'H2': {'NA':0.00364, 'mol_mass':2.014102, 'nat_form': 'H1'}}
     const_obj = PyConstObj(isotope_na_mass=isotope_na_mass)
     return const_obj.ISOTOPE_NA_MASS

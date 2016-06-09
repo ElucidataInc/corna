@@ -1,5 +1,6 @@
 import corna
 import pandas as pd
+import json
 
 # path to directory where multiquant text data files are present
 path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agios/'
@@ -11,6 +12,7 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 # multiple tracer data
 maven_data = corna.read_maven(path_dir + '/data_multiple_tracers.csv')
 #std_input_data = corna.convert_inputdata_to_stdfrom(maven_data)
+json_input = json.dumps(maven_data.to_dict())
 
 # For json input, use this funtion:
 #maven_data = corna.convert_json_to_df(json_input)
@@ -29,7 +31,9 @@ iso_tracers = ['C13', 'N15']
 eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
 
 # NA values dict
-na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015], 'O': [0.99757, 0.00038, 0.00205], 'N': [0.99636, 0.00364], 'S': [0.922297, 0.046832, 0.030872]}
+na_dict = corna.get_na_dict(iso_tracers, eleme_corr)
+# edit na values
+na_dict['H'][0] = 0.989
 
 # NA correction single tracer
 #na_corr_dict = corna.na_corr_single_tracer_mvn(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
@@ -51,7 +55,6 @@ frac_enr_df = corna.convert_to_df(frac_enrichment, colname = 'Frac Enrichment')
 # combine results - dataframe with na correction column, frac enrichment column and post processed column
 df_list = [na_corr_df, postprocessed_out_df, frac_enr_df]
 merged_results_df = corna.merge_dfs(df_list)
-print merged_results_df
 
 # filter any dataframe as per requirement and save it to csv
 # filter by one column - sample name
