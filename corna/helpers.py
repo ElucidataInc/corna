@@ -58,6 +58,7 @@ def read_file(path):
 	else:
 		raise IOError('only csv/xls/xlsx/txt extensions are allowed')
 
+
 	return input_file
 
 
