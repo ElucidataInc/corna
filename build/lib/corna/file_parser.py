@@ -25,9 +25,10 @@ def maven_merge_dfs(df1, df2):
     value = [x for x in df1.columns.tolist() if x not in id]
 
     long_form = pd.melt(df1, id_vars=id, value_vars=value)
-
-    merged_df = hl.merge_dfs(long_form, df2, how = 'left', left_on = 'variable', right_on = 'sample')
-
+    try:
+        merged_df = hl.merge_dfs(long_form, df2, how = 'left', left_on = 'variable', right_on = 'sample')
+    except KeyError:
+        raise KeyError('sample column not found in metadata')
     merged_df['Parent'] = merged_df['Name']
     merged_df.rename(columns={"variable":"Sample Name", "value":"Intensity"}, inplace=True)
 

@@ -1,6 +1,7 @@
 import os
 import sys
 import warnings
+import pandas as pd
 
 import helpers as hl
 import file_parser as fp
@@ -77,6 +78,15 @@ def merge_mvn_metadata(mv_df, metadata):
 def merge_mq_metadata(mq_df, metdata):
     merged_data = fp.mq_merge_dfs(mq_df, metdata)
     return merged_data
+
+
+def convert_inputdata_to_stdfrom(input_df):
+    id = ["Name", "Formula", "Label"]
+    value = [x for x in input_df.columns.tolist() if x not in id]
+    long_form = pd.melt(input_df, id_vars=id, value_vars=value)
+    long_form['Parent'] = long_form['Name']
+    long_form.rename(columns={"variable":"Sample Name", "value":"Intensity"}, inplace=True)
+    return long_form
 
 
 # Filtering data

@@ -14,7 +14,6 @@ corna/nacorr.py
 corna/output.py
 corna/postprocess.py
 corna/preprocess.py
-corna/seq_algo.py
 corna/sequential_algo.py
 corna.egg-info/PKG-INFO
 corna.egg-info/SOURCES.txt
