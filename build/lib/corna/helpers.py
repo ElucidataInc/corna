@@ -54,7 +54,7 @@ def read_file(path):
 	return input_file
 
 
-def json_to_df(json_input, input_data):
+def json_to_df(json_input):
     """
     This function takes input data in the form of json format and converts
     it in pandas dataframe

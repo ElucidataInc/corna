@@ -1,12 +1,14 @@
 import os
 import sys
 import warnings
+import pandas as pd
 
 import helpers as hl
 import file_parser as fp
 import isotopomer as iso
 import preprocess as preproc
 import algorithms as algo
+import sequential_algo as sqalgo
 import postprocess as postpro
 import output as out
 
@@ -78,6 +80,24 @@ def merge_mq_metadata(mq_df, metdata):
     return merged_data
 
 
+def convert_inputdata_to_stdfrom(input_df):
+    id = ["Name", "Formula", "Label"]
+    value = [x for x in input_df.columns.tolist() if x not in id]
+    long_form = pd.melt(input_df, id_vars=id, value_vars=value)
+    long_form['Parent'] = long_form['Name']
+    long_form.rename(columns={"variable":"Sample Name", "value":"Intensity"}, inplace=True)
+    return long_form
+
+def convert_json_to_df(json_input):
+    df = hl.json_to_df(json_input)
+    return df
+
+def merge_dfs(df_list):
+    combined_dfs = reduce(lambda left,right: pd.merge(left,right, on= ['Label', 'Sample Name', 'name', 'formula']), df_list)
+    return combined_dfs
+
+
+
 # Filtering data
 def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = []):
 	filtered_df = hl.filtering_df(df, num_col, col1, list_col1_vals, col2, list_col2_vals, col3, list_col3_vals)
@@ -127,19 +147,18 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     return na_corrected_out
 
 
-
 #NA correction maven
-def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict):
+def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
     na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
     return na_corr_model
 
-
-
-
+def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+    nacorr_multiple_model = sqalgo.correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
+    return nacorr_multiple_model
 
 
 # Post processing: Replacing negatives by zero
-def replace_negatives(na_corr_dict, all=False):
+def replace_negatives(na_corr_dict, replace_negative = True, all=False):
     if all:
         post_processed_dict = {}
         for metabolite, fragment_dict in na_corr_dict.iteritems():
@@ -186,9 +205,6 @@ def save_to_csv(df, path):
     df.to_csv(path)
 
 
-def test_sample_lab_dict(iso_tracers, merged_df):
-    sampledict = algo.samp_label_dcit(iso_tracers, merged_df)
-    return sampledict
 
 
 
