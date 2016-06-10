@@ -45,9 +45,8 @@ def get_sub_na_dict(elements):
 
 def label_dict_to_key(label_dict):
     key = ''
-    print label_dict
+
     for ele, num in label_dict.iteritems():
-        print ele
         key = key + '_' + ele + '_' + str(num)
 
     key = key.strip('_')
@@ -197,10 +196,7 @@ def convert_labels_to_std(df, iso_tracers):
         else:
             splitted = labels.split('-label-')
             split2 = splitted[1].split('-')
-
             isotopelist = chemformula_schema.parseString(splitted[0])
-
-            #isotopelist = Formula(splitted[0]).parse_chemforumla_to_polyatom()
             el1 = (''.join(str(x) for x in isotopelist[0]))
             el1_num = el1 + '_'+ split2[0]
             if len(iso_tracers) == 1:
