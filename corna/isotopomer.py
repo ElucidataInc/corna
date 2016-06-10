@@ -1,6 +1,8 @@
 from model import Fragment
 import helpers as hl
 import numpy as np
+import collections
+
 
 def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
     if molecular_mass != None:
@@ -106,6 +108,7 @@ def fragment_to_input_model(fragment, mass, number):
     return {key_tuple:{label_dict_key:label_dict_value}}
 
 def fragment_dict_to_std_model(fragment_dict, mass=False, number=True):
+
     output_fragment_dict = {}
     if mass == True:
         for key, value in fragment_dict.iteritems():
@@ -113,6 +116,7 @@ def fragment_dict_to_std_model(fragment_dict, mass=False, number=True):
     elif number == True:
         for key, value in fragment_dict.iteritems():
             label_dict = fragment_to_input_model(value, mass, number)
+
             curr_key = hl.get_key_from_single_value_dict(label_dict)
             try:
                 output_fragment_dict[curr_key].update(label_dict[curr_key])

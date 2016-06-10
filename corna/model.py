@@ -90,6 +90,12 @@ class Fragment(Ion, Label):
             raise KeyError('Fragment should contain label information')
         self.check_if_valid_label(self.label_dict)
 
+    def __str__(self):
+        return self.formula
+
+    def __repr__(self):
+        return self.formula
+
     def get_elem_num(self, label_dict):
         elem_num = {}
         for iso in label_dict.keys():

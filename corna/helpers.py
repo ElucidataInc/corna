@@ -1,11 +1,20 @@
 import os
 import pandas as pd
 import numpy as np
+import collections
+
 
 import constants as cs
+from formula import Formula
+from formulaschema import FormulaSchema
+
+schema_obj = FormulaSchema()
+chemformula_schema = schema_obj.create_chemicalformula_schema()
+
 
 ELE_ATOMIC_WEIGHTS = cs.const_element_mol_weight_dict()
 ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
+NA_DICT = cs.const_na_dict()
 
 def get_atomic_weight(element):
     try:
@@ -28,10 +37,18 @@ def get_isotope_na(iso):
 def get_isotope_natural(iso):
     return get_isotope(iso)['nat_form']
 
+def get_sub_na_dict(elements):
+    sub_na_dict = {}
+    for element in elements:
+        sub_na_dict[element] = NA_DICT[element]
+    return sub_na_dict
+
 def label_dict_to_key(label_dict):
     key = ''
+
     for ele, num in label_dict.iteritems():
-        key = ele + '_' + str(num) + '_' + key
+        key = key + '_' + ele + '_' + str(num)
+
     key = key.strip('_')
     return key
 
@@ -50,6 +67,7 @@ def read_file(path):
 
 	else:
 		raise IOError('only csv/xls/xlsx/txt extensions are allowed')
+
 
 	return input_file
 
@@ -127,7 +145,8 @@ def filtering_df(df, num_col=3, col1='col1', list_col1_vals=[], col2='col2', lis
     return filtered_df
 
 def create_dict_from_isotope_label_list(isonumlist):
-    label_dict = {}
+    label_dict = collections.OrderedDict()
+
     for i in xrange(0,len(isonumlist),2):
         try:
             get_isotope(isonumlist[i])
@@ -165,3 +184,34 @@ def check_if_all_elems_same_type(inputlist, classname):
 
 def concatentate_dataframes_by_col(df_list):
     return pd.concat(df_list)
+
+def convert_labels_to_std(df, iso_tracers):
+    new_labels = []
+    for labels in df['Label']:
+        if labels == 'C12 PARENT':
+            labe = ''
+            for tracs in iso_tracers:
+                labe = labe + tracs+'_0_'
+            new_labels.append(labe.strip('_'))
+        else:
+            splitted = labels.split('-label-')
+            split2 = splitted[1].split('-')
+            isotopelist = chemformula_schema.parseString(splitted[0])
+            el1 = (''.join(str(x) for x in isotopelist[0]))
+            el1_num = el1 + '_'+ split2[0]
+            if len(iso_tracers) == 1:
+                new_labels.append(el1_num)
+
+            else:
+                try:
+                    el2 = '_'+(''.join(str(x) for x in isotopelist[1])) + '_' + split2[1]
+
+                    el = el1_num+el2
+                    new_labels.append(el)
+                except:
+                    for tracer in iso_tracers:
+                        if tracer != el1:
+                            el = el1_num + '_' + tracer + '_0'
+                            new_labels.append(el)
+
+    return new_labels

@@ -124,8 +124,10 @@ def correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization
                 else:
                     intens.append((orig_key, orig_value))
             intens.sort(key = lambda x:x[0])
-            #for x in (intens):
 
+            #intensities = []
+            #for i in range(0, len(intens)):
+                #intensities.append(intens[i][1])
             intensities = [intens[0][1], intens[1][1]]
             #print intensities
 

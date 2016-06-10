@@ -93,7 +93,9 @@ def convert_json_to_df(json_input):
     return df
 
 def merge_dfs(df_list):
-    combined_dfs = reduce(lambda left,right: pd.merge(left,right, on= ['Label', 'Sample Name', 'name', 'formula']), df_list)
+    combined_dfs = reduce(lambda left,right: pd.merge(left,right, on= ['Label', 'Sample Name', 'Name', 'Formula']), df_list)
+    #combined_dfs = reduce(lambda left,right: pd.merge(left,right), df_list)
+    #on= ['Name', 'Formula', 'Label', 'Sample Name']
     return combined_dfs
 
 
@@ -149,10 +151,23 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
 
 #NA correction maven
 def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+    for key, value in eleme_corr.iteritems():
+        for el in algo.get_atoms_from_tracers(iso_tracers):
+            if el in value:
+                raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
+    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
+    merged_df['Label'] = labels_std
     na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
     return na_corr_model
 
 def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+
+    for key, value in eleme_corr.iteritems():
+        for el in algo.get_atoms_from_tracers(iso_tracers):
+            if el in value:
+                raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
+    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
+    merged_df['Label'] = labels_std
     nacorr_multiple_model = sqalgo.correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
     return nacorr_multiple_model
 
@@ -193,7 +208,9 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
     else:
 
         std_model = iso.fragment_dict_to_std_model(dict_output, mass=False, number=True)
+
         model_to_df = out.convert_dict_df(std_model, parent=False)
+
 
     model_to_df.rename(columns={"Intensity": str(colname)}, inplace=True)
 
@@ -205,10 +222,14 @@ def save_to_csv(df, path):
     df.to_csv(path)
 
 
-
-
-
-
+def get_na_dict(isotracers, eleme_corr):
+    ele_list = algo.get_atoms_from_tracers(isotracers)
+    for key, value in eleme_corr.iteritems():
+        ele_list.append(key)
+        for ele in value:
+            ele_list.append(ele)
+    ele_list = list(set(ele_list))
+    return hl.get_sub_na_dict(ele_list)
 
 
 

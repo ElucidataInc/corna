@@ -10,7 +10,8 @@ import postprocess as postpro
 import output as out
 #from collections import defaultdict
 from formulaschema import FormulaSchema
-import algo as al
+from formula import Formula
+#import algo as al
 import corna
 
 
@@ -20,12 +21,55 @@ warnings.simplefilter(action = "ignore")
 # setting relative path
 basepath = os.path.dirname(__file__)
 #data_dir = os.path.abspath(os.path.join(basepath, "..", "data"))
-data_dir ='/Users/raaisa/OneDrive/Elucidata/NA_correction/Demo/data_agios'
+data_dir ='/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agios/'
 
 # Maven
 
 # read files
+iso_tracers = ['C13']
 input_data = hl.read_file(data_dir + '/maven_output.csv')
+
+def convert_labels_to_std(df, iso_tracers):
+	new_labels = []
+	for labels in input_data['Label']:
+		if labels == 'C12 PARENT':
+			labe = ''
+			for tracs in iso_tracers:
+				labe = labe + tracs+'_0_'
+			new_labels.append(labe.strip('_'))
+		else:
+			splitted = labels.split('-label-')
+			split2 = splitted[1].split('-')
+			isotopelist = Formula(splitted[0]).parse_chemforumla_to_polyatom()
+			el1 = (''.join(str(x) for x in isotopelist[0]))
+			el1_num = el1 + '_'+ split2[0]
+			if len(iso_tracers) == 1:
+				new_labels.append(el1_num)
+
+			else:
+				try:
+					el2 = '_'+(''.join(str(x) for x in isotopelist[1])) + '_' + split2[1]
+
+					el = el1_num+el2
+					new_labels.append(el)
+				except:
+					for tracer in iso_tracers:
+						if tracer != el1:
+							el = el1_num + '_' + tracer + '_0'
+							new_labels.append(el)
+
+	return new_labels
+#print new_labels
+#print input_data
+input_data['Label'] = new_labels
+print input_data
+
+
+
+
+#parsed_formula = Formula(formula).parse_formula_to_elem_numatoms()
+
+#input_data = hl.read_file(data_dir + '/data_multiple_tracers.csv')
 
 # metadata
 metadata = hl.read_file(data_dir + '/metadata.csv')
@@ -88,11 +132,11 @@ for key, value in outer_dict.iteritems():
 
 	    no_atom_tracer = formula_dict[iso_tracer]
 
-	    correction_vector = al.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+	    correction_vector = algo.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
 
-	    correction_matrix = al.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+	    correction_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
-	    icorr = al.na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+	    icorr = algo.na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
 
 	    intensities = icorr
 
