@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 
 import constants as cs
+from formula import Formula
 
 ELE_ATOMIC_WEIGHTS = cs.const_element_mol_weight_dict()
 ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
@@ -57,6 +58,7 @@ def read_file(path):
 
 	else:
 		raise IOError('only csv/xls/xlsx/txt extensions are allowed')
+
 
 	return input_file
 
@@ -172,3 +174,34 @@ def check_if_all_elems_same_type(inputlist, classname):
 
 def concatentate_dataframes_by_col(df_list):
     return pd.concat(df_list)
+
+def convert_labels_to_std(df, iso_tracers):
+    new_labels = []
+    for labels in df['Label']:
+        if labels == 'C12 PARENT':
+            labe = ''
+            for tracs in iso_tracers:
+                labe = labe + tracs+'_0_'
+            new_labels.append(labe.strip('_'))
+        else:
+            splitted = labels.split('-label-')
+            split2 = splitted[1].split('-')
+            isotopelist = Formula(splitted[0]).parse_chemforumla_to_polyatom()
+            el1 = (''.join(str(x) for x in isotopelist[0]))
+            el1_num = el1 + '_'+ split2[0]
+            if len(iso_tracers) == 1:
+                new_labels.append(el1_num)
+
+            else:
+                try:
+                    el2 = '_'+(''.join(str(x) for x in isotopelist[1])) + '_' + split2[1]
+
+                    el = el1_num+el2
+                    new_labels.append(el)
+                except:
+                    for tracer in iso_tracers:
+                        if tracer != el1:
+                            el = el1_num + '_' + tracer + '_0'
+                            new_labels.append(el)
+
+    return new_labels

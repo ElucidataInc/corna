@@ -7,14 +7,15 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 
 # read maven data
 #single tracer data
-#maven_data = corna.read_maven(path_dir + '/maven_output.csv')
+#maven_data = corna.read_maven(path_dir + '/data_single_tracer_std.csv')
 
 # multiple tracer data
-maven_data = corna.read_maven(path_dir + '/data_multiple_tracers.csv')
+maven_data = corna.read_maven(path_dir + '/data_multiple_tracers_std.csv')
 #std_input_data = corna.convert_inputdata_to_stdfrom(maven_data)
-json_input = json.dumps(maven_data.to_dict())
+
 
 # For json input, use this funtion:
+#json_input = json.dumps(maven_data.to_dict())
 #maven_data = corna.convert_json_to_df(json_input)
 
 # read maven metadata file
@@ -42,7 +43,7 @@ na_dict['H'][0] = 0.989
 # NA correction multiple tracer
 na_corr_dict = corna.na_corr_multiple_tracer(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = True)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
-
+print na_corr_df
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, colname =  'CorrIntensities-Replaced_negatives')
@@ -63,11 +64,11 @@ sample_1_data = corna.filtering_df(frac_enr_df, num_col=1, col1="Sample Name",
                                 list_col1_vals=['sample_1'])
 
 # filter by two columns - metabolite name and label
-filtered_data = corna.filtering_df(frac_enr_df, num_col=2, col1="name",
+filtered_data = corna.filtering_df(frac_enr_df, num_col=2, col1="Name",
                                 list_col1_vals=['L-Methionine'], col2="Sample Name", list_col2_vals=['sample_1', 'sample_2'])
 
 
-filtered_data = corna.filtering_df(frac_enr_df, num_col=3, col1="name",
+filtered_data = corna.filtering_df(frac_enr_df, num_col=3, col1="Name",
                                 list_col1_vals=['L-Methionine'], col2="Sample Name", list_col2_vals=['sample_1', 'sample_2'],\
                                 col3="Label", list_col3_vals = ['C13_1_N15_0', 'C13_2_N15_0'])
 

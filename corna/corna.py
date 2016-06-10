@@ -93,7 +93,7 @@ def convert_json_to_df(json_input):
     return df
 
 def merge_dfs(df_list):
-    combined_dfs = reduce(lambda left,right: pd.merge(left,right, on= ['Label', 'Sample Name', 'name', 'formula']), df_list)
+    combined_dfs = reduce(lambda left,right: pd.merge(left,right, on= ['Label', 'Sample Name', 'Name', 'Formula']), df_list)
     return combined_dfs
 
 
@@ -149,10 +149,14 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
 
 #NA correction maven
 def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
+    merged_df['Label'] = labels_std
     na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
     return na_corr_model
 
 def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
+    merged_df['Label'] = labels_std
     nacorr_multiple_model = sqalgo.correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
     return nacorr_multiple_model
 

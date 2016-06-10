@@ -29,35 +29,37 @@ data_dir ='/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agi
 iso_tracers = ['C13']
 input_data = hl.read_file(data_dir + '/maven_output.csv')
 
-new_labels = []
-for labels in input_data['Label']:
-	if labels == 'C12 PARENT':
-		labe = ''
-		for tracs in iso_tracers:
-			labe = labe + tracs+'_0_'
-		new_labels.append(labe.strip('_'))
-	else:
-		splitted = labels.split('-label-')
-		split2 = splitted[1].split('-')
-		isotopelist = Formula(splitted[0]).parse_chemforumla_to_polyatom()
-		el1 = (''.join(str(x) for x in isotopelist[0]))
-		el1_num = el1 + '_'+ split2[0]
-		if len(iso_tracers) == 1:
-			new_labels.append(el1_num)
-
+def convert_labels_to_std(df, iso_tracers):
+	new_labels = []
+	for labels in input_data['Label']:
+		if labels == 'C12 PARENT':
+			labe = ''
+			for tracs in iso_tracers:
+				labe = labe + tracs+'_0_'
+			new_labels.append(labe.strip('_'))
 		else:
-			try:
-				el2 = '_'+(''.join(str(x) for x in isotopelist[1])) + '_' + split2[1]
+			splitted = labels.split('-label-')
+			split2 = splitted[1].split('-')
+			isotopelist = Formula(splitted[0]).parse_chemforumla_to_polyatom()
+			el1 = (''.join(str(x) for x in isotopelist[0]))
+			el1_num = el1 + '_'+ split2[0]
+			if len(iso_tracers) == 1:
+				new_labels.append(el1_num)
 
-				el = el1_num+el2
-				new_labels.append(el)
-			except:
-				for tracer in iso_tracers:
-					if tracer != el1:
-						el = el1_num + '_' + tracer + '_0'
-						new_labels.append(el)
+			else:
+				try:
+					el2 = '_'+(''.join(str(x) for x in isotopelist[1])) + '_' + split2[1]
 
-print new_labels
+					el = el1_num+el2
+					new_labels.append(el)
+				except:
+					for tracer in iso_tracers:
+						if tracer != el1:
+							el = el1_num + '_' + tracer + '_0'
+							new_labels.append(el)
+
+	return new_labels
+#print new_labels
 #print input_data
 input_data['Label'] = new_labels
 print input_data

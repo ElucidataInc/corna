@@ -24,8 +24,8 @@ def convert_dict_df(nest_dict, parent = True):
             lab.append(key)
             frames.append(pd.DataFrame(tup))
             df = pd.concat(frames, keys=lab).reset_index()
-            df['name'] = name
-            df['formula'] = formula
+            df['Name'] = name
+            df['Formula'] = formula
             if parent == True:
                  df['parent'] = parent
                  df_list.append(df)
