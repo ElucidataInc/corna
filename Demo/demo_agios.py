@@ -42,8 +42,9 @@ na_dict['H'][0] = 0.989
 
 # NA correction multiple tracer
 na_corr_dict = corna.na_corr_multiple_tracer(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = True)
+#corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
-print na_corr_df
+
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, colname =  'CorrIntensities-Replaced_negatives')
@@ -54,8 +55,18 @@ frac_enrichment = corna.fractional_enrichment(postprocessed_out,)
 frac_enr_df = corna.convert_to_df(frac_enrichment, colname = 'Frac Enrichment')
 
 # combine results - dataframe with na correction column, frac enrichment column and post processed column
-df_list = [na_corr_df, postprocessed_out_df, frac_enr_df]
+
+df_list = [na_corr_df, frac_enr_df, postprocessed_out_df, merge_mv_metdata]
+
+#merge = pd.concat(df_list, ignore_index = True, axis = 0)
+#print merge
 merged_results_df = corna.merge_dfs(df_list)
+
+#merged_results_df.append(merge_mv_metdata)
+#print merged_results_df
+#df = pd.concat(df_list, axis = 1)
+#df = df.T.drop_duplicates().T
+#print df
 
 
 # filter any dataframe as per requirement and save it to csv
