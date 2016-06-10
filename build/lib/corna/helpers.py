@@ -1,9 +1,16 @@
 import os
 import pandas as pd
 import numpy as np
+import collections
+
 
 import constants as cs
 from formula import Formula
+from formulaschema import FormulaSchema
+
+schema_obj = FormulaSchema()
+chemformula_schema = schema_obj.create_chemicalformula_schema()
+
 
 ELE_ATOMIC_WEIGHTS = cs.const_element_mol_weight_dict()
 ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
@@ -38,8 +45,11 @@ def get_sub_na_dict(elements):
 
 def label_dict_to_key(label_dict):
     key = ''
+    print label_dict
     for ele, num in label_dict.iteritems():
-        key = ele + '_' + str(num) + '_' + key
+        print ele
+        key = key + '_' + ele + '_' + str(num)
+
     key = key.strip('_')
     return key
 
@@ -136,7 +146,8 @@ def filtering_df(df, num_col=3, col1='col1', list_col1_vals=[], col2='col2', lis
     return filtered_df
 
 def create_dict_from_isotope_label_list(isonumlist):
-    label_dict = {}
+    label_dict = collections.OrderedDict()
+
     for i in xrange(0,len(isonumlist),2):
         try:
             get_isotope(isonumlist[i])
@@ -186,7 +197,10 @@ def convert_labels_to_std(df, iso_tracers):
         else:
             splitted = labels.split('-label-')
             split2 = splitted[1].split('-')
-            isotopelist = Formula(splitted[0]).parse_chemforumla_to_polyatom()
+
+            isotopelist = chemformula_schema.parseString(splitted[0])
+
+            #isotopelist = Formula(splitted[0]).parse_chemforumla_to_polyatom()
             el1 = (''.join(str(x) for x in isotopelist[0]))
             el1_num = el1 + '_'+ split2[0]
             if len(iso_tracers) == 1:

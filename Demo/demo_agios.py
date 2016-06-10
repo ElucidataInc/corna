@@ -12,6 +12,7 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 # multiple tracer data
 maven_data = corna.read_maven(path_dir + '/data_multiple_tracers_std.csv')
 #std_input_data = corna.convert_inputdata_to_stdfrom(maven_data)
+print maven_data
 
 
 # For json input, use this funtion:
@@ -23,6 +24,7 @@ maven_metadata = corna.read_mvn_metadata(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
+print merge_mv_metdata
 
 # tracer isotopes
 #iso_tracers = ['C13']
@@ -42,7 +44,6 @@ na_dict['H'][0] = 0.989
 
 # NA correction multiple tracer
 na_corr_dict = corna.na_corr_multiple_tracer(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = True)
-#corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 
 # Replace negative values by zero on NA corrected data - optional
@@ -55,12 +56,10 @@ frac_enrichment = corna.fractional_enrichment(postprocessed_out,)
 frac_enr_df = corna.convert_to_df(frac_enrichment, colname = 'Frac Enrichment')
 
 # combine results - dataframe with na correction column, frac enrichment column and post processed column
-
 df_list = [na_corr_df, frac_enr_df, postprocessed_out_df, merge_mv_metdata]
-
 #merge = pd.concat(df_list, ignore_index = True, axis = 0)
-#print merge
 merged_results_df = corna.merge_dfs(df_list)
+print merged_results_df
 
 #merged_results_df.append(merge_mv_metdata)
 #print merged_results_df

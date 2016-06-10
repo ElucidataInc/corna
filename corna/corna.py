@@ -154,7 +154,7 @@ def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optim
     for key, value in eleme_corr.iteritems():
         for el in algo.get_atoms_from_tracers(iso_tracers):
             if el in value:
-                raise KeyError('Indistinguishable element cannot be an iso_tracers')
+                raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
     labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
     merged_df['Label'] = labels_std
     na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
