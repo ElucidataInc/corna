@@ -115,12 +115,20 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
 
     for i in range(no_atom_tracer+1):
 
-        column = correction_vector[:no_atom_tracer+1]
+        if not eleme_corr:
+            correction_vector = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            correction_vector = numpy.zeros(no_atom_tracer + 1)
+            column = correction_vector[:no_atom_tracer+1]
+        else:
+            column = correction_vector[:no_atom_tracer+1]
         #for na in range(i):
             #column = numpy.convolve(column, el_pur)[:no_atom_tracer+1]
         if el_excluded != iso_tracer:
             for nb in range(no_atom_tracer-i):
+                print column
+                na_dict[iso_tracer] = [0.99, 0.011]
                 column = numpy.convolve(column, na_dict[iso_tracer])[:no_atom_tracer+1]
+                print column
 
 
         correction_matrix[:,i] = column
@@ -131,7 +139,7 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
 
 
 def na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False):
-
+    print correction_matrix
     if optimization == False:
         matrix = numpy.array(correction_matrix)
         mat_inverse = numpy.linalg.inv(matrix)

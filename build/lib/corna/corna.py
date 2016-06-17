@@ -15,35 +15,6 @@ import output as out
 
 
 warnings.simplefilter(action = "ignore")
-# setting relative path
-#basepath = os.path.dirname(__file__)
-#data_dir = os.path.abspath(os.path.join(basepath, "..", "data"))
-
-
-# Maven
-
-# read files
-#input_data = hl.read_file(data_dir + '/maven_output.csv')
-
-
-
-#print input_data
-# metadata = hl.read_file(data_dir + '/metadata.csv')
-# #print metadata
-# # merge data file and metadata
-# merged_df = fp.maven_merge_dfs(input_data, metadata)
-# #print merged_df
-# # filter df if reqd , given example
-# filter_df = hl.filter_df(merged_df, 'Sample Name', 'sample_1')
-
-# # std model maven
-# std_model_mvn = fp.standard_model(merged_df, parent = False)
-
-
-
-
-
-# read files:
 
 # Maven
 def read_maven(path):
@@ -170,6 +141,14 @@ def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimiz
     merged_df['Label'] = labels_std
     nacorr_multiple_model = sqalgo.correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
     return nacorr_multiple_model
+
+def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+    if len(iso_tracers) == 1:
+        na_corr_dict = na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
+    else:
+        na_corr_dict = na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
+    return na_corr_dict
+
 
 
 # Post processing: Replacing negatives by zero
