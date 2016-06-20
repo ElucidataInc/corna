@@ -32,8 +32,8 @@ def test_mq_stds():
 
 def test_frag_keys():
 	with pytest.raises(KeyError):
-		df1 = pd.DataFrame({'Name': [1,2,3], conf.FORMULA: [1,2,3]})
-		fragkey_col = fp.frag_key(df, parent = True)
+		df1 = pd.DataFrame({'Name': [1,2,3], conf.FORMULA_COL: [1,2,3]})
+		fragkey_col = fp.frag_key(df1, parent = True)
 
 
 

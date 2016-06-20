@@ -5,6 +5,7 @@ PARENT_COL = 'Parent'
 SAMPLE_COL = 'Sample Name'
 INTENSITY_COL = 'Intensity'
 FRAG_COL = 'frag_keys'
+MASSINFO_COL = 'Mass Info'
 
 
 

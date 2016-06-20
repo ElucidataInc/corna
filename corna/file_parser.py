@@ -10,11 +10,11 @@ import config as conf
 
 def maven_merge_dfs(df1, df2):
     """
-    This function combines the input file dataframe and the metadata
+    This function combines the MAVEN input file dataframe and the metadata
     file dataframe
 
     Args:
-        input_data : input data in form of pandas dataframe
+        input_data : MAVEN input data in form of pandas dataframe
 
         metadata : metadata in the form of pandas dataframe
 
@@ -37,13 +37,25 @@ def maven_merge_dfs(df1, df2):
 
 
 def mq_merge_dfs(df1, df2):
+    """
+    This function combines the MQ input file dataframe and the metadata
+    file dataframe
+
+    Args:
+        input_data : MQ input data in form of pandas dataframe
+
+        metadata : metadata in the form of pandas dataframe
+
+    Returns:
+        combined_data : dataframe with input data and metadata combined
+    """
 
     try:
         merged_df = hl.merge_dfs(df1, df2, how= 'inner', left_on = 'Component Name', right_on = 'Fragment')
     except KeyError:
         raise KeyError('Missing columns: Componenet Name or Fragment')
 
-    merged_df['Mass Info'] = merged_df['Mass Info'].str.replace(' / ', "_")
+    merged_df[conf.MASSINFO_COL] = merged_df[conf.MASSINFO_COL].str.replace(' / ', "_")
 
     remove_stds = remove_mq_stds(merged_df)
 
@@ -56,7 +68,7 @@ def get_sample_names(df):
     This function gets the unique sample names from data
     """
     try:
-        sample_list = df['Sample Name'].unique().tolist()
+        sample_list = df[conf.SAMPLE_COL].unique().tolist()
     except:
         raise KeyError('Column'+ conf.SAMPLE_COL + 'not found in dataframe')
     return sample_list
@@ -106,12 +118,12 @@ def remove_mq_stds(merged_df):
     This function removes the standard samples from multiquant data
     """
     try:
-        remove_stds = merged_df[merged_df['Sample Name'].str.contains("std") == False]
+        remove_stds = merged_df[merged_df[conf.SAMPLE_COL].str.contains("std") == False]
     except:
         raise KeyError('Std samples not found in' + conf.SAMPLE_COL +' column')
-    remove_stds['Label'] = remove_stds['Isotopic Tracer'] + "_" + remove_stds['Mass Info']
-    remove_stds.pop('Mass Info')
-    remove_stds.pop('Isotopic Tracer')
+    remove_stds[conf.LABEL_COL] = remove_stds[conf.ISOTRACER_COL] + "_" + remove_stds[conf.MASSINFO_COL]
+    remove_stds.pop(conf.MASSINFO_COL)
+    remove_stds.pop(conf.ISOTRACER_COL)
     return remove_stds
 
 
