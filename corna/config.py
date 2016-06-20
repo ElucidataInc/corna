@@ -1,15 +1,11 @@
 NAME_COL = 'Name'
 FORMULA_COL = 'Formula'
 LABEL_COL = 'Label'
+PARENT_COL = 'Parent'
+SAMPLE_COL = 'Sample Name'
+INTENSITY_COL = 'Intensity'
+FRAG_COL = 'frag_keys'
 
 
-# class Config(object):
 
-# 	def __init__(self):
-# 		self.NAME_COL = 'Name'
-# 		self.FORMULA_COL = 'Formula'
-# 		self.LABEL_COL = 'Label'
-
-
-# config = Config()
 
