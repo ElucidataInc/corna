@@ -33,7 +33,6 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
         post_proc_dict : returns nested dictionary with negative values replaced
 
     """
-    print corrected_dict
     if replace_negative==True:
 
         post_proc_dict = {}
@@ -50,27 +49,41 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
 
 
 def enrichment(fragments_dict, decimals):
-    all_values = fragments_dict.values()
-    sample_names = all_values[1][1].keys()
-    sum_dict = {}
-    for sample_name in sample_names:
-       curr_arr = np.zeros(len(all_values[1][1][sample_name]))
-       for value in all_values:
-          curr_arr = curr_arr + value[1][sample_name]
-       sum_dict[sample_name] = curr_arr
-
+    """
+    This function calculates the fractional enrichment for each label
+    Fractional enrichment[sample1] = Corrected Intensity/ Sum of corrected intensities of all labels
+    """
     fragments_fractional = {}
+    print fragments_dict
+    sum_dict = sum_intensities(fragments_dict)
 
     for key, value in fragments_dict.iteritems():
-       data = value[1]
-       fractional_data = {}
-       for sample_name, intensity in data.iteritems():
-          fractional_data[sample_name] = np.around(intensity/sum_dict[sample_name], decimals)
-       fragments_fractional[key] = [value[0], fractional_data, value[2], value[3]]
+        data = value[1]
+        fractional_data = {}
+        for sample_name, intensity in data.iteritems():
+            if not sum_dict[sample_name] == 0:
+                fractional_data[sample_name] = np.around(intensity/sum_dict[sample_name], decimals)
+            else:
+                raise ValueError('sum of labels is zero for sample' + sample_name)
+        fragments_fractional[key] = [value[0], fractional_data, value[2], value[3]]
 
     return fragments_fractional
 
 
+
+def sum_intensities(fragments_dict):
+    """
+    This function calculates the sum of corrected intensities for a given sample
+    """
+    all_values = fragments_dict.values()
+    sample_names = all_values[1][1].keys()
+    sum_dict = {}
+    for sample_name in sample_names:
+        curr_arr = np.zeros(len(all_values[1][1][sample_name]))
+        for value in all_values:
+            curr_arr = curr_arr + value[1][sample_name]
+        sum_dict[sample_name] = curr_arr
+    return sum_dict
 
 
 
