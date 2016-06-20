@@ -55,6 +55,7 @@ postprocessed_out_df = corna.convert_to_df(postprocessed_out, colname =  'CorrIn
 # calculate fractional enrichment on post processed data
 frac_enrichment = corna.fractional_enrichment(postprocessed_out,)
 frac_enr_df = corna.convert_to_df(frac_enrichment, colname = 'Frac Enrichment')
+print frac_enr_df
 
 # combine results - dataframe with na correction column, frac enrichment column and post processed column
 df_list = [na_corr_df, frac_enr_df, postprocessed_out_df, merge_mv_metdata]

@@ -32,4 +32,5 @@ tests/test_formulaschema.py
 tests/test_helpers.py
 tests/test_isotopomer.py
 tests/test_model.py
+tests/test_postprocess.py
 tests/test_preprocess.py
