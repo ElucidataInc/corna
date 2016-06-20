@@ -2,6 +2,7 @@ README.rst
 setup.py
 corna/__init__.py
 corna/algorithms.py
+corna/config.py
 corna/constants.py
 corna/corna.py
 corna/file_parser.py

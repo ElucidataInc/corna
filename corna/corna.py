@@ -11,6 +11,7 @@ import algorithms as algo
 import sequential_algo as sqalgo
 import postprocess as postpro
 import output as out
+import config
 
 
 

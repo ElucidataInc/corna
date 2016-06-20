@@ -3,6 +3,28 @@ import json
 import numpy as np
 import pandas as pd
 import helpers as hl
+import config as conf
+
+
+
+
+def fixed_columns():
+    try:
+        fixed_cols = [conf.NAME_COL, conf.FORMULA_COL, conf.LABEL_COL]
+    except KeyError:
+        raise KeyError('Column names for metabolite Name, Formula or Label not found')
+    return fixed_cols
+
+
+
+def melt_df(df1):
+    fixed_cols = [conf.NAME_COL, conf.LABEL_COL, conf.FORMULA_COL]
+
+    melt_cols = [x for x in df1.columns.tolist() if x not in fixed_cols]
+
+    long_form = pd.melt(df1, id_vars=fixed_cols, value_vars=melt_cols)
+
+    return long_form
 
 
 
@@ -19,12 +41,13 @@ def maven_merge_dfs(df1, df2):
     Returns:
         combined_data : dataframe with input data and metadata combined
     """
-    id = ["Name", "Formula", "Label"] #column names to go in config
 
-    # put in functions - combinig dfs
-    value = [x for x in df1.columns.tolist() if x not in id]
+    #fixed_cols = [conf.NAME_COL, conf.LABEL_COL, conf.FORMULA_COL]
 
-    long_form = pd.melt(df1, id_vars=id, value_vars=value)
+    #melt_cols = [x for x in df1.columns.tolist() if x not in fixed_cols]
+
+    #long_form = pd.melt(df1, id_vars=fixed_cols, value_vars=melt_cols)
+    long_form = melt_df(df1)
     try:
         merged_df = hl.merge_dfs(long_form, df2, how = 'left', left_on = 'variable', right_on = 'sample')
     except KeyError:

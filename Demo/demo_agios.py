@@ -1,5 +1,7 @@
 import corna
+from corna import config
 
+config.NAME_COL = 'Name'
 # path to directory where multiquant text data files are present
 path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agios/'
 
@@ -27,8 +29,8 @@ iso_tracers = ['C13']
 #iso_tracers = ['C13', 'N15']
 
 #element to be corrected
-#eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
-eleme_corr = {}
+eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
+#eleme_corr = {}
 
 # NA values dict
 na_dict = corna.get_na_dict(iso_tracers, eleme_corr)
@@ -46,7 +48,6 @@ na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na
 #na_corr_dict = corna.na_corr_multiple_tracer(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = True)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 print na_corr_df
-
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, colname =  'CorrIntensities-Replaced_negatives')
