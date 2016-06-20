@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import corna.postprocess as pp
-import corna.config as conf
+
 
 
 corrected_dict = {'Acetic_C13_0': ['H4C2O2', {'sample_1': np.array([ -0.63865507])}, True, 'Acetic'], \

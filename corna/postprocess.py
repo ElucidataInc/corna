@@ -54,7 +54,7 @@ def enrichment(fragments_dict, decimals):
     Fractional enrichment[sample1] = Corrected Intensity/ Sum of corrected intensities of all labels
     """
     fragments_fractional = {}
-    print fragments_dict
+
     sum_dict = sum_intensities(fragments_dict)
 
     for key, value in fragments_dict.iteritems():
