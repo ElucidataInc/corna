@@ -33,7 +33,7 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
         post_proc_dict : returns nested dictionary with negative values replaced
 
     """
-
+    print corrected_dict
     if replace_negative==True:
 
         post_proc_dict = {}

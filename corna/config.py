@@ -6,6 +6,7 @@ SAMPLE_COL = 'Sample Name'
 INTENSITY_COL = 'Intensity'
 FRAG_COL = 'frag_keys'
 MASSINFO_COL = 'Mass Info'
+ISOTRACER_COL = 'Isotopic Tracer'
 
 
 
