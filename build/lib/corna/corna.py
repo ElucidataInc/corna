@@ -122,7 +122,7 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
 
 
 #NA correction maven
-def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
     for key, value in eleme_corr.iteritems():
         for el in algo.get_atoms_from_tracers(iso_tracers):
             if el in value:
@@ -132,7 +132,7 @@ def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optim
     na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
     return na_corr_model
 
-def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
 
     for key, value in eleme_corr.iteritems():
         for el in algo.get_atoms_from_tracers(iso_tracers):
@@ -140,14 +140,14 @@ def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimiz
                 raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
     labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
     merged_df['Label'] = labels_std
-    nacorr_multiple_model = sqalgo.correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
+    nacorr_multiple_model = sqalgo.correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
     return nacorr_multiple_model
 
-def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
     if len(iso_tracers) == 1:
-        na_corr_dict = na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
+        na_corr_dict = na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
     else:
-        na_corr_dict = na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
+        na_corr_dict = na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
     return na_corr_dict
 
 

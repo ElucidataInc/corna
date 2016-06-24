@@ -3,6 +3,7 @@ import numpy as np
 import helpers as hl
 import numpy
 import math
+from numpy.linalg import pinv
 from scipy import optimize
 import file_parser as fp
 import isotopomer as iso
@@ -148,12 +149,16 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
 def na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False):
 
     if optimization == False:
+        print 'yes'
         matrix = numpy.array(correction_matrix)
-        mat_inverse = numpy.linalg.inv(matrix)
+        #mat_inverse = numpy.linalg.inv(matrix)
+        mat_inverse = pinv(matrix)
         inten_trasp = numpy.array(intensities).transpose()
-        corrected_intensites = numpy.dot(mat_inverse, inten_trasp)
-        #corrected_intensites = numpy.dot(matrix, inten_trasp)
+        #corrected_intensites = numpy.dot(mat_inverse, inten_trasp)
+        corrected_intensites = numpy.matmul(mat_inverse, inten_trasp)
+        print corrected_intensites
     else:
+        print 'no'
         corrected_intensites, residuum = [], [float('inf')]
         icorr_ini = numpy.zeros(no_atom_tracer+1)
         inten_trasp = numpy.array(intensities).transpose()
@@ -236,18 +241,18 @@ def get_atoms_from_tracers(iso_tracers):
 
 
 
-def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = True):
+def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = False):
 
     correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
 
     correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
-    icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = True)
+    icorr = na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False)
 
     return icorr
 
 
-def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
     # tracer C13, N15 goes
     samp_lab_dict = samp_label_dcit(iso_tracers, merged_df)
 
