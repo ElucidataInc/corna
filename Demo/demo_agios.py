@@ -29,12 +29,13 @@ iso_tracers = ['C13']
 #iso_tracers = ['C13', 'N15']
 
 #element to be corrected
-eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
-#eleme_corr = {}
+#eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
+eleme_corr = {}
+#eleme_corr = {'C':[], 'N':[]}
 
 # NA values dict
-na_dict = corna.get_na_dict(iso_tracers, eleme_corr)
-na_dict = {'H': [0.99, 0.00015], 'C': [0.99, 0.011], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757, 0.00038, 0.00205], 'N': [0.99636, 0.00364]}
+#na_dict = corna.get_na_dict(iso_tracers, eleme_corr)
+na_dict = {'H': [0.99, 0.00015], 'C': [0.05, 0.95], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757, 0.00038, 0.00205], 'N': [0.99636, 0.00364]}
 # edit na values
 #na_dict['H'][0] = 0.989
 
@@ -44,10 +45,11 @@ na_dict = {'H': [0.99, 0.00015], 'C': [0.99, 0.011], 'S': [0.922297, 0.046832, 0
 #print na_corr_df
 
 # NA correction multiple tracer
-na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = True)
+na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = False)
 #na_corr_dict = corna.na_corr_multiple_tracer(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = True)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 print na_corr_df
+
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, colname =  'CorrIntensities-Replaced_negatives')

@@ -6,7 +6,7 @@ def convert_dict_df(nest_dict, parent = True):
     """
     This function convert the fragment dictionary model in dataframe
     """
-    print nest_dict
+
     df_list = []
     for frag_name, label_dict in nest_dict.iteritems():
         df, df_list = lists_labeldict(df_list, frag_name, label_dict)

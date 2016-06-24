@@ -79,7 +79,10 @@ def excluded_elements(iso_tracer, formula_dict, eleme_corr):
     el_excluded = []
     for key, value in formula_dict.iteritems():
         if iso_tracer in eleme_corr.keys():
+            print key
             if key not in eleme_corr[iso_tracer]:
+                print eleme_corr[iso_tracer]
+                print key
                 el_excluded.append(key)
     return el_excluded
 
@@ -109,20 +112,27 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
 
     #no_atom_tracer = formula_dict[iso_tracer]
     el_excluded = excluded_elements(iso_tracer,formula_dict, eleme_corr)
+    print 'el_excluded', el_excluded
     correction_matrix = numpy.zeros((no_atom_tracer+1, no_atom_tracer+1))
     el_pur = na_dict[iso_tracer]
     el_pur.reverse()
+    el_pur = [0,1]
+
 
 
     for i in range(no_atom_tracer+1):
-
+        print 'no_atom_tracer', no_atom_tracer
+        print 'iso_tracer', iso_tracer
+        print 'na', na_dict[iso_tracer]
         if not eleme_corr:
-            correction_vector = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-            column = correction_vector[:no_atom_tracer+1]
+            #correction_vector = [1.]
+            column = [1.]
+            #correction_vector[:no_atom_tracer+1]
         else:
             column = correction_vector[:no_atom_tracer+1]
-        #for na in range(i):
-            #column = numpy.convolve(column, el_pur)[:no_atom_tracer+1]
+
+        for na in range(i):
+            column = numpy.convolve(column, el_pur)[:no_atom_tracer+1]
         if el_excluded != iso_tracer:
             for nb in range(no_atom_tracer-i):
                 #na_dict[iso_tracer] = [0.99, 0.011]
@@ -131,10 +141,8 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
 
 
         correction_matrix[:,i] = column
-
+    print correction_matrix
     return correction_matrix
-
-
 
 
 def na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False):
@@ -144,7 +152,7 @@ def na_correction(correction_matrix, intensities, no_atom_tracer, optimization =
         mat_inverse = numpy.linalg.inv(matrix)
         inten_trasp = numpy.array(intensities).transpose()
         corrected_intensites = numpy.dot(mat_inverse, inten_trasp)
-
+        #corrected_intensites = numpy.dot(matrix, inten_trasp)
     else:
         corrected_intensites, residuum = [], [float('inf')]
         icorr_ini = numpy.zeros(no_atom_tracer+1)
