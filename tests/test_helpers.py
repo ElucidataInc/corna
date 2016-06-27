@@ -68,5 +68,9 @@ def test_get_key_from_single_value_dict_len_error():
     with pytest.raises(OverflowError):
         help.get_key_from_single_value_dict({'C13':1, 'C14':2})
 
+def test_parse_polyatom():
+    assert help.parse_polyatom('C13') == ('C',13)
 
+def test_get_formula():
+    assert help.get_formula('C6H12O6') == {'C':6, 'H':12, 'O':6}
 

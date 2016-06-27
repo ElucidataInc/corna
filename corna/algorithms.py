@@ -1,17 +1,10 @@
 
+import numpy
 import numpy as np
 import helpers as hl
-import numpy
-import math
-from numpy.linalg import pinv
 from scipy import optimize
 import file_parser as fp
 import isotopomer as iso
-from formulaschema import FormulaSchema
-
-
-
-polyatomschema = FormulaSchema().create_polyatom_schema()
 
 # MULTIQUANT
 def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
@@ -101,7 +94,7 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
         if not el == iso_tracer and el not in el_excluded:
 
             for i in range(n):
-                correction_vector = numpy.convolve(correction_vector, na_dict[el])
+                correction_vector = np.convolve(correction_vector, na_dict[el])
 
     return list(correction_vector)
 
@@ -112,9 +105,11 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
     #no_atom_tracer = formula_dict[iso_tracer]
     el_excluded = excluded_elements(iso_tracer,formula_dict, eleme_corr)
     print 'el_excluded', el_excluded
+
     correction_matrix = numpy.zeros((no_atom_tracer+1, no_atom_tracer+1))
     #el_pur = na_dict[iso_tracer]
     #el_pur.reverse()
+
     el_pur = [0,1]
     print 'no reverse corrvec'
     print correction_vector
@@ -132,7 +127,7 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
         print 'col'
         print column
         for na in range(i):
-            column = numpy.convolve(column, el_pur)[:no_atom_tracer+1]
+            column = np.convolve(column, el_pur)[:no_atom_tracer+1]
         if el_excluded != iso_tracer:
             for nb in range(no_atom_tracer-i):
                 column = numpy.convolve(column, na_dict[iso_tracer])[:no_atom_tracer+1]
@@ -158,11 +153,12 @@ def na_correction(correction_matrix, intensities, no_atom_tracer, optimization =
         inten_trasp = numpy.array(intensities).transpose()
         #corrected_intensites = numpy.dot(mat_inverse, inten_trasp)
         corrected_intensites = numpy.matmul(mat_inverse, inten_trasp)
+
         print corrected_intensites
     else:
         corrected_intensites, residuum = [], [float('inf')]
-        icorr_ini = numpy.zeros(no_atom_tracer+1)
-        inten_trasp = numpy.array(intensities).transpose()
+        icorr_ini = np.zeros(no_atom_tracer+1)
+        inten_trasp = np.array(intensities).transpose()
         corrected_intensites, r, d = optimize.fmin_l_bfgs_b(cost_function, icorr_ini, fprime=None, approx_grad=0,\
                                            args=(inten_trasp, correction_matrix), factr=1000, pgtol=1e-10,\
                                            bounds=[(0.,float('inf'))]*len(icorr_ini))
@@ -176,9 +172,9 @@ def cost_function(corrected_intensites, intensities, correction_matrix):
     Cost function used for BFGS minimization.
         return : (sum(v_mes - mat_cor * corrected_intensites)^2, gradient)
     """
-    x = intensities - numpy.dot(correction_matrix, corrected_intensites)
+    x = intensities - np.dot(correction_matrix, corrected_intensites)
     # calculate sum of square differences and gradient
-    return (numpy.dot(x,x), numpy.dot(correction_matrix.transpose(),x)*-2)
+    return (np.dot(x,x), np.dot(correction_matrix.transpose(),x)*-2)
 
 def fragmentsdict_model(merged_df):
     fragments_dict = {}
@@ -235,9 +231,8 @@ def formuladict(merged_df):
 def get_atoms_from_tracers(iso_tracers):
     trac_atoms = []
     for i in range(0, len(iso_tracers)):
-        polyatomdata = polyatomschema.parseString(iso_tracers[i])
-        polyatom = polyatomdata[0]
-        trac_atoms.append(polyatom.element)
+        element = hl.parse_polyatom(iso_tracers[i])[0]
+        trac_atoms.append(element)
     return trac_atoms
 
 
@@ -270,7 +265,7 @@ def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimizatio
     correc_inten_dict = {}
     for samp_name, label_dict in samp_lab_dict.iteritems():
 
-        intensities = numpy.concatenate(numpy.array((label_dict).values()))
+        intensities = np.concatenate(np.array((label_dict).values()))
 
         if len(trac_atoms) == 1:
             iso_tracer = trac_atoms[0]
@@ -306,7 +301,7 @@ def label_sample_dict(sample_list, correc_inten_dict):
         sample_dict = {}
         for sample_tr in correc_inten_dict.keys():
             k = correc_inten_dict[sample_tr][inv]
-            sample_dict[sample_tr] = numpy.array([k])
+            sample_dict[sample_tr] = np.array([k])
         lab_samp_dict[inv] = sample_dict
     return lab_samp_dict
 
