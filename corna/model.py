@@ -1,11 +1,5 @@
-import numpy as np
-
-from formulaschema import FormulaSchema
-from formula import Formula
 import helpers as hl
 
-
-polyatomschema = FormulaSchema().create_polyatom_schema()
 
 class Ion():
     def __init__(self, name, formula):
@@ -14,7 +8,7 @@ class Ion():
 
     def get_formula(self):
         """Parsing formula to store as an element -> number of atoms dictionary"""
-        parsed_formula = Formula(self.formula).parse_formula_to_elem_numatoms()
+        parsed_formula = hl.get_formula(self.formula)
         return parsed_formula
 
     def number_of_atoms(self, element):
@@ -99,12 +93,11 @@ class Fragment(Ion, Label):
     def get_elem_num(self, label_dict):
         elem_num = {}
         for iso in label_dict.keys():
-            polyatomdata = polyatomschema.parseString(iso)
-            polyatom = polyatomdata[0]
+            element = hl.parse_polyatom(iso)[0]
             try:
-                elem_num[polyatom.element] = elem_num[polyatom.element] + label_dict[iso]
+                elem_num[element] = elem_num[element] + label_dict[iso]
             except KeyError:
-                elem_num[polyatom.element] = label_dict[iso]
+                elem_num[element] = label_dict[iso]
 
         return elem_num
 
@@ -143,9 +136,8 @@ class Fragment(Ion, Label):
         return {isotope: num}
 
     def get_number_of_atoms_isotope(self, isotope):
-        polyatomdata = polyatomschema.parseString(isotope)
-        polyatom = polyatomdata[0]
-        return self.number_of_atoms(polyatom.element)
+        element = hl.parse_polyatom(isotope)[0]
+        return self.number_of_atoms(element)
 
     def check_if_unlabel(self):
         for key, value in self.label_dict.iteritems():

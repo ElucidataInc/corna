@@ -7,11 +7,6 @@ from numpy.linalg import pinv
 from scipy import optimize
 import file_parser as fp
 import isotopomer as iso
-from formulaschema import FormulaSchema
-
-
-
-polyatomschema = FormulaSchema().create_polyatom_schema()
 
 # MULTIQUANT
 def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
@@ -234,9 +229,8 @@ def formuladict(merged_df):
 def get_atoms_from_tracers(iso_tracers):
     trac_atoms = []
     for i in range(0, len(iso_tracers)):
-        polyatomdata = polyatomschema.parseString(iso_tracers[i])
-        polyatom = polyatomdata[0]
-        trac_atoms.append(polyatom.element)
+        element = hl.parse_polyatom(iso_tracers[i])[0]
+        trac_atoms.append(element)
     return trac_atoms
 
 
