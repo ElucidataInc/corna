@@ -7,10 +7,10 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 
 # read maven data
 #single tracer data
-maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
+#maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
 #maven_data = corna.read_maven(path_dir + '/single_trac_indistinguish.csv')
 #double tracer
-#maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
+maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
 print 'sum input'
 print maven_data['sample_1'].sum()
 # multiple tracer data
