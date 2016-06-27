@@ -3,6 +3,7 @@ import numpy
 import numpy as np
 import helpers as hl
 from scipy import optimize
+from numpy.linalg import pinv
 import file_parser as fp
 import isotopomer as iso
 
