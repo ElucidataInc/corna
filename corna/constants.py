@@ -42,7 +42,6 @@ class PyConstObj(object):
         else:
             super(PyConstObj, self).__setattr__(name.upper(), val)
 
-
 def const_element_mol_weight_dict():
     """Constant for elem->mol weight dictionary"""
     element_mol_weight_dict = {'H': 1.007940, 'He': 4.002602, 'Li': 6.941000,
@@ -87,12 +86,10 @@ def const_element_mol_weight_dict():
     constant_obj = PyConstObj(elem_mol_weight_dict=element_mol_weight_dict)
     return constant_obj.ELEM_MOL_WEIGHT_DICT
 
-
 def const_caps():
     """Constant for alphabet upper case"""
     constant_obj = PyConstObj(upper_case="ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     return constant_obj.UPPER_CASE
-
 
 def const_lower():
     """Constant for alphabet lower case"""
@@ -103,57 +100,6 @@ def const_digit():
     """Constant for digits"""
     constant_obj = PyConstObj(digits="0123456789")
     return constant_obj.DIGITS
-
-def const_metab_name_id_map():
-    metab_name_id = {"Glucose":"HMDB00122",
-                     "AcetylCoA":"HMDB01206",
-                     "Succinate" : "HMDB00254",
-                     "Pyruvate": "HMDB00243",
-                     "Citrate": "HMDB00094",
-                     "Glutamate": "HMDB03339",
-                     "Malate": "HMDB00744",
-                     "PEP": "HMDB00263",
-                     "OAA": "HMDB00223",
-                     "aKG": "HMDB00208"}
-    const_obj = PyConstObj(metab_name_id_map=metab_name_id)
-    return const_obj.METAB_NAME_ID_MAP
-
-def const_id_metab_name():
-    id_name = {"HMDB00122":"Glucose",
-                     "HMDB01206":"AcetylCoA",
-                     "HMDB00254":"Succinate",
-                     "HMDB00243":"Pyruvate",
-                     "HMDB00094":"Citrate",
-                     "HMDB03339":"Glutamate",
-                     "HMDB00744":"Malate",
-                     "HMDB00263":"PEP",
-                     "HMDB00223":"OAA",
-                     "HMDB00208":"aKG"}
-    const_obj = PyConstObj(id_name_map=id_name)
-    return const_obj.ID_NAME_MAP
-
-
-def const_id_formula():
-    id_formula = {"HMDB00122": "C6H12O6",
-                  "HMDB01206": "C2H3O",
-                  "HMDB00254": "C4H6O4",
-                  "HMDB00243": "C3H4O3",
-                  "HMDB00094": "C6H8O7",
-                  "HMDB03339": "C5H9NO4",
-                  "HMDB00744": "C4H6O5",
-                  "HMDB00263": "C3H5O6P",
-                  "HMDB00223": "C4H4O5",
-                  "HMDB00208": "C5H6O5"}
-    const_obj = PyConstObj(id_formula_map=id_formula)
-    return const_obj.ID_FORMULA_MAP
-
-def const_enzyme_name():
-    enzyme_name = {'PDH':'PDH','PK':'PK','Beta_ox':'Beta_ox',
-                   'CS':'CS','SC':'SC','PEP_Pyr_cycling':'PEP_Pyr_cycling',
-                   'Glut_dil':'Glut_dil','PC':'PC',
-                   'ICDH':'ICDH','Glut_exc':'Glut_exc'}
-    const_obj = PyConstObj(enzyme_name=enzyme_name)
-    return  const_obj.ENZYME_NAME
 
 def const_na_dict():
     # na_dict = {'C': [0.99, 0.011], 'H' : [0.99, 0.00015],

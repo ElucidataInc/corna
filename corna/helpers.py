@@ -3,14 +3,13 @@ import pandas as pd
 import numpy as np
 import collections
 
-
 import constants as cs
 from formula import Formula
 from formulaschema import FormulaSchema
 
 schema_obj = FormulaSchema()
 chemformula_schema = schema_obj.create_chemicalformula_schema()
-
+polyatomschema = schema_obj.create_polyatom_schema()
 
 ELE_ATOMIC_WEIGHTS = cs.const_element_mol_weight_dict()
 ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
@@ -54,22 +53,22 @@ def label_dict_to_key(label_dict):
 
 def read_file(path):
 
-	excel = ['.xls', '.xlsx']
+    excel = ['.xls', '.xlsx']
 
-	if os.path.splitext(path)[1] in excel:
-		input_file = pd.read_excel(path, header = 0)
+    if os.path.splitext(path)[1] in excel:
+        input_file = pd.read_excel(path, header = 0)
 
-	elif os.path.splitext(path)[1] == '.csv':
-		input_file = pd.read_csv(path, header = 0)
+    elif os.path.splitext(path)[1] == '.csv':
+        input_file = pd.read_csv(path, header = 0)
 
-	elif os.path.splitext(path)[1] == '.txt':
-		input_file = pd.read_table(path, header = 0)
+    elif os.path.splitext(path)[1] == '.txt':
+        input_file = pd.read_table(path, header = 0)
 
-	else:
-		raise IOError('only csv/xls/xlsx/txt extensions are allowed')
+    else:
+        raise IOError('only csv/xls/xlsx/txt extensions are allowed')
 
 
-	return input_file
+    return input_file
 
 
 def json_to_df(json_input):
@@ -124,12 +123,12 @@ def merge_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
 def filter_df(df, column_name, column_value):
 
     #write test if col name not string
-	filtered_df = df[df[str(column_name)] == column_value]
+    filtered_df = df[df[str(column_name)] == column_value]
 
-	if filtered_df.empty == 'TRUE':
-		raise ValueError('column value does not exist in dataframe', column_value)
+    if filtered_df.empty == 'TRUE':
+        raise ValueError('column value does not exist in dataframe', column_value)
 
-	return filtered_df
+    return filtered_df
 
 
 def filtering_df(df, num_col=3, col1='col1', list_col1_vals=[], col2='col2', list_col2_vals=[], col3='col3', list_col3_vals=[]):
@@ -184,6 +183,17 @@ def check_if_all_elems_same_type(inputlist, classname):
 
 def concatentate_dataframes_by_col(df_list):
     return pd.concat(df_list)
+
+def parse_polyatom(polyatom_string):
+    polyatomdata = polyatomschema.parseString(polyatom_string)
+    polyatom = polyatomdata[0]
+    return (polyatom.element, polyatom.number_atoms)
+
+def get_formula(formula):
+    """Parsing formula to store as an element -> number of atoms dictionary"""
+    parsed_formula = Formula(formula).parse_formula_to_elem_numatoms()
+    return parsed_formula
+
 
 def convert_labels_to_std(df, iso_tracers):
     new_labels = []

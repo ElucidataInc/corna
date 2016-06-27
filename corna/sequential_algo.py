@@ -1,8 +1,5 @@
 import numpy
 import algorithms as algo
-from formulaschema import FormulaSchema
-
-
 
 
 def correction_tracer1_species1(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
