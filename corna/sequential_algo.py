@@ -5,7 +5,8 @@ from formulaschema import FormulaSchema
 
 
 
-def correction_tracer1_species1(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+def correction_tracer1_species1(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
+    na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
     samp_lab_dict = algo.samp_label_dcit(iso_tracers, merged_df)
 
     trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
@@ -38,7 +39,7 @@ def correction_tracer1_species1(merged_df, iso_tracers, eleme_corr, na_dict, opt
 
         intensities = numpy.concatenate(numpy.array(intens))
 
-        icorr = algo.perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = True)
+        icorr = algo.perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = False)
 
         inten_index_dict = {}
         for i in range(0, len(icorr)):
@@ -50,7 +51,8 @@ def correction_tracer1_species1(merged_df, iso_tracers, eleme_corr, na_dict, opt
 
 
 
-def correction_tracer1_species2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+def correction_tracer1_species2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
+    na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
 
     samp_lab_dict = algo.samp_label_dcit(iso_tracers, merged_df)
 
@@ -83,8 +85,10 @@ def correction_tracer1_species2(merged_df, iso_tracers, eleme_corr, na_dict, opt
             intens.append(lab_dict[keys])
 
         intensities = numpy.concatenate(numpy.array(intens))
-
-        icorr = algo.perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = True)
+        print 'matrix2'
+        print formula_dict
+        print iso_tracer
+        icorr = algo.perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = False)
 
         inten_index_dict = {}
         for i in range(0, len(icorr)):
@@ -95,14 +99,15 @@ def correction_tracer1_species2(merged_df, iso_tracers, eleme_corr, na_dict, opt
     return correc_inten_dict2
 
 
-def correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True):
+def correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
+    na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
 
     formula_dict = algo.formuladict(merged_df)
     fragments_dict = algo.fragmentsdict_model(merged_df)
 
-    correc_inten_dict1 = correction_tracer1_species1(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
-
-    correc_inten_dict2 = correction_tracer1_species2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = True)
+    correc_inten_dict1 = correction_tracer1_species1(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
+    print correc_inten_dict1
+    correc_inten_dict2 = correction_tracer1_species2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
 
     trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
     #iso_tracers = trac_atoms
@@ -131,12 +136,12 @@ def correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization
             intensities = [intens[0][1], intens[1][1]]
             #print intensities
 
-            icorr = algo.perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = True)
+            icorr = algo.perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = False)
 
             for i in range(0,len(icorr)):
                 intens_idx_dict[(corr_key, i)] = icorr[i]
         corr_intensities_dict[samp_name] = intens_idx_dict
-
+        print corr_intensities_dict
     sample_list = algo.check_samples_ouputdict(corr_intensities_dict)
     # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
     lab_samp_dict = algo.label_sample_dict(sample_list, corr_intensities_dict)

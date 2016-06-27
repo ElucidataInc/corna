@@ -74,16 +74,11 @@ def na_correction_mimosa_by_fragment(fragments_dict, decimals):
 
 
 
-
-
 def excluded_elements(iso_tracer, formula_dict, eleme_corr):
     el_excluded = []
     for key, value in formula_dict.iteritems():
         if iso_tracer in eleme_corr.keys():
-            print key
             if key not in eleme_corr[iso_tracer]:
-                print eleme_corr[iso_tracer]
-                print key
                 el_excluded.append(key)
     return el_excluded
 
@@ -91,11 +86,13 @@ def excluded_elements(iso_tracer, formula_dict, eleme_corr):
 def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
     """
     Calculate a mass distribution vector (at natural abundancy),
-    based on the elemental compositions of both metabolite's and
-    derivative's moieties.
+    based on the elemental compositions of both metabolite's moiety.
     The element corresponding to the isotopic tracer is not taken
     into account in the metabolite moiety.
     """
+    #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
+    na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757,  0.00038,0.00205], 'N': [0.8, 0.2]}
+
     el_excluded = excluded_elements(iso_tracer, formula_dict, eleme_corr)
 
     correction_vector = [1.]
@@ -110,15 +107,18 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
 
 
 def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector):
-
+    #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
+    na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757,  0.00038,0.00205], 'N': [0.8, 0.2]}
     #no_atom_tracer = formula_dict[iso_tracer]
     el_excluded = excluded_elements(iso_tracer,formula_dict, eleme_corr)
     print 'el_excluded', el_excluded
     correction_matrix = numpy.zeros((no_atom_tracer+1, no_atom_tracer+1))
-    el_pur = na_dict[iso_tracer]
-    el_pur.reverse()
+    #el_pur = na_dict[iso_tracer]
+    #el_pur.reverse()
     el_pur = [0,1]
-
+    print 'no reverse corrvec'
+    print correction_vector
+    #correction_vector.reverse()
 
 
     for i in range(no_atom_tracer+1):
@@ -126,39 +126,40 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
         print 'iso_tracer', iso_tracer
         print 'na', na_dict[iso_tracer]
         if not eleme_corr:
-            #correction_vector = [1.]
             column = [1.]
-            #correction_vector[:no_atom_tracer+1]
         else:
             column = correction_vector[:no_atom_tracer+1]
-
+        print 'col'
+        print column
         for na in range(i):
             column = numpy.convolve(column, el_pur)[:no_atom_tracer+1]
         if el_excluded != iso_tracer:
             for nb in range(no_atom_tracer-i):
-                #na_dict[iso_tracer] = [0.99, 0.011]
                 column = numpy.convolve(column, na_dict[iso_tracer])[:no_atom_tracer+1]
 
-
-
         correction_matrix[:,i] = column
-    print correction_matrix
+
     return correction_matrix
 
 
 def na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False):
+    #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
+    na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757,  0.00038,0.00205], 'N': [0.8, 0.2]}
 
     if optimization == False:
         print 'yes'
+        print 'cor_mat'
+        print correction_matrix
         matrix = numpy.array(correction_matrix)
         #mat_inverse = numpy.linalg.inv(matrix)
         mat_inverse = pinv(matrix)
+        print 'inverse'
+        print mat_inverse
         inten_trasp = numpy.array(intensities).transpose()
         #corrected_intensites = numpy.dot(mat_inverse, inten_trasp)
         corrected_intensites = numpy.matmul(mat_inverse, inten_trasp)
         print corrected_intensites
     else:
-        print 'no'
         corrected_intensites, residuum = [], [float('inf')]
         icorr_ini = numpy.zeros(no_atom_tracer+1)
         inten_trasp = numpy.array(intensities).transpose()
@@ -242,8 +243,10 @@ def get_atoms_from_tracers(iso_tracers):
 
 
 def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = False):
-
+    #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
+    na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757,  0.00038,0.00205], 'N': [0.8, 0.2]}
     correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+    #correction_vector.reverse()
 
     correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
