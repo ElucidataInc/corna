@@ -1,3 +1,8 @@
+"""Ion, Label and Fragment class
+Ion is given by name and formula of chemical species, label is collection of functions
+to validate a label obtained from mass of species or label information given in form of
+dictionary.
+"""
 import helpers as hl
 
 
