@@ -8,14 +8,14 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 # read maven data
 #single tracer data
 #maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
+
+# single tracer indistinguishable
 #maven_data = corna.read_maven(path_dir + '/single_trac_indistinguish.csv')
 #double tracer
 maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
-#print 'sum input'
-#print maven_data['sample_1'].sum()
-# multiple tracer data
-#maven_data = corna.read_maven(path_dir + '/data_multiple_tracers_std.csv')
-#std_input_data = corna.convert_inputdata_to_stdfrom(maven_data)
+
+# double tracer indistinguishable
+
 
 # For json input, use this funtion:
 #json_input = json.dumps(maven_data.to_dict())
@@ -43,23 +43,11 @@ na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.0
 # edit na values
 #na_dict['H'][0] = 0.989
 
-# NA correction single tracer
-#na_corr_dict = corna.na_corr_single_tracer_mvn(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = False)
-#na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
-#print na_corr_df
-#print 'merged df'
-#print merge_mv_metdata
-#nadf = corna.na_corr_double_tracer(iso_tracers, merge_mv_metdata, na_dict)
-#print corna.convert_to_df(nadf, colname = 'NA corrected')
-#print nadf
-#print nadf
-# NA correction multiple tracer
+
+# NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = False)
-#na_corr_dict = corna.na_corr_multiple_tracer(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = True)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
-#print 'sum'
-print na_corr_df['NA corrected'].sum()
-print na_corr_df
+
 
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
