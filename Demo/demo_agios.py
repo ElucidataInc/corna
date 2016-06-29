@@ -10,9 +10,10 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 #maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
 
 # single tracer indistinguishable
-#maven_data = corna.read_maven(path_dir + '/single_trac_indistinguish.csv')
+maven_data = corna.read_maven(path_dir + '/single_trac_indistinguish.csv')
+
 #double tracer
-maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
+#maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
 
 # double tracer indistinguishable
 
@@ -28,8 +29,8 @@ maven_metadata = corna.read_mvn_metadata(path_dir + '/metadata.csv')
 merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
 
 # tracer isotopes
-#iso_tracers = ['C13']
-iso_tracers = ['C13', 'N15']
+iso_tracers = ['C13']
+#iso_tracers = ['C13', 'N15']
 
 #element to be corrected
 #eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
