@@ -8,6 +8,7 @@ import file_parser as fp
 import isotopomer as iso
 import preprocess as preproc
 import algorithms as algo
+import double_tracer as dbt
 import sequential_algo as sqalgo
 import postprocess as postpro
 import output as out
@@ -132,6 +133,45 @@ def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optim
     na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
     return na_corr_model
 
+def na_corr_double_tracer(iso_tracers, merged_df, na_dict):
+    #iso_tracers[0], iso_tracers[1]
+    #algo.get_atoms_from_tracers(iso_tracers) - 0 and 1
+    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
+    merged_df['Label'] = labels_std
+    sample_label_dict = algo.samp_label_dcit(iso_tracers, merged_df)
+    formula_dict = algo.formuladict(merged_df)
+    trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
+    fragments_dict = algo.fragmentsdict_model(merged_df)
+    corr_intensities_dict = {}
+    for samp_name, lab_dict in sample_label_dict.iteritems():
+        intens_idx_dict = {}
+        iso_tracer = iso_tracers[0]
+
+        no_atom_tracer1 = formula_dict[trac_atoms[0]]
+        no_atom_tracer2 = formula_dict[trac_atoms[1]]
+        na1 = na_dict[trac_atoms[0]][-1]
+        na2 = na_dict[trac_atoms[1]][-1]
+        #sorted tuples by tracer 2
+        sorted_keys = lab_dict.keys()
+        sorted_keys.sort(key = lambda x: (x[0], x[1]))
+        inten = []
+        for tups in sorted_keys:
+            inten.append(lab_dict[tups])
+        corr_x=dbt.double_label_NA_corr(inten,no_atom_tracer1,no_atom_tracer2,na1,na2)
+        corr_x = [x[0] for x in corr_x]
+        for i in range(0,len(corr_x)):
+            intens_idx_dict[sorted_keys[i]] = corr_x[i]
+        corr_intensities_dict[samp_name] = intens_idx_dict
+
+    sample_list = algo.check_samples_ouputdict(corr_intensities_dict)
+    # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
+    lab_samp_dict = algo.label_sample_dict(sample_list, corr_intensities_dict)
+
+    nacorr_dict_model = algo.fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
+    print nacorr_dict_model
+    #df= dbt.p_double_corr(M2,0.05,0.2,'C','N','13C','15N','formula','freq','double_corr')
+    return nacorr_dict_model
+
 def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
 
     for key, value in eleme_corr.iteritems():
@@ -146,6 +186,9 @@ def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimiz
 def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
     if len(iso_tracers) == 1:
         na_corr_dict = na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
+
+    elif len(iso_tracers) == 2:
+        na_corr_dict = na_corr_double_tracer(iso_tracers, merged_df, na_dict)
     else:
         na_corr_dict = na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
     return na_corr_dict
