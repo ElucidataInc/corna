@@ -7,15 +7,15 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 
 # read maven data
 #single tracer data
-maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
+#maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
+
+# single tracer indistinguishable
 #maven_data = corna.read_maven(path_dir + '/single_trac_indistinguish.csv')
 #double tracer
-#maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
-print 'sum input'
-print maven_data['sample_1'].sum()
-# multiple tracer data
-#maven_data = corna.read_maven(path_dir + '/data_multiple_tracers_std.csv')
-#std_input_data = corna.convert_inputdata_to_stdfrom(maven_data)
+maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
+
+# double tracer indistinguishable
+
 
 # For json input, use this funtion:
 #json_input = json.dumps(maven_data.to_dict())
@@ -28,13 +28,13 @@ maven_metadata = corna.read_mvn_metadata(path_dir + '/metadata.csv')
 merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
 
 # tracer isotopes
-iso_tracers = ['C13']
-#iso_tracers = ['C13', 'N15']
+#iso_tracers = ['C13']
+iso_tracers = ['C13', 'N15']
 
 #element to be corrected
 #eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
-#eleme_corr = {}
-eleme_corr = {'C':['H', 'O']}
+eleme_corr = {}
+#eleme_corr = {'C':['H', 'O']}
 
 # NA values dict
 #na_dict = corna.get_na_dict(iso_tracers, eleme_corr)
@@ -43,17 +43,10 @@ na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.0
 # edit na values
 #na_dict['H'][0] = 0.989
 
-# NA correction single tracer
-#na_corr_dict = corna.na_corr_single_tracer_mvn(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = False)
-#na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
-#print na_corr_df
 
-# NA correction multiple tracer
+# NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = False)
-#na_corr_dict = corna.na_corr_multiple_tracer(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = True)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
-print 'sum'
-print na_corr_df['NA corrected'].sum()
 print na_corr_df
 
 # Replace negative values by zero on NA corrected data - optional

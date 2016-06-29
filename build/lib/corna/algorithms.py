@@ -103,19 +103,14 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
 def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector):
     #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
     na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757,  0.00038,0.00205], 'N': [0.8, 0.2]}
-    #no_atom_tracer = formula_dict[iso_tracer]
+
     el_excluded = excluded_elements(iso_tracer,formula_dict, eleme_corr)
     print 'el_excluded', el_excluded
 
     correction_matrix = numpy.zeros((no_atom_tracer+1, no_atom_tracer+1))
-    #el_pur = na_dict[iso_tracer]
-    #el_pur.reverse()
+
 
     el_pur = [0,1]
-    print 'no reverse corrvec'
-    print correction_vector
-    #correction_vector.reverse()
-
 
     for i in range(no_atom_tracer+1):
         print 'no_atom_tracer', no_atom_tracer
@@ -152,9 +147,7 @@ def na_correction(correction_matrix, intensities, no_atom_tracer, optimization =
         print 'inverse'
         print mat_inverse
         inten_trasp = numpy.array(intensities).transpose()
-        #corrected_intensites = numpy.dot(mat_inverse, inten_trasp)
         corrected_intensites = numpy.matmul(mat_inverse, inten_trasp)
-
         print corrected_intensites
     else:
         corrected_intensites, residuum = [], [float('inf')]
