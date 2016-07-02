@@ -17,7 +17,6 @@ corna/output.py
 corna/postprocess.py
 corna/preprocess.py
 corna/sequential_algo.py
-corna/testing_vc.py
 corna.egg-info/PKG-INFO
 corna.egg-info/SOURCES.txt
 corna.egg-info/dependency_links.txt

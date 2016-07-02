@@ -23,7 +23,15 @@ def double_label_NA_matrix(nA,nB,pA,pB):
                     j=idx.index((jA,jB))
                     x=expNA(iA-jA,nA-jA,pA)*expNA(iB-jB,nB-jB,pB)
                     M[i,j]=x
+    print M
     return M
+
+
+def double_label_matrix_tensor(matA, matB):
+    matC = np.kron(matA, matB)
+    return matC
+
+
 
 def double_label_NA_corr(x,nA,nB,pA,pB):
     M=double_label_NA_matrix(nA,nB,pA,pB)

@@ -85,8 +85,7 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
     into account in the metabolite moiety.
     """
     #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
-    na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757,  0.00038,0.00205], 'N': [0.8, 0.2]}
-
+    na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
     el_excluded = excluded_elements(iso_tracer, formula_dict, eleme_corr)
 
     correction_vector = [1.]
@@ -102,8 +101,7 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
 
 def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector):
     #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
-    na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757,  0.00038,0.00205], 'N': [0.8, 0.2]}
-
+    na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
     el_excluded = excluded_elements(iso_tracer,formula_dict, eleme_corr)
     print 'el_excluded', el_excluded
 
@@ -135,8 +133,7 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
 
 def na_correction(correction_matrix, intensities, no_atom_tracer, optimization = False):
     #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
-    na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757,  0.00038,0.00205], 'N': [0.8, 0.2]}
-
+    na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
     if optimization == False:
         print 'yes'
         print 'cor_mat'
@@ -233,7 +230,7 @@ def get_atoms_from_tracers(iso_tracers):
 
 def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities, optimization = False):
     #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
-    na_dict = {'H': [0.99,0.00015], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O': [0.99757,  0.00038,0.00205], 'N': [0.8, 0.2]}
+    na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
     correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
     #correction_vector.reverse()
 
