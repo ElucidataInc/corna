@@ -2,6 +2,7 @@ import os
 import sys
 import warnings
 import pandas as pd
+from itertools import product
 
 import helpers as hl
 import file_parser as fp
@@ -13,6 +14,7 @@ import sequential_algo as sqalgo
 import postprocess as postpro
 import output as out
 import config
+import numpy as np
 
 
 
@@ -70,7 +72,6 @@ def merge_dfs(df_list):
     #combined_dfs = reduce(lambda left,right: pd.merge(left,right), df_list)
     #on= ['Name', 'Formula', 'Label', 'Sample Name']
     return combined_dfs
-
 
 
 # Filtering data
@@ -149,13 +150,17 @@ def na_corr_double_tracer(iso_tracers, merged_df, na_dict):
         na2 = na_dict[trac_atoms[1]][-1]
         sorted_keys = lab_dict.keys()
         sorted_keys.sort(key = lambda x: (x[0], x[1]))
+
         inten = []
         for tups in sorted_keys:
             inten.append(lab_dict[tups])
         corr_x=dbt.double_label_NA_corr(inten,no_atom_tracer1,no_atom_tracer2,na1,na2)
         corr_x = [x[0] for x in corr_x]
+
         for i in range(0,len(corr_x)):
             intens_idx_dict[sorted_keys[i]] = corr_x[i]
+            print sorted_keys[i]
+        print intens_idx_dict
         corr_intensities_dict[samp_name] = intens_idx_dict
 
     sample_list = algo.check_samples_ouputdict(corr_intensities_dict)
@@ -165,6 +170,91 @@ def na_corr_double_tracer(iso_tracers, merged_df, na_dict):
     nacorr_dict_model = algo.fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
 
     return nacorr_dict_model
+
+
+def na_double_trac_indist(iso_tracers, eleme_corr, merged_df, na_dict):
+
+    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
+    merged_df['Label'] = labels_std
+    sample_label_dict = algo.samp_label_dcit(iso_tracers, merged_df)
+    formula_dict = algo.formuladict(merged_df)
+    trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
+    fragments_dict = algo.fragmentsdict_model(merged_df)
+
+    #formula_dict = {'C': 5, 'H': 10, 'N':1, 'O':2, 'S':1}
+    eleme_corr = {'C': ['H']}
+
+    eleme_corr_list = ['C', 'H', 'N']
+
+
+    no_atom_tracers = []
+    for i in eleme_corr_list:
+        no_atom_tracers.append(formula_dict[i])
+
+    for samp_name, lab_dict in sample_label_dict.iteritems():
+
+        l = [np.arange(x+1) for x in no_atom_tracers]
+        tup_list = list(product(*l))
+
+        indist_sp = sum(eleme_corr.values(),[])
+        tup_pos = [i for i, e in enumerate(eleme_corr_list) if e in indist_sp]
+        #ft = filter_tuples(tup_list, tup_pos)
+        intensities_list = filter_tuples(tup_list, lab_dict, tup_pos)
+
+
+        icorr = dbt.double_na_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
+        print icorr
+    return intens_idx_dict
+
+
+
+
+def filter_tuples(tuple_list, value_dict, positions):
+    result_tuples = []
+    for tuples in tuple_list:
+        tuple_l = list(tuples)
+        filtered_tuple = [tuple_l[x] for x in positions]
+        if sum(filtered_tuple) == 0:
+            rqrd_pos = [tuple_l[x] for x in range(0,len(tuple_l)) if x not in positions]
+            rqrd_tup = tuple(rqrd_pos)
+            if rqrd_tup in value_dict.keys():
+                result_tuples.append(value_dict[rqrd_tup][0])
+            else:
+                result_tuples.append(0)
+        else:
+            result_tuples.append(0)
+    return result_tuples
+# def intensities_list(formula_dict,eleme_corr_list):
+#
+#     dbt.intensities_list(formula_dict,eleme_corr_list)
+
+
+# def na_corr_double_trac_indist():
+#     na_dict = {'C':[0.95,0.05],
+#            'H':[0.98,0.01,0.01], 'N':[0.8,0.2],
+#            'O':[0.95,0.03,0.02],
+#            'S': [0.8,0.05,0.15]}
+
+#     formula_dict = {'C': 5, 'H': 10, 'N':1, 'O':2, 'S':1}
+
+#     correction_vector = [1.]
+
+#     #eleme_corr ={'C':['H','O'], 'N':['S']}
+#     eleme_corr_list = ['C', 'H', 'N']
+#     #idx=list(product(np.arange(6),np.arange(11), np.arange(3), np.arange(2), np.arange(2)))
+
+#     matx = [1.]
+#     for trac in eleme_corr_list:
+#         no_atom_tracer = formula_dict[trac]
+#         eleme_corr = {}
+#         mat_tracer = algo.corr_matrix(str(trac), formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+#         matx = np.kron(matx, mat_tracer)
+#         print matx
+
+#     return matx
+
+
+
 
 def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
 

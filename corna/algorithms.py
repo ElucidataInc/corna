@@ -103,7 +103,6 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
     #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
     na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
     el_excluded = excluded_elements(iso_tracer,formula_dict, eleme_corr)
-    print 'el_excluded', el_excluded
 
     correction_matrix = numpy.zeros((no_atom_tracer+1, no_atom_tracer+1))
 
@@ -111,15 +110,11 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
     el_pur = [0,1]
 
     for i in range(no_atom_tracer+1):
-        print 'no_atom_tracer', no_atom_tracer
-        print 'iso_tracer', iso_tracer
-        print 'na', na_dict[iso_tracer]
         if not eleme_corr:
             column = [1.]
         else:
             column = correction_vector[:no_atom_tracer+1]
-        print 'col'
-        print column
+
         for na in range(i):
             column = np.convolve(column, el_pur)[:no_atom_tracer+1]
         if el_excluded != iso_tracer:
@@ -135,17 +130,10 @@ def na_correction(correction_matrix, intensities, no_atom_tracer, optimization =
     #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
     na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
     if optimization == False:
-        print 'yes'
-        print 'cor_mat'
-        print correction_matrix
         matrix = numpy.array(correction_matrix)
-        #mat_inverse = numpy.linalg.inv(matrix)
         mat_inverse = pinv(matrix)
-        print 'inverse'
-        print mat_inverse
         inten_trasp = numpy.array(intensities).transpose()
         corrected_intensites = numpy.matmul(mat_inverse, inten_trasp)
-        print corrected_intensites
     else:
         corrected_intensites, residuum = [], [float('inf')]
         icorr_ini = np.zeros(no_atom_tracer+1)
@@ -232,7 +220,6 @@ def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_
     #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
     na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
     correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
-    #correction_vector.reverse()
 
     correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
@@ -242,12 +229,9 @@ def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_
 
 
 def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
-    # tracer C13, N15 goes
     samp_lab_dict = samp_label_dcit(iso_tracers, merged_df)
 
     trac_atoms = get_atoms_from_tracers(iso_tracers)
-    # this onwards tracer C, N goes
-    #iso_tracers_el = trac_atoms
 
     formula_dict = formuladict(merged_df)
     fragments_dict = fragmentsdict_model(merged_df)
@@ -281,9 +265,11 @@ def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimizatio
 def check_samples_ouputdict(correc_inten_dict):
     univ_new = correc_inten_dict.values()
     inverse_sample = []
+
     for un_new in univ_new:
         inverse_sample.extend(un_new.keys())
     inverse_sample = list(set(inverse_sample))
+
     return inverse_sample
 
 def label_sample_dict(sample_list, correc_inten_dict):
@@ -297,7 +283,6 @@ def label_sample_dict(sample_list, correc_inten_dict):
     return lab_samp_dict
 
 
-    #fragment dict model
 def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
     nacorr_fragment_dict = {}
     for key, value in fragments_dict.iteritems():
