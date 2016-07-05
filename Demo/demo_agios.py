@@ -10,11 +10,11 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 #maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
 
 # single tracer indistinguishable
-maven_data = corna.read_maven(path_dir + '/aceticacid_indist.csv')
-#print maven_data
+#maven_data = corna.read_maven(path_dir + '/aceticacid_indist.csv')
+
 #double tracer
-#maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
-# double tracer indistinguishable
+maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
+
 
 
 # For json input, use this funtion:
@@ -26,13 +26,13 @@ maven_metadata = corna.read_mvn_metadata(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
-print merge_mv_metdata.to_dict()
+
 # tracer isotopes
 #iso_tracers = ['C13']
 iso_tracers = ['C13', 'N15']
 
 #element to be corrected
-eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
+eleme_corr = {'C': ['H']}
 #eleme_corr = {}
 #eleme_corr = {'C':['H']}
 
@@ -41,12 +41,15 @@ eleme_corr = {'C': ['H', 'O'], 'N': ['S']}
 #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
 na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
 
-
+lis = corna.eleme_corr_to_list(eleme_corr, iso_tracers)
+print lis
 # edit na values
 #na_dict['H'][0] = 0.989
+
 double_trac_indist = corna.na_double_trac_indist(iso_tracers, eleme_corr, merge_mv_metdata, na_dict)
-print 'kron matrix'
-print double_trac_indist
+#print 'kron matrix'
+#print corna.convert_to_df(double_trac_indist, colname = 'NA corrected')
+
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = False)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')

@@ -189,8 +189,9 @@ def na_double_trac_indist(iso_tracers, eleme_corr, merged_df, na_dict):
     for i in eleme_corr_list:
         no_atom_tracers.append(formula_dict[i])
 
+    corr_intensities_dict = {}
     for samp_name, lab_dict in sample_label_dict.iteritems():
-
+        intens_idx_dict = {}
         l = [np.arange(x+1) for x in no_atom_tracers]
         tup_list = list(product(*l))
 
@@ -201,14 +202,60 @@ def na_double_trac_indist(iso_tracers, eleme_corr, merged_df, na_dict):
         intensities_list = filter_tuples(tup_list, lab_dict, tup_pos)
 
         icorr = dbt.double_na_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
-        print tup_pos
-        # for i in range(0,len(corr_x)):
-        #     intens_idx_dict[sorted_keys[i]] = corr_x[i]
+        ############### line below is incorroect dictionary for now
+        # to do here, this is input data dict only - to get the icorr values with keys here
+        intens_idx_dict = lab_dict
+
+        corr_intensities_dict[samp_name] = intens_idx_dict
+
+    sample_list = algo.check_samples_ouputdict(corr_intensities_dict)
+    # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
+    lab_samp_dict = algo.label_sample_dict(sample_list, corr_intensities_dict)
+
+    nacorr_dict_model = algo.fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
+
+    return nacorr_dict_model
 
 
-    return intens_idx_dict
 
 
+def eleme_corr_to_list(eleme_corr, iso_tracers):
+    trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
+    eleme_corr_list = []
+    for i in trac_atoms:
+        eleme_corr_list.append([i])
+        if i in eleme_corr.keys():
+            eleme_corr_list.append(eleme_corr[i])
+
+    return sum(eleme_corr_list, [])
+
+
+
+
+
+
+# def data_tups(tuple_list, positions):
+#     result_tuples = []
+#     for tuples in tuple_list:
+#         tuple_l = list(tuples)
+#         filtered_tuple = [tuple_l[x] for x in positions]
+#         if sum(filtered_tuple) == 0:
+#             result_tuples.append(tuple(tuple_l))
+    #result_tuples = []
+
+
+
+
+# def get_vals(tuple_list, positions, value_dict):
+#     result_dict = {}
+#     for tuples in tuple_list:
+#         tuple_l = list(tuples)
+#         filtered_tuple = [tuple_l[x] for x in range(0,len(tuple_l)) if x not in positions]
+#         filtered_tuple = tuple(filtered_tuple)
+#         if filtered_tuple in value_dict.keys():
+#             result_dict[filtered_tuple] = value_dict[filtered_tuple][0]
+#             #result_tuples.append(value_dict[filtered_tuple][0])
+#     return result_dict
 
 
 def filter_tuples(tuple_list, value_dict, positions):
