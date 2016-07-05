@@ -44,9 +44,9 @@ na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.
 
 # edit na values
 #na_dict['H'][0] = 0.989
-#double_trac_indist = corna.na_double_trac_indist(iso_tracers, eleme_corr, merge_mv_metdata, na_dict)
-#print 'kron matrix'
-#print double_trac_indist
+double_trac_indist = corna.na_double_trac_indist(iso_tracers, eleme_corr, merge_mv_metdata, na_dict)
+print 'kron matrix'
+print double_trac_indist
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = False)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')

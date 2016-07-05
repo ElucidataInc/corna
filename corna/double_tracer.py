@@ -45,16 +45,13 @@ def na_corr_double_trac(na_dict, formula_dict, eleme_corr_list):
     formula_dict = {'C': 5, 'H': 10, 'N':1, 'O':2, 'S':1}
     correction_vector = [1.]
     eleme_corr_list = ['C', 'H', 'N']
-
+    # if eleme_corr = {} then eleme_corr_list = iso_tracers
     correction_matrix = [1.]
     for trac in eleme_corr_list:
         no_atom_tracer = formula_dict[trac]
         eleme_corr = {}
         matrix_tracer = algo.corr_matrix(str(trac), formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
-        print trac
-        print matrix_tracer
         correction_matrix = np.kron(correction_matrix, matrix_tracer)
-    print correction_matrix
     return correction_matrix
 
 def double_na_correc(na_dict, formula_dict, eleme_corr_list, intensities_list):

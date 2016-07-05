@@ -159,8 +159,6 @@ def na_corr_double_tracer(iso_tracers, merged_df, na_dict):
 
         for i in range(0,len(corr_x)):
             intens_idx_dict[sorted_keys[i]] = corr_x[i]
-            print sorted_keys[i]
-        print intens_idx_dict
         corr_intensities_dict[samp_name] = intens_idx_dict
 
     sample_list = algo.check_samples_ouputdict(corr_intensities_dict)
@@ -197,13 +195,17 @@ def na_double_trac_indist(iso_tracers, eleme_corr, merged_df, na_dict):
         tup_list = list(product(*l))
 
         indist_sp = sum(eleme_corr.values(),[])
+
         tup_pos = [i for i, e in enumerate(eleme_corr_list) if e in indist_sp]
-        #ft = filter_tuples(tup_list, tup_pos)
+
         intensities_list = filter_tuples(tup_list, lab_dict, tup_pos)
 
-
         icorr = dbt.double_na_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
-        print icorr
+        print tup_pos
+        # for i in range(0,len(corr_x)):
+        #     intens_idx_dict[sorted_keys[i]] = corr_x[i]
+
+
     return intens_idx_dict
 
 
@@ -224,35 +226,6 @@ def filter_tuples(tuple_list, value_dict, positions):
         else:
             result_tuples.append(0)
     return result_tuples
-# def intensities_list(formula_dict,eleme_corr_list):
-#
-#     dbt.intensities_list(formula_dict,eleme_corr_list)
-
-
-# def na_corr_double_trac_indist():
-#     na_dict = {'C':[0.95,0.05],
-#            'H':[0.98,0.01,0.01], 'N':[0.8,0.2],
-#            'O':[0.95,0.03,0.02],
-#            'S': [0.8,0.05,0.15]}
-
-#     formula_dict = {'C': 5, 'H': 10, 'N':1, 'O':2, 'S':1}
-
-#     correction_vector = [1.]
-
-#     #eleme_corr ={'C':['H','O'], 'N':['S']}
-#     eleme_corr_list = ['C', 'H', 'N']
-#     #idx=list(product(np.arange(6),np.arange(11), np.arange(3), np.arange(2), np.arange(2)))
-
-#     matx = [1.]
-#     for trac in eleme_corr_list:
-#         no_atom_tracer = formula_dict[trac]
-#         eleme_corr = {}
-#         mat_tracer = algo.corr_matrix(str(trac), formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
-#         matx = np.kron(matx, mat_tracer)
-#         print matx
-
-#     return matx
-
 
 
 
