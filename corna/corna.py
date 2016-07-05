@@ -12,6 +12,7 @@ import algorithms as algo
 import double_tracer as dbt
 import sequential_algo as sqalgo
 import postprocess as postpro
+import multi_tracer as mlt
 import output as out
 import config
 import numpy as np
@@ -125,52 +126,15 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
 
 #NA correction maven
 def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
-    for key, value in eleme_corr.iteritems():
-        for el in algo.get_atoms_from_tracers(iso_tracers):
-            if el in value:
-                raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
     labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
     merged_df['Label'] = labels_std
-    na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
+    na_corr_model = algo.single_trac_na_correc(merged_df, iso_tracers, eleme_corr, na_dict)
     return na_corr_model
 
-def na_corr_double_tracer(iso_tracers, merged_df, na_dict):
-    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
-    merged_df['Label'] = labels_std
-    sample_label_dict = algo.samp_label_dcit(iso_tracers, merged_df)
-    formula_dict = algo.formuladict(merged_df)
-    trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
-    fragments_dict = algo.fragmentsdict_model(merged_df)
-    corr_intensities_dict = {}
-    for samp_name, lab_dict in sample_label_dict.iteritems():
-        intens_idx_dict = {}
-        no_atom_tracer1 = formula_dict[trac_atoms[0]]
-        no_atom_tracer2 = formula_dict[trac_atoms[1]]
-        na1 = na_dict[trac_atoms[0]][-1]
-        na2 = na_dict[trac_atoms[1]][-1]
-        sorted_keys = lab_dict.keys()
-        sorted_keys.sort(key = lambda x: (x[0], x[1]))
-
-        inten = []
-        for tups in sorted_keys:
-            inten.append(lab_dict[tups])
-        corr_x=dbt.double_label_NA_corr(inten,no_atom_tracer1,no_atom_tracer2,na1,na2)
-        corr_x = [x[0] for x in corr_x]
-
-        for i in range(0,len(corr_x)):
-            intens_idx_dict[sorted_keys[i]] = corr_x[i]
-        corr_intensities_dict[samp_name] = intens_idx_dict
-
-    sample_list = algo.check_samples_ouputdict(corr_intensities_dict)
-    # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
-    lab_samp_dict = algo.label_sample_dict(sample_list, corr_intensities_dict)
-
-    nacorr_dict_model = algo.fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
-
-    return nacorr_dict_model
 
 
-def na_double_trac_indist(iso_tracers, eleme_corr, merged_df, na_dict):
+
+def multi_trac_na_correc(merged_df, iso_tracers, eleme_corr, na_dict):
 
     labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
     merged_df['Label'] = labels_std
@@ -179,10 +143,11 @@ def na_double_trac_indist(iso_tracers, eleme_corr, merged_df, na_dict):
     trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
     fragments_dict = algo.fragmentsdict_model(merged_df)
 
-    #formula_dict = {'C': 5, 'H': 10, 'N':1, 'O':2, 'S':1}
-    eleme_corr = {'C': ['H']}
+    if not eleme_corr:
+        eleme_corr_list = trac_atoms
+    else:
+        eleme_corr_list = mlt.eleme_corr_to_list(iso_tracers, eleme_corr)
 
-    eleme_corr_list = ['C', 'H', 'N']
 
 
     no_atom_tracers = []
@@ -199,9 +164,11 @@ def na_double_trac_indist(iso_tracers, eleme_corr, merged_df, na_dict):
 
         tup_pos = [i for i, e in enumerate(eleme_corr_list) if e in indist_sp]
 
-        intensities_list = filter_tuples(tup_list, lab_dict, tup_pos)
+        intensities_list = mlt.filter_tuples(tup_list, lab_dict, tup_pos)
 
-        icorr = dbt.double_na_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
+        icorr = mlt.multi_label_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
+        print 'corrected inten'
+        print icorr
         ############### line below is incorroect dictionary for now
         # to do here, this is input data dict only - to get the icorr values with keys here
         intens_idx_dict = lab_dict
@@ -219,7 +186,7 @@ def na_double_trac_indist(iso_tracers, eleme_corr, merged_df, na_dict):
 
 
 
-def eleme_corr_to_list(eleme_corr, iso_tracers):
+def eleme_corr_to_list(iso_tracers, eleme_corr):
     trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
     eleme_corr_list = []
     for i in trac_atoms:
@@ -229,33 +196,6 @@ def eleme_corr_to_list(eleme_corr, iso_tracers):
 
     return sum(eleme_corr_list, [])
 
-
-
-
-
-
-# def data_tups(tuple_list, positions):
-#     result_tuples = []
-#     for tuples in tuple_list:
-#         tuple_l = list(tuples)
-#         filtered_tuple = [tuple_l[x] for x in positions]
-#         if sum(filtered_tuple) == 0:
-#             result_tuples.append(tuple(tuple_l))
-    #result_tuples = []
-
-
-
-
-# def get_vals(tuple_list, positions, value_dict):
-#     result_dict = {}
-#     for tuples in tuple_list:
-#         tuple_l = list(tuples)
-#         filtered_tuple = [tuple_l[x] for x in range(0,len(tuple_l)) if x not in positions]
-#         filtered_tuple = tuple(filtered_tuple)
-#         if filtered_tuple in value_dict.keys():
-#             result_dict[filtered_tuple] = value_dict[filtered_tuple][0]
-#             #result_tuples.append(value_dict[filtered_tuple][0])
-#     return result_dict
 
 
 def filter_tuples(tuple_list, value_dict, positions):
@@ -276,28 +216,23 @@ def filter_tuples(tuple_list, value_dict, positions):
 
 
 
-def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
 
+
+def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
+
+    invalid_eleme_corr = eleme_corr_invalid_entry(iso_tracers, eleme_corr)
+
+    if len(iso_tracers) == 1:
+        na_corr_dict = na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
+    else:
+        na_corr_dict = multi_trac_na_correc(merged_df, iso_tracers, eleme_corr, na_dict)
+    return na_corr_dict
+
+def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
     for key, value in eleme_corr.iteritems():
         for el in algo.get_atoms_from_tracers(iso_tracers):
             if el in value:
                 raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
-    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
-    merged_df['Label'] = labels_std
-    nacorr_multiple_model = sqalgo.correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
-    return nacorr_multiple_model
-
-def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
-    if len(iso_tracers) == 1:
-        na_corr_dict = na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
-
-    elif len(iso_tracers) == 2:
-        na_corr_dict = na_corr_double_tracer(iso_tracers, merged_df, na_dict)
-    else:
-        na_corr_dict = na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
-    return na_corr_dict
-
-
 
 # Post processing: Replacing negatives by zero
 def replace_negatives(na_corr_dict, replace_negative = True, all=False):
@@ -361,7 +296,40 @@ def get_na_dict(isotracers, eleme_corr):
 
 
 
+# def na_corr_double_tracer(iso_tracers, merged_df, na_dict):
+#     labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
+#     merged_df['Label'] = labels_std
+#     sample_label_dict = algo.samp_label_dcit(iso_tracers, merged_df)
+#     formula_dict = algo.formuladict(merged_df)
+#     trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
+#     fragments_dict = algo.fragmentsdict_model(merged_df)
+#     corr_intensities_dict = {}
+#     for samp_name, lab_dict in sample_label_dict.iteritems():
+#         intens_idx_dict = {}
+#         no_atom_tracer1 = formula_dict[trac_atoms[0]]
+#         no_atom_tracer2 = formula_dict[trac_atoms[1]]
+#         na1 = na_dict[trac_atoms[0]][-1]
+#         na2 = na_dict[trac_atoms[1]][-1]
+#         sorted_keys = lab_dict.keys()
+#         sorted_keys.sort(key = lambda x: (x[0], x[1]))
 
+#         inten = []
+#         for tups in sorted_keys:
+#             inten.append(lab_dict[tups])
+#         corr_x=dbt.double_label_NA_corr(inten,no_atom_tracer1,no_atom_tracer2,na1,na2)
+#         corr_x = [x[0] for x in corr_x]
+
+#         for i in range(0,len(corr_x)):
+#             intens_idx_dict[sorted_keys[i]] = corr_x[i]
+#         corr_intensities_dict[samp_name] = intens_idx_dict
+
+#     sample_list = algo.check_samples_ouputdict(corr_intensities_dict)
+#     # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
+#     lab_samp_dict = algo.label_sample_dict(sample_list, corr_intensities_dict)
+
+#     nacorr_dict_model = algo.fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
+
+#     return nacorr_dict_model
 
 
 

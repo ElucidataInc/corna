@@ -12,6 +12,7 @@ corna/formulaschema.py
 corna/helpers.py
 corna/isotopomer.py
 corna/model.py
+corna/multi_tracer.py
 corna/nacorr.py
 corna/output.py
 corna/postprocess.py

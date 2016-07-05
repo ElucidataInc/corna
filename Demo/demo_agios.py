@@ -32,28 +32,27 @@ merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
 iso_tracers = ['C13', 'N15']
 
 #element to be corrected
-eleme_corr = {'C': ['H']}
+eleme_corr = {'C': ['H', 'O'], 'N':['S']}
 #eleme_corr = {}
-#eleme_corr = {'C':['H']}
+
 
 # NA values dict
 #na_dict = corna.get_na_dict(iso_tracers, eleme_corr)
 #na_dict = {'H': [0.00015, 0.99], 'C': [0.05, 0.95], 'S': [0.030872, 0.046832, 0.922297], 'O': [0.00205, 0.00038, 0.99757], 'N': [0.2, 0.8]}
 na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
 
-lis = corna.eleme_corr_to_list(eleme_corr, iso_tracers)
-print lis
+
 # edit na values
 #na_dict['H'][0] = 0.989
 
-double_trac_indist = corna.na_double_trac_indist(iso_tracers, eleme_corr, merge_mv_metdata, na_dict)
+#double_trac_indist = corna.na_double_trac_indist(iso_tracers, eleme_corr, merge_mv_metdata, na_dict)
 #print 'kron matrix'
 #print corna.convert_to_df(double_trac_indist, colname = 'NA corrected')
 
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = False)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
-#print na_corr_df
+print na_corr_df
 #print sum(na_corr_df['NA corrected'])
 
 # Replace negative values by zero on NA corrected data - optional

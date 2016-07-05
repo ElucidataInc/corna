@@ -228,7 +228,7 @@ def perform_correction(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_
     return icorr
 
 
-def na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
+def single_trac_na_correc(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
     samp_lab_dict = samp_label_dcit(iso_tracers, merged_df)
 
     trac_atoms = get_atoms_from_tracers(iso_tracers)

@@ -42,9 +42,9 @@ def na_corr_double_trac(na_dict, formula_dict, eleme_corr_list):
            'O':[0.95,0.03,0.02],
            'S': [0.8,0.05,0.15]}
 
-    formula_dict = {'C': 5, 'H': 10, 'N':1, 'O':2, 'S':1}
+    #formula_dict = {'C': 5, 'H': 10, 'N':1, 'O':2, 'S':1}
     correction_vector = [1.]
-    eleme_corr_list = ['C', 'H', 'N']
+    #eleme_corr_list = ['C', 'H', 'N']
     # if eleme_corr = {} then eleme_corr_list = iso_tracers
     correction_matrix = [1.]
     for trac in eleme_corr_list:
@@ -52,6 +52,8 @@ def na_corr_double_trac(na_dict, formula_dict, eleme_corr_list):
         eleme_corr = {}
         matrix_tracer = algo.corr_matrix(str(trac), formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
         correction_matrix = np.kron(correction_matrix, matrix_tracer)
+    print 'matrix'
+    print correction_matrix
     return correction_matrix
 
 def double_na_correc(na_dict, formula_dict, eleme_corr_list, intensities_list):
@@ -59,14 +61,13 @@ def double_na_correc(na_dict, formula_dict, eleme_corr_list, intensities_list):
        'H':[0.98,0.01,0.01], 'N':[0.8,0.2],
        'O':[0.95,0.03,0.02],
        'S': [0.8,0.05,0.15]}
-    formula_dict = {'C': 5, 'H': 10, 'N':1, 'O':2, 'S':1}
+    #formula_dict = {'C': 5, 'H': 10, 'N':1, 'O':2, 'S':1}
     #correction_vector = [1.]
-    eleme_corr_list = ['C', 'H', 'N']
+    #eleme_corr_list = ['C', 'H', 'N']
 
     M = na_corr_double_trac(na_dict, formula_dict, eleme_corr_list)
 
     Minv=pinv(M)
-
     icorr = np.matmul(Minv,intensities_list)
 
     return icorr
