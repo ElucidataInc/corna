@@ -64,6 +64,20 @@ def na_correction_mimosa_by_fragment(fragments_dict, decimals):
 
 # MAVEN
 def excluded_elements(iso_tracer, formula_dict, eleme_corr):
+    """
+    This function gives a list of elements to be excluded for correction
+
+    Args:
+        iso_tracer : List of isotopic tracer elements
+
+        formula_dict : Dictionary of number of atoms of chemical formula
+
+        eleme_corr : Indistinguishable species to be considered for correction
+                     along with isotopic tracers
+
+    Returns:
+        el_excluded : List of elements to be excluded for correction
+    """
     el_excluded = []
     for key, value in formula_dict.iteritems():
         if iso_tracer in eleme_corr.keys():
@@ -74,10 +88,26 @@ def excluded_elements(iso_tracer, formula_dict, eleme_corr):
 
 def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
     """
-    Calculate a mass distribution vector (at natural abundancy),
-    based on the elemental compositions of both metabolite's moiety.
-    The element corresponding to the isotopic tracer is not taken
-    into account in the metabolite moiety.
+    Calculate a correction vector or mass distribution vector (at natural abundance),
+    based on the elemental compositions of both metabolite's moiety.The element
+    corresponding to the isotopic tracer is not taken into account in the
+    metabolite moiety.
+
+    Args:
+        iso_tracer : List of isotopic tracer elements
+
+        formula_dict : Dictionary of number of atoms of chemical formula
+
+        eleme_corr : Indistinguishable species to be considered for correction
+                     along with isotopic tracers
+
+        na_dict : Dictionary of natural abundance values
+
+    Returns:
+        correction_vector: A correction vector list. This vector is formed by convolution
+                           of NA values of all atoms other than isotopic tracers. It is
+                           arranged in increasing order of labeled atoms [m0, m1, m2 ..so on]
+
     """
     el_excluded = excluded_elements(iso_tracer, formula_dict, eleme_corr)
 
