@@ -1,19 +1,18 @@
 import os
 import sys
 import warnings
+import numpy as np
 import pandas as pd
 
+import config
 import helpers as hl
 import file_parser as fp
 import isotopomer as iso
 import preprocess as preproc
 import algorithms as algo
-import double_tracer as dbt
-import sequential_algo as sqalgo
 import postprocess as postpro
+import na_correction as nacorr
 import output as out
-import config
-
 
 
 warnings.simplefilter(action = "ignore")
@@ -72,7 +71,6 @@ def merge_dfs(df_list):
     return combined_dfs
 
 
-
 # Filtering data
 def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'col2', list_col2_vals = [], col3 = 'col3', list_col3_vals = []):
 	filtered_df = hl.filtering_df(df, num_col, col1, list_col1_vals, col2, list_col2_vals, col3, list_col3_vals)
@@ -109,6 +107,14 @@ def met_background_correction_all(merged_data, background_sample, list_of_sample
                                                                          background_sample, list_of_samples, all_samples, decimals)
     return preprocessed_output_dict
 
+def get_na_dict(isotracers, eleme_corr):
+    ele_list = algo.get_atoms_from_tracers(isotracers)
+    for key, value in eleme_corr.iteritems():
+        ele_list.append(key)
+        for ele in value:
+            ele_list.append(ele)
+    ele_list = list(set(ele_list))
+    return hl.get_sub_na_dict(ele_list)
 
 # NA correction
 # Multiquant
@@ -123,71 +129,19 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
 
 
 #NA correction maven
-def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
-    for key, value in eleme_corr.iteritems():
-        for el in algo.get_atoms_from_tracers(iso_tracers):
-            if el in value:
-                raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
-    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
-    merged_df['Label'] = labels_std
-    na_corr_model = algo.na_corrected_output(merged_df, iso_tracers, eleme_corr, na_dict)
-    return na_corr_model
+def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
 
-def na_corr_double_tracer(iso_tracers, merged_df, na_dict):
-    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
-    merged_df['Label'] = labels_std
-    sample_label_dict = algo.samp_label_dcit(iso_tracers, merged_df)
-    formula_dict = algo.formuladict(merged_df)
-    trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
-    fragments_dict = algo.fragmentsdict_model(merged_df)
-    corr_intensities_dict = {}
-    for samp_name, lab_dict in sample_label_dict.iteritems():
-        intens_idx_dict = {}
-        no_atom_tracer1 = formula_dict[trac_atoms[0]]
-        no_atom_tracer2 = formula_dict[trac_atoms[1]]
-        na1 = na_dict[trac_atoms[0]][-1]
-        na2 = na_dict[trac_atoms[1]][-1]
-        sorted_keys = lab_dict.keys()
-        sorted_keys.sort(key = lambda x: (x[0], x[1]))
-        inten = []
-        for tups in sorted_keys:
-            inten.append(lab_dict[tups])
-        corr_x=dbt.double_label_NA_corr(inten,no_atom_tracer1,no_atom_tracer2,na1,na2)
-        corr_x = [x[0] for x in corr_x]
-        for i in range(0,len(corr_x)):
-            intens_idx_dict[sorted_keys[i]] = corr_x[i]
-        corr_intensities_dict[samp_name] = intens_idx_dict
+    invalid_eleme_corr = eleme_corr_invalid_entry(iso_tracers, eleme_corr)
 
-    sample_list = algo.check_samples_ouputdict(corr_intensities_dict)
-    # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
-    lab_samp_dict = algo.label_sample_dict(sample_list, corr_intensities_dict)
+    na_corr_dict = nacorr.na_correction(merged_df, iso_tracers, eleme_corr, na_dict)
 
-    nacorr_dict_model = algo.fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
-
-    return nacorr_dict_model
-
-def na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
-
-    for key, value in eleme_corr.iteritems():
-        for el in algo.get_atoms_from_tracers(iso_tracers):
-            if el in value:
-                raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
-    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
-    merged_df['Label'] = labels_std
-    nacorr_multiple_model = sqalgo.correction_tracer2(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
-    return nacorr_multiple_model
-
-def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
-    if len(iso_tracers) == 1:
-        na_corr_dict = na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
-
-    elif len(iso_tracers) == 2:
-        na_corr_dict = na_corr_double_tracer(iso_tracers, merged_df, na_dict)
-    else:
-        na_corr_dict = na_corr_multiple_tracer(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False)
     return na_corr_dict
 
-
+def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
+    for key, value in eleme_corr.iteritems():
+        for el in algo.get_atoms_from_tracers(iso_tracers):
+            if el in value:
+                raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
 
 # Post processing: Replacing negatives by zero
 def replace_negatives(na_corr_dict, replace_negative = True, all=False):
@@ -237,21 +191,6 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
 # Save any dataframe to csv
 def save_to_csv(df, path):
     df.to_csv(path)
-
-
-def get_na_dict(isotracers, eleme_corr):
-    ele_list = algo.get_atoms_from_tracers(isotracers)
-    for key, value in eleme_corr.iteritems():
-        ele_list.append(key)
-        for ele in value:
-            ele_list.append(ele)
-    ele_list = list(set(ele_list))
-    return hl.get_sub_na_dict(ele_list)
-
-
-
-
-
 
 
 
