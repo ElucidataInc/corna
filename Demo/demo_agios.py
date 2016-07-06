@@ -14,7 +14,7 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 
 #double tracer
 maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
-
+#print maven_data
 
 
 # For json input, use this funtion:
@@ -32,7 +32,7 @@ merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
 iso_tracers = ['C13', 'N15']
 
 #element to be corrected
-eleme_corr = {'C': ['H', 'O'], 'N':['S']}
+eleme_corr = {'C': ['H']}
 #eleme_corr = {}
 
 
@@ -50,7 +50,7 @@ na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.
 #print corna.convert_to_df(double_trac_indist, colname = 'NA corrected')
 
 # NA correction
-na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict, optimization = False)
+na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 print na_corr_df
 #print sum(na_corr_df['NA corrected'])

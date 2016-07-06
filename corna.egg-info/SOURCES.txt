@@ -13,11 +13,13 @@ corna/helpers.py
 corna/isotopomer.py
 corna/model.py
 corna/multi_tracer.py
+corna/na_correction.py
 corna/nacorr.py
 corna/output.py
 corna/postprocess.py
 corna/preprocess.py
 corna/sequential_algo.py
+corna/single_tracer.py
 corna.egg-info/PKG-INFO
 corna.egg-info/SOURCES.txt
 corna.egg-info/dependency_links.txt
