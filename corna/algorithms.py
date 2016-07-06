@@ -89,8 +89,10 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
         if not el == iso_tracer and el not in el_excluded:
 
             for i in range(n):
-                correction_vector = np.convolve(correction_vector, na_dict[el])
-
+                try:
+                    correction_vector = np.convolve(correction_vector, na_dict[el])
+                except:
+                    raise KeyError('Element ' + el + ' not found in Natural Abundance dictionary')
     return list(correction_vector)
 
 

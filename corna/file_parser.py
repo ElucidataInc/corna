@@ -109,7 +109,7 @@ def melt_df(df1):
     try:
         long_form = pd.melt(df1, id_vars=fixed_cols, value_vars=melt_cols)
     except KeyError():
-        raise KeyError('columns' + conf.NAME_COL + conf.LABEL_COL + conf.FORMULA_COL + 'not found in data')
+        raise KeyError('columns' + conf.NAME_COL + conf.LABEL_COL + conf.FORMULA_COL + 'not found in input data')
 
     return long_form
 
