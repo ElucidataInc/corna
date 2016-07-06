@@ -1,3 +1,4 @@
+import pytest
 import numpy
 import corna.algorithms as algo
 import corna.isotopomer as iso
@@ -359,31 +360,60 @@ glutamate_146_41_output_dict[(150.0, 42.0)] = glutamate_146_41[('Glutamate 150/4
 glutamate_146_41_output_dict[(148.0, 43.0)] = glutamate_146_41[('Glutamate 148/43_148.0', 'Glutamate 148/43_43.0')]
 
 
-def test_na_correct_mimosa():
-    assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
-                                  input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
-                                  2055, 40820, 0, 'C13', 0.011) == 798.3600000000001
+# def test_na_correct_mimosa():
+#     assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
+#                                   input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
+#                                   2055, 40820, 0, 'C13', 0.011) == 798.3600000000001
 
-def test_na_correct_mimosa_zero():
-    assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
-                                  input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
-                                  769, 87550, 0, 'C13', 0.011) == 0
+# def test_na_correct_mimosa_zero():
+#     assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
+#                                   input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
+#                                   769, 87550, 0, 'C13', 0.011) == 0
 
-def test_na_correct_mimosa_array():
-    assert numpy.array_equal(algo.na_correct_mimosa_algo_array(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
-                                            input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
-                                      numpy.array([45060, 31710, 87550,	0, 60980, 38700]), numpy.zeros(6),
-                                      numpy.zeros(6), 'C13', 0.011), numpy.array([ 47042.64,  33105.24,  91402.2,
-                                                                       0., 63663.12,  40402.8]))
+# def test_na_correct_mimosa_array():
+#     assert numpy.array_equal(algo.na_correct_mimosa_algo_array(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
+#                                             input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
+#                                       numpy.array([45060, 31710, 87550,	0, 60980, 38700]), numpy.zeros(6),
+#                                       numpy.zeros(6), 'C13', 0.011), numpy.array([ 47042.64,  33105.24,  91402.2,
+#                                                                        0., 63663.12,  40402.8]))
 
-def test_arrange_fragments_by_mass():
-    test_dict = algo.arrange_fragments_by_mass(glutamate_146_41)
-    for key, value in glutamate_146_41_output_dict.iteritems():
-        assert test_dict[key] == value
+# def test_arrange_fragments_by_mass():
+#     test_dict = algo.arrange_fragments_by_mass(glutamate_146_41)
+#     for key, value in glutamate_146_41_output_dict.iteritems():
+#         assert test_dict[key] == value
 
-def test_na_correction_mimosa_by_fragment():
-    test_dict = algo.na_correction_mimosa_by_fragment(glutamate_146_41)
-    test_data = test_dict[(147.0, 42.0)][1]
-    assert numpy.array_equal(numpy.around(test_data['F. [13C-glc] G2.5 120min'],8), numpy.around(numpy.array([991.7099655, 522.23934132,
-                                                                                 2790.3025836, 0., 1768.9036688,
-                                                                                 2126.6667507 ]),8))
+# def test_na_correction_mimosa_by_fragment():
+#     test_dict = algo.na_correction_mimosa_by_fragment(glutamate_146_41)
+#     test_data = test_dict[(147.0, 42.0)][1]
+#     assert numpy.array_equal(numpy.around(test_data['F. [13C-glc] G2.5 120min'],8), numpy.around(numpy.array([991.7099655, 522.23934132,
+#                                                                                  2790.3025836, 0., 1768.9036688,
+
+#                                                                                  2126.6667507 ]),8))
+
+iso_tracer = ['C13']
+formula_dict = {'C':2, 'H':4, 'O':2}
+no_atom_tracer = 2
+eleme_corr = {}
+na_dict = {'H':[0.98,0.01,0.01], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
+
+
+def test_el_excluded():
+    ele_list = algo.excluded_elements(iso_tracer, formula_dict, eleme_corr)
+    assert ele_list == []
+
+def test_calc_mdv():
+    with pytest.raises(KeyError):
+        mdv = algo.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+
+def test_corr_matrix():
+    correction_vector = [1.]
+    with pytest.raises(KeyError):
+        c_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+
+def test_matrix_multiplication():
+    correction_matrix = [[0,1], [2,3]]
+    intensities = [1]
+    with pytest.raises(ValueError):
+        multiply = algo.matrix_multiplication(correction_matrix, intensities)
+
+

@@ -392,6 +392,7 @@ glutamate_146_41_output_dict[(148.0, 43.0)] = glutamate_146_41[('Glutamate 148/4
 
 iso_tracer = ['C13']
 formula_dict = {'C':2, 'H':4, 'O':2}
+no_atom_tracer = 2
 eleme_corr = {}
 na_dict = {'H':[0.98,0.01,0.01], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
 
@@ -404,4 +405,18 @@ def test_calc_mdv():
     with pytest.raises(KeyError):
         mdv = algo.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
 
+def test_corr_matrix():
+    correction_vector = [1.]
+    with pytest.raises(KeyError):
+        c_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
+def test_matrix_multiplication():
+    correction_matrix = [[0,1], [2,3]]
+    intensities = [1]
+    with pytest.raises(ValueError):
+        multiply = algo.matrix_multiplication(correction_matrix, intensities)
+
+def test_multi_label_matrix():
+    eleme_corr_list = ['S']
+    with pytest.raises(KeyError):
+        multi_lab_cm = algo.multi_label_matrix(na_dict, formula_dict, eleme_corr_list)

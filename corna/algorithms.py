@@ -1,5 +1,3 @@
-
-import numpy
 import numpy as np
 import helpers as hl
 from scipy import optimize
@@ -100,7 +98,7 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
 
     el_excluded = excluded_elements(iso_tracer,formula_dict, eleme_corr)
 
-    correction_matrix = numpy.zeros((no_atom_tracer+1, no_atom_tracer+1))
+    correction_matrix = np.zeros((no_atom_tracer+1, no_atom_tracer+1))
 
     el_pur = [0,1]
 
@@ -114,11 +112,33 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
             column = np.convolve(column, el_pur)[:no_atom_tracer+1]
         if el_excluded != iso_tracer:
             for nb in range(no_atom_tracer-i):
-                column = numpy.convolve(column, na_dict[iso_tracer])[:no_atom_tracer+1]
-
+                try:
+                    column = np.convolve(column, na_dict[iso_tracer])[:no_atom_tracer+1]
+                except:
+                    raise KeyError('Element not found in Natural Abundance dictionary', iso_tracer)
         correction_matrix[:,i] = column
 
     return correction_matrix
+
+
+def matrix_multiplication(correction_matrix, intensities):
+
+    matrix = np.array(correction_matrix)
+
+    mat_inverse = pinv(matrix)
+
+    inten_trasp = np.array(intensities).transpose()
+
+    try:
+
+        corrected_intensites = np.matmul(mat_inverse, inten_trasp)
+
+    except:
+        raise ValueError('Matrix size = ' + str(len(mat_inverse)) + ' and intensities = ' \
+         + str(len(inten_trasp)) + ' Length does not match, \
+            hence cant be multiplied')
+
+    return corrected_intensites
 
 
 def single_lab_corr(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities):
@@ -138,9 +158,15 @@ def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
     correction_matrix = [1.]
 
     for trac in eleme_corr_list:
-        no_atom_tracer = formula_dict[trac]
+        try:
+            no_atom_tracer = formula_dict[trac]
+        except:
+            raise KeyError('Element ' + str(trac) + ' given for correction not found in chemical \
+             formula')
+
         eleme_corr = {}
         matrix_tracer = corr_matrix(str(trac), formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+
         correction_matrix = np.kron(correction_matrix, matrix_tracer)
 
     return correction_matrix
@@ -212,19 +238,6 @@ def get_atoms_from_tracers(iso_tracers):
         element = hl.parse_polyatom(iso_tracers[i])[0]
         trac_atoms.append(element)
     return trac_atoms
-
-
-def matrix_multiplication(correction_matrix, intensities):
-
-    matrix = numpy.array(correction_matrix)
-
-    mat_inverse = pinv(matrix)
-
-    inten_trasp = numpy.array(intensities).transpose()
-
-    corrected_intensites = numpy.matmul(mat_inverse, inten_trasp)
-
-    return corrected_intensites
 
 
 def check_samples_ouputdict(correc_inten_dict):
