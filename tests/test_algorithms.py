@@ -1,5 +1,6 @@
 import pytest
 import numpy
+import pandas as pd
 import corna.algorithms as algo
 import corna.isotopomer as iso
 
@@ -395,7 +396,7 @@ formula_dict = {'C':2, 'H':4, 'O':2}
 no_atom_tracer = 2
 eleme_corr = {}
 na_dict = {'H':[0.98,0.01,0.01], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
-
+df = pd.DataFrame({})
 
 def test_el_excluded():
     ele_list = algo.excluded_elements(iso_tracer, formula_dict, eleme_corr)
@@ -420,3 +421,8 @@ def test_multi_label_matrix():
     eleme_corr_list = ['S']
     with pytest.raises(KeyError):
         multi_lab_cm = algo.multi_label_matrix(na_dict, formula_dict, eleme_corr_list)
+
+def test_sample_list():
+    with pytest.raises(KeyError):
+        samp_dict = algo.unique_samples_for_dict(df)
+

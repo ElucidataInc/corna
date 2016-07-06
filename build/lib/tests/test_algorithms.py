@@ -416,4 +416,7 @@ def test_matrix_multiplication():
     with pytest.raises(ValueError):
         multiply = algo.matrix_multiplication(correction_matrix, intensities)
 
-
+def test_multi_label_matrix():
+    eleme_corr_list = ['S']
+    with pytest.raises(KeyError):
+        multi_lab_cm = algo.multi_label_matrix(na_dict, formula_dict, eleme_corr_list)

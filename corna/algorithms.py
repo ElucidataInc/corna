@@ -125,6 +125,28 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
 
 
 def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector):
+    """
+    This function creates a correction matrix using correction vector or mass distribution vector
+    by convolving the correction vector over natural abundance of isotopic tracer elements. This
+    correction matrix is used to correct input intensity values.
+
+    Args:
+        iso_tracer : List of isotopic tracer elements
+
+        formula_dict : Dictionary of number of atoms of chemical formula
+
+        eleme_corr : Indistinguishable species to be considered for correction
+                     along with isotopic tracers
+
+        na_dict : Dictionary of natural abundance values
+
+        no_atom_tracer : no of atoms of isotopic tracer
+
+        correction_vector : mass distribution vector
+
+    Returns:
+        correction_matrix: matrix to be used for correcting intensities
+    """
 
     el_excluded = excluded_elements(iso_tracer,formula_dict, eleme_corr)
 
@@ -152,6 +174,17 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
 
 
 def matrix_multiplication(correction_matrix, intensities):
+    """
+    This function multiplies the inverse of correction matrix with the intensities
+    vector
+
+    Args:
+        correction_matrix
+
+        intensities : list of intensities
+    Returns:
+        corrected_intensites : list of corrected intensities after matrix multiplication
+    """
 
     matrix = np.array(correction_matrix)
 
@@ -202,7 +235,10 @@ def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
     return correction_matrix
 
 def multi_label_correc(na_dict, formula_dict, eleme_corr_list, intensities_list):
-
+    """
+    This function does matrix multiplication of multi label correction matrix
+    with intensities_list
+    """
     M = multi_label_matrix(na_dict, formula_dict, eleme_corr_list)
 
     icorr = matrix_multiplication(M, intensities_list)
@@ -211,6 +247,16 @@ def multi_label_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
 
 
 def fragmentsdict_model(merged_df):
+    """
+    This function converts the dataframe into fragment dictionary model
+
+    Args:
+        merged_df : dataframe with input + metadata file
+
+    Returns:
+        fragments_dict : Dictionary of the form, example : {'Aceticacid_C13_1': [C2H4O2,
+                         {'sample_1': array([ 0.0164])}, False, 'Aceticacid']
+    """
     fragments_dict = {}
     std_model_mvn = fp.standard_model(merged_df, parent = False)
     for frag_name, label_dict in std_model_mvn.iteritems():
@@ -220,20 +266,35 @@ def fragmentsdict_model(merged_df):
 
 
 def unique_samples_for_dict(merged_df):
+    """
+    This function returns the list of samples from fragment dictionary model
+
+    Args:
+        merged_df : dataframe with input + metadata file
+
+    Returns:
+        sample_list : returns list of samples from merged dataframe
+                      of the form ['sample_1', 'sample_2',..]
+    """
     fragments_dict = fragmentsdict_model(merged_df)
     universe_values = fragments_dict.values()
     sample_list = []
     for uv in universe_values:
-        samples = uv[1].keys()
+        try:
+            samples = uv[1].keys()
+        except:
+            raise KeyError('Missing samples in dataframe', samples)
         sample_list.extend(samples)
     sample_list = list(set(sample_list))
+
     return sample_list
 
 
 
 def samp_label_dcit(iso_tracers, merged_df):
     """
-    Dictionary of the form { sample1: { 0 : val, 1: value }, sample2: {}, ...}
+    This function returns dictionary of the form { sample1: { 0 : val, 1: value },
+    sample2: {}, ...}
     """
     sample_list = unique_samples_for_dict(merged_df)
     fragments_dict = fragmentsdict_model(merged_df)
