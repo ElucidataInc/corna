@@ -1,22 +1,18 @@
 import os
 import sys
 import warnings
+import numpy as np
 import pandas as pd
-#from itertools import product
 
+import config
 import helpers as hl
 import file_parser as fp
 import isotopomer as iso
 import preprocess as preproc
 import algorithms as algo
-#import double_tracer as dbt
-#import sequential_algo as sqalgo
 import postprocess as postpro
 import na_correction as nacorr
 import output as out
-import config
-import numpy as np
-
 
 
 warnings.simplefilter(action = "ignore")
@@ -133,12 +129,6 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
 
 
 #NA correction maven
-# def na_corr_single_tracer_mvn(merged_df, iso_tracers, eleme_corr, na_dict, optimization = False):
-#     labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
-#     merged_df['Label'] = labels_std
-#     na_corr_model = algo.single_trac_na_correc(merged_df, iso_tracers, eleme_corr, na_dict)
-#     return na_corr_model
-
 def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
 
     invalid_eleme_corr = eleme_corr_invalid_entry(iso_tracers, eleme_corr)
