@@ -429,6 +429,10 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
 
 
 def eleme_corr_to_list(iso_tracers, eleme_corr):
+    """
+    This function creates a list of elements to be corrected for multi tracer na correction.
+    It includes the tracer elements along with the indistinguishable species.
+    """
 
     trac_atoms = get_atoms_from_tracers(iso_tracers)
 
@@ -443,6 +447,23 @@ def eleme_corr_to_list(iso_tracers, eleme_corr):
 
 
 def filter_tuples(tuple_list, value_dict, positions):
+    """
+    This function filters the tuple list for multi tracer na correction and appends
+    zero value to the combinations not present in the input data
+
+    Args:
+        tuple_list : list of tuples with all possible combinations of the elements to
+                     be corrected
+
+        value_dict : dictionary of labels and intensity value from input data
+
+        positions : position of tuple to be ignored for filtering
+
+    Returns:
+        result_tuples : list of intensites with zeroes appended at positions for which
+                        combinations are not found in the input data.This intensites vector
+                        is used to multiply with the resultant correction matrix for multi tracer
+    """
     result_tuples = []
     for tuples in tuple_list:
         tuple_l = list(tuples)
