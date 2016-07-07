@@ -7,29 +7,43 @@ from itertools import product
 
 
 def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
-
-    labels_std = hl.convert_labels_to_std(merged_df, iso_tracers)
-
-    merged_df['Label'] = labels_std
+    """
+    This function is wrapper around algorithms.py function. It performs na correction
+    for single and multiple tracers and creates the output in the form of fragment
+    dictionary model with corrected intensities.
+    """
+    hl.convert_labels_to_std(merged_df, iso_tracers)
 
     samp_lab_dict = algo.samp_label_dcit(iso_tracers, merged_df)
 
     trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
 
     formula_dict = algo.formuladict(merged_df)
+
     fragments_dict = algo.fragmentsdict_model(merged_df)
 
     correc_inten_dict = {}
 
     for samp_name, label_dict in samp_lab_dict.iteritems():
 
-        if len(trac_atoms) == 1:
-            icorr = single_corr_list(label_dict, trac_atoms, formula_dict, eleme_corr, na_dict)
-            inten_index_dict = singe_corr_inten_dict(icorr)
-        else:
-            inten_index_dict = multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, label_dict, na_dict)
+        inten_index_dict = label_corr_intens_dict(iso_tracers, trac_atoms, label_dict, formula_dict, eleme_corr, na_dict)
 
         correc_inten_dict[samp_name] = inten_index_dict
+
+    nacorr_dict_model = corr_int_dict_model(iso_tracers, correc_inten_dict, fragments_dict)
+
+    return nacorr_dict_model
+
+def label_corr_intens_dict(iso_tracers, trac_atoms, label_dict, formula_dict, eleme_corr, na_dict):
+    if len(trac_atoms) == 1:
+        icorr = single_corr_list(label_dict, trac_atoms, formula_dict, eleme_corr, na_dict)
+        inten_index_dict = singe_corr_inten_dict(icorr)
+    else:
+        inten_index_dict = multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, label_dict, na_dict)
+    return inten_index_dict
+
+
+def corr_int_dict_model(iso_tracers, correc_inten_dict, fragments_dict):
     sample_list = algo.check_samples_ouputdict(correc_inten_dict)
     # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
     lab_samp_dict = algo.label_sample_dict(sample_list, correc_inten_dict)
@@ -39,12 +53,10 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
     return nacorr_dict_model
 
 
-
 def single_corr_list(label_dict, trac_atoms, formula_dict, eleme_corr, na_dict):
 
     intensities = np.concatenate(np.array((label_dict).values()))
 
-    #if len(trac_atoms) == 1:
     iso_tracer = trac_atoms[0]
 
     no_atom_tracer = formula_dict[iso_tracer]
