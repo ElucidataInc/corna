@@ -1,16 +1,128 @@
+import pytest
+import numpy as np
 import numpy
+import pandas as pd
 import corna.algorithms as algo
 import corna.isotopomer as iso
 
 
+iso_tracer = ['C13']
+
+formula_dict = {'C':2, 'H':4, 'O':2}
+
+no_atom_tracer = 2
+
+eleme_corr = {}
+
+na_dict = {'H':[0.98,0.01,0.01], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
+
+df = pd.DataFrame({'Name': {0: 'Acetic', 1: 'Acetic', 2: 'Acetic'}, \
+   'Parent': {0: 'Acetic', 1: 'Acetic', 2: 'Acetic'}, \
+    'Label': {0: 'C12 PARENT', 1: 'C13-label-1', 2: 'C13-label-2'}, \
+     'Intensity': {0: 0.3624, 1: 0.040349999999999997, 2: 0.59724999999999995}, \
+      'Formula': {0: 'H4C2O2', 1: 'H4C2O2', 2: 'H4C2O2'}, \
+      'info2': {0: 'culture_1', 1: 'culture_1', 2: 'culture_1'}, \
+       'Sample Name': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
+
+correc_inten_dict = {'sample_1': {(0, 1): np.array([ 0.0619]), (0, 0): np.array([ 0.2456]), \
+     (3, 0): np.array([ 0.0003]), (3, 1): np.array([ 0.0001]), (2, 1): np.array([ 0.0015]), \
+      (2, 0): np.array([ 0.0071]), (5, 0): np.array([ 0.]), (5, 1): np.array([ 0.60045]), \
+      (1, 0): np.array([ 0.06665]), (4, 1): np.array([ 0.]), (1, 1): np.array([ 0.0164]), \
+       (4, 0): np.array([ 0.])}}
+
+label_list = [(0, 1), (0, 0), (3, 0), (3, 1), (2, 1), (2, 0), (5, 0), \
+                 (5, 1), (1, 0), (4, 1), (1, 1), (4, 0)]
+
+def test_el_excluded():
+    ele_list = algo.excluded_elements(iso_tracer, formula_dict, eleme_corr)
+    assert ele_list == []
+
+def test_calc_mdv():
+    with pytest.raises(KeyError):
+        mdv = algo.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+
+def test_corr_matrix():
+    correction_vector = [1.]
+    with pytest.raises(KeyError):
+        c_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+
+def test_matrix_multiplication():
+    correction_matrix = [[0,1], [2,3]]
+    intensities = [1]
+    with pytest.raises(ValueError):
+        multiply = algo.matrix_multiplication(correction_matrix, intensities)
+
+def test_multi_label_matrix():
+    eleme_corr_list = ['S']
+    with pytest.raises(KeyError):
+        multi_lab_cm = algo.multi_label_matrix(na_dict, formula_dict, eleme_corr_list)
+
+def test_sample_list():
+    with pytest.raises(KeyError):
+        samp_dict = algo.unique_samples_for_dict(df)
+
+def test_samp_label_dcit():
+    with pytest.raises(KeyError):
+        samp_dict = algo.samp_label_dcit(iso_tracer, df)
+
+def test_formula_dict():
+    with pytest.raises(KeyError):
+        form_dict = algo.formuladict(df)
+
+def test_tracer_atoms():
+    out_atom = ['C']
+    atoms = algo.get_atoms_from_tracers(iso_tracer)
+    assert atoms == out_atom
+
+
+def test_check_samples_ouputdict():
+    lab_list = algo.check_samples_ouputdict(correc_inten_dict)
+    assert lab_list == label_list
+
+def test_label_sample_dict():
+    out_label_samp_dc = {(0, 1): {'sample_1': np.array([[ 0.0619]])}, \
+    (0, 0): {'sample_1': np.array([[ 0.2456]])}, (3, 0): {'sample_1': np.array([[ 0.0003]])}, \
+    (3, 1): {'sample_1': np.array([[ 0.0001]])}, (2, 1): {'sample_1': np.array([[ 0.0015]])}, \
+    (2, 0): {'sample_1': np.array([[ 0.0071]])}, (5, 0): {'sample_1': np.array([[ 0.]])}, \
+    (5, 1): {'sample_1': np.array([[ 0.60045]])}, (1, 0): {'sample_1': np.array([[ 0.06665]])}, \
+    (4, 1): {'sample_1': np.array([[ 0.]])}, (1, 1): {'sample_1': np.array([[ 0.0164]])}, \
+    (4, 0): {'sample_1': np.array([[ 0.]])}}
+    lab_samp_dict = algo.label_sample_dict(label_list, correc_inten_dict)
+    assert lab_samp_dict == out_label_samp_dc
+
+
+
+def test_eleme_corr_list():
+    eleme_corr = {'C':['H']}
+    el_list = algo.eleme_corr_to_list(iso_tracer, eleme_corr)
+    assert el_list == ['C', 'H']
+
+
+def test_filter_tups():
+    tuple_list = [(0,0,0), (0,0,1), (2,1,2)]
+    value_dict = {(0, 1): np.array([1]), (0, 0): np.array([2])}
+    positions = [1]
+    out = [2,1,0]
+    result = algo.filter_tuples(tuple_list, value_dict, positions)
+    assert out == result
+
+
+
+
+
+
+
+
+
+#---------------------------- YALE ---------------------------------------------------------
 sample_data = {'A. [13C-glc] G2.5 0min' : numpy.array([128.9, 385.1, 0, 385.2, 250.6, 0]),
 'B. [13C-glc] G2.5 5min' : numpy.array([258.1, 370.2, 901.3, 1026, 127, 254]),
 'C. [13C-glc] G2.5 15min' : numpy.array([2182, 1797, 3722, 1798, 2440, 1928]),
-'D. [13C-glc] G2.5 30min': numpy.array([2952, 3468,	3595, 2696,	3339, 2569]),
-'E. [13C-glc] G2.5 60min': numpy.array([2184, 2569,	2827, 2440,	3851, 3595]),
+'D. [13C-glc] G2.5 30min': numpy.array([2952, 3468, 3595, 2696, 3339, 2569]),
+'E. [13C-glc] G2.5 60min': numpy.array([2184, 2569, 2827, 2440, 3851, 3595]),
 'F. [13C-glc] G2.5 120min': numpy.array([3466, 3850, 4234, 3210, 3593, 3210]),
 'G. [13C-glc] G2.5 240min': numpy.array([2825, 4236, 7703, 3466, 2440, 2954]),
-'H. [6,6-DD-glc] G2.5 240min': numpy.array([258, 0,	0, 127.1, 770.3, 0])}
+'H. [6,6-DD-glc] G2.5 240min': numpy.array([258, 0, 0, 127.1, 770.3, 0])}
 
 input_fragment = iso.insert_data_to_fragment(('Glutamate 147/41', 'C2HO', 'C5H8NO4'), 'C13_147.0_41.0', sample_data, mass=True, number=False, mode=None)
 
@@ -359,31 +471,33 @@ glutamate_146_41_output_dict[(150.0, 42.0)] = glutamate_146_41[('Glutamate 150/4
 glutamate_146_41_output_dict[(148.0, 43.0)] = glutamate_146_41[('Glutamate 148/43_148.0', 'Glutamate 148/43_43.0')]
 
 
-def test_na_correct_mimosa():
-    assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
-                                  input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
-                                  2055, 40820, 0, 'C13', 0.011) == 798.3600000000001
+# def test_na_correct_mimosa():
+#     assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
+#                                   input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
+#                                   2055, 40820, 0, 'C13', 0.011) == 798.3600000000001
 
-def test_na_correct_mimosa_zero():
-    assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
-                                  input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
-                                  769, 87550, 0, 'C13', 0.011) == 0
+# def test_na_correct_mimosa_zero():
+#     assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
+#                                   input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
+#                                   769, 87550, 0, 'C13', 0.011) == 0
 
-def test_na_correct_mimosa_array():
-    assert numpy.array_equal(algo.na_correct_mimosa_algo_array(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
-                                            input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
-                                      numpy.array([45060, 31710, 87550,	0, 60980, 38700]), numpy.zeros(6),
-                                      numpy.zeros(6), 'C13', 0.011), numpy.array([ 47042.64,  33105.24,  91402.2,
-                                                                       0., 63663.12,  40402.8]))
+# def test_na_correct_mimosa_array():
+#     assert numpy.array_equal(algo.na_correct_mimosa_algo_array(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
+#                                             input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
+#                                       numpy.array([45060, 31710, 87550, 0, 60980, 38700]), numpy.zeros(6),
+#                                       numpy.zeros(6), 'C13', 0.011), numpy.array([ 47042.64,  33105.24,  91402.2,
+#                                                                        0., 63663.12,  40402.8]))
 
-def test_arrange_fragments_by_mass():
-    test_dict = algo.arrange_fragments_by_mass(glutamate_146_41)
-    for key, value in glutamate_146_41_output_dict.iteritems():
-        assert test_dict[key] == value
+# def test_arrange_fragments_by_mass():
+#     test_dict = algo.arrange_fragments_by_mass(glutamate_146_41)
+#     for key, value in glutamate_146_41_output_dict.iteritems():
+#         assert test_dict[key] == value
 
-def test_na_correction_mimosa_by_fragment():
-    test_dict = algo.na_correction_mimosa_by_fragment(glutamate_146_41)
-    test_data = test_dict[(147.0, 42.0)][1]
-    assert numpy.array_equal(numpy.around(test_data['F. [13C-glc] G2.5 120min'],8), numpy.around(numpy.array([991.7099655, 522.23934132,
-                                                                                 2790.3025836, 0., 1768.9036688,
-                                                                                 2126.6667507 ]),8))
+# def test_na_correction_mimosa_by_fragment():
+#     test_dict = algo.na_correction_mimosa_by_fragment(glutamate_146_41)
+#     test_data = test_dict[(147.0, 42.0)][1]
+#     assert numpy.array_equal(numpy.around(test_data['F. [13C-glc] G2.5 120min'],8), numpy.around(numpy.array([991.7099655, 522.23934132,
+#                                                                                  2790.3025836, 0., 1768.9036688,
+
+#                                                                                  2126.6667507 ]),8))
+

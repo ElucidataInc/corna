@@ -26,31 +26,10 @@ def read_mvn_metadata(path):
     mvn_metadata = hl.read_file(path)
     return mvn_metadata
 
-# Multiquant
-def read_multiquant(dir_path):
-    #mq_df = hl.concat_txts_into_df(data_dir + '/')
-    mq_df = hl.concat_txts_into_df(dir_path)
-    return mq_df
-
-def read_multiquant_metadata(path):
-    #mq_metdata = hl.read_file(data_dir + '/mq_metadata.xlsx')
-    mq_metdata = hl.read_file(path)
-
-    return mq_metdata
-
-# Merge input + metadata files
-
-# Maven
+# Maven input + metadata
 def merge_mvn_metadata(mv_df, metadata):
     merged_data = fp.maven_merge_dfs(mv_df, metadata)
     return merged_data
-
-
-# Multiquant
-def merge_mq_metadata(mq_df, metdata):
-    merged_data = fp.mq_merge_dfs(mq_df, metdata)
-    return merged_data
-
 
 def convert_inputdata_to_stdfrom(input_df):
     id = ["Name", "Formula", "Label"]
@@ -77,36 +56,6 @@ def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'co
 	return filtered_df
 
 
-# Background correction for multiquant
-def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
-    filtered_df = hl.filter_df(merged_data, "Name", metabolite)
-    if all_samples:
-        list_of_samples = fp.get_sample_names(filtered_df)
-    else:
-        list_of_samples = list_of_samples
-    std_model_mq = fp.standard_model(merged_data, parent = True)
-    fragments_dict = {}
-    for frag_name, label_dict in std_model_mq.iteritems():
-        if frag_name[2] == metabolite:
-            new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
-            fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
-    preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample, decimals)
-
-    return preprocessed_dict
-
-
-def met_background_correction_all(merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
-    if all_samples:
-        list_of_samples = fp.get_sample_names(merged_data)
-    else:
-        list_of_samples = list_of_samples
-    metab_names = hl.get_unique_values(merged_data, "Parent")
-    preprocessed_output_dict = {}
-    for metabolite in metab_names:
-        preprocessed_output_dict[metabolite] = met_background_correction(metabolite, merged_data,
-                                                                         background_sample, list_of_samples, all_samples, decimals)
-    return preprocessed_output_dict
-
 def get_na_dict(isotracers, eleme_corr):
     ele_list = algo.get_atoms_from_tracers(isotracers)
     for key, value in eleme_corr.iteritems():
@@ -117,18 +66,6 @@ def get_na_dict(isotracers, eleme_corr):
     return hl.get_sub_na_dict(ele_list)
 
 # NA correction
-# Multiquant
-def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
-    if all:
-        na_corrected_out = {}
-        for key, value in preprocessed_output.iteritems():
-            na_corrected_out[key] = algo.na_correction_mimosa_by_fragment(value, decimals)
-    else:
-        na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output, decimals)
-    return na_corrected_out
-
-
-#NA correction maven
 def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
 
     invalid_eleme_corr = eleme_corr_invalid_entry(iso_tracers, eleme_corr)
@@ -136,6 +73,7 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
     na_corr_dict = nacorr.na_correction(merged_df, iso_tracers, eleme_corr, na_dict)
 
     return na_corr_dict
+
 
 def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
     for key, value in eleme_corr.iteritems():
@@ -194,6 +132,66 @@ def save_to_csv(df, path):
 
 
 
+
+#--------------------YALE ----------------------------------------------------------
+
+# Multiquant
+def read_multiquant(dir_path):
+    #mq_df = hl.concat_txts_into_df(data_dir + '/')
+    mq_df = hl.concat_txts_into_df(dir_path)
+    return mq_df
+
+def read_multiquant_metadata(path):
+    #mq_metdata = hl.read_file(data_dir + '/mq_metadata.xlsx')
+    mq_metdata = hl.read_file(path)
+
+    return mq_metdata
+
+# Multiquant
+def merge_mq_metadata(mq_df, metdata):
+    merged_data = fp.mq_merge_dfs(mq_df, metdata)
+    return merged_data
+
+# Background correction for multiquant
+def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
+    filtered_df = hl.filter_df(merged_data, "Name", metabolite)
+    if all_samples:
+        list_of_samples = fp.get_sample_names(filtered_df)
+    else:
+        list_of_samples = list_of_samples
+    std_model_mq = fp.standard_model(merged_data, parent = True)
+    fragments_dict = {}
+    for frag_name, label_dict in std_model_mq.iteritems():
+        if frag_name[2] == metabolite:
+            new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
+            fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
+    preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample, decimals)
+
+    return preprocessed_dict
+
+
+def met_background_correction_all(merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
+    if all_samples:
+        list_of_samples = fp.get_sample_names(merged_data)
+    else:
+        list_of_samples = list_of_samples
+    metab_names = hl.get_unique_values(merged_data, "Parent")
+    preprocessed_output_dict = {}
+    for metabolite in metab_names:
+        preprocessed_output_dict[metabolite] = met_background_correction(metabolite, merged_data,
+                                                                         background_sample, list_of_samples, all_samples, decimals)
+    return preprocessed_output_dict
+
+
+#NA correction Multiquant
+def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
+    if all:
+        na_corrected_out = {}
+        for key, value in preprocessed_output.iteritems():
+            na_corrected_out[key] = algo.na_correction_mimosa_by_fragment(value, decimals)
+    else:
+        na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output, decimals)
+    return na_corrected_out
 
 
 
