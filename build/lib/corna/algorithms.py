@@ -141,7 +141,7 @@ def matrix_multiplication(correction_matrix, intensities):
 
         corrected_intensites = np.matmul(mat_inverse, inten_trasp)
 
-    except:
+    except ValueError:
         raise ValueError('Matrix size = ' + str(len(mat_inverse)) + ' and intensities = ' \
          + str(len(inten_trasp)) + ' Length does not match, \
             hence cant be multiplied')
@@ -150,6 +150,10 @@ def matrix_multiplication(correction_matrix, intensities):
 
 
 def single_lab_corr(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities):
+    """
+    This function corrects intensities for single tracer by calling other functions, correction
+    vector, correction matrix and matrix multiplication
+    """
 
     correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
 
@@ -161,6 +165,22 @@ def single_lab_corr(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dic
 
 
 def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
+    """
+    This function creates a correction matrix for multiple tracers using kronecker
+    product of matrices of different elements. Numpy kron function is used to get the product
+
+    Args:
+        na_dict : Dictionary of natural abundance values
+
+        formula_dict : Dictionary of number of atoms of chemical formula
+
+        eleme_corr_list : list of elements to be corrected (isotracers + indistinguishable elements)
+
+    Returns:
+        correction_matrix : resultant correction matrix for multiple tracers, obtained after kronecker
+                            product of matrices of different elements
+
+    """
 
     correction_vector = [1.]
     correction_matrix = [1.]
@@ -168,7 +188,7 @@ def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
     for trac in eleme_corr_list:
         try:
             no_atom_tracer = formula_dict[trac]
-        except:
+        except KeyError:
             raise KeyError('Element ' + str(trac) + ' given for correction not found in chemical \
              formula')
 
@@ -182,7 +202,7 @@ def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
 def multi_label_correc(na_dict, formula_dict, eleme_corr_list, intensities_list):
     """
     This function does matrix multiplication of multi label correction matrix
-    with intensities_list
+    with intensities_list by calling other functions
     """
     M = multi_label_matrix(na_dict, formula_dict, eleme_corr_list)
 
@@ -229,7 +249,7 @@ def unique_samples_for_dict(merged_df):
     for uv in universe_values:
         try:
             samples = uv[1].keys()
-        except:
+        except KeyError:
             raise KeyError('Missing samples in dataframe', samples)
         sample_list.extend(samples)
 
@@ -263,14 +283,14 @@ def samp_label_dcit(iso_tracers, merged_df):
             if len(iso_tracers) == 1:
                 try:
                     lab_num = uv_new[0].get_num_labeled_atoms_isotope(iso_tracers[0])
-                except:
+                except KeyError:
                     raise KeyError('Labels not defined with chemical formula in input file')
             elif len(iso_tracers) > 1:
                 lab_num = ()
                 for isotopes in iso_tracers:
                     try:
                         lab_num = lab_num + (uv_new[0].get_num_labeled_atoms_isotope(str(isotopes)),)
-                    except:
+                    except KeyError:
                         raise KeyError('Labels not defined with chemical formula in input file')
 
             dict_s[lab_num] = uv_new[1][s]
@@ -296,13 +316,23 @@ def formuladict(merged_df):
     for key, value in fragments_dict.iteritems():
         try:
             formula_dict =  value[0].get_formula()
-        except:
+        except KeyError:
             raise KeyError('Chemical formula not found in input file')
-    print formula_dict
+
     return formula_dict
 
 
 def get_atoms_from_tracers(iso_tracers):
+    """
+    This function return the atoms of the isotopic tracer in the form of
+    a list
+
+    Arg:
+        iso_tracers : list of isotopic tracers ['C13', 'N15']
+
+    Returns:
+        trac_atoms : list of atoms of isotopic tracers ['C', 'N']
+    """
     trac_atoms = []
     for i in range(0, len(iso_tracers)):
         element = hl.parse_polyatom(iso_tracers[i])[0]
@@ -311,6 +341,16 @@ def get_atoms_from_tracers(iso_tracers):
 
 
 def check_samples_ouputdict(correc_inten_dict):
+    """
+    This function gives the list of unique samples from dictionary of corrected
+    intensity model
+
+    Args:
+        correc_inten_dict : fragment dictionary model of corrected isntensities
+
+    Returns:
+        inverse_sample : list of unique label tuple from dictionary
+    """
     univ_new = correc_inten_dict.values()
     inverse_sample = []
 
@@ -320,25 +360,68 @@ def check_samples_ouputdict(correc_inten_dict):
 
     return inverse_sample
 
-def label_sample_dict(sample_list, correc_inten_dict):
+def label_sample_dict(label_list, correc_inten_dict):
+    """
+    This function returns a dictionary with outer key as number of labeled tracer
+    as tuple and dictionary with sample name amd its value
+
+    Args:
+        label_list : list of unique labels
+
+        correc_inten_dict : fragment dictionary model of corrected intensities
+
+    Returns:
+        lab_samp_dict : dictionary label as outer key and sample dictionary
+                        corresponding to each label
+    """
+
     lab_samp_dict = {}
-    for inv in sample_list:
+    for inv in label_list:
         sample_dict = {}
         for sample_tr in correc_inten_dict.keys():
-            k = correc_inten_dict[sample_tr][inv]
+            try:
+                k = correc_inten_dict[sample_tr][inv]
+            except KeyError:
+                raise KeyError('samples and labels not found in corrected intensities dictionary', sample_tr, inv)
             sample_dict[sample_tr] = np.array([k])
         lab_samp_dict[inv] = sample_dict
+
     return lab_samp_dict
 
 
 def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
+    """
+    This function creates a model of fragments dictionary on which model functions can
+    applied
+
+    Args:
+        iso_tracers : list of isotopic tracers
+
+        fragments_dict : dictionary of the form Dictionary of the form, example : {'Aceticacid_C13_1': [C2H4O2,
+                         {'sample_1': array([ 0.0164])}, False, 'Aceticacid']
+
+        lab_samp_dict : dictionary of the form {(0, 1): {'sample_1': 0.0619}....}
+
+    Returns:
+        nacorr_fragment_dict : fragment dictionary model
+
+    """
     nacorr_fragment_dict = {}
     for key, value in fragments_dict.iteritems():
         if len(iso_tracers) == 1:
-            nacorr_fragment_dict[key] = [value[0], lab_samp_dict[value[0].get_num_labeled_atoms_isotope(iso_tracers[0])], value[2], value[3]]
+
+            try:
+                nacorr_fragment_dict[key] = [value[0], lab_samp_dict[value[0].get_num_labeled_atoms_isotope(iso_tracers[0])], value[2], value[3]]
+            except KeyError:
+                raise KeyError('Name, Formula or Sample not found in input data file')
+
         elif len(iso_tracers) > 1:
-            tup_key = (value[0].get_num_labeled_atoms_isotope(iso_tracers[0]),
-                value[0].get_num_labeled_atoms_isotope(iso_tracers[1]))
+
+            try:
+                tup_key = (value[0].get_num_labeled_atoms_isotope(iso_tracers[0]),
+                    value[0].get_num_labeled_atoms_isotope(iso_tracers[1]))
+            except KeyError:
+                raise KeyError('Name, Formula or Sample not found in input data file')
             nacorr_fragment_dict[key] = [value[0], lab_samp_dict[tup_key], value[2], value[3]]
 
     return nacorr_fragment_dict
@@ -360,6 +443,8 @@ def eleme_corr_to_list(iso_tracers, eleme_corr):
 
 
 def filter_tuples(tuple_list, value_dict, positions):
+    print value_dict
+    print positions
     result_tuples = []
     for tuples in tuple_list:
         tuple_l = list(tuples)
