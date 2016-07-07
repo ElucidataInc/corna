@@ -34,12 +34,15 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
 
     return nacorr_dict_model
 
+
 def label_corr_intens_dict(iso_tracers, trac_atoms, label_dict, formula_dict, eleme_corr, na_dict):
+
     if len(trac_atoms) == 1:
         icorr = single_corr_list(label_dict, trac_atoms, formula_dict, eleme_corr, na_dict)
         inten_index_dict = singe_corr_inten_dict(icorr)
     else:
         inten_index_dict = multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, label_dict, na_dict)
+
     return inten_index_dict
 
 
@@ -65,13 +68,35 @@ def single_corr_list(label_dict, trac_atoms, formula_dict, eleme_corr, na_dict):
 
     return icorr
 
+
 def singe_corr_inten_dict(icorr):
+
     inten_index_dict = {}
     for i in range(0, len(icorr)):
         inten_index_dict[i] = icorr[i]
 
     return inten_index_dict
 
+
+def multi_corr_inten_dict():
+
+    intens_idx_dict = {}
+
+    return intens_idx_dict
+
+
+def multi_trac_intensities_list(no_atom_tracer, eleme_corr, eleme_corr_list, lab_dict):
+
+    l = [np.arange(x+1) for x in no_atom_tracer]
+    tup_list = list(product(*l))
+
+    indist_sp = sum(eleme_corr.values(),[])
+
+    tup_pos = [i for i, e in enumerate(eleme_corr_list) if e in indist_sp]
+
+    intensities_list = algo.filter_tuples(tup_list, lab_dict, tup_pos)
+
+    return intensities_list
 
 
 def multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, lab_dict, na_dict):
@@ -85,24 +110,19 @@ def multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, lab_
     for i in eleme_corr_list:
         no_atom_tracer.append(formula_dict[i])
 
-    # corr_intensities_dict = {}
-    # for samp_name, lab_dict in sample_label_dict.iteritems():
     intens_idx_dict = {}
-    l = [np.arange(x+1) for x in no_atom_tracer]
-    tup_list = list(product(*l))
 
-    indist_sp = sum(eleme_corr.values(),[])
-
-    tup_pos = [i for i, e in enumerate(eleme_corr_list) if e in indist_sp]
-
-    intensities_list = algo.filter_tuples(tup_list, lab_dict, tup_pos)
+    intensities_list = multi_trac_intensities_list(no_atom_tracer, eleme_corr, eleme_corr_list, lab_dict)
 
     icorr = algo.multi_label_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
-    #icorr = algo.perform_correction(formula_dict, iso_tracers, eleme_corr, no_atom_tracer, na_dict, intensities_list)
     print 'corrected inten'
     print icorr
     ############### line below is incorroect dictionary for now
     # to do here, this is input data dict only - to get the icorr values with keys here
+    #intens_idx_dict = multi_corr_inten_dict()
     intens_idx_dict = lab_dict
 
     return intens_idx_dict
+
+
+
