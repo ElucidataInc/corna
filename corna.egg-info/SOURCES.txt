@@ -24,9 +24,7 @@ corna.egg-info/top_level.txt
 tests/__init__.py
 tests/test_algorithms.py
 tests/test_constants.py
-tests/test_corna.py
 tests/test_demo.py
-tests/test_demo_agios.py
 tests/test_file_parser.py
 tests/test_formula.py
 tests/test_formulaschema.py
@@ -34,5 +32,6 @@ tests/test_helpers.py
 tests/test_isotopomer.py
 tests/test_model.py
 tests/test_output.py
+tests/test_output_values.py
 tests/test_postprocess.py
 tests/test_preprocess.py
