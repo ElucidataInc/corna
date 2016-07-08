@@ -24,10 +24,12 @@ def excluded_elements(iso_tracer, formula_dict, eleme_corr):
         el_excluded : List of elements to be excluded for correction
     """
     el_excluded = []
+
     for key, value in formula_dict.iteritems():
         if iso_tracer in eleme_corr.keys():
             if key not in eleme_corr[iso_tracer]:
                 el_excluded.append(key)
+
     return el_excluded
 
 
