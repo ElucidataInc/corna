@@ -37,12 +37,14 @@ def replace_negative_to_zero(corrected_dict, replace_negative = True):
 
         post_proc_dict = {}
         for frag_key, frag_info in corrected_dict.iteritems():
-            data = frag_info[1]
-            new_data = {}
-            for sample, intensity_list in data.iteritems():
-                intensity_list = map(zero_if_negative, intensity_list)
-                new_data[sample] = np.array(intensity_list)
-            post_proc_dict[frag_key] = [frag_info[0], new_data, frag_info[2], frag_info[3]]
+            sample_int_dict = frag_info[1]
+            print sample_int_dict
+            #dict_replaced_vals = {}
+            dict_replaced_vals = replace_vals(sample_int_dict)
+            # for sample, intensity_list in data.iteritems():
+            #     intensity_list = map(zero_if_negative, intensity_list)
+            #     dict_replaced_vals[sample] = np.array(intensity_list)
+            post_proc_dict[frag_key] = [frag_info[0], dict_replaced_vals, frag_info[2], frag_info[3]]
         return post_proc_dict
     elif replace_negative==False:
         return corrected_dict
@@ -85,8 +87,12 @@ def sum_intensities(fragments_dict):
         sum_dict[sample_name] = curr_arr
     return sum_dict
 
-
-
+def replace_vals(sample_int_dict):
+    dict_replaced_vals = {}
+    for sample, intensity_list in sample_int_dict.iteritems():
+        intensity_list = map(zero_if_negative, intensity_list)
+        dict_replaced_vals[sample] = np.array(intensity_list)
+    return dict_replaced_vals
 
 
 

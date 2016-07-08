@@ -7,10 +7,15 @@ import corna.isotopomer as iso
 
 
 iso_tracer = ['C13']
+
 formula_dict = {'C':2, 'H':4, 'O':2}
+
 no_atom_tracer = 2
+
 eleme_corr = {}
+
 na_dict = {'H':[0.98,0.01,0.01], 'S': [0.922297, 0.046832, 0.030872], 'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
+
 df = pd.DataFrame({'Name': {0: 'Acetic', 1: 'Acetic', 2: 'Acetic'}, \
    'Parent': {0: 'Acetic', 1: 'Acetic', 2: 'Acetic'}, \
     'Label': {0: 'C12 PARENT', 1: 'C13-label-1', 2: 'C13-label-2'}, \
@@ -94,10 +99,10 @@ def test_eleme_corr_list():
 
 
 def test_filter_tups():
-    tuple_list = [(0,0,0), (1,0,1), (2,1,2)]
-    value_dict = {'(0,0)':1, '(1,1)':2}
+    tuple_list = [(0,0,0), (0,0,1), (2,1,2)]
+    value_dict = {(0, 1): np.array([1]), (0, 0): np.array([2])}
     positions = [1]
-    out = [1,2,0]
+    out = [2,1,0]
     result = algo.filter_tuples(tuple_list, value_dict, positions)
     assert out == result
 

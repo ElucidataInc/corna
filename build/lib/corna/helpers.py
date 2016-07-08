@@ -47,11 +47,20 @@ def label_dict_to_key(label_dict):
 
     for ele, num in label_dict.iteritems():
         key = key + '_' + ele + '_' + str(num)
-
     key = key.strip('_')
+
     return key
 
 def read_file(path):
+    """
+    This function reads the input file in xls, xlsx, txt and csv
+    format
+    Args:
+        path : path to input file
+
+    Returns:
+         input_file : input file in the form of pandas dataframe
+    """
 
     excel = ['.xls', '.xlsx']
 
