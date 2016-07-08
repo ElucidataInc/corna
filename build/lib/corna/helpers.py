@@ -224,4 +224,6 @@ def convert_labels_to_std(df, iso_tracers):
                             el = el1_num + '_' + tracer + '_0'
                             new_labels.append(el)
 
-    return new_labels
+    df['Label'] = new_labels
+
+    return df
