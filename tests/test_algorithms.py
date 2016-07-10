@@ -43,6 +43,7 @@ def test_calc_mdv():
 
 def test_corr_matrix():
     correction_vector = [1.]
+    iso_tracer = 'C'
     with pytest.raises(KeyError):
         c_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 

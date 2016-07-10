@@ -399,7 +399,7 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
     Args:
         iso_tracers : list of isotopic tracers
 
-        fragments_dict : dictionary of the form Dictionary of the form, example : {'Aceticacid_C13_1': [C2H4O2,
+        fragments_dict : dictionary of the form, example : {'Aceticacid_C13_1': [C2H4O2,
                          {'sample_1': array([ 0.0164])}, False, 'Aceticacid']
 
         lab_samp_dict : dictionary of the form {(0, 1): {'sample_1': 0.0619}....}
