@@ -1,13 +1,24 @@
 """Ion, Label and Fragment class
 Ion is given by name and formula of chemical species, label is collection of functions
 to validate a label obtained from mass of species or label information given in form of
-dictionary.
+dictionary. Fragment class inherits these classes. It represnts an Ion with label present in it.
 """
 import helpers as hl
 
 
 class Ion():
+    """This class implements an Ion species with name
+    and formula
+    Attributes:
+        name (string): Name of the ion
+        formula (string): Chemical formula
+    """
     def __init__(self, name, formula):
+        """initialise Ion class
+        Args:
+            name (string): Name of the ion
+            formula (string): Chemical formula
+        """
         self.name = name
         self.formula = formula
 
@@ -35,6 +46,8 @@ class Ion():
             raise KeyError("Element not in formula", element)
 
     def get_mol_weight(self):
+        """calculate molecular weight
+        """
         parsed_formula = self.get_formula()
         mw=0
         for sym,qty in parsed_formula.iteritems():
