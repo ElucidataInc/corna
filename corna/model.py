@@ -63,9 +63,12 @@ class Label():
         """
         if isinstance(isotope_list, str):
             isotope_list = [isotope_list,]
-        for iso in isotope_list:
+        try:
+            for iso in isotope_list:
                 hl.get_isotope(iso)
-        return True
+            return True
+        except:
+            return False
 
     def get_num_labeled_atoms(self, isotope, label_dict):
         self.check_if_valid_isotope(isotope)
