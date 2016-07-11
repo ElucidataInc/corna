@@ -66,7 +66,7 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
             for i in range(n):
                 try:
                     correction_vector = np.convolve(correction_vector, na_dict[el])
-                except:
+                except KeyError:
                     raise KeyError('Element ' + el + ' not found in Natural Abundance dictionary')
     return list(correction_vector)
 
@@ -113,7 +113,7 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
             for nb in range(no_atom_tracer-i):
                 try:
                     column = np.convolve(column, na_dict[iso_tracer])[:no_atom_tracer+1]
-                except:
+                except KeyError:
                     raise KeyError('Element not found in Natural Abundance dictionary', iso_tracer)
         correction_matrix[:,i] = column
 
