@@ -127,3 +127,15 @@ def const_isotope_na_mass():
 def const_variable():
     const_obj = PyConstObj(var_col="variable")
     return const_obj.VAR_COL
+
+def const_col_level_0():
+    const_obj = PyConstObj(level_0_col="level_0")
+    return const_obj.LEVEL_0_COL
+
+def const_col_level_1():
+    const_obj = PyConstObj(level_1_col="level_1")
+    return const_obj.LEVEL_1_COL
+
+def const_value():
+    const_obj = PyConstObj(val_col="value")
+    return const_obj.VAL_COL

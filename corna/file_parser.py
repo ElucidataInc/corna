@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import helpers as hl
 import config as conf
-import constants as const
+
 
 
 
@@ -25,13 +25,13 @@ def maven_merge_dfs(df1, df2):
     long_form = melt_df(df1)
 
     try:
-        merged_df = hl.merge_dfs(long_form, df2, how = 'left', left_on = 'variable', right_on = 'sample')
+        merged_df = hl.merge_dfs(long_form, df2, how = 'left', left_on = hl.VAR_COL, right_on = 'sample')
     except KeyError:
         raise KeyError('sample column not found in metadata')
 
     merged_df[conf.PARENT_COL] = merged_df[conf.NAME_COL]
 
-    merged_df.rename(columns={"variable": conf.SAMPLE_COL, "value":conf.INTENSITY_COL}, inplace=True)
+    merged_df.rename(columns={hl.VAR_COL: conf.SAMPLE_COL, hl.VAL_COL:conf.INTENSITY_COL}, inplace=True)
 
     return merged_df
 

@@ -14,6 +14,10 @@ polyatomschema = schema_obj.create_polyatom_schema()
 ELE_ATOMIC_WEIGHTS = cs.const_element_mol_weight_dict()
 ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
 NA_DICT = cs.const_na_dict()
+LEVEL_0_COl = cs.const_col_level_0()
+LEVEL_1_COL = cs.const_col_level_1()
+VAR_COL = cs.const_variable()
+VAL_COL = cs.const_value()
 
 def get_atomic_weight(element):
     try:
@@ -130,6 +134,10 @@ def merge_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
 
 
 def filter_df(df, column_name, column_value):
+    """
+    This function filters the dataframe over single column name and single column
+    value
+    """
 
     #write test if col name not string
     filtered_df = df[df[str(column_name)] == column_value]
@@ -141,6 +149,9 @@ def filter_df(df, column_name, column_value):
 
 
 def filtering_df(df, num_col=3, col1='col1', list_col1_vals=[], col2='col2', list_col2_vals=[], col3='col3', list_col3_vals=[]):
+    """
+    This function allows filtering of dataframe over multiple columns and multiple columns values (maximum three)
+    """
     if num_col==1:
         filtered_df = df[(df[str(col1)].isin(list_col1_vals))]
 
@@ -167,6 +178,9 @@ def create_dict_from_isotope_label_list(isonumlist):
 
 
 def get_unique_values(df, column_name):
+    """
+    This function gives the unique values from a column in the form of a list
+    """
 
     unique_val_list = np.unique(df[[str(column_name)]])
 
@@ -205,6 +219,10 @@ def get_formula(formula):
 
 
 def convert_labels_to_std(df, iso_tracers):
+    """
+    This function converts the labels C13N15-label-1-1 in the form
+    C13_1_N15_1
+    """
     new_labels = []
     for labels in df['Label']:
         if labels == 'C12 PARENT':
