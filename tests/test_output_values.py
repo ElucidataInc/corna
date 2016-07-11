@@ -28,6 +28,7 @@ def test_na_corr_single_tracer():
 
 	assert na_corr_df['NA corrected'].tolist() == output_list
 
+
 def test_na_corr_single_trac_indist():
 
 	df = pd.DataFrame({'Name': {0: 'Acetic', 1: 'Acetic', 2: 'Acetic'}, \
@@ -80,6 +81,7 @@ def test_na_corr_multi_trac():
 	0.00064617771744998609, -2.6604348209106283e-06, 0.60045010712919833]
 
 	assert na_corr_df['NA corrected'].tolist() == output_list
+
 
 def test_na_corr_multi_trac_indist():
 

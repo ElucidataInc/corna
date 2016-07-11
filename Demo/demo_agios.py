@@ -26,7 +26,7 @@ maven_metadata = corna.read_mvn_metadata(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
-print merge_mv_metdata.to_dict()
+
 # tracer isotopes
 #iso_tracers = ['C13']
 iso_tracers = ['C13', 'N15']
@@ -51,9 +51,6 @@ na_dict = corna.get_na_dict(iso_tracers, eleme_corr)
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 print na_corr_df
-
-for i in na_corr_df['NA corrected']:
-	print i
 
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)

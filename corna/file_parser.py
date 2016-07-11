@@ -1,5 +1,3 @@
-import os
-import json
 import numpy as np
 import pandas as pd
 import helpers as hl
@@ -31,7 +29,9 @@ def maven_merge_dfs(df1, df2):
 
     merged_df[conf.PARENT_COL] = merged_df[conf.NAME_COL]
 
-    merged_df.rename(columns={hl.VAR_COL: conf.SAMPLE_COL, hl.VAL_COL:conf.INTENSITY_COL}, inplace=True)
+    merged_df.rename(
+        columns={hl.VAR_COL: conf.SAMPLE_COL, hl.VAL_COL:conf.INTENSITY_COL},
+        inplace=True)
 
     return merged_df
 
@@ -70,7 +70,7 @@ def get_sample_names(df):
     try:
         sample_list = df[conf.SAMPLE_COL].unique().tolist()
     except:
-        raise KeyError('Column'+ conf.SAMPLE_COL + 'not found in dataframe')
+        raise KeyError('Column' + conf.SAMPLE_COL + 'not found in dataframe')
     return sample_list
 
 
@@ -118,7 +118,7 @@ def frag_key(df, parent = False):
     return df
 
 
-def standard_model(df, parent = False):
+def standard_model(df, parent=False):
     """
     This function convert the merged data into standard data model
     """
