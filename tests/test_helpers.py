@@ -11,7 +11,7 @@ def test_get_atomic_weight_wildcard():
     assert err.value.message == 'Element doesnt exist'
 
 def test_get_isotope_details():
-    assert help.get_isotope('C13') == {'NA':0.0107, 'mol_mass':13.0033548378, 'nat_form':'C12'}
+    assert help.get_isotope('C13') == 'C'
 
 def test_get_isotope_na():
     assert help.get_isotope_na('C13') == 0.0107

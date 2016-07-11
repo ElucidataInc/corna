@@ -23,7 +23,7 @@ def get_atomic_weight(element):
 
 def get_isotope(iso):
     try:
-        return ISOTOPE_NA_MASS[iso]
+        return ISOTOPE_NA_MASS['Element'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 

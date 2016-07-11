@@ -55,7 +55,12 @@ class Ion():
         return mw
 
 class Label():
+    """Collection of label validation functions"""
     def check_if_valid_isotope(self, isotope_list):
+        """
+        Args:
+            isotope_list (string/list[string]): list of isotopes
+        """
         if isinstance(isotope_list, str):
             isotope_list = [isotope_list,]
         for iso in isotope_list:

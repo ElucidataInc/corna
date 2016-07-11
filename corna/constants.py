@@ -114,15 +114,29 @@ def const_na_dict():
     return const_obj.NA_DICT
 
 def const_isotope_na_mass():
-    isotope_na_mass = {'C12': {'NA':0.9893, 'mol_mass':12, 'nat_form': 'C12'},
-                       'C13': {'NA':0.011, 'mol_mass':13, 'nat_form': 'C12'},
-                       'C14': {'NA':0, 'mol_mass':14.003241989, 'nat_form': 'C12'},
-                       'N14': {'NA':0.00364, 'mol_mass':14.003074, 'nat_form': 'N14'},
-                       'N15': {'NA':0.00364, 'mol_mass':15.0001088982, 'nat_form': 'N14'},
-                       'O16': {'NA':0.00364, 'mol_mass':15.994915, 'nat_form': 'O16'},
-                       'O17': {'NA':0.00364, 'mol_mass':16.999132, 'nat_form': 'O17'},
-                       'O18': {'NA':0.00364, 'mol_mass':17.999160, 'nat_form': 'O18'},
-                       'H1': {'NA':0.00364, 'mol_mass':1.007825, 'nat_form': 'H1'},
-                       'H2': {'NA':0.00364, 'mol_mass':2.014102, 'nat_form': 'H1'}}
+    isotope_na_mass = {'NA':{'C12':0.989, 'C13':0.011,
+                             'N14':0.99636, 'N15':0.00364,
+                             'O16':0.99757, 'O17':0.00038, 'O18':0.00205,
+                             'H1':0.999885, 'H2':0.000115,
+                             'S32':0.9493, 'S33':0.0076, 'S34':0.0429},
+                       'Element':{'C12':'C', 'C13':'C',
+                                  'N14':'N', 'N15':'N',
+                                  'H1':'H', 'H2':'H',
+                                  'O16':'O', 'O17':'O', 'O18':'O',
+                                  'S32':'S', 'S33':'S', 'S34':'S'},
+                       'amu':{'C12':12, 'C13':13,
+                                  'N14':14, 'N15':15,
+                                  'O16':16, 'O17':17, 'O18':18,
+                                  'S32':32, 'S33':33, 'S34':34}}
+    # isotope_na_mass = {'C12': {'NA':0.9893, 'mol_mass':12, 'nat_form': 'C12'},
+    #                    'C13': {'NA':0.011, 'mol_mass':13, 'nat_form': 'C12'},
+    #                    'C14': {'NA':0, 'mol_mass':14.003241989, 'nat_form': 'C12'},
+    #                    'N14': {'NA':0.00364, 'mol_mass':14.003074, 'nat_form': 'N14'},
+    #                    'N15': {'NA':0.00364, 'mol_mass':15.0001088982, 'nat_form': 'N14'},
+    #                    'O16': {'NA':0.00364, 'mol_mass':15.994915, 'nat_form': 'O16'},
+    #                    'O17': {'NA':0.00364, 'mol_mass':16.999132, 'nat_form': 'O17'},
+    #                    'O18': {'NA':0.00364, 'mol_mass':17.999160, 'nat_form': 'O18'},
+    #                    'H1': {'NA':0.00364, 'mol_mass':1.007825, 'nat_form': 'H1'},
+    #                    'H2': {'NA':0.00364, 'mol_mass':2.014102, 'nat_form': 'H1'}}
     const_obj = PyConstObj(isotope_na_mass=isotope_na_mass)
     return const_obj.ISOTOPE_NA_MASS
