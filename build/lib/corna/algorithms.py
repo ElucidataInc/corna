@@ -24,10 +24,12 @@ def excluded_elements(iso_tracer, formula_dict, eleme_corr):
         el_excluded : List of elements to be excluded for correction
     """
     el_excluded = []
+
     for key, value in formula_dict.iteritems():
         if iso_tracer in eleme_corr.keys():
             if key not in eleme_corr[iso_tracer]:
                 el_excluded.append(key)
+
     return el_excluded
 
 
@@ -64,7 +66,7 @@ def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
             for i in range(n):
                 try:
                     correction_vector = np.convolve(correction_vector, na_dict[el])
-                except:
+                except KeyError:
                     raise KeyError('Element ' + el + ' not found in Natural Abundance dictionary')
     return list(correction_vector)
 
@@ -111,7 +113,7 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
             for nb in range(no_atom_tracer-i):
                 try:
                     column = np.convolve(column, na_dict[iso_tracer])[:no_atom_tracer+1]
-                except:
+                except KeyError:
                     raise KeyError('Element not found in Natural Abundance dictionary', iso_tracer)
         correction_matrix[:,i] = column
 
@@ -397,7 +399,7 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
     Args:
         iso_tracers : list of isotopic tracers
 
-        fragments_dict : dictionary of the form Dictionary of the form, example : {'Aceticacid_C13_1': [C2H4O2,
+        fragments_dict : dictionary of the form, example : {'Aceticacid_C13_1': [C2H4O2,
                          {'sample_1': array([ 0.0164])}, False, 'Aceticacid']
 
         lab_samp_dict : dictionary of the form {(0, 1): {'sample_1': 0.0619}....}

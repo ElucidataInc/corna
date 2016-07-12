@@ -107,9 +107,6 @@ def const_na_dict():
     #             'S': [0.922297, 0.046832, 0.030872]}
     na_dict = {'H':[0.98,0.01,0.01], 'C': [0.95, 0.05], 'S': [0.922297, 0.046832, 0.030872], \
     'O':[0.95,0.03,0.02], 'N': [0.8, 0.2]}
-    # na_dict = {'C': [0.05, 0.95], 'H' : [0.00015, 0.99],
-    #             'O': [0.00205, 0.00038, 0.99757], 'N': [0.00364,0.99636],
-    #             'S': [0.030872, 0.046832, 0.922297]}
     const_obj = PyConstObj(na_dict=na_dict)
     return const_obj.NA_DICT
 
@@ -126,3 +123,19 @@ def const_isotope_na_mass():
                        'H2': {'NA':0.00364, 'mol_mass':2.014102, 'nat_form': 'H1'}}
     const_obj = PyConstObj(isotope_na_mass=isotope_na_mass)
     return const_obj.ISOTOPE_NA_MASS
+
+def const_variable():
+    const_obj = PyConstObj(var_col="variable")
+    return const_obj.VAR_COL
+
+def const_col_level_0():
+    const_obj = PyConstObj(level_0_col="level_0")
+    return const_obj.LEVEL_0_COL
+
+def const_col_level_1():
+    const_obj = PyConstObj(level_1_col="level_1")
+    return const_obj.LEVEL_1_COL
+
+def const_value():
+    const_obj = PyConstObj(val_col="value")
+    return const_obj.VAL_COL

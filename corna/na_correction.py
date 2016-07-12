@@ -110,13 +110,26 @@ def singe_corr_inten_dict(icorr):
     return inten_index_dict
 
 
-def multi_corr_inten_dict():
+def multi_corr_inten_dict(eleme_corr, eleme_corr_list, no_atom_tracer, icorr, lab_dict):
     """
     This function creates a dictionary of labels and corrected intensities for multi tracer
     na correction
     """
 
     intens_idx_dict = {}
+
+    positions = indis_tuple_position(eleme_corr, eleme_corr_list)
+    tup_list = element_tuple_list(no_atom_tracer)
+    correct_idx_dict = dict(zip(tup_list, icorr))
+
+    for tuples, vals in correct_idx_dict.iteritems():
+        tuple_l = list(tuples)
+        filtered_tuple = [tuple_l[x] for x in positions]
+        if sum(filtered_tuple) == 0:
+            rqrd_pos = [tuple_l[x] for x in range(0,len(tuple_l)) if x not in positions]
+            rqrd_tup = tuple(rqrd_pos)
+            if rqrd_tup in lab_dict.keys():
+                intens_idx_dict[rqrd_tup] = vals
 
     return intens_idx_dict
 
@@ -127,17 +140,37 @@ def multi_trac_intensities_list(no_atom_tracer, eleme_corr, eleme_corr_list, lab
     all posible combinaltion for elements to be corrected). This intensity list vector
     is used for correction
     """
-    l = [np.arange(x+1) for x in no_atom_tracer]
+    tup_list = element_tuple_list(no_atom_tracer)
 
-    tup_list = list(product(*l))
-
-    indist_sp = sum(eleme_corr.values(),[])
-
-    tup_pos = [i for i, e in enumerate(eleme_corr_list) if e in indist_sp]
+    tup_pos = indis_tuple_position(eleme_corr, eleme_corr_list)
 
     intensities_list = algo.filter_tuples(tup_list, lab_dict, tup_pos)
 
     return intensities_list
+
+
+def indis_tuple_position(eleme_corr, eleme_corr_list):
+    """
+    This function returns the positions of indistinguishable elements from
+    tuple list
+    """
+    indist_sp = sum(eleme_corr.values(),[])
+
+    tup_pos = [i for i, e in enumerate(eleme_corr_list) if e in indist_sp]
+
+    return tup_pos
+
+
+def element_tuple_list(no_atom_tracer):
+    """
+    This function returns the tuple list of elements to be corrected. it generates
+    all possible combinations of the elements in the form of a tuple
+    """
+    l = [np.arange(x+1) for x in no_atom_tracer]
+
+    tup_list = list(product(*l))
+
+    return tup_list
 
 
 def multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, lab_dict, na_dict):
@@ -159,14 +192,12 @@ def multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, lab_
     intensities_list = multi_trac_intensities_list(no_atom_tracer, eleme_corr, eleme_corr_list, lab_dict)
 
     icorr = algo.multi_label_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
-    print 'corrected inten'
-    print icorr
-    ############### line below is incorroect dictionary for now
-    # to do here, this is input data dict only - to get the icorr values with keys here
-    #intens_idx_dict = multi_corr_inten_dict()
-    intens_idx_dict = lab_dict
+
+
+    intens_idx_dict = multi_corr_inten_dict(eleme_corr, eleme_corr_list, no_atom_tracer, icorr, lab_dict)
 
     return intens_idx_dict
+
 
 
 
