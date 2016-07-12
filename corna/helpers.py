@@ -24,7 +24,7 @@ def get_atomic_weight(element):
 def check_if_isotope_in_dict(iso):
     return ISOTOPE_NA_MASS['Element'].has_key(iso)
 
-def get_isotope(iso):
+def get_isotope_element(iso):
     try:
         return ISOTOPE_NA_MASS['Element'][iso]
     except KeyError:

@@ -21,20 +21,32 @@ def get_atomic_weight(element):
     except KeyError:
         raise KeyError('Element doesnt exist')
 
-def get_isotope(iso):
+def check_if_isotope_in_dict(iso):
+    return ISOTOPE_NA_MASS['Element'].has_key(iso)
+
+def get_isotope_element(iso):
     try:
-        return ISOTOPE_NA_MASS[iso]
+        return ISOTOPE_NA_MASS['Element'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 def get_isotope_mass(iso):
-    return get_isotope(iso)['mol_mass']
+    try:
+        return ISOTOPE_NA_MASS['amu'][iso]
+    except KeyError:
+        raise KeyError('Check available isotope list', iso)
 
 def get_isotope_na(iso):
-    return get_isotope(iso)['NA']
+    try:
+        return ISOTOPE_NA_MASS['NA'][iso]
+    except KeyError:
+        raise KeyError('Check available isotope list', iso)
 
 def get_isotope_natural(iso):
-    return get_isotope(iso)['nat_form']
+    try:
+        return ISOTOPE_NA_MASS['Natural Isotope'][iso]
+    except KeyError:
+        raise KeyError('Check available isotope list', iso)
 
 def get_sub_na_dict(elements):
     sub_na_dict = {}

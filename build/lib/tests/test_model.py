@@ -46,9 +46,11 @@ class TestLabelClass:
     def test_validity_of_isotopes(self):
         assert self.label.check_if_valid_isotope(['C13', 'N15']) == True
 
+    def test_validity_of_isotopes_string(self):
+        assert self.label.check_if_valid_isotope('C13') == True
+
     def test_validity_of_isotopes_wildcard(self):
-        with pytest.raises(KeyError):
-            self.label.check_if_valid_isotope(['C13', 'N15', 'K10'])
+        assert self.label.check_if_valid_isotope(['C13', 'N15', 'K10']) == False
 
     def test_get_number_of_labeled_atoms(self):
         assert self.label.get_num_labeled_atoms('C13', {'C13':3, 'N15':3}) == 3
@@ -56,10 +58,7 @@ class TestLabelClass:
     def test_get_number_of_labeled_atoms_wildcard(self):
         with pytest.raises(KeyError) as err:
             self.label.get_num_labeled_atoms('C14', {'C13':2, 'N15':3})
-        assert err.value.message == 'Isotope not present in label dictionary'
-
-    def test_check_for_number_atoms_zero(self):
-        assert self.label.get_num_labeled_atoms('C12', {'C12':2}) == 0
+        assert err.value.args == ('Isotope not available in constants','C14')
 
     def test_number_of_label_from_mass(self):
         assert self.label.get_label_from_mass('C13', 192.124, 198) == 6
@@ -118,5 +117,11 @@ class TestFragmentClass:
     def test_check_if_unlabel_nat(self):
         assert self.fragment_unlabel_nat.check_if_unlabel() == True
 
-    def test_check_if_unlabel_label(self):
-        assert self.fragment.check_if_unlabel() == False
+    def test_check_if_unlabel_0(self):
+        print (self.fragment.check_if_unlabel({'C12':2, 'C13':0}))
+
+    def test_check_if_unlabel_1(self):
+        print (self.fragment.check_if_unlabel({'C12':2, 'C13':3}))
+
+    def test_check_if_unlabel_2(self):
+        print (self.fragment.check_if_unlabel({'C13':0}))

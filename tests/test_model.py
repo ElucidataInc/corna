@@ -117,5 +117,11 @@ class TestFragmentClass:
     def test_check_if_unlabel_nat(self):
         assert self.fragment_unlabel_nat.check_if_unlabel() == True
 
-    def test_check_if_unlabel_label(self):
-        assert self.fragment.check_if_unlabel() == False
+    def test_check_if_unlabel_0(self):
+        print (self.fragment.check_if_unlabel({'C12':2, 'C13':0}))
+
+    def test_check_if_unlabel_1(self):
+        print (self.fragment.check_if_unlabel({'C12':2, 'C13':3}))
+
+    def test_check_if_unlabel_2(self):
+        print (self.fragment.check_if_unlabel({'C13':0}))

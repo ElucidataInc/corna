@@ -23,11 +23,12 @@ def backround_subtraction(input_intensity, noise):
 def background(sample_name, input_fragment_value, unlabeled_fragment_value):
     parent_frag, daughter_frag = input_fragment_value[0]
     data = input_fragment_value[1]
-    parent_label = parent_frag.get_num_labeled_atoms_tracer()
-    parent_atoms = parent_frag.get_number_of_atoms_isotope(parent_frag.isotope)
+    parent_label = parent_frag.get_num_labeled_atoms_isotope(parent_frag.isotope)
+    iso_elem = hl.get_isotope_element(parent_frag.isotope)
+    parent_atoms = parent_frag.number_of_atoms(iso_elem)
     na = hl.get_isotope_na(parent_frag.isotope)
-    daughter_atoms = daughter_frag.get_number_of_atoms_isotope(parent_frag.isotope)
-    daughter_label = daughter_frag.get_num_labeled_atoms_tracer()
+    daughter_atoms = daughter_frag.number_of_atoms(iso_elem)
+    daughter_label = daughter_frag.get_num_labeled_atoms_isotope(daughter_frag.isotope)
     input_intensities = data[sample_name]
     unlabeled_data = unlabeled_fragment_value[1]
     unlabeled_intensities = unlabeled_data[sample_name]
