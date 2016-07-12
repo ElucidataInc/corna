@@ -4,7 +4,7 @@ from corna import config
 config.NAME_COL = 'Name'
 # path to directory where multiquant text data files are present
 #path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agios/'
-path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_agios/'
+path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_agios/testfiles'
 # read maven data
 #single tracer data
 #maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
