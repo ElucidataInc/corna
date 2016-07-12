@@ -10,14 +10,20 @@ def test_get_atomic_weight_wildcard():
         help.get_atomic_weight('R')
     assert err.value.message == 'Element doesnt exist'
 
+def test_check_if_isotope_in_dict():
+    assert help.check_if_isotope_in_dict('C13') == True
+
+def test_check_if_isotope_in_dict_false():
+    assert help.check_if_isotope_in_dict('C14') == False
+
 def test_get_isotope_details():
     assert help.get_isotope('C13') == 'C'
 
 def test_get_isotope_na():
-    assert help.get_isotope_na('C13') == 0.0107
+    assert help.get_isotope_na('C13') == 0.011
 
 def	test_get_isotope_mass():
-    assert help.get_isotope_mass('C13') == 13.0033548378
+    assert help.get_isotope_mass('C13') == 13
 
 def test_get_isotope_natural():
     assert help.get_isotope_natural('C13') == 'C12'

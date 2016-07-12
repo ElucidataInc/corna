@@ -60,34 +60,48 @@ class Label():
         """
         Args:
             isotope_list (string/list[string]): list of isotopes
+            Example ['C13', 'N15']
         """
         if isinstance(isotope_list, str):
             isotope_list = [isotope_list,]
-        try:
-            for iso in isotope_list:
-                hl.get_isotope(iso)
-            return True
-        except:
-            return False
+        for iso in isotope_list:
+            if hl.check_if_isotope_in_dict(iso):
+                continue
+            else:
+                return False
+        return True
 
     def get_num_labeled_atoms(self, isotope, label_dict):
-        self.check_if_valid_isotope(isotope)
-        if isotope == hl.get_isotope_natural(isotope):
-            return 0
-        try:
-            return label_dict[isotope]
-        except KeyError:
-            raise KeyError('Isotope not present in label dictionary')
+        """get number of labeled atoms of an isotope in label dictionary
+        Args:
+            isotope (string): isotope symbol (eg 'C13')
+            label_dict (dict): dictionary of isotope -> number of atoms
+            Example {'C13':3, 'N14':5}
+        """
+        if self.check_if_valid_isotope(isotope):
+            try:
+                return label_dict[isotope]
+            except KeyError:
+                raise KeyError('Isotope not present in label dictionary')
+        else:
+            raise KeyError('Isotope not available in constants', isotope)
 
     def get_label_from_mass(self, isotope, molecular_mass, isotopic_mass):
-        self.check_if_valid_isotope(isotope)
-        nat_iso = hl.get_isotope_natural(isotope)
-        if nat_iso == isotope:
-            return 0
-        atom_excess_mass = hl.get_isotope_mass(isotope) - hl.get_isotope_mass(nat_iso)
-        number_label = int(round((isotopic_mass - molecular_mass)/atom_excess_mass))
-        return number_label
-
+        """get label from molecular mass and isotopic mass
+        Args:
+            isotope (string): isotope symbol (eg 'C13')
+            molecular_mass (float): molecular mass of the molecule
+            isotopic_mass (float): isotopic mass of the molecule
+        """
+        if self.check_if_valid_isotope(isotope):
+            nat_iso = hl.get_isotope_natural(isotope)
+            if nat_iso == isotope:
+                return 0
+            atom_excess_mass = hl.get_isotope_mass(isotope) - hl.get_isotope_mass(nat_iso)
+            number_label = int(round((isotopic_mass - molecular_mass)/atom_excess_mass))
+            return number_label
+        else:
+            raise KeyError('Isotope not available in constants', isotope)
 
 class Fragment(Ion, Label):
     def __init__(self, name, formula, **kwargs):
