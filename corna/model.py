@@ -275,15 +275,13 @@ class Fragment(Ion, Label):
         num = self.get_label_from_mass(isotope, molecular_mass, isotopic_mass)
         return {isotope: num}
 
-    def check_if_unlabel(self, label_dict):
+    def check_if_unlabel(self):
         """say dict is unlabel if it contains no label isotopes are zero
-        Args:
-            label_dict (dict): isotope -> number of atoms
         Returns:
             bool: if unlabel true else false
         """
         if all(hl.get_isotope_natural(key) == key or value == 0
-               for key, value in label_dict.iteritems()):
+               for key, value in self.label_dict.iteritems()):
             return True
         else:
             return False
