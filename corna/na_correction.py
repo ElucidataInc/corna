@@ -40,13 +40,25 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
 
     fragments_dict = algo.fragmentsdict_model(merged_df)
 
+    print 'fragements dict before'
+    print fragments_dict
+
     correc_inten_dict = {}
+
+    print 'samp_lab_dict'
+    print samp_lab_dict
 
     for samp_name, label_dict in samp_lab_dict.iteritems():
 
         inten_index_dict = label_corr_intens_dict(iso_tracers, trac_atoms, label_dict, formula_dict, eleme_corr, na_dict)
 
         correc_inten_dict[samp_name] = inten_index_dict
+
+    print 'correc_inten_dict'
+    print correc_inten_dict
+
+    print 'fragments_dict'
+    print fragments_dict
 
     nacorr_dict_model = corr_int_dict_model(iso_tracers, correc_inten_dict, fragments_dict)
 

@@ -226,9 +226,17 @@ def fragmentsdict_model(merged_df):
     """
     fragments_dict = {}
     std_model_mvn = fp.standard_model(merged_df, parent = False)
+    print 'std_model_mvn'
+    print std_model_mvn
+    #fragments_list = []
 
-    for frag_name, label_dict in std_model_mvn.iteritems():
-        fragments_dict.update(iso.bulk_insert_data_to_fragment(frag_name, label_dict, mass=False, number=True, mode=None))
+    for metabolite_name, label_dict  in std_model_mvn.iteritems():
+        fragments_dict[metabolite_name] = {}
+        for label, data in label_dict.iteritems():
+            fragments_dict[metabolite_name].update(iso.bulk_insert_data_to_fragment(metabolite_name, {label:data}, mass=False, number=True, mode=None))
+
+    print 'fragmentsdict_model'
+    print fragments_dict
 
     return fragments_dict
 
@@ -246,12 +254,15 @@ def unique_samples_for_dict(merged_df):
     """
     fragments_dict = fragmentsdict_model(merged_df)
     universe_values = fragments_dict.values()
+    print 'universe values'
+    print universe_values
     sample_list = []
 
     for uv in universe_values:
         try:
             samples = uv[1].keys()
         except KeyError:
+            #this doesn't raise error properly, samples referred before assignment
             raise KeyError('Missing samples in dataframe', samples)
         sample_list.extend(samples)
 
@@ -277,6 +288,8 @@ def samp_label_dcit(iso_tracers, merged_df):
     sample_list = unique_samples_for_dict(merged_df)
     fragments_dict = fragmentsdict_model(merged_df)
     universe_values = fragments_dict.values()
+    print 'universe values'
+    print universe_values
     samp_lab_dict = {}
 
     for s in sample_list:
@@ -495,8 +508,8 @@ def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intens
     iso_elem = hl.get_isotope_element(isotope)
     p = parent_frag_m.number_of_atoms(iso_elem)
     d = daughter_frag_n.number_of_atoms(iso_elem)
-    m = parent_frag_m.get_num_labeled_atoms_isotope(isotope)
-    n = daughter_frag_n.get_num_labeled_atoms_isotope(isotope)
+    m = parent_frag_m.get_num_labeled_atoms_tracer()
+    n = daughter_frag_n.get_num_labeled_atoms_tracer()
 
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
@@ -507,8 +520,8 @@ def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, 
     iso_elem = hl.get_isotope_element(isotope)
     p = parent_frag_m.number_of_atoms(iso_elem)
     d = daughter_frag_n.number_of_atoms(iso_elem)
-    m = parent_frag_m.get_num_labeled_atoms_isotope(isotope)
-    n = daughter_frag_n.get_num_labeled_atoms_isotope(isotope)
+    m = parent_frag_m.get_num_labeled_atoms_tracer()
+    n = daughter_frag_n.get_num_labeled_atoms_tracer()
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
 
