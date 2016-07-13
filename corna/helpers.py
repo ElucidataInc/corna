@@ -18,6 +18,7 @@ LEVEL_0_COl = cs.const_col_level_0()
 LEVEL_1_COL = cs.const_col_level_1()
 VAR_COL = cs.const_variable()
 VAL_COL = cs.const_value()
+ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
 
 def get_atomic_weight(element):
     try:

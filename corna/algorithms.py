@@ -158,6 +158,7 @@ def single_lab_corr(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dic
     """
 
     correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+    #correction_vector = [1.]
 
     correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 

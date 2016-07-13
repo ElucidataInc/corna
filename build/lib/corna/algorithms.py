@@ -158,6 +158,7 @@ def single_lab_corr(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dic
     """
 
     correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
+    #correction_vector = [1.]
 
     correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
 
@@ -276,6 +277,7 @@ def samp_label_dcit(iso_tracers, merged_df):
     """
     sample_list = unique_samples_for_dict(merged_df)
     fragments_dict = fragmentsdict_model(merged_df)
+    print fragments_dict
     universe_values = fragments_dict.values()
     samp_lab_dict = {}
 
