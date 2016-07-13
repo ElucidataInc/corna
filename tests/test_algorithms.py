@@ -37,15 +37,11 @@ def test_el_excluded():
     ele_list = algo.excluded_elements(iso_tracer, formula_dict, eleme_corr)
     assert ele_list == []
 
-def test_calc_mdv():
-    with pytest.raises(KeyError):
-        mdv = algo.calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
-
 def test_corr_matrix():
     correction_vector = [1.]
     iso_tracer = 'C'
     with pytest.raises(KeyError):
-        c_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+        c_matrix = algo.corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict)
 
 def test_matrix_multiplication():
     correction_matrix = [[0,1], [2,3]]
@@ -75,7 +71,6 @@ def test_tracer_atoms():
     atoms = algo.get_atoms_from_tracers(iso_tracer)
     assert atoms == out_atom
 
-
 def test_check_samples_ouputdict():
     lab_list = algo.check_samples_ouputdict(correc_inten_dict)
     assert lab_list == label_list
@@ -91,13 +86,10 @@ def test_label_sample_dict():
     lab_samp_dict = algo.label_sample_dict(label_list, correc_inten_dict)
     assert lab_samp_dict == out_label_samp_dc
 
-
-
 def test_eleme_corr_list():
     eleme_corr = {'C':['H']}
     el_list = algo.eleme_corr_to_list(iso_tracer, eleme_corr)
     assert el_list == ['C', 'H']
-
 
 def test_filter_tups():
     tuple_list = [(0,0,0), (0,0,1), (2,1,2)]
