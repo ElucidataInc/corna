@@ -54,8 +54,6 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
 
 
 
-
-
 def corr_int_dict_model(iso_tracers, correc_inten_dict, fragments_dict):
     """
     This function returns the na correction dictionary model
