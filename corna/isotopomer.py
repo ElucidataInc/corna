@@ -1,7 +1,6 @@
 from model import Fragment
 import helpers as hl
 import numpy as np
-import collections
 
 
 def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
@@ -38,7 +37,7 @@ def parse_label_mass(label_mass):
     massdata = label_mass.split('_')
     try:
         isotracer = massdata[0]
-        hl.get_isotope(isotracer)
+        hl.get_isotope_element(isotracer)
         parent_mass = float(massdata[1])
         daughter_mass = float(massdata[2])
     except IndexError:
