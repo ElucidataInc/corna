@@ -48,7 +48,6 @@ def test_na_corr_single_trac_indist():
 
 	assert na_corr_df['NA corrected'].tolist() == output_list
 
-
 def test_na_corr_multi_trac():
 
 	df = pd.DataFrame({'Name': {0: 'L-Methionine', 1: 'L-Methionine', 2: 'L-Methionine', 3: 'L-Methionine',

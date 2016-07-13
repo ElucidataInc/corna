@@ -38,7 +38,7 @@ def parse_label_mass(label_mass):
     massdata = label_mass.split('_')
     try:
         isotracer = massdata[0]
-        hl.get_isotope(isotracer)
+        hl.get_isotope_element(isotracer)
         parent_mass = float(massdata[1])
         daughter_mass = float(massdata[2])
     except IndexError:

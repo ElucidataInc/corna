@@ -494,10 +494,11 @@ def filter_tuples(tuple_list, value_dict, positions):
 # -------------------------YALE--------------------------------------------------
 def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                       isotope, na, decimals):
-    p = parent_frag_m.get_number_of_atoms_isotope(isotope)
-    d = daughter_frag_n.get_number_of_atoms_isotope(isotope)
-    m = parent_frag_m.get_num_labeled_atoms_tracer()
-    n = daughter_frag_n.get_num_labeled_atoms_tracer()
+    iso_elem = hl.get_isotope_element(isotope)
+    p = parent_frag_m.number_of_atoms(iso_elem)
+    d = daughter_frag_n.number_of_atoms(iso_elem)
+    m = parent_frag_m.get_num_labeled_atoms_isotope(isotope)
+    n = daughter_frag_n.get_num_labeled_atoms_isotope(isotope)
 
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
@@ -505,10 +506,11 @@ def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intens
 
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                       isotope, na, decimals):
-    p = parent_frag_m.get_number_of_atoms_isotope(isotope)
-    d = daughter_frag_n.get_number_of_atoms_isotope(isotope)
-    m = parent_frag_m.get_num_labeled_atoms_tracer()
-    n = daughter_frag_n.get_num_labeled_atoms_tracer()
+    iso_elem = hl.get_isotope_element(isotope)
+    p = parent_frag_m.number_of_atoms(iso_elem)
+    d = daughter_frag_n.number_of_atoms(iso_elem)
+    m = parent_frag_m.get_num_labeled_atoms_isotope(isotope)
+    n = daughter_frag_n.get_num_labeled_atoms_isotope(isotope)
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
 
