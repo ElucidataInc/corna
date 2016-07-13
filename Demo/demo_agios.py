@@ -7,13 +7,13 @@ path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_ag
 #path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_agios/testfiles'
 # read maven data
 #single tracer data
-#maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
+maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
 
 # single tracer indistinguishable
 #maven_data = corna.read_maven(path_dir + '/aceticacid_indist.csv')
 
 #double tracer
-maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
+#maven_data = corna.read_maven(path_dir + '/double_trac_test.csv')
 #print maven_data
 
 
@@ -26,11 +26,11 @@ maven_metadata = corna.read_mvn_metadata(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
-print merge_mv_metdata
+#print merge_mv_metdata
 
 # tracer isotopes
-#iso_tracers = ['C13']
-iso_tracers = ['C13', 'N15']
+iso_tracers = ['C13']
+#iso_tracers = ['C13', 'N15']
 
 #element to be corrected
 #eleme_corr = {'C': ['H']}
@@ -51,8 +51,9 @@ na_dict = corna.get_na_dict(iso_tracers, eleme_corr)
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+print maven_data
 print na_corr_df
-print na_corr_df['NA corrected'].sum()
+
 
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
@@ -81,6 +82,6 @@ filtered_data = corna.filtering_df(frac_enr_df, num_col=3, col1="Name",
                                 col3="Label", list_col3_vals = ['C13_1_N15_0', 'C13_2_N15_0'])
 
 # save any dataframe at given path
-#save_dfs = corna.save_to_csv(merged_results_df, path_dir + 'results.csv')
+save_dfs = corna.save_to_csv(merged_results_df, path_dir + 'results.csv')
 
 

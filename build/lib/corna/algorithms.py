@@ -7,7 +7,7 @@ import isotopomer as iso
 
 
 
-# MAVEN
+
 def excluded_elements(iso_tracer, formula_dict, eleme_corr):
     """
     This function gives a list of elements to be excluded for correction
@@ -33,45 +33,7 @@ def excluded_elements(iso_tracer, formula_dict, eleme_corr):
     return el_excluded
 
 
-def calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict):
-    """
-    Calculate a correction vector or mass distribution vector (at natural abundance),
-    based on the elemental compositions of both metabolite's moiety.The element
-    corresponding to the isotopic tracer is not taken into account in the
-    metabolite moiety.
-
-    Args:
-        iso_tracer : List of isotopic tracer elements
-
-        formula_dict : Dictionary of number of atoms of chemical formula
-
-        eleme_corr : Indistinguishable species to be considered for correction
-                     along with isotopic tracers
-
-        na_dict : Dictionary of natural abundance values
-
-    Returns:
-        correction_vector: A correction vector list. This vector is formed by convolution
-                           of NA values of all atoms other than isotopic tracers. It is
-                           arranged in increasing order of labeled atoms [m0, m1, m2 ..so on]
-
-    """
-    el_excluded = excluded_elements(iso_tracer, formula_dict, eleme_corr)
-
-    correction_vector = [1.]
-    for el, n in formula_dict.iteritems():
-
-        if not el == iso_tracer and el not in el_excluded:
-
-            for i in range(n):
-                try:
-                    correction_vector = np.convolve(correction_vector, na_dict[el])
-                except KeyError:
-                    raise KeyError('Element ' + el + ' not found in Natural Abundance dictionary')
-    return list(correction_vector)
-
-
-def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector):
+def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict):
     """
     This function creates a correction matrix using correction vector or mass distribution vector
     by convolving the correction vector over natural abundance of isotopic tracer elements. This
@@ -102,10 +64,8 @@ def corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, c
     el_pur = [0,1]
 
     for i in range(no_atom_tracer+1):
-        if not eleme_corr:
-            column = [1.]
-        else:
-            column = correction_vector[:no_atom_tracer+1]
+
+        column = [1.]
 
         for na in range(i):
             column = np.convolve(column, el_pur)[:no_atom_tracer+1]
@@ -151,22 +111,6 @@ def matrix_multiplication(correction_matrix, intensities):
     return corrected_intensites
 
 
-def single_lab_corr(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities):
-    """
-    This function corrects intensities for single tracer by calling other functions, correction
-    vector, correction matrix and matrix multiplication
-    """
-
-    correction_vector = calc_mdv(formula_dict, iso_tracer, eleme_corr, na_dict)
-    #correction_vector = [1.]
-
-    correction_matrix = corr_matrix(iso_tracer, formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
-
-    icorr = matrix_multiplication(correction_matrix, intensities)
-
-    return icorr
-
-
 def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
     """
     This function creates a correction matrix for multiple tracers using kronecker
@@ -185,7 +129,7 @@ def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
 
     """
 
-    correction_vector = [1.]
+    #correction_vector = [1.]
     correction_matrix = [1.]
 
     for trac in eleme_corr_list:
@@ -196,9 +140,12 @@ def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
              formula')
 
         eleme_corr = {}
-        matrix_tracer = corr_matrix(str(trac), formula_dict, eleme_corr, no_atom_tracer, na_dict, correction_vector)
+
+        matrix_tracer = corr_matrix(str(trac), formula_dict, eleme_corr, no_atom_tracer, na_dict)
 
         correction_matrix = np.kron(correction_matrix, matrix_tracer)
+
+
 
     return correction_matrix
 
@@ -277,25 +224,18 @@ def samp_label_dcit(iso_tracers, merged_df):
     """
     sample_list = unique_samples_for_dict(merged_df)
     fragments_dict = fragmentsdict_model(merged_df)
-    print fragments_dict
     universe_values = fragments_dict.values()
     samp_lab_dict = {}
 
     for s in sample_list:
         dict_s = {}
         for uv_new in universe_values:
-            if len(iso_tracers) == 1:
+            lab_num = ()
+            for isotopes in iso_tracers:
                 try:
-                    lab_num = uv_new[0].get_num_labeled_atoms_isotope(iso_tracers[0])
+                    lab_num = lab_num + (uv_new[0].get_num_labeled_atoms_isotope(str(isotopes)),)
                 except KeyError:
                     raise KeyError('Labels not defined with chemical formula in input file')
-            elif len(iso_tracers) > 1:
-                lab_num = ()
-                for isotopes in iso_tracers:
-                    try:
-                        lab_num = lab_num + (uv_new[0].get_num_labeled_atoms_isotope(str(isotopes)),)
-                    except KeyError:
-                        raise KeyError('Labels not defined with chemical formula in input file')
 
             dict_s[lab_num] = uv_new[1][s]
 
@@ -412,21 +352,18 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
     """
     nacorr_fragment_dict = {}
     for key, value in fragments_dict.iteritems():
-        if len(iso_tracers) == 1:
 
-            try:
-                nacorr_fragment_dict[key] = [value[0], lab_samp_dict[value[0].get_num_labeled_atoms_isotope(iso_tracers[0])], value[2], value[3]]
-            except KeyError:
-                raise KeyError('Name, Formula or Sample not found in input data file')
+        if len(iso_tracers) == 1:
+            tup_key = (value[0].get_num_labeled_atoms_isotope(iso_tracers[0]),)
 
         elif len(iso_tracers) > 1:
-
             try:
                 tup_key = (value[0].get_num_labeled_atoms_isotope(iso_tracers[0]),
-                    value[0].get_num_labeled_atoms_isotope(iso_tracers[1]))
+                            value[0].get_num_labeled_atoms_isotope(iso_tracers[1]))
             except KeyError:
                 raise KeyError('Name, Formula or Sample not found in input data file')
-            nacorr_fragment_dict[key] = [value[0], lab_samp_dict[tup_key], value[2], value[3]]
+
+        nacorr_fragment_dict[key] = [value[0], lab_samp_dict[tup_key], value[2], value[3]]
 
     return nacorr_fragment_dict
 
@@ -497,8 +434,8 @@ def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intens
     iso_elem = hl.get_isotope_element(isotope)
     p = parent_frag_m.number_of_atoms(iso_elem)
     d = daughter_frag_n.number_of_atoms(iso_elem)
-    m = parent_frag_m.get_num_labeled_atoms_isotope(isotope)
-    n = daughter_frag_n.get_num_labeled_atoms_isotope(isotope)
+    m = parent_frag_m.get_num_labeled_atoms_tracer()
+    n = daughter_frag_n.get_num_labeled_atoms_tracer()
 
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
@@ -509,8 +446,8 @@ def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, 
     iso_elem = hl.get_isotope_element(isotope)
     p = parent_frag_m.number_of_atoms(iso_elem)
     d = daughter_frag_n.number_of_atoms(iso_elem)
-    m = parent_frag_m.get_num_labeled_atoms_isotope(isotope)
-    n = daughter_frag_n.get_num_labeled_atoms_isotope(isotope)
+    m = parent_frag_m.get_num_labeled_atoms_tracer()
+    n = daughter_frag_n.get_num_labeled_atoms_tracer()
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
 

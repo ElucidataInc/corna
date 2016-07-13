@@ -44,7 +44,7 @@ def test_na_corr_single_trac_indist():
 	na_corr_dict = corna.na_correction(df, single_tracers, eleme_corr, na_dict)
 	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 
-	output_list = [0.20455050180955123, 0.49128964787331614, 0.30268558338072632]
+	output_list = [0.2783720710600131, 0.52118757080316813, 0.3026855833807266]
 
 	assert na_corr_df['NA corrected'].tolist() == output_list
 

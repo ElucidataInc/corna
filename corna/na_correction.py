@@ -44,7 +44,7 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
 
     for samp_name, label_dict in samp_lab_dict.iteritems():
 
-        inten_index_dict = label_corr_intens_dict(iso_tracers, trac_atoms, label_dict, formula_dict, eleme_corr, na_dict)
+        inten_index_dict = multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, label_dict, na_dict)
 
         correc_inten_dict[samp_name] = inten_index_dict
 
@@ -53,19 +53,7 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
     return nacorr_dict_model
 
 
-def label_corr_intens_dict(iso_tracers, trac_atoms, label_dict, formula_dict, eleme_corr, na_dict):
-    """
-    This function creates a dictionary with keys as labels and values as corrected intensities for
-    single and multiple tracer
-    """
 
-    if len(trac_atoms) == 1:
-        icorr = single_corr_list(label_dict, trac_atoms, formula_dict, eleme_corr, na_dict)
-        inten_index_dict = singe_corr_inten_dict(icorr)
-    else:
-        inten_index_dict = multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, label_dict, na_dict)
-
-    return inten_index_dict
 
 
 def corr_int_dict_model(iso_tracers, correc_inten_dict, fragments_dict):
@@ -79,35 +67,6 @@ def corr_int_dict_model(iso_tracers, correc_inten_dict, fragments_dict):
     nacorr_dict_model = algo.fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
 
     return nacorr_dict_model
-
-
-def single_corr_list(label_dict, trac_atoms, formula_dict, eleme_corr, na_dict):
-    """
-    This function returns the list of corrected intensities for single tracer na correction
-    """
-
-    intensities = np.concatenate(np.array((label_dict).values()))
-
-    iso_tracer = trac_atoms[0]
-
-    no_atom_tracer = formula_dict[iso_tracer]
-
-    icorr = algo.single_lab_corr(formula_dict, iso_tracer, eleme_corr, no_atom_tracer, na_dict, intensities)
-
-    return icorr
-
-
-def singe_corr_inten_dict(icorr):
-    """
-    This function creates a dictionary of labels and corrected intensities for single tracer
-    na correction
-    """
-
-    inten_index_dict = {}
-    for i in range(0, len(icorr)):
-        inten_index_dict[i] = icorr[i]
-
-    return inten_index_dict
 
 
 def multi_corr_inten_dict(eleme_corr, eleme_corr_list, no_atom_tracer, icorr, lab_dict):
