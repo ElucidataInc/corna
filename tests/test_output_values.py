@@ -22,8 +22,7 @@ def test_na_corr_single_tracer():
 	eleme_corr = {}
 
 	na_corr_dict = corna.na_correction(df, single_tracers, eleme_corr, na_dict)
-	print na_corr_dict
-	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected', all=True)
+	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 
 	output_list = [0.59613019390581723, 0.0023185595567866008, 0.40155124653739621]
 
