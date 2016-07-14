@@ -3,17 +3,17 @@ from corna import config
 
 config.NAME_COL = 'Name'
 # path to directory where multiquant text data files are present
-path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agios/'
-#path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_agios/testfiles'
+#path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agios/'
+path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_agios/testfiles'
 # read maven data
 #single tracer data
-maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
+#maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
 
 # single tracer indistinguishable
 #maven_data = corna.read_maven(path_dir + '/aceticacid_indist.csv')
 
 #double tracer
-#maven_data = corna.read_maven(path_dir + '/double_trac_test.csv')
+maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
 #maven_data = corna.read_maven(path_dir + '/aceticacid_multi.csv')
 #print maven_data
 
@@ -30,8 +30,8 @@ merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
 #print merge_mv_metdata
 
 # tracer isotopes
-iso_tracers = ['C13']
-#iso_tracers = ['C13', 'N15']
+#iso_tracers = ['C13']
+iso_tracers = ['C13', 'N15']
 
 #element to be corrected
 #eleme_corr = {'C': ['H']}

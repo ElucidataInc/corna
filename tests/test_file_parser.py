@@ -3,8 +3,6 @@ import pandas as pd
 import corna.file_parser as fp
 import corna.config as conf
 
-
-
 def test_mvn_merge_dfs():
 	with pytest.raises(KeyError):
 		df1 = pd.DataFrame({'Name': [1,2,3], 'Formula': [1,2,3], 'sample': [1,2,3]})
