@@ -56,14 +56,28 @@ def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'co
 	return filtered_df
 
 
-def get_na_dict(isotracers, eleme_corr):
-    ele_list = algo.get_atoms_from_tracers(isotracers)
-    for key, value in eleme_corr.iteritems():
-        ele_list.append(key)
-        for ele in value:
-            ele_list.append(ele)
-    ele_list = list(set(ele_list))
-    return hl.get_sub_na_dict(ele_list)
+# def get_na_dict(isotracers, eleme_corr):
+#     ele_list = algo.get_atoms_from_tracers(isotracers)
+#     for key, value in eleme_corr.iteritems():
+#         ele_list.append(key)
+#         for ele in value:
+#             ele_list.append(ele)
+#     ele_list = list(set(ele_list))
+#     return hl.get_sub_na_dict(ele_list)
+
+def get_na_value_dict():
+    na_mass_dict =  hl.ISOTOPE_NA_MASS
+    NA = na_mass_dict['NA']
+    elements = na_mass_dict['Element']
+    out_dict = {}
+    chemical_elements = list(set(elements.values()))
+    for e in chemical_elements:
+        isotope_dict = {k: v for k, v in elements.iteritems() if v == e}
+        isotope_list = isotope_dict.keys()
+        na_correction = [NA[x] for x in isotope_list]
+        na_correction.sort(reverse=True)
+        out_dict[e] = na_correction
+    return out_dict
 
 # NA correction
 def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
@@ -194,17 +208,5 @@ def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
     return na_corrected_out
 
 
-def get_na_dictionary():
-    na_mass_dict =  hl.ISOTOPE_NA_MASS
-    df = pd.DataFrame(na_mass_dict)
-    f = lambda x: x.sort('amu', ascending=True)
-    sort_df = df.groupby('Element', sort=False).apply(f)
-    sort2.set_index('Element').T.to_dict('list')
-    # ele_list = algo.get_atoms_from_tracers(isotracers)
-    # for key, value in eleme_corr.iteritems():
-    #     ele_list.append(key)
-    #     for ele in value:
-    #         ele_list.append(ele)
-    # ele_list = list(set(ele_list))
-    # return hl.get_sub_na_dict(ele_list)
+
 

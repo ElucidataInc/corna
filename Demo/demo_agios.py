@@ -37,9 +37,8 @@ iso_tracers = ['C13']
 # In case of no indistinguishable elements, eleme corr is empty dictionary
 eleme_corr = {}
 
-
 # NA values dict
-na_dict = corna.get_na_dict(iso_tracers, eleme_corr)
+na_dict = corna.get_na_value_dict()
 
 # edit na values
 #na_dict['H'][0] = 0.989
@@ -53,6 +52,7 @@ na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 print maven_data
 print na_corr_df
+print na_corr_df['NA corrected'].sum()
 
 
 # Replace negative values by zero on NA corrected data - optional
