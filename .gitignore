@@ -67,12 +67,13 @@ Thumbs.db
 *.cdat
 *.xml
 *.ipynb
-*.ipynb_checkpoints
 *.csv
 *.xls
 *.xlsx
 
+.cache/**
 dist/**
 corna.egg-info/**
 build/**
+.ipynb_checkpoints/**
 
