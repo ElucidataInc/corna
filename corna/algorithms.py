@@ -358,8 +358,10 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
 
         elif len(iso_tracers) > 1:
             try:
-                tup_key = (value[0].get_num_labeled_atoms_isotope(iso_tracers[0]),
-                            value[0].get_num_labeled_atoms_isotope(iso_tracers[1]))
+                tup_key = []
+                for isotope in iso_tracers:
+                    tup_key.append(value[0].get_num_labeled_atoms_isotope(isotope))
+                tup_key = tuple(tup_key)
             except KeyError:
                 raise KeyError('Name, Formula or Sample not found in input data file')
 

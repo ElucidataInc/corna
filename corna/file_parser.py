@@ -133,7 +133,6 @@ def standard_model(df, parent=False):
         lab_dict = {}
         for label in unq_labels:
             df_subset_on_labels = df_subset[df_subset[conf.LABEL_COL] == label]
-
             label_frame = df_subset_on_labels.groupby(conf.SAMPLE_COL)[conf.INTENSITY_COL].apply(lambda x: np.array(x.tolist()))
             label_dict = label_frame.to_dict()
             lab_dict[label] = label_dict
