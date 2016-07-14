@@ -129,7 +129,6 @@ def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
 
     """
 
-    #correction_vector = [1.]
     correction_matrix = [1.]
 
     for trac in eleme_corr_list:
@@ -243,6 +242,7 @@ def samp_label_dcit(iso_tracers, merged_df):
 
     return samp_lab_dict
 
+
 def formuladict(merged_df):
     """
     This function creates a formula dictionary from the chemical
@@ -303,6 +303,7 @@ def check_samples_ouputdict(correc_inten_dict):
     inverse_sample = list(set(inverse_sample))
 
     return inverse_sample
+
 
 def label_sample_dict(label_list, correc_inten_dict):
     """

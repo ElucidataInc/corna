@@ -29,8 +29,8 @@ merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
 #print merge_mv_metdata
 
 # tracer isotopes
-#iso_tracers = ['C13']
-iso_tracers = ['C13', 'N15']
+iso_tracers = ['C13']
+#iso_tracers = ['C13', 'N15']
 
 #element to be corrected
 #eleme_corr = {'C': ['H']}
