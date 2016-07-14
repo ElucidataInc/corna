@@ -1,14 +1,10 @@
-import os
-import sys
+
 import warnings
-import numpy as np
 import pandas as pd
 
-import config
 import helpers as hl
 import file_parser as fp
 import isotopomer as iso
-import preprocess as preproc
 import algorithms as algo
 import postprocess as postpro
 import na_correction as nacorr
@@ -55,16 +51,6 @@ def filtering_df(df, num_col = 3, col1 = 'col1', list_col1_vals = [], col2 = 'co
 	filtered_df = hl.filtering_df(df, num_col, col1, list_col1_vals, col2, list_col2_vals, col3, list_col3_vals)
 	return filtered_df
 
-
-# def get_na_dict(isotracers, eleme_corr):
-#     ele_list = algo.get_atoms_from_tracers(isotracers)
-#     for key, value in eleme_corr.iteritems():
-#         ele_list.append(key)
-#         for ele in value:
-#             ele_list.append(ele)
-#     ele_list = list(set(ele_list))
-#     return hl.get_sub_na_dict(ele_list)
-
 def get_na_value_dict():
     na_mass_dict =  hl.ISOTOPE_NA_MASS
     NA = na_mass_dict['NA']
@@ -81,14 +67,13 @@ def get_na_value_dict():
 
 # NA correction
 def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
-    invalid_eleme_corr = eleme_corr_invalid_entry(iso_tracers, eleme_corr)
+    eleme_corr_invalid_entry(iso_tracers, eleme_corr)
     hl.convert_labels_to_std(merged_df, iso_tracers)
 
     metabolite_dict = algo.fragmentsdict_model(merged_df)
     na_corr_dict = {}
     for metabolite, fragments_dict in metabolite_dict.iteritems():
         na_corr_dict[metabolite] = nacorr.na_correction(fragments_dict, iso_tracers, eleme_corr, na_dict)
-
 
     return na_corr_dict
 
@@ -103,7 +88,7 @@ def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
 def replace_negatives(na_corr_dict, replace_negative = True):
     post_processed_dict = {}
     for metabolite, fragment_dict in na_corr_dict.iteritems():
-        post_processed_dict[metabolite] = postpro.replace_negative_to_zero(fragment_dict, replace_negative = True)
+        post_processed_dict[metabolite] = postpro.replace_negative_to_zero(fragment_dict, replace_negative)
 
     return post_processed_dict
 
@@ -133,70 +118,6 @@ def convert_to_df(dict_output, colname = 'col_name'):
 # Save any dataframe to csv
 def save_to_csv(df, path):
     df.to_csv(path)
-
-
-
-
-#--------------------YALE ----------------------------------------------------------
-
-# Multiquant
-def read_multiquant(dir_path):
-    #mq_df = hl.concat_txts_into_df(data_dir + '/')
-    mq_df = hl.concat_txts_into_df(dir_path)
-    return mq_df
-
-def read_multiquant_metadata(path):
-    #mq_metdata = hl.read_file(data_dir + '/mq_metadata.xlsx')
-    mq_metdata = hl.read_file(path)
-
-    return mq_metdata
-
-# Multiquant
-def merge_mq_metadata(mq_df, metdata):
-    merged_data = fp.mq_merge_dfs(mq_df, metdata)
-    return merged_data
-
-# Background correction for multiquant
-def met_background_correction(metabolite, merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
-    filtered_df = hl.filter_df(merged_data, "Name", metabolite)
-    if all_samples:
-        list_of_samples = fp.get_sample_names(filtered_df)
-    else:
-        list_of_samples = list_of_samples
-    std_model_mq = fp.standard_model(merged_data)
-    fragments_dict = {}
-    for frag_name, label_dict in std_model_mq.iteritems():
-        if frag_name[2] == metabolite:
-            new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
-            fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
-    preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample, decimals)
-
-    return preprocessed_dict
-
-
-def met_background_correction_all(merged_data, background_sample, list_of_samples=[], all_samples=True, decimals=0):
-    if all_samples:
-        list_of_samples = fp.get_sample_names(merged_data)
-    else:
-        list_of_samples = list_of_samples
-    metab_names = hl.get_unique_values(merged_data, "Parent")
-    preprocessed_output_dict = {}
-    for metabolite in metab_names:
-        preprocessed_output_dict[metabolite] = met_background_correction(metabolite, merged_data,
-                                                                         background_sample, list_of_samples, all_samples, decimals)
-    return preprocessed_output_dict
-
-
-#NA correction Multiquant
-def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
-    if all:
-        na_corrected_out = {}
-        for key, value in preprocessed_output.iteritems():
-            na_corrected_out[key] = algo.na_correction_mimosa_by_fragment(value, decimals)
-    else:
-        na_corrected_out = algo.na_correction_mimosa_by_fragment(preprocessed_output, decimals)
-    return na_corrected_out
-
 
 
 
