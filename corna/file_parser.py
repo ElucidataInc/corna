@@ -3,9 +3,6 @@ import pandas as pd
 import helpers as hl
 import config as conf
 
-
-
-
 def maven_merge_dfs(df1, df2):
     """
     This function combines the MAVEN input file dataframe and the metadata
