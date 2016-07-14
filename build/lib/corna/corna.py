@@ -72,6 +72,7 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
 
     na_corr_dict = nacorr.na_correction(merged_df, iso_tracers, eleme_corr, na_dict)
 
+
     return na_corr_dict
 
 
@@ -89,6 +90,9 @@ def replace_negatives(na_corr_dict, replace_negative = True, all=False):
             post_processed_dict[metabolite] = postpro.replace_negative_to_zero(fragment_dict, replace_negative = True)
     else:
         post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict, replace_negative = True)
+    print ''
+    print 'post processed dict'
+    print post_processed_dict
     return post_processed_dict
 
 # Fractional Enrichment
@@ -99,6 +103,9 @@ def fractional_enrichment(post_processed_out, all=False, decimals=4):
             frac_enrichment_dict[metabolite] = postpro.enrichment(fragment_dict, decimals)
     else:
         frac_enrichment_dict = postpro.enrichment(post_processed_out, decimals)
+    print ''
+    print 'fractional enrichment'
+    print frac_enrichment_dict
     return frac_enrichment_dict
 
 # Convert nested dict to dataframe for visualization
@@ -107,6 +114,7 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
         df_list = []
 
         for metabolite, fragment_dict in dict_output.iteritems():
+
             std_model = iso.fragment_dict_to_std_model(fragment_dict, mass=False, number=True)
 
             model_to_df = out.convert_dict_df(std_model, parent=False)
@@ -115,7 +123,6 @@ def convert_to_df(dict_output, all=False, colname = 'col_name'):
         model_to_df = hl.concatentate_dataframes_by_col(df_list)
 
     else:
-
         std_model = iso.fragment_dict_to_std_model(dict_output, mass=False, number=True)
 
         model_to_df = out.convert_dict_df(std_model, parent=False)
