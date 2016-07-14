@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+
 import helpers as hl
 import config as conf
 
@@ -33,33 +34,6 @@ def maven_merge_dfs(df1, df2):
     return merged_df
 
 
-def mq_merge_dfs(df1, df2):
-    """
-    This function combines the MQ input file dataframe and the metadata
-    file dataframe
-
-    Args:
-        input_data : MQ input data in form of pandas dataframe
-
-        metadata : metadata in the form of pandas dataframe
-
-    Returns:
-        combined_data : dataframe with input data and metadata combined
-    """
-
-    try:
-        merged_df = hl.merge_dfs(df1, df2, how= 'inner', left_on = 'Component Name', right_on = 'Fragment')
-    except KeyError:
-        raise KeyError('Missing columns: Componenet Name or Fragment')
-
-    merged_df[conf.MASSINFO_COL] = merged_df[conf.MASSINFO_COL].str.replace(' / ', "_")
-
-    remove_stds = remove_mq_stds(merged_df)
-
-    remove_stds.rename(columns={"Component Name":conf.NAME_COL, "Area":conf.INTENSITY_COL}, inplace=True)
-    return remove_stds
-
-
 def get_sample_names(df):
     """
     This function gets the unique sample names from data
@@ -87,40 +61,23 @@ def melt_df(df1):
     return long_form
 
 
-def remove_mq_stds(merged_df):
-    """
-    This function removes the standard samples from multiquant data
-    """
-    try:
-        remove_stds = merged_df[merged_df[conf.SAMPLE_COL].str.contains("std") == False]
-    except:
-        raise KeyError('Std samples not found in' + conf.SAMPLE_COL +' column')
-    remove_stds[conf.LABEL_COL] = remove_stds[conf.ISOTRACER_COL] + "_" + remove_stds[conf.MASSINFO_COL]
-    remove_stds.pop(conf.MASSINFO_COL)
-    remove_stds.pop(conf.ISOTRACER_COL)
-    return remove_stds
-
-
-def frag_key(df, parent = False):
+def frag_key(df):
     """
     This function creates a fragment key column in merged data based on parent information.
     """
     try:
-        if parent == True:
-            df[conf.FRAG_COL] = df.apply(lambda x : tuple([x[conf.NAME_COL], x[conf.FORMULA_COL], x[conf.PARENT_COL], x["Parent_Formula"]]), axis=1)
-        elif parent == False:
-            df[conf.FRAG_COL] = df.apply(lambda x : tuple([x[conf.NAME_COL], x[conf.FORMULA_COL]]), axis=1)
+        df[conf.FRAG_COL] = df.apply(lambda x : tuple([x[conf.NAME_COL], x[conf.FORMULA_COL]]), axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
     return df
 
 
-def standard_model(df, parent=False):
+def standard_model(df):
     """
     This function convert the merged data into standard data model
     """
 
-    df = frag_key(df, parent = False)
+    df = frag_key(df)
     unique_frags = df[conf.FRAG_COL].unique().tolist()
     std_model_dict = {}
 

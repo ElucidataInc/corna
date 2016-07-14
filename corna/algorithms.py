@@ -172,7 +172,7 @@ def fragmentsdict_model(merged_df):
                          {'sample_1': array([ 0.0164])}, False, 'Aceticacid']
     """
     fragments_dict = {}
-    std_model_mvn = fp.standard_model(merged_df, parent = False)
+    std_model_mvn = fp.standard_model(merged_df)
     for metabolite_name, label_dict  in std_model_mvn.iteritems():
         fragments_dict[metabolite_name] = {}
         for label, data in label_dict.iteritems():

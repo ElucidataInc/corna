@@ -163,7 +163,7 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
         list_of_samples = fp.get_sample_names(filtered_df)
     else:
         list_of_samples = list_of_samples
-    std_model_mq = fp.standard_model(merged_data, parent = True)
+    std_model_mq = fp.standard_model(merged_data)
     fragments_dict = {}
     for frag_name, label_dict in std_model_mq.iteritems():
         if frag_name[2] == metabolite:
