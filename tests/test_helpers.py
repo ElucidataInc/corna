@@ -80,5 +80,4 @@ def test_parse_polyatom():
 def test_get_formula():
     assert help.get_formula('C6H12O6') == {'C':6, 'H':12, 'O':6}
 
-def test_concat_dfs():
 
