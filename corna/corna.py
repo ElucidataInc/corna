@@ -75,6 +75,7 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
     for metabolite, fragments_dict in metabolite_dict.iteritems():
         na_corr_dict[metabolite] = nacorr.na_correction(fragments_dict, iso_tracers, eleme_corr, na_dict)
 
+
     return na_corr_dict
 
 
@@ -97,17 +98,14 @@ def fractional_enrichment(post_processed_out, decimals=4):
     frac_enrichment_dict = {}
     for metabolite, fragment_dict in post_processed_out.iteritems():
         frac_enrichment_dict[metabolite] = postpro.enrichment(fragment_dict, decimals)
-
     return frac_enrichment_dict
 
 # Convert nested dict to dataframe for visualization
 def convert_to_df(dict_output, colname = 'col_name'):
     df_list = []
-
     for metabolite, fragment_dict in dict_output.iteritems():
 
         std_model = iso.fragment_dict_to_std_model(fragment_dict, mass=False, number=True)
-
         model_to_df = out.convert_dict_df(std_model, parent=False)
         df_list.append(model_to_df)
 

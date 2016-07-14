@@ -173,17 +173,10 @@ def fragmentsdict_model(merged_df):
     """
     fragments_dict = {}
     std_model_mvn = fp.standard_model(merged_df, parent = False)
-    print 'std_model_mvn'
-    print std_model_mvn
-    #fragments_list = []
-
     for metabolite_name, label_dict  in std_model_mvn.iteritems():
         fragments_dict[metabolite_name] = {}
         for label, data in label_dict.iteritems():
             fragments_dict[metabolite_name].update(iso.bulk_insert_data_to_fragment(metabolite_name, {label:data}, mass=False, number=True, mode=None))
-
-    print 'fragmentsdict_model'
-    print fragments_dict
 
     return fragments_dict
 
@@ -200,7 +193,6 @@ def unique_samples_for_dict(fragments_dict):
                       of the form ['sample_1', 'sample_2',..]
     """
     sample_list = []
-
 
     universe_values = fragments_dict.values()
     for uv in universe_values:
@@ -232,7 +224,6 @@ def samp_label_dcit(iso_tracers, fragments_dict):
     """
     sample_list = unique_samples_for_dict(fragments_dict)
     universe_values = fragments_dict.values()
-
     samp_lab_dict = {}
 
     for s in sample_list:
