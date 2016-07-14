@@ -117,7 +117,7 @@ sample_data = {'A. [13C-glc] G2.5 0min' : numpy.array([128.9, 385.1, 0, 385.2, 2
 'G. [13C-glc] G2.5 240min': numpy.array([2825, 4236, 7703, 3466, 2440, 2954]),
 'H. [6,6-DD-glc] G2.5 240min': numpy.array([258, 0, 0, 127.1, 770.3, 0])}
 
-input_fragment = iso.insert_data_to_fragment(('Glutamate 147/41', 'C2HO', 'C5H8NO4'), 'C13_147.0_41.0', sample_data, mass=True, number=False, mode=None)
+input_fragment = iso.insert_data_to_fragment(('Glutamate 147/41', 'C2HO', 'C5H8NO4'), 'C13_147.0_41.0', sample_data)
 
 list_of_frag_info_tuples = [('Glutamate 148/42', u'C2HO', u'C5H8NO4'), ('Glutamate 150/43', u'C2HO', u'C5H8NO4'),
 ('Glutamate 147/41', u'C2HO', u'C5H8NO4'), ('Glutamate 151/43', u'C2HO', u'C5H8NO4'),
@@ -445,8 +445,7 @@ list_of_label_dict = [{'C13_148.0_42.0': {'D. [13C-glc] G2.5 30min': numpy.array
 
 glutamate_146_41 = {}
 for i in range(len(list_of_frag_info_tuples)):
-    glutamate_146_41.update(iso.bulk_insert_data_to_fragment(list_of_frag_info_tuples[i],
-                                                             list_of_label_dict[i], mass=True, number=False, mode=None))
+    glutamate_146_41.update(iso.bulk_insert_data_to_fragment(list_of_frag_info_tuples[i], list_of_label_dict[i]))
 
 glutamate_146_41_output_dict = {}
 glutamate_146_41_output_dict[(148.0, 42.0)] = glutamate_146_41[('Glutamate 148/42_148.0', 'Glutamate 148/42_42.0')]

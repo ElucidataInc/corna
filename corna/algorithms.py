@@ -176,7 +176,7 @@ def fragmentsdict_model(merged_df):
     for metabolite_name, label_dict  in std_model_mvn.iteritems():
         fragments_dict[metabolite_name] = {}
         for label, data in label_dict.iteritems():
-            fragments_dict[metabolite_name].update(iso.bulk_insert_data_to_fragment(metabolite_name, {label:data}, mass=False, number=True, mode=None))
+            fragments_dict[metabolite_name].update(iso.bulk_insert_data_to_fragment(metabolite_name, {label: data}))
 
     return fragments_dict
 

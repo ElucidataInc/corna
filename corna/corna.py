@@ -104,7 +104,7 @@ def convert_to_df(dict_output, colname = 'col_name'):
     df_list = []
     for metabolite, fragment_dict in dict_output.iteritems():
 
-        std_model = iso.fragment_dict_to_std_model(fragment_dict, mass=False, number=True)
+        std_model = iso.fragment_dict_to_std_model(fragment_dict)
         model_to_df = out.convert_dict_df(std_model, parent=False)
         df_list.append(model_to_df)
 
