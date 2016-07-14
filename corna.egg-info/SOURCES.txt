@@ -10,6 +10,7 @@ corna/formula.py
 corna/formulaschema.py
 corna/helpers.py
 corna/isotopomer.py
+corna/isotopomer_agios.py
 corna/model.py
 corna/na_correction.py
 corna/output.py
