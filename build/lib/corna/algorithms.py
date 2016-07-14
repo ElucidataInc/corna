@@ -173,26 +173,10 @@ def fragmentsdict_model(merged_df):
     """
     fragments_dict = {}
     std_model_mvn = fp.standard_model(merged_df, parent = False)
-    print 'std_model_mvn'
-    print std_model_mvn
-    #fragments_list = []
-<<<<<<< HEAD
-
     for metabolite_name, label_dict  in std_model_mvn.iteritems():
         fragments_dict[metabolite_name] = {}
         for label, data in label_dict.iteritems():
             fragments_dict[metabolite_name].update(iso.bulk_insert_data_to_fragment(metabolite_name, {label:data}, mass=False, number=True, mode=None))
-
-=======
-
-    for metabolite_name, label_dict  in std_model_mvn.iteritems():
-        fragments_dict[metabolite_name] = {}
-        for label, data in label_dict.iteritems():
-            fragments_dict[metabolite_name].update(iso.bulk_insert_data_to_fragment(metabolite_name, {label:data}, mass=False, number=True, mode=None))
-
->>>>>>> 7e342672acfddf1250458ba3384c3de8eaa70791
-    print 'fragmentsdict_model'
-    print fragments_dict
 
     return fragments_dict
 
@@ -208,26 +192,14 @@ def unique_samples_for_dict(fragments_dict):
         sample_list : returns list of samples from merged dataframe
                       of the form ['sample_1', 'sample_2',..]
     """
-<<<<<<< HEAD
-=======
-    fragments_dict = fragmentsdict_model(merged_df)
-    universe_values = fragments_dict.values()
-    print 'universe values'
-    print universe_values
->>>>>>> 7e342672acfddf1250458ba3384c3de8eaa70791
     sample_list = []
-
 
     universe_values = fragments_dict.values()
     for uv in universe_values:
         try:
             samples = uv[1].keys()
         except KeyError:
-<<<<<<< HEAD
         #this doesn't raise error properly, samples referred before assignment
-=======
-            #this doesn't raise error properly, samples referred before assignment
->>>>>>> 7e342672acfddf1250458ba3384c3de8eaa70791
             raise KeyError('Missing samples in dataframe', samples)
         sample_list.extend(samples)
 
@@ -252,12 +224,6 @@ def samp_label_dcit(iso_tracers, fragments_dict):
     """
     sample_list = unique_samples_for_dict(fragments_dict)
     universe_values = fragments_dict.values()
-<<<<<<< HEAD
-
-=======
-    print 'universe values'
-    print universe_values
->>>>>>> 7e342672acfddf1250458ba3384c3de8eaa70791
     samp_lab_dict = {}
 
     for s in sample_list:

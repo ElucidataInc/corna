@@ -100,7 +100,6 @@ def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
                 raise KeyError('An iso tracer cannot be an Indistinguishable element (' + el + ') , invalid input in eleme_corr dictionary')
 
 # Post processing: Replacing negatives by zero
-<<<<<<< HEAD
 def replace_negatives(na_corr_dict, replace_negative = True):
     post_processed_dict = {}
     for metabolite, fragment_dict in na_corr_dict.iteritems():
@@ -113,56 +112,14 @@ def fractional_enrichment(post_processed_out, decimals=4):
     frac_enrichment_dict = {}
     for metabolite, fragment_dict in post_processed_out.iteritems():
         frac_enrichment_dict[metabolite] = postpro.enrichment(fragment_dict, decimals)
-
-=======
-def replace_negatives(na_corr_dict, replace_negative = True, all=False):
-    if all:
-        post_processed_dict = {}
-        for metabolite, fragment_dict in na_corr_dict.iteritems():
-            post_processed_dict[metabolite] = postpro.replace_negative_to_zero(fragment_dict, replace_negative = True)
-    else:
-        post_processed_dict = postpro.replace_negative_to_zero(na_corr_dict, replace_negative = True)
-    print ''
-    print 'post processed dict'
-    print post_processed_dict
-    return post_processed_dict
-
-# Fractional Enrichment
-def fractional_enrichment(post_processed_out, all=False, decimals=4):
-    if all:
-        frac_enrichment_dict = {}
-        for metabolite, fragment_dict in post_processed_out.iteritems():
-            frac_enrichment_dict[metabolite] = postpro.enrichment(fragment_dict, decimals)
-    else:
-        frac_enrichment_dict = postpro.enrichment(post_processed_out, decimals)
-    print ''
-    print 'fractional enrichment'
-    print frac_enrichment_dict
->>>>>>> 7e342672acfddf1250458ba3384c3de8eaa70791
     return frac_enrichment_dict
 
 # Convert nested dict to dataframe for visualization
 def convert_to_df(dict_output, colname = 'col_name'):
     df_list = []
-
-<<<<<<< HEAD
     for metabolite, fragment_dict in dict_output.iteritems():
 
         std_model = iso.fragment_dict_to_std_model(fragment_dict, mass=False, number=True)
-=======
-        for metabolite, fragment_dict in dict_output.iteritems():
-
-            std_model = iso.fragment_dict_to_std_model(fragment_dict, mass=False, number=True)
-
-            model_to_df = out.convert_dict_df(std_model, parent=False)
-            df_list.append(model_to_df)
-
-        model_to_df = hl.concatentate_dataframes_by_col(df_list)
-
-    else:
-        std_model = iso.fragment_dict_to_std_model(dict_output, mass=False, number=True)
->>>>>>> 7e342672acfddf1250458ba3384c3de8eaa70791
-
         model_to_df = out.convert_dict_df(std_model, parent=False)
         df_list.append(model_to_df)
 
