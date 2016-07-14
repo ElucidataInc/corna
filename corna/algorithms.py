@@ -188,7 +188,7 @@ def fragmentsdict_model(merged_df):
     return fragments_dict
 
 
-def unique_samples_for_dict(merged_df):
+def unique_samples_for_dict(fragments_dict):
     """
     This function returns the list of samples from fragment dictionary model
 
@@ -199,17 +199,15 @@ def unique_samples_for_dict(merged_df):
         sample_list : returns list of samples from merged dataframe
                       of the form ['sample_1', 'sample_2',..]
     """
-    fragments_dict = fragmentsdict_model(merged_df)
-    universe_values = fragments_dict.values()
-    print 'universe values'
-    print universe_values
     sample_list = []
 
+
+    universe_values = fragments_dict.values()
     for uv in universe_values:
         try:
             samples = uv[1].keys()
         except KeyError:
-            #this doesn't raise error properly, samples referred before assignment
+        #this doesn't raise error properly, samples referred before assignment
             raise KeyError('Missing samples in dataframe', samples)
         sample_list.extend(samples)
 
@@ -219,7 +217,7 @@ def unique_samples_for_dict(merged_df):
 
 
 
-def samp_label_dcit(iso_tracers, merged_df):
+def samp_label_dcit(iso_tracers, fragments_dict):
     """
     This function returns dictionary of the form { sample1: { 0 : val, 1: value },
     sample2: {}, ...}
@@ -232,11 +230,9 @@ def samp_label_dcit(iso_tracers, merged_df):
     Returns:
         samp_lab_dict : label dictionary corresponding to each sample
     """
-    sample_list = unique_samples_for_dict(merged_df)
-    fragments_dict = fragmentsdict_model(merged_df)
+    sample_list = unique_samples_for_dict(fragments_dict)
     universe_values = fragments_dict.values()
-    print 'universe values'
-    print universe_values
+
     samp_lab_dict = {}
 
     for s in sample_list:
@@ -256,7 +252,7 @@ def samp_label_dcit(iso_tracers, merged_df):
     return samp_lab_dict
 
 
-def formuladict(merged_df):
+def formuladict(fragments_dict):
     """
     This function creates a formula dictionary from the chemical
     formula defined in the input data file
@@ -267,7 +263,6 @@ def formuladict(merged_df):
     Returns:
         formula_dict : dictionary of the form {C:2, H:4, O:2}
     """
-    fragments_dict = fragmentsdict_model(merged_df)
     formula_dict = {}
 
     for key, value in fragments_dict.iteritems():

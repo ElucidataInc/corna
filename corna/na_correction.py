@@ -11,7 +11,7 @@ from itertools import product
 
 
 
-def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
+def na_correction(fragments_dict, iso_tracers, eleme_corr, na_dict):
     """
     This function is wrapper around algorithms.py function. It performs na correction
     for single and multiple tracers and creates the output in the form of fragment
@@ -30,35 +30,20 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
     Returns:
         nacorr_dict_model : fragments dictionary with corrected intensity values
     """
-    hl.convert_labels_to_std(merged_df, iso_tracers)
 
-    samp_lab_dict = algo.samp_label_dcit(iso_tracers, merged_df)
+    samp_lab_dict = algo.samp_label_dcit(iso_tracers, fragments_dict)
 
     trac_atoms = algo.get_atoms_from_tracers(iso_tracers)
 
-    formula_dict = algo.formuladict(merged_df)
-
-    fragments_dict = algo.fragmentsdict_model(merged_df)
-
-    print 'fragements dict before'
-    print fragments_dict
+    formula_dict = algo.formuladict(fragments_dict)
 
     correc_inten_dict = {}
-
-    print 'samp_lab_dict'
-    print samp_lab_dict
 
     for samp_name, label_dict in samp_lab_dict.iteritems():
 
         inten_index_dict = multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, label_dict, na_dict)
 
         correc_inten_dict[samp_name] = inten_index_dict
-
-    print 'correc_inten_dict'
-    print correc_inten_dict
-
-    print 'fragments_dict'
-    print fragments_dict
 
     nacorr_dict_model = corr_int_dict_model(iso_tracers, correc_inten_dict, fragments_dict)
 

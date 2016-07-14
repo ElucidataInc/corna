@@ -67,11 +67,13 @@ def get_na_dict(isotracers, eleme_corr):
 
 # NA correction
 def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
-
     invalid_eleme_corr = eleme_corr_invalid_entry(iso_tracers, eleme_corr)
+    hl.convert_labels_to_std(merged_df, iso_tracers)
 
-    na_corr_dict = nacorr.na_correction(merged_df, iso_tracers, eleme_corr, na_dict)
-
+    metabolite_dict = algo.fragmentsdict_model(merged_df)
+    na_corr_dict = {}
+    for metabolite, fragments_dict in metabolite_dict.iteritems():
+        na_corr_dict[metabolite] = nacorr.na_correction(fragments_dict, iso_tracers, eleme_corr, na_dict)
 
     return na_corr_dict
 
