@@ -1,9 +1,9 @@
 import pandas as pd
-import config_yale as conf
-import ..helpers as hl
+import config as conf
+import helpers as hl
 
 
-def convert_dict_df(nest_dict):
+def convert_dict_df(nest_dict, parent=True):
     """
     This function convert the fragment dictionary model in dataframe
     Args:
@@ -16,9 +16,10 @@ def convert_dict_df(nest_dict):
     df_list = []
     for frag_name, label_dict in nest_dict.iteritems():
         df, df_list = lists_labeldict(df_list, frag_name, label_dict)
-
-    final_df = pd.concat(df_list)
-
+    if parent is True:
+        final_df = pd.concat(df_list)
+    else:
+        final_df = df
     final_df.rename(columns={
                         hl.LEVEL_0_COl:conf.LABEL_COL,
                         0:conf.SAMPLE_COL,
@@ -29,7 +30,7 @@ def convert_dict_df(nest_dict):
     return final_df
 
 
-def lists_labeldict(df_list, frag_name, label_dict):
+def lists_labeldict(df_list, frag_name, label_dict, parent):
     """
     This function extracts lists of metabolite name, formula, parent from
     label dictionary model
@@ -56,13 +57,17 @@ def lists_labeldict(df_list, frag_name, label_dict):
                 tup.append((samp, intensity))
                 name.append(frag_name[0])
                 formula.append(frag_name[1])
-                parent.append(frag_name[2])
+                if parent is True:
+                    parent.append(frag_name[2])
         lab.append(label)
         frames.append(pd.DataFrame(tup))
         df = pd.concat(frames, keys=lab).reset_index()
         df[conf.NAME_COL] = name
         df[conf.FORMULA_COL] = formula
-        df[conf.PARENT_COL] = parent
-        df_list.append(df)
+        if parent is True:
+            df[conf.PARENT_COL] = parent
+            df_list.append(df)
 
     return (df, df_list)
+
+

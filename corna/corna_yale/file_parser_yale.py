@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
 
-import ..helpers as hl
-import config_yale as conf
+import corna.helpers as hl
 
 
 def mq_merge_dfs(df1, df2):

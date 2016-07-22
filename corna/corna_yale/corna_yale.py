@@ -1,13 +1,11 @@
 
 import warnings
-import pandas as pd
 
-import ..helpers as hl
+import corna.helpers as hl
 import file_parser_yale as fp
-import ..isotopomer as iso
+import corna.isotopomer as iso
 import algorithms_yale as algo
-import ..postprocess as postpro
-import output_yale as out
+import preprocess as preproc
 
 
 warnings.simplefilter(action = "ignore")

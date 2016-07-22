@@ -2,9 +2,9 @@
 import numpy as np
 from numpy.linalg import pinv
 
-import ..helpers as hl
-import ..file_parser as fp
-import ..isotopomer as iso
+import corna.helpers as hl
+import corna.file_parser as fp
+import corna.isotopomer as iso
 
 
 def corr_matrix(iso_tracer, no_atom_tracer, na_dict):
