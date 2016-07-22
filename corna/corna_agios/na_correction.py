@@ -3,8 +3,8 @@ This module is a wrapper around algorithms.py. It calls different functions from
 and performs na correction (na_correction function). The output is given in the form of fragments
 dictionary model which can further be used in post processing function, converting to dataframr, etc
 """
-import algorithms as algo
-import helpers as hl
+import algorithms_agios as algo
+import ..helpers as hl
 import numpy as np
 from itertools import product
 

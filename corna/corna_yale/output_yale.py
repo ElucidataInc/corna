@@ -1,9 +1,9 @@
 import pandas as pd
-import config as conf
-import helpers as hl
+import config_yale as conf
+import ..helpers as hl
 
 
-def convert_dict_df(nest_dict, parent=True):
+def convert_dict_df(nest_dict):
     """
     This function convert the fragment dictionary model in dataframe
     Args:
@@ -16,10 +16,9 @@ def convert_dict_df(nest_dict, parent=True):
     df_list = []
     for frag_name, label_dict in nest_dict.iteritems():
         df, df_list = lists_labeldict(df_list, frag_name, label_dict)
-    if parent is True:
-        final_df = pd.concat(df_list)
-    else:
-        final_df = df
+
+    final_df = pd.concat(df_list)
+
     final_df.rename(columns={
                         hl.LEVEL_0_COl:conf.LABEL_COL,
                         0:conf.SAMPLE_COL,
@@ -57,18 +56,13 @@ def lists_labeldict(df_list, frag_name, label_dict):
                 tup.append((samp, intensity))
                 name.append(frag_name[0])
                 formula.append(frag_name[1])
-                if parent is True:
-                    parent.append(frag_name[2])
+                parent.append(frag_name[2])
         lab.append(label)
         frames.append(pd.DataFrame(tup))
         df = pd.concat(frames, keys=lab).reset_index()
         df[conf.NAME_COL] = name
         df[conf.FORMULA_COL] = formula
-        if parent is True:
-            df[conf.PARENT_COL] = parent
-            df_list.append(df)
+        df[conf.PARENT_COL] = parent
+        df_list.append(df)
 
     return (df, df_list)
-
-
-
