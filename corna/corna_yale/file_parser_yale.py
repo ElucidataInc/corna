@@ -48,7 +48,7 @@ def frag_key(df):
     """
     try:
 
-        df[conf.FRAG_COL] = df.apply(lambda x : tuple([x[conf.NAME_COL], x[conf.FORMULA_COL], x[conf.PARENT_COL], x["Parent_Formula"]]), axis=1)
+        df[conf.FRAG_COL] = df.apply(lambda x : tuple([x[conf.NAME_COL], x[conf.FORMULA_COL], x[conf.PARENT_COL], x["Parent Formula"]]), axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
     return df

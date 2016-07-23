@@ -1,7 +1,7 @@
 NAME_COL = 'Name'
 FORMULA_COL = 'Formula'
 LABEL_COL = 'Label'
-PARENT_COL = 'Parent'
+PARENT_COL = 'Unlabeled Fragment'
 SAMPLE_COL = 'Sample Name'
 INTENSITY_COL = 'Intensity'
 FRAG_COL = 'frag_keys'

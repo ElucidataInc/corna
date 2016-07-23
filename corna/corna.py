@@ -163,7 +163,7 @@ def convert_to_df(dict_output, colname='col_name'):
 
     for metabolite, fragment_dict in dict_output.iteritems():
 
-        std_model = iso.fragment_dict_to_std_model(fragment_dict)
+        std_model = iso.fragment_dict_to_std_model_number(fragment_dict)
         model_to_df = out.convert_dict_df(std_model)
         df_list.append(model_to_df)
         model_to_df = hl.concatenate_dataframes_by_col(df_list)
