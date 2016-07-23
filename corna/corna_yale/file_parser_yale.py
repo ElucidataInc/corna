@@ -1,8 +1,5 @@
-import numpy as np
-import pandas as pd
-
 import corna.helpers as hl
-
+import corna.config as conf
 
 def mq_merge_dfs(df1, df2):
     """
@@ -21,7 +18,7 @@ def mq_merge_dfs(df1, df2):
     try:
         merged_df = hl.merge_dfs(df1, df2, how= 'inner', left_on = 'Component Name', right_on = 'Fragment')
     except KeyError:
-        raise KeyError('Missing columns: Componenet Name or Fragment')
+        raise KeyError('Missing columns: Component Name or Fragment')
 
     merged_df[conf.MASSINFO_COL] = merged_df[conf.MASSINFO_COL].str.replace(' / ', "_")
 

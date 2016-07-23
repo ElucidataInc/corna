@@ -3,7 +3,7 @@ import config as conf
 import helpers as hl
 
 
-def convert_dict_df(nest_dict, parent=True):
+def convert_dict_df(nest_dict, parent=False):
     """
     This function convert the fragment dictionary model in dataframe
     Args:
@@ -15,7 +15,7 @@ def convert_dict_df(nest_dict, parent=True):
     """
     df_list = []
     for frag_name, label_dict in nest_dict.iteritems():
-        df, df_list = lists_labeldict(df_list, frag_name, label_dict)
+        df, df_list = lists_labeldict(df_list, frag_name, label_dict, parent)
     if parent is True:
         final_df = pd.concat(df_list)
     else:
@@ -30,7 +30,7 @@ def convert_dict_df(nest_dict, parent=True):
     return final_df
 
 
-def lists_labeldict(df_list, frag_name, label_dict, parent):
+def lists_labeldict(df_list, frag_name, label_dict, parent=False):
     """
     This function extracts lists of metabolite name, formula, parent from
     label dictionary model
@@ -43,6 +43,7 @@ def lists_labeldict(df_list, frag_name, label_dict, parent):
 
     Returns:
         (df, df_list) : final dataframe or list of dataframes to be appended
+        :param parent:
     """
     name = []
     formula = []

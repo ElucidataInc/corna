@@ -2,7 +2,9 @@
 import warnings
 
 import corna.helpers as hl
-import file_parser_yale as fp
+import corna.file_parser as fp
+
+import file_parser_yale as fpy
 import corna.isotopomer as iso
 import algorithms_yale as algo
 import preprocess as preproc
@@ -25,7 +27,7 @@ def read_multiquant_metadata(path):
 
 # Multiquant
 def merge_mq_metadata(mq_df, metdata):
-    merged_data = fp.mq_merge_dfs(mq_df, metdata)
+    merged_data = fpy.mq_merge_dfs(mq_df, metdata)
     return merged_data
 
 # Background correction for multiquant
@@ -35,12 +37,13 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
         list_of_samples = fp.get_sample_names(filtered_df)
     else:
         list_of_samples = list_of_samples
-    std_model_mq = fp.standard_model(merged_data, parent = True)
+    frag_key_df = fpy.frag_key(merged_data)
+    std_model_mq = fp.standard_model(frag_key_df)
     fragments_dict = {}
     for frag_name, label_dict in std_model_mq.iteritems():
         if frag_name[2] == metabolite:
             new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
-            fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True, number=False, mode=None))
+            fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict))
     preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample, decimals)
 
     return preprocessed_dict

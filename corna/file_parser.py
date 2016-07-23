@@ -5,12 +5,28 @@ import helpers as hl
 import config as conf
 
 
+def get_sample_names(df):
+    """
+    This function gets the unique sample names from data
+
+    Args:
+        df : dataframe with Sample column
+    Returns:
+        sample_list : list of unique sample names from data
+    """
+    try:
+        sample_list = df[conf.SAMPLE_COL].unique().tolist()
+    except:
+        raise KeyError('Column' + conf.SAMPLE_COL + 'not found in dataframe')
+
+    return sample_list
+
+
 def standard_model(df):
     """
     This function convert the merged data into standard data model
     """
 
-    df = frag_key(df)
     unique_frags = df[conf.FRAG_COL].unique().tolist()
     std_model_dict = {}
 

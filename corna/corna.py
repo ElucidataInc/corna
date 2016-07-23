@@ -2,11 +2,11 @@
 import warnings
 import pandas as pd
 
-import helpers as hl
 import isotopomer as iso
 import postprocess as postpro
 import output as out
-
+import config as conf
+import helpers as hl
 
 warnings.simplefilter(action="ignore")
 
@@ -166,7 +166,6 @@ def convert_to_df(dict_output, colname='col_name'):
         std_model = iso.fragment_dict_to_std_model(fragment_dict)
         model_to_df = out.convert_dict_df(std_model)
         df_list.append(model_to_df)
-
         model_to_df = hl.concatenate_dataframes_by_col(df_list)
 
     model_to_df.rename(columns={conf.INTENSITY_COL: str(colname)}, inplace=True)

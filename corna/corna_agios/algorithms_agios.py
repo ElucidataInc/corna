@@ -6,6 +6,7 @@ import corna.helpers as hl
 import corna.file_parser as fp
 import corna.isotopomer as iso
 
+import file_parser_agios as fpa
 
 def corr_matrix(iso_tracer, no_atom_tracer, na_dict):
     """
@@ -119,7 +120,8 @@ def fragmentsdict_model(merged_df):
         [Fragment object, {'sample_1': array([ 0.0164])}, False, 'Aceticacid']
     """
     fragments_dict = {}
-    std_model_mvn = fp.standard_model(merged_df)
+    frag_merge_df = fpa.frag_key(merged_df)
+    std_model_mvn = fp.standard_model(frag_merge_df)
 
     for metabolite_name, label_dict  in std_model_mvn.iteritems():
         fragments_dict[metabolite_name] = {}
