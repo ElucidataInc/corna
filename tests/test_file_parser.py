@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 import corna.file_parser as fp
+import corna.corna_agios.file_parser_agios as fpa
 
 
 def test_unq_sample():
@@ -12,13 +13,13 @@ def test_unq_sample():
 
 
 def test_std_model():
-	df = pd.DataFrame({'Name': {0: 'Acetic', 1: 'Acetic', 2: 'Acetic'},
+	merged_df = pd.DataFrame({'Name': {0: 'Acetic', 1: 'Acetic', 2: 'Acetic'},
 		'Parent': {0: 'Acetic', 1: 'Acetic', 2: 'Acetic'},
 		'Label': {0: 'C13_0', 1: 'C13_1', 2: 'C13_2'},
 		'Intensity': {0: 0.3624, 1: 0.040349999999999997, 2: 0.59724999999999995},
 		'Formula': {0: 'H4C2O2', 1: 'H4C2O2', 2: 'H4C2O2'},
 		'Sample Name': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
-
+	df = fpa.frag_key(merged_df)
 	std_model = {('Acetic', 'H4C2O2'): {'C13_2': {'sample_1': np.array([ 0.59725])},
 					'C13_1': {'sample_1': np.array([ 0.04035])},
 					'C13_0': {'sample_1': np.array([ 0.3624])}}}
