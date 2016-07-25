@@ -1,22 +1,18 @@
+import os
 import corna
-from corna import config
+from corna import config_agios
 
-config.NAME_COL = 'Name'
-# path to directory where multiquant text data files are present
-path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data'
-#path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_agios/testfiles'
+
+config_agios.NAME_COL = 'Name'
+print config_agios.NAME_COL
+
+# path to directory where data files are present - give the path the file
+# as this path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data/'
+path_dir = os.path.join(os.path.dirname(__file__), 'data')
+
+
 # read maven data
-#single tracer data
-#maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
-
-# single tracer indistinguishable
-#maven_data = corna.read_maven(path_dir + '/aceticacid_indist.csv')
-
-#double tracer
 maven_data = corna.read_data_file(path_dir + '/test_m0_2.csv')
-#maven_data = corna.read_maven(path_dir + '/aceticacid_multi.csv')
-#print maven_data
-
 
 # For json input, use this funtion:
 #json_input = json.dumps(maven_data.to_dict())
@@ -27,16 +23,15 @@ maven_metadata = corna.read_data_file(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
-#print merge_mv_metdata
-
-# tracer isotopes
+# isotopic tracers
 #iso_tracers = ['C13']
 iso_tracers = ['C13', 'N15']
 
-#element to be corrected
-#eleme_corr = {'C': ['H']}
-# In case of no indistinguishable elements, eleme corr is empty dictionary
-eleme_corr = {}
+# element to be corrected
+# in case of no indistinguishable elements, eleme corr is empty dictionary
+#eleme_corr = {}
+# in case of indistinguishable elements
+eleme_corr = {'C': ['H', 'O'], 'N':['S']}
 
 # NA values dict
 na_dict = corna.get_na_value_dict()
@@ -44,15 +39,10 @@ na_dict = corna.get_na_value_dict()
 # edit na values
 #na_dict['H'][0] = 0.989
 
-#double_trac_indist = corna.na_double_trac_indist(iso_tracers, eleme_corr, merge_mv_metdata, na_dict)
-#print 'kron matrix'
-#print corna.convert_to_df(double_trac_indist, colname = 'NA corrected')
-
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
 na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
 print na_corr_df
-
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, colname =  'CorrIntensities-Replaced_negatives')
@@ -64,7 +54,7 @@ frac_enr_df = corna.convert_to_df(frac_enrichment, colname = 'Frac Enrichment')
 # combine results - dataframe with na correction column, frac enrichment column and post processed column
 df_list = [na_corr_df, frac_enr_df, postprocessed_out_df, merge_mv_metdata]
 merged_results_df = corna.merge_dfs(df_list)
-print merged_results_df
+
 # filter any dataframe as per requirement and save it to csv
 # filter by one column - sample name
 sample_1_data = corna.filtering_df(frac_enr_df, num_col=1, col1="Sample Name",
@@ -80,6 +70,5 @@ filtered_data = corna.filtering_df(frac_enr_df, num_col=3, col1="Name",
                                 col3="Label", list_col3_vals = ['C13_1_N15_0', 'C13_2_N15_0'])
 
 # save any dataframe at given path
-#save_dfs = corna.save_to_csv(merged_results_df, path_dir + 'results.csv')
-
+save_dfs = corna.save_to_csv(merged_results_df, path_dir + 'results.csv')
 

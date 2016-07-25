@@ -36,13 +36,9 @@ def na_correction(fragments_dict, iso_tracers, eleme_corr, na_dict):
 
     formula_dict = algo.formuladict(fragments_dict)
 
-    print 'fragements dict before'
-    print fragments_dict
 
     correc_inten_dict = {}
 
-    print 'samp_lab_dict'
-    print samp_lab_dict
 
     for samp_name, label_dict in samp_lab_dict.iteritems():
 
@@ -50,26 +46,18 @@ def na_correction(fragments_dict, iso_tracers, eleme_corr, na_dict):
 
         correc_inten_dict[samp_name] = inten_index_dict
 
-    print 'correc_inten_dict'
-    print correc_inten_dict
-
-    print 'fragments_dict'
-    print fragments_dict
 
     nacorr_dict_model = corr_int_dict_model(iso_tracers, correc_inten_dict, fragments_dict)
 
     return nacorr_dict_model
 
 
-
 def corr_int_dict_model(iso_tracers, correc_inten_dict, fragments_dict):
     """
     This function returns the na correction dictionary model
     """
-    sample_list = algo.check_samples_ouputdict(correc_inten_dict)
-    # { 0: { sample1 : val, sample2: val }, 1: {}, ...}
-    lab_samp_dict = algo.label_sample_dict(sample_list, correc_inten_dict)
-
+    label_list = algo.check_labels_corrdict(correc_inten_dict)
+    lab_samp_dict = algo.label_sample_dict(label_list, correc_inten_dict)
     nacorr_dict_model = algo.fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict)
 
     return nacorr_dict_model
@@ -105,11 +93,9 @@ def multi_trac_intensities_list(no_atom_tracer, eleme_corr, eleme_corr_list, lab
     all posible combinaltion for elements to be corrected). This intensity list vector
     is used for correction
     """
-    tup_list = element_tuple_list(no_atom_tracer)
-
-    tup_pos = indis_tuple_position(eleme_corr, eleme_corr_list)
-
-    intensities_list = algo.filter_tuples(tup_list, lab_dict, tup_pos)
+    num_label_tuples = element_tuple_list(no_atom_tracer)
+    indist_el_position = indis_tuple_position(eleme_corr, eleme_corr_list)
+    intensities_list = algo.input_intens_list(num_label_tuples, lab_dict, indist_el_position)
 
     return intensities_list
 
@@ -119,8 +105,7 @@ def indis_tuple_position(eleme_corr, eleme_corr_list):
     This function returns the positions of indistinguishable elements from
     tuple list
     """
-    indist_sp = sum(eleme_corr.values(),[])
-
+    indist_sp = sum(eleme_corr.values(), [])
     tup_pos = [i for i, e in enumerate(eleme_corr_list) if e in indist_sp]
 
     return tup_pos
@@ -131,11 +116,10 @@ def element_tuple_list(no_atom_tracer):
     This function returns the tuple list of elements to be corrected. it generates
     all possible combinations of the elements in the form of a tuple
     """
-    l = [np.arange(x+1) for x in no_atom_tracer]
+    combinations = [np.arange(num_atoms+1) for num_atoms in no_atom_tracer]
+    num_label_tuples = list(product(*combinations))
 
-    tup_list = list(product(*l))
-
-    return tup_list
+    return num_label_tuples
 
 
 def multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, lab_dict, na_dict):
@@ -152,17 +136,12 @@ def multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, lab_
     for i in eleme_corr_list:
         no_atom_tracer.append(formula_dict[i])
 
-    intens_idx_dict = {}
+    intensities_list = multi_trac_intensities_list(no_atom_tracer,
+                                                   eleme_corr, eleme_corr_list, lab_dict)
+    icorr = algo.multi_label_correc(na_dict, formula_dict,
+                                    eleme_corr_list, intensities_list)
 
-    intensities_list = multi_trac_intensities_list(no_atom_tracer, eleme_corr, eleme_corr_list, lab_dict)
-
-    icorr = algo.multi_label_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
-
-
-    intens_idx_dict = multi_corr_inten_dict(eleme_corr, eleme_corr_list, no_atom_tracer, icorr, lab_dict)
+    intens_idx_dict = multi_corr_inten_dict(eleme_corr, eleme_corr_list,
+                                            no_atom_tracer, icorr, lab_dict)
 
     return intens_idx_dict
-
-
-
-

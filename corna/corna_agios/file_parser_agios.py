@@ -1,7 +1,7 @@
 import pandas as pd
 
 import corna.helpers as hl
-import config_agios as conf
+import corna.config as conf
 
 
 def maven_merge_dfs(df1, df2):
@@ -51,21 +51,6 @@ def column_manipulation(df):
     return df
 
 
-def get_sample_names(df):
-    """
-    This function gets the unique sample names from data
-
-    Args:
-        df : dataframe with Sample column
-    Returns:
-        sample_list : list of unique sample names from data
-    """
-    try:
-        sample_list = df[conf.SAMPLE_COL].unique().tolist()
-    except:
-        raise KeyError('Column' + conf.SAMPLE_COL + 'not found in dataframe')
-
-    return sample_list
 
 
 def melt_df(df1):

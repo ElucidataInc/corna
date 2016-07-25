@@ -328,7 +328,7 @@ list_of_label_dict = [{'C13_148.0_42.0': {'D. [13C-glc] G2.5 30min': numpy.array
 
 glutamate_146_41 = {}
 for i in range(len(list_of_frag_info_tuples)):
-    glutamate_146_41.update(iso.bulk_insert_data_to_fragment(list_of_frag_info_tuples[i], list_of_label_dict[i]))
+    glutamate_146_41.update(iso.bulk_insert_data_to_fragment_number(list_of_frag_info_tuples[i], list_of_label_dict[i]))
 
 def test_background_noise_label_daughter_unlabel():
     assert preproc.background_noise(31710, 0.011, 5, 1, 2, 0) == 1046.43
@@ -340,12 +340,12 @@ def test_backround_subtraction():
     assert preproc.backround_subtraction(27800, 2.29E+03) == 25510.0
 
 
-input_fragment = iso.insert_data_to_fragment(('Glutamate 147/41', 'C2HO', 'C5H8NO4'), 'C13_147.0_41.0',
-                                             {'A. [13C-glc] G2.5 0min':
+input_fragment = iso.insert_data_to_fragment_number(('Glutamate 147/41', 'C2HO', 'C5H8NO4'), 'C13_147.0_41.0',
+                                                    {'A. [13C-glc] G2.5 0min':
                                                   numpy.array([1155.5335, 1409.6325, 2052.6495,
                                                                1284.4085, 1542.459, 1542.5255])})
-unlabeled_fragment = iso.insert_data_to_fragment(('Glutamate 146/41', 'C2HO', 'C5H8NO4'), 'C13_146.0_41.0',
-                                                 {'A. [13C-glc] G2.5 0min':
+unlabeled_fragment = iso.insert_data_to_fragment_number(('Glutamate 146/41', 'C2HO', 'C5H8NO4'), 'C13_146.0_41.0',
+                                                        {'A. [13C-glc] G2.5 0min':
                                                       numpy.array([45057.0155, 31707.183, 54944.625,
                                                                    32608.4505, 60981.034, 38701.986])})
 

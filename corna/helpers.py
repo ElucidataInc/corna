@@ -217,7 +217,7 @@ def get_value_from_single_value_dict(inputdict):
 def check_if_all_elems_same_type(inputlist, classname):
     return all(isinstance(x, classname) for x in inputlist)
 
-def concatentate_dataframes_by_col(df_list):
+def concatenate_dataframes_by_col(df_list):
     return pd.concat(df_list)
 
 def parse_polyatom(polyatom_string):
