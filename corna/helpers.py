@@ -117,20 +117,25 @@ def json_to_df(json_input):
     return json_df
 
 
-def concat_txts_into_df(direc):
+# def concat_txts_into_df(direc):
 
-    txt_files = []
+#     txt_files = []
 
-    txt_files += [each for each in os.listdir(direc) if each.endswith('.txt')]
+#     txt_files += [each for each in os.listdir(direc) if each.endswith('.txt')]
 
-    df_list= []
+#     df_list= []
 
-    for files in txt_files:
-        df_list.append(read_file(direc + files))
+#     for files in txt_files:
+#         df_list.append(read_file(direc + files))
 
-    concat_df = pd.concat(df_list)
+#     concat_df = pd.concat(df_list)
 
-    return concat_df
+#     return concat_df
+def concat_txts_into_df(directory):
+    data_frames = [read_file(os.path.join(directory, f))
+                      for f in os.listdir(directory)
+                      if f.endswith('.txt')]
+    return pd.concat(data_frames)
 
 def merge_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
 
@@ -161,20 +166,13 @@ def filter_df(df, column_name, column_value):
     return filtered_df
 
 
-def filtering_df(df, num_col=3, col1='col1', list_col1_vals=[], col2='col2', list_col2_vals=[], col3='col3', list_col3_vals=[]):
-    """
-    This function allows filtering of dataframe over multiple columns and multiple columns values (maximum three)
-    """
-    if num_col==1:
-        filtered_df = df[(df[str(col1)].isin(list_col1_vals))]
+def filtering_df(df, colname_val_dict):
 
-    elif num_col==2:
-        filtered_df = df[(df[str(col1)].isin(list_col1_vals)) & (df[str(col2)].isin(list_col2_vals))]
+    for col_name, col_val_list in colname_val_dict.iteritems():
+        filtered_df = df[(df[str(col_name)].isin(col_val_list))]
 
-    elif num_col==3:
-        filtered_df = df[(df[str(col1)].isin(list_col1_vals)) & (df[str(col2)].isin(list_col2_vals)) & (df[str(col3)].isin(list_col3_vals))]
+        return filtered_df
 
-    return filtered_df
 
 def create_dict_from_isotope_label_list(isonumlist):
     label_dict = collections.OrderedDict()

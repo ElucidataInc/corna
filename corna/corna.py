@@ -11,7 +11,7 @@ import helpers as hl
 warnings.simplefilter(action="ignore")
 
 
-def read_data_file(path):
+def read_file(path):
     """
     This function reads the input file in xls, xlsx, txt and csv
     format
@@ -57,28 +57,9 @@ def merge_dfs(df_list):
 
 
 
-def filtering_df(df, num_col=3, col1='col1', list_col1_vals=[],
-                 col2='col2', list_col2_vals=[], col3='col3', list_col3_vals=[]):
-    """
-    This function filters the dataframe based on multiple column names and column values
-    Args:
-        df : dataframe on which filtering is to be done
-        num_col : total number of columns which are to be filtered
-        col1 : 1st column name
-        list_col1_vals : list of column values to be filtered
-        col2 : 1st column name
-        list_col2_vals : list of column values to be filtered
-        col3 : 1st column name
-        list_col3_vals : list of column values to be filtered
-    Returns:
-        filtered_df : subset of dataframe with filtered data
-    """
-
-    filtered_df = hl.filtering_df(df, num_col, col1, list_col1_vals,
-                                  col2, list_col2_vals, col3, list_col3_vals)
-
+def filtering_df(df, colname_vals_dict):
+    filtered_df = hl.filtering_df(df, colname_vals_dict)
     return filtered_df
-
 
 def get_na_value_dict():
     """
