@@ -23,7 +23,7 @@ def background(sample_name, input_fragment_value, unlabeled_fragment_value):
     iso_elem = hl.get_isotope_element(parent_frag.isotracer)
     parent_label = parent_frag.get_num_labeled_atoms_isotope(parent_frag.isotracer)
     parent_atoms = parent_frag.number_of_atoms(iso_elem)
-    na = hl.get_isotope_na(parent_frag.isotope)
+    na = hl.get_isotope_na(parent_frag.isotracer)
     daughter_atoms = daughter_frag.number_of_atoms(iso_elem)
     daughter_label = daughter_frag.get_num_labeled_atoms_isotope(parent_frag.isotracer)
     input_intensities = data[sample_name]

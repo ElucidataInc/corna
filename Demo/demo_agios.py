@@ -1,10 +1,17 @@
 import os
 import corna
+<<<<<<< HEAD
 from corna import config
 
 
 config.NAME_COL = 'Name'
 print config.NAME_COL
+=======
+
+
+
+corna.config_agios.NAME_COL = 'Name'
+>>>>>>> 3f5c894d23bcee3a1bb1ddb34353949358b3bdfc
 
 # path to directory where data files are present - give the path the file
 # as this path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data/'
@@ -41,15 +48,16 @@ na_dict = corna.get_na_value_dict()
 
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
-na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+na_corr_df = corna.convert_to_df(na_corr_dict, parent=False, colname='NA corrected')
+
 
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
-postprocessed_out_df = corna.convert_to_df(postprocessed_out, colname =  'CorrIntensities-Replaced_negatives')
+postprocessed_out_df = corna.convert_to_df(postprocessed_out, parent=False, colname='CorrIntensities-Replaced_negatives')
 
 # calculate fractional enrichment on post processed data
 frac_enrichment = corna.fractional_enrichment(postprocessed_out)
-frac_enr_df = corna.convert_to_df(frac_enrichment, colname = 'Frac Enrichment')
+frac_enr_df = corna.convert_to_df(frac_enrichment, parent=False, colname='Frac Enrichment')
 
 # combine results - dataframe with na correction column, frac enrichment column and post processed column
 df_list = [na_corr_df, frac_enr_df, postprocessed_out_df, merge_mv_metdata]

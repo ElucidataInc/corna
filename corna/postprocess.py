@@ -63,7 +63,6 @@ def enrichment(fragments_dict, decimals):
         fragments_fractional : fragment dictionary model of fractional enrichment values
     """
     fragments_fractional = {}
-
     sum_dict = sum_intensities(fragments_dict)
 
     for key, value in fragments_dict.iteritems():

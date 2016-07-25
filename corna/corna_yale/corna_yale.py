@@ -43,7 +43,7 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
     for frag_name, label_dict in std_model_mq.iteritems():
         if frag_name[2] == metabolite:
             new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
-            fragments_dict.update(iso.bulk_insert_data_to_fragment_mass(new_frag_name, label_dict))
+            fragments_dict.update(iso.bulk_insert_data_to_fragment(new_frag_name, label_dict, mass=True))
     preprocessed_dict = preproc.bulk_background_correction(fragments_dict, list_of_samples, background_sample, decimals)
 
     return preprocessed_dict

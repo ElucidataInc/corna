@@ -19,8 +19,8 @@ def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, 
     iso_elem = hl.get_isotope_element(isotope)
     p = parent_frag_m.number_of_atoms(iso_elem)
     d = daughter_frag_n.number_of_atoms(iso_elem)
-    m = parent_frag_m.get_num_labeled_atoms_tracer()
-    n = daughter_frag_n.get_num_labeled_atoms_tracer()
+    m = parent_frag_m.get_num_labeled_atoms_isotope(isotope)
+    n = daughter_frag_n.get_num_labeled_atoms_isotope(isotope)
     corrected_intensity = intensity_m_n * (1+na*(p-m)) - intensity_m_1_n * na * ((p-d) - (m-n-1)) -\
                          intensity_m_1_n_1 * na * (d - (n-1))
 
@@ -40,7 +40,7 @@ def na_correction_mimosa_by_fragment(fragments_dict, decimals):
         m_1_n = (key[0]-1, key[1])
         m_1_n_1 = (key[0]-1, key[1]-1)
         parent_frag_m, daughter_frag_n = value[0]
-        isotope = parent_frag_m.isotope
+        isotope = parent_frag_m.isotracer
         na = hl.get_isotope_na(isotope)
         data = value[1]
         corrected_data = {}

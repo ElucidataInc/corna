@@ -22,7 +22,7 @@ def test_na_corr_single_tracer():
 	eleme_corr = {}
 
 	na_corr_dict = corna.na_correction(df, single_tracers, eleme_corr, na_dict)
-	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+	na_corr_df = corna.convert_to_df(na_corr_dict, True, colname='NA corrected')
 
 	output_list = [0.59613019390581723, 0.0023185595567866008, 0.40155124653739621]
 
@@ -42,7 +42,7 @@ def test_na_corr_single_trac_indist():
 	eleme_corr = {'C': ['H', 'O']}
 
 	na_corr_dict = corna.na_correction(df, single_tracers, eleme_corr, na_dict)
-	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+	na_corr_df = corna.convert_to_df(na_corr_dict, True, colname='NA corrected')
 
 	output_list = [0.2783720710600131, 0.52118757080316813, 0.3026855833807266]
 
@@ -72,7 +72,7 @@ def test_na_corr_multi_trac():
 	eleme_corr = {}
 
 	na_corr_dict = corna.na_correction(df, multi_tracers, eleme_corr, na_dict)
-	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+	na_corr_df = corna.convert_to_df(na_corr_dict, True, colname='NA corrected')
 
 	output_list = [2.6016225533332996e-07, 0.3967531185142435, -9.8844997716120012e-05,
 	7.0170861504082293e-05, -0.00024013579424740682, -0.00018698767698716368,
@@ -105,7 +105,7 @@ def test_na_corr_multi_trac_indist():
 	eleme_corr = {'C': ['H']}
 
 	na_corr_dict = corna.na_correction(df, multi_tracers, eleme_corr, na_dict)
-	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+	na_corr_df = corna.convert_to_df(na_corr_dict, True, colname='NA corrected')
 
 	output_list = [0.0063239074820523374, 0.40215442709008198, 0.016489750088414929,
 	 -0.0032216908381774477, -0.031526293342053771, 0.15881269215932281, -0.0064943180078375707,

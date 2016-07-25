@@ -173,8 +173,8 @@ class Fragment(Ion, Label):
         if kwargs.has_key('label_dict'):
             label_dict = kwargs['label_dict']
         elif kwargs.has_key('isotracer') and kwargs.has_key('isotope_mass'):
-            isotope = kwargs['isotracer']
-            isotope_mass = kwargs['isotope_mass']
+            self.isotracer = kwargs['isotracer']
+            self.isotope_mass = kwargs['isotope_mass']
             try:
                 mol_mass = kwargs['molecular_mass']
             except:
@@ -183,7 +183,7 @@ class Fragment(Ion, Label):
                 mode = kwargs['mode']
             except:
                 mode = None
-            label_dict = self.create_label_dict_from_mass(isotope, isotope_mass,
+            label_dict = self.create_label_dict_from_mass(self.isotracer, self.isotope_mass,
                                                           mode=mode, molecular_mass=mol_mass)
         else:
             raise KeyError('Fragment should contain label information')

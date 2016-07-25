@@ -80,16 +80,13 @@ def insert_data_to_fragment_number(frag_info, label, sample_dict):
     label_info = frag_value.check_if_unlabel()
     return add_data_fragment(frag, sample_dict, label_info, name)
 
-def bulk_insert_data_to_fragment_number(frag_info, list_data_dict):
+def bulk_insert_data_to_fragment(frag_info, list_data_dict, mass=False, number=False):
     fragment_list = {}
     for key, value in list_data_dict.iteritems():
-        fragment_list.update(insert_data_to_fragment_number(frag_info, key, value))
-    return fragment_list
-
-def bulk_insert_data_to_fragment_mass(frag_info, list_data_dict):
-    fragment_list = {}
-    for key, value in list_data_dict.iteritems():
-        fragment_list.update(insert_data_to_fragment_mass(frag_info, key, value))
+        if number:
+            fragment_list.update(insert_data_to_fragment_number(frag_info, key, value))
+        elif mass:
+            fragment_list.update(insert_data_to_fragment_mass(frag_info, key, value))
     return fragment_list
 
 def fragment_to_input_model_mass(fragment):
@@ -98,7 +95,7 @@ def fragment_to_input_model_mass(fragment):
     daughter_formula = daughter_frag.formula
     name = fragment[3]
     key_tuple = (name, daughter_formula, parent_formula)
-    label_dict_key = str(parent_frag.isotope) + '_' + \
+    label_dict_key = str(parent_frag.isotracer) + '_' + \
                  str(parent_frag.isotope_mass) + '_' + \
                  str(daughter_frag.isotope_mass)
     label_dict_value = fragment[1]
@@ -114,20 +111,17 @@ def fragment_to_input_model_number(fragment):
     label_dict_value = fragment[1]
     return {key_tuple:{label_dict_key:label_dict_value}}
 
-def fragment_dict_to_std_model_mass(fragment_dict):
+def fragment_dict_to_std_model(fragment_dict, parent):
     output_fragment_dict = {}
-    for key, value in fragment_dict.iteritems():
-        output_fragment_dict.update(fragment_to_input_model_mass(value))
-    return output_fragment_dict
-
-
-def fragment_dict_to_std_model_number(fragment_dict):
-    output_fragment_dict = {}
-    for key, value in fragment_dict.iteritems():
-        label_dict = fragment_to_input_model_number(value)
-        curr_key = hl.get_key_from_single_value_dict(label_dict)
-        try:
-            output_fragment_dict[curr_key].update(label_dict[curr_key])
-        except KeyError:
-            output_fragment_dict.update(label_dict)
+    if parent:
+        for key, value in fragment_dict.iteritems():
+            output_fragment_dict.update(fragment_to_input_model_mass(value))
+    else:
+        for key, value in fragment_dict.iteritems():
+            label_dict = fragment_to_input_model_number(value)
+            curr_key = hl.get_key_from_single_value_dict(label_dict)
+            try:
+                output_fragment_dict[curr_key].update(label_dict[curr_key])
+            except KeyError:
+                output_fragment_dict.update(label_dict)
     return output_fragment_dict
