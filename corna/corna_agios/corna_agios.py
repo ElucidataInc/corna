@@ -11,19 +11,19 @@ warnings.simplefilter(action="ignore")
 
 
 
-def merge_mvn_metadata(mv_df, metadata):
-    """
-    This function combines the MAVEN input file dataframe and the metadata
-    file dataframe
-    Args:
-        input_data : MAVEN input data in form of pandas dataframe
-        metadata : metadata in the form of pandas dataframe
-    Returns:
-        combined_data : dataframe with input data and metadata combined
-    """
+# def merge_mvn_metadata(mv_df, metadata):
+#     """
+#     This function combines the MAVEN input file dataframe and the metadata
+#     file dataframe
+#     Args:
+#         input_data : MAVEN input data in form of pandas dataframe
+#         metadata : metadata in the form of pandas dataframe
+#     Returns:
+#         combined_data : dataframe with input data and metadata combined
+#     """
 
-    merged_data = fp.maven_merge_dfs(mv_df, metadata)
-    return merged_data
+#     merged_data = fp.maven_merge_dfs(mv_df, metadata)
+#     return merged_data
 
 
 def convert_inputdata_to_stdfrom(input_df):

@@ -23,7 +23,7 @@ maven_data = corna.read_file(path_dir + '/test_m0_2.csv')
 maven_metadata = corna.read_file(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
-merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
+merge_mv_metdata = corna.maven_merge_dfs(maven_data, maven_metadata)
 # isotopic tracers
 #iso_tracers = ['C13']
 iso_tracers = ['C13', 'N15']
@@ -60,7 +60,7 @@ merged_results_df = corna.merge_dfs(df_list)
 # any number of columns and column values can be filtered
 col_rename = {'Name': ['L-Methionine'], "Sample Name": ['sample_1', 'sample_2']}
 filtered_data = corna.filter_df(merged_results_df, col_rename)
-
+print filtered_data
 # save any dataframe at given path
 save_dfs = corna.save_to_csv(merged_results_df, path_dir + 'results.csv')
 
