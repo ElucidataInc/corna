@@ -2,12 +2,16 @@ import os
 import corna
 
 
+
+corna.config_agios.NAME_COL = 'Name'
+
 # path to directory where data files are present - give the path the file
 # as this path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data/'
 path_dir = os.path.join(os.path.dirname(__file__), 'data')
 
+
 # read maven data
-maven_data = corna.read_data_file(path_dir + '/single_tracer_aceticacid.csv')
+maven_data = corna.read_data_file(path_dir + '/test_m0_2.csv')
 
 # For json input, use this funtion:
 #json_input = json.dumps(maven_data.to_dict())
@@ -19,14 +23,14 @@ maven_metadata = corna.read_data_file(path_dir + '/metadata.csv')
 # merge maven files and metadata files
 merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
 # isotopic tracers
-iso_tracers = ['C13']
-#iso_tracers = ['C13', 'N15']
+#iso_tracers = ['C13']
+iso_tracers = ['C13', 'N15']
 
 # element to be corrected
 # in case of no indistinguishable elements, eleme corr is empty dictionary
-eleme_corr = {}
+#eleme_corr = {}
 # in case of indistinguishable elements
-#eleme_corr = {'C': ['H', 'O'], 'N':['S']}
+eleme_corr = {'C': ['H', 'O'], 'N':['S']}
 
 # NA values dict
 na_dict = corna.get_na_value_dict()
@@ -37,6 +41,7 @@ na_dict = corna.get_na_value_dict()
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
 na_corr_df = corna.convert_to_df(na_corr_dict, parent=False, colname='NA corrected')
+
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, parent=False, colname='CorrIntensities-Replaced_negatives')
