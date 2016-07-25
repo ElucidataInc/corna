@@ -1,17 +1,11 @@
 import os
 import corna
-<<<<<<< HEAD
+
 from corna import config
 
 
 config.NAME_COL = 'Name'
 print config.NAME_COL
-=======
-
-
-
-corna.config_agios.NAME_COL = 'Name'
->>>>>>> 3f5c894d23bcee3a1bb1ddb34353949358b3bdfc
 
 # path to directory where data files are present - give the path the file
 # as this path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data/'
@@ -66,7 +60,7 @@ merged_results_df = corna.merge_dfs(df_list)
 # filter any dataframe as per requirement.
 # any number of columns and column values can be filtered
 col_rename = {'Name': ['L-Methionine'], "Sample Name": ['sample_1', 'sample_2']}
-filtered_data = corna.filtering_df(merged_results_df, col_rename)
+filtered_data = corna.filter_df(merged_results_df, col_rename)
 
 # save any dataframe at given path
 save_dfs = corna.save_to_csv(merged_results_df, path_dir + 'results.csv')

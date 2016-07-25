@@ -56,12 +56,12 @@ def merge_dfs(df_list):
     return combined_dfs
 
 
-def filtering_df(df, colname_vals_dict):
+def filter_df(df, colname_vals_dict):
     """
     This function filters the dataframe over single/multiple column name(s) and single/
     multiple column values
     """
-    filtered_df = hl.filtering_df(df, colname_vals_dict)
+    filtered_df = hl.filter_df(df, colname_vals_dict)
 
     return filtered_df
 

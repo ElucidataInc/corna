@@ -151,7 +151,7 @@ def merge_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
     return merged_df
 
 
-def filtering_df(df, colname_val_dict):
+def filter_df(df, colname_val_dict):
     """
     This function filters the dataframe over single/multiple column name(s) and single/
     multiple column values
