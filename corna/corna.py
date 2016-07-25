@@ -74,7 +74,7 @@ def get_na_value_dict():
     NA = na_mass_dict['NA']
     elements = na_mass_dict['Element']
     na_val_dict = {}
-    atoms = list(set(elements.values()))
+    atoms = set(elements.values())
 
     for atom in atoms:
         isotope_dict = {isotope: iso_atom for isotope, iso_atom
