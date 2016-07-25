@@ -1,5 +1,5 @@
 import numpy
-import corna.preprocess as preproc
+import corna.corna_yale.preprocess as preproc
 import corna.isotopomer as iso
 
 list_of_frag_info_tuples = [('Glutamate 148/42', u'C2HO', u'C5H8NO4'), ('Glutamate 150/43', u'C2HO', u'C5H8NO4'),
