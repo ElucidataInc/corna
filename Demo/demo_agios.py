@@ -3,8 +3,8 @@ from corna import config
 
 config.NAME_COL = 'Name'
 # path to directory where multiquant text data files are present
-#path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data_agios/'
-path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_agios/testfiles'
+path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data'
+#path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_agios/testfiles'
 # read maven data
 #single tracer data
 #maven_data = corna.read_maven(path_dir + '/aceticacid.csv')
@@ -13,7 +13,7 @@ path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_agios/testf
 #maven_data = corna.read_maven(path_dir + '/aceticacid_indist.csv')
 
 #double tracer
-maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
+maven_data = corna.read_data_file(path_dir + '/test_m0_2.csv')
 #maven_data = corna.read_maven(path_dir + '/aceticacid_multi.csv')
 #print maven_data
 
@@ -23,7 +23,7 @@ maven_data = corna.read_maven(path_dir + '/double_trac_testing.csv')
 #maven_data = corna.convert_json_to_df(json_input)
 
 # read maven metadata file
-maven_metadata = corna.read_mvn_metadata(path_dir + '/metadata.csv')
+maven_metadata = corna.read_data_file(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.merge_mvn_metadata(maven_data, maven_metadata)
