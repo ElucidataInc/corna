@@ -12,7 +12,6 @@ mq_metadata = corna.read_multiquant_metadata(path_dir + 'mq_metadata.xlsx')
 
 # merge multiquant files and metadata files
 merge_mq_metdata = corna.merge_mq_metadata(mq_files, mq_metadata)
-print merge_mq_metdata
 
 
 # filter merged data as per requirement
@@ -24,7 +23,7 @@ filtered_data = corna.filtering_df(merge_mq_metdata, num_col=2, col1="Time",
                                 list_col1_vals=['0min','30min'], col2="Glucose Concentration", list_col2_vals=["G7"])
 
 background_corr = corna.met_background_correction_all(citrate_G7, 'Q. [13C-glc] G7 0min')
-
+print background_corr
 # background noise correction on filtered data
 #background_corr = corna.met_background_correction_all(filtered_data, 'Q. [13C-glc] G7 0min')
 
@@ -36,21 +35,22 @@ list_of_samples = ['Q. [13C-glc] G7 0min', 'R. [13C-glc] G7 5min', 'S. [13C-glc]
 #background_corr = corna.met_background_correction('Citrate 191/67', merge_mq_metdata, 'Q. [13C-glc] G7 0min', list_of_samples, all_samples=False)
 
 # convert background noise corrected dictionary to dataframe
-background_corr_df = corna.convert_to_df(background_corr, colname = 'Background correction')
+background_corr_df = corna.convert_to_df(background_corr, True, colname='Background correction')
 
 
 # NA correction method on background noise corrected data
 nacorr_dict = corna.na_correction_mimosa(background_corr, all = True)
 
-na_corr_df = corna.convert_to_df(nacorr_dict, colname = 'NA corrected')
-
+na_corr_df = corna.convert_to_df(nacorr_dict, True, colname='NA corrected')
+print na_corr_df
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(nacorr_dict)
-postprocessed_out_df = corna.convert_to_df(postprocessed_out, colname =  'Replaced negatives')
+print postprocessed_out
+postprocessed_out_df = corna.convert_to_df(postprocessed_out, True, colname='Replaced negatives')
 
 # calculate fractional enrichment on post processed data
 frac_enrichment = corna.fractional_enrichment(postprocessed_out)
-frac_enr_df = corna.convert_to_df(frac_enrichment, colname = 'Frac Enrichment')
+frac_enr_df = corna.convert_to_df(frac_enrichment, True, colname='Frac Enrichment')
 
 # save any dataframe at given path
 save_dfs = corna.save_to_csv(frac_enr_df, path_dir + 'frac_enrichment.csv')

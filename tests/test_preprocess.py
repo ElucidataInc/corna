@@ -328,7 +328,7 @@ list_of_label_dict = [{'C13_148.0_42.0': {'D. [13C-glc] G2.5 30min': numpy.array
 
 glutamate_146_41 = {}
 for i in range(len(list_of_frag_info_tuples)):
-    glutamate_146_41.update(iso.bulk_insert_data_to_fragment_number(list_of_frag_info_tuples[i], list_of_label_dict[i]))
+    glutamate_146_41.update(iso.bulk_insert_data_to_fragment(list_of_frag_info_tuples[i], list_of_label_dict[i]))
 
 def test_background_noise_label_daughter_unlabel():
     assert preproc.background_noise(31710, 0.011, 5, 1, 2, 0) == 1046.43

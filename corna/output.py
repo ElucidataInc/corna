@@ -3,7 +3,7 @@ import config as conf
 import helpers as hl
 
 
-def convert_dict_df(nest_dict, parent=False):
+def convert_dict_df(nest_dict, parent):
     """
     This function convert the fragment dictionary model in dataframe
     Args:
@@ -30,7 +30,7 @@ def convert_dict_df(nest_dict, parent=False):
     return final_df
 
 
-def lists_labeldict(df_list, frag_name, label_dict, parent=False):
+def lists_labeldict(df_list, frag_name, label_dict, parent):
     """
     This function extracts lists of metabolite name, formula, parent from
     label dictionary model
@@ -47,7 +47,7 @@ def lists_labeldict(df_list, frag_name, label_dict, parent=False):
     """
     name = []
     formula = []
-    parent = []
+    parent_list = []
     lab = []
     frames = []
 
@@ -58,15 +58,15 @@ def lists_labeldict(df_list, frag_name, label_dict, parent=False):
                 tup.append((samp, intensity))
                 name.append(frag_name[0])
                 formula.append(frag_name[1])
-                if parent is True:
-                    parent.append(frag_name[2])
+                if parent:
+                    parent_list.append(frag_name[2])
         lab.append(label)
         frames.append(pd.DataFrame(tup))
         df = pd.concat(frames, keys=lab).reset_index()
         df[conf.NAME_COL] = name
         df[conf.FORMULA_COL] = formula
-        if parent is True:
-            df[conf.PARENT_COL] = parent
+        if parent:
+            df[conf.PARENT_COL] = parent_list
             df_list.append(df)
 
     return (df, df_list)

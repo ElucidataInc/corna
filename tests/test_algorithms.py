@@ -445,7 +445,7 @@ list_of_label_dict = [{'C13_148.0_42.0': {'D. [13C-glc] G2.5 30min': numpy.array
 
 glutamate_146_41 = {}
 for i in range(len(list_of_frag_info_tuples)):
-    glutamate_146_41.update(iso.bulk_insert_data_to_fragment_number(list_of_frag_info_tuples[i], list_of_label_dict[i]))
+    glutamate_146_41.update(iso.bulk_insert_data_to_fragment(list_of_frag_info_tuples[i], list_of_label_dict[i]))
 
 glutamate_146_41_output_dict = {}
 glutamate_146_41_output_dict[(148.0, 42.0)] = glutamate_146_41[('Glutamate 148/42_148.0', 'Glutamate 148/42_42.0')]

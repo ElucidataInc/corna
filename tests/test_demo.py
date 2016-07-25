@@ -32,7 +32,7 @@ glutamate = corna.filtering_df(merge_mq_metdata, num_col=1, col1="Parent",
 
 background_corr_malate = corna.met_background_correction('Malate 133/115', malate, 'A. [13C-glc] G9 0min')
 postprocessed_out_malate = corna.replace_negatives(background_corr_malate, all=False)
-background_corr_df_malate = corna.convert_to_df(postprocessed_out_malate, all = False, colname = 'Background correction')
+background_corr_df_malate = corna.convert_to_df(postprocessed_out_malate, True, colname='Background correction')
 
 #output file
 background_corr_out = pd.read_excel(path_dir + '/test_demo_output.xlsx', 'BackgroundCorrection')
@@ -53,7 +53,7 @@ na_corr_out_malate = corna.filtering_df(na_corr_out, num_col=1, col1='name',
 # NA correction method on background noise corrected data
 nacorr_dict = corna.na_correction_mimosa(postprocessed_out_malate, all = False)
 na_postprocessed_out_malate = corna.replace_negatives(nacorr_dict, all=False)
-na_corr_df_malate = corna.convert_to_df(na_postprocessed_out_malate, all=False, colname = 'NA corrected')
+na_corr_df_malate = corna.convert_to_df(na_postprocessed_out_malate, True, colname='NA corrected')
 
 
 corna.save_to_csv(na_corr_df_malate, path_dir + '/our_out_malate_na.csv')
@@ -62,7 +62,7 @@ corna.save_to_csv(na_corr_out_malate, path_dir + '/excel_out_malate_na.csv')
 
 # # calculate fractional enrichment on post processed data
 frac_enrichment = corna.fractional_enrichment(na_postprocessed_out_malate, all=False)
-frac_enr_df_malate = corna.convert_to_df(frac_enrichment, all = False, colname = 'Frac Enrichment')
+frac_enr_df_malate = corna.convert_to_df(frac_enrichment, True, colname='Frac Enrichment')
 
 frac_enr_out = pd.read_excel(path_dir + '/test_demo_output.xlsx', 'FractionalEnrichment')
 frac_enr_out_malate = corna.filtering_df(frac_enr_out, num_col=1, col1='name',

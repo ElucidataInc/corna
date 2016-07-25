@@ -147,7 +147,7 @@ def fractional_enrichment(post_processed_out, decimals=4):
     return frac_enrichment_dict
 
 
-def convert_to_df(dict_output, colname='col_name'):
+def convert_to_df(dict_output, parent, colname='col_name'):
     """
     This function convert the dictionary output from na_correction function, postprocessing
     and frac_enrichment_dict to dataframe
@@ -158,13 +158,13 @@ def convert_to_df(dict_output, colname='col_name'):
 
     Returns:
         model_to_df : a pandas dataframe
+        :param parent:
     """
     df_list = []
 
     for metabolite, fragment_dict in dict_output.iteritems():
-
-        std_model = iso.fragment_dict_to_std_model_number(fragment_dict)
-        model_to_df = out.convert_dict_df(std_model)
+        std_model = iso.fragment_dict_to_std_model(fragment_dict, parent)
+        model_to_df = out.convert_dict_df(std_model, parent)
         df_list.append(model_to_df)
         model_to_df = hl.concatenate_dataframes_by_col(df_list)
 
