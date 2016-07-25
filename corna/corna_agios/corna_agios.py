@@ -1,10 +1,9 @@
 """"This module calls all the functions in the package. All user functions defined here."""
 import warnings
-
-import corna.helpers as hl
-import file_parser_agios as fp
-import algorithms_agios as algo
-import na_correction as nacorr
+from .. helpers import convert_labels_to_std
+from . file_parser_agios import melt_df, column_manipulation
+from . algorithms_agios import fragmentsdict_model, get_atoms_from_tracers
+from . na_correction import nacorrection
 
 
 warnings.simplefilter(action="ignore")
@@ -61,13 +60,12 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
         na_corr_dict : dictionary with corrected intensity values
     """
     eleme_corr_invalid_entry(iso_tracers, eleme_corr)
-    std_label_df = hl.convert_labels_to_std(merged_df, iso_tracers)
-    metabolite_dict = algo.fragmentsdict_model(std_label_df)
+    std_label_df = convert_labels_to_std(merged_df, iso_tracers)
+    metabolite_dict = fragmentsdict_model(std_label_df)
     na_corr_dict = {}
 
     for metabolite, fragments_dict in metabolite_dict.iteritems():
-        na_corr_dict[metabolite] = nacorr.na_correction(fragments_dict,
-                                                        iso_tracers, eleme_corr, na_dict)
+        na_corr_dict[metabolite] = nacorrection(fragments_dict, iso_tracers, eleme_corr, na_dict)
 
     return na_corr_dict
 
@@ -79,7 +77,7 @@ def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
     element. This is logically incorrect input, hence raises an error.
     """
     for key, value in eleme_corr.iteritems():
-        for el in algo.get_atoms_from_tracers(iso_tracers):
+        for el in get_atoms_from_tracers(iso_tracers):
             if el in value:
                 raise KeyError('An iso tracer cannot'
                                ' be an Indistinguishable element (' + el +

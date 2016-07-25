@@ -24,6 +24,7 @@ maven_metadata = corna.read_file(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.maven_merge_dfs(maven_data, maven_metadata)
+print merge_mv_metdata
 # isotopic tracers
 #iso_tracers = ['C13']
 iso_tracers = ['C13', 'N15']

@@ -10,7 +10,7 @@ from itertools import product
 
 
 
-def na_correction(fragments_dict, iso_tracers, eleme_corr, na_dict):
+def nacorrection(fragments_dict, iso_tracers, eleme_corr, na_dict):
     """
     This function is wrapper around algorithms.py function. It performs na correction
     for single and multiple tracers and creates the output in the form of fragment
