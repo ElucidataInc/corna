@@ -26,23 +26,29 @@ def background(list_of_replicates, input_fragment_value, unlabeled_fragment_valu
     daughter_atoms = daughter_frag.number_of_atoms(iso_elem)
     daughter_label = daughter_frag.get_num_labeled_atoms_isotope(parent_frag.isotracer)
     unlabeled_data = unlabeled_fragment_value[1]
-    background_list = []
-    for sample_name in list_of_replicates:
-        noise = background_noise(unlabeled_data[sample_name], na, parent_atoms,
+    replicate_value = {}
+    for replicate_group in list_of_replicates:
+        background_list = []
+        for each_replicate in replicate_group:
+            noise = background_noise(unlabeled_data[each_replicate], na, parent_atoms,
                                  parent_label, daughter_atoms, daughter_label)
-        background = backround_subtraction(data[sample_name], noise)
-        background_list.append(background)
-    return background_list
+            background = backround_subtraction(data[each_replicate], noise)
+            #bcause numpy array with one value
+            background_list.append(background[0])
+        background_value = max(background_list)
+        for each_replicate in replicate_group:
+            replicate_value[each_replicate] = background_value
+    return replicate_value
 
-def background_correction(background_list, sample_data, decimals):
-    background = max(background_list)
+def background_correction(replicates, sample_background, sample_data, decimals):
     corrected_sample_data = {}
     for key, value in sample_data.iteritems():
-        new_value = np.around(value - background, decimals)
+        background_value = replicates[sample_background[key]]
+        new_value = np.around(value - background_value, decimals)
         corrected_sample_data[key] = new_value
     return corrected_sample_data
 
-def bulk_background_correction(fragment_dict, list_of_samples, background_sample, decimals):
+def bulk_background_correction(fragment_dict, list_of_replicates, sample_background, decimals):
     input_fragments = []
     unlabeled_fragment = []
     corrected_fragments_dict = {}
@@ -59,12 +65,9 @@ def bulk_background_correction(fragment_dict, list_of_samples, background_sample
         raise AssertionError('The input should contain atleast and only one unlabeled fragment data'
                              'Please check metadata or raw data files')
     for input_fragment in input_fragments:
-        background_list = background(background_sample, input_fragment[1], unlabeled_fragment[0][1])
-        sample_data = {}
+        replicate_value = background(list_of_replicates, input_fragment[1], unlabeled_fragment[0][1])
         data = input_fragment[1][1]
-        for sample_name in list_of_samples:
-            sample_data[sample_name] = data[sample_name]
-        corrected_sample_data = background_correction(background_list, sample_data, decimals)
+        corrected_sample_data = background_correction(replicate_value, sample_background, data, decimals)
         corrected_fragments_dict[input_fragment[0]] = [input_fragment[1][0], corrected_sample_data,
                                                        input_fragment[1][2], input_fragment[1][3]]
     return corrected_fragments_dict
