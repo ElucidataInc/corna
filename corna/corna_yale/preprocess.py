@@ -6,9 +6,8 @@ from scipy.misc import comb
 from .. import helpers as hl
 
 def background_noise(unlabel_intensity, na, parent_atoms, parent_label, daughter_atoms, daughter_label):
-    noise = unlabel_intensity*math.pow(na, parent_label-daughter_label)\
+    noise = unlabel_intensity*math.pow(na, parent_label)\
             *comb(parent_atoms - daughter_atoms, parent_label - daughter_label)\
-            *math.pow(na, daughter_label)\
             *comb(daughter_atoms, daughter_label)
     return noise
 
@@ -16,7 +15,7 @@ def backround_subtraction(input_intensity, noise):
     intensity = input_intensity - noise
     return intensity
 
-def background(sample_name, input_fragment_value, unlabeled_fragment_value):
+def background(list_of_replicates, input_fragment_value, unlabeled_fragment_value):
     parent_frag, daughter_frag = input_fragment_value[0]
     data = input_fragment_value[1]
     iso_elem = hl.get_isotope_element(parent_frag.isotracer)
@@ -25,26 +24,30 @@ def background(sample_name, input_fragment_value, unlabeled_fragment_value):
     na = hl.get_isotope_na(parent_frag.isotracer)
     daughter_atoms = daughter_frag.number_of_atoms(iso_elem)
     daughter_label = daughter_frag.get_num_labeled_atoms_isotope(parent_frag.isotracer)
-    input_intensities = data[sample_name]
     unlabeled_data = unlabeled_fragment_value[1]
-    unlabeled_intensities = unlabeled_data[sample_name]
-    background_list = []
-    for i in range(len(input_intensities)):
-        noise = background_noise(unlabeled_intensities[i], na, parent_atoms,
+    replicate_value = {}
+    for replicate_group in list_of_replicates:
+        background_list = []
+        for each_replicate in replicate_group:
+            noise = background_noise(unlabeled_data[each_replicate], na, parent_atoms,
                                  parent_label, daughter_atoms, daughter_label)
-        background = backround_subtraction(input_intensities[i], noise)
-        background_list.append(background)
-    return background_list
+            background = backround_subtraction(data[each_replicate], noise)
+            #bcause numpy array with one value
+            background_list.append(background[0])
+        background_value = max(background_list)
+        for each_replicate in replicate_group:
+            replicate_value[each_replicate] = background_value
+    return replicate_value
 
-def background_correction(background_list, sample_data, decimals):
-    background = max(background_list)
+def background_correction(replicates, sample_background, sample_data, decimals):
     corrected_sample_data = {}
     for key, value in sample_data.iteritems():
-        new_value = np.around(value - background, decimals)
+        background_value = replicates[sample_background[key]]
+        new_value = np.around(value - background_value, decimals)
         corrected_sample_data[key] = new_value
     return corrected_sample_data
 
-def bulk_background_correction(fragment_dict, list_of_samples, background_sample, decimals):
+def bulk_background_correction(fragment_dict, list_of_replicates, sample_background, decimals):
     input_fragments = []
     unlabeled_fragment = []
     corrected_fragments_dict = {}
@@ -61,12 +64,9 @@ def bulk_background_correction(fragment_dict, list_of_samples, background_sample
         raise AssertionError('The input should contain atleast and only one unlabeled fragment data'
                              'Please check metadata or raw data files')
     for input_fragment in input_fragments:
-        background_list = background(background_sample, input_fragment[1], unlabeled_fragment[0][1])
-        sample_data = {}
+        replicate_value = background(list_of_replicates, input_fragment[1], unlabeled_fragment[0][1])
         data = input_fragment[1][1]
-        for sample_name in list_of_samples:
-            sample_data[sample_name] = data[sample_name]
-        corrected_sample_data = background_correction(background_list, sample_data, decimals)
+        corrected_sample_data = background_correction(replicate_value, sample_background, data, decimals)
         corrected_fragments_dict[input_fragment[0]] = [input_fragment[1][0], corrected_sample_data,
                                                        input_fragment[1][2], input_fragment[1][3]]
     return corrected_fragments_dict

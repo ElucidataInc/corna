@@ -340,19 +340,37 @@ def test_backround_subtraction():
     assert preproc.backround_subtraction(27800, 2.29E+03) == 25510.0
 
 
-input_fragment = iso.insert_data_to_fragment_number(('Glutamate 147/41', 'C2HO', 'C5H8NO4'), 'C13_147.0_41.0',
-                                                    {'A. [13C-glc] G2.5 0min':
-                                                  numpy.array([1155.5335, 1409.6325, 2052.6495,
-                                                               1284.4085, 1542.459, 1542.5255])})
-unlabeled_fragment = iso.insert_data_to_fragment_number(('Glutamate 146/41', 'C2HO', 'C5H8NO4'), 'C13_146.0_41.0',
-                                                        {'A. [13C-glc] G2.5 0min':
-                                                      numpy.array([45057.0155, 31707.183, 54944.625,
-                                                                   32608.4505, 60981.034, 38701.986])})
+unlabeled_fragment = iso.insert_data_to_fragment_mass(('2PG 185/79', 'O3P', 'C3H6O7P'), 'C13_185.0_79.0',
+                                             {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':numpy.array([59689.272]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)':numpy.array([59950.872]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)':numpy.array([57204.072]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)':numpy.array([58641.564]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)':numpy.array([62607.86519]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)':numpy.array([62521.092])})
+input_fragment = iso.insert_data_to_fragment_mass(('2PG 186/79', 'O3P', 'C3H6O7P'), 'C13_186.0_79.0',
+                                                 {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':numpy.array([2746.8]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)':numpy.array([1525.128]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)':numpy.array([1438.8]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)':numpy.array([2223.6]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)':numpy.array([2745.492]),
+                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)':numpy.array([2703.636])})
 
 def test_background():
-    assert numpy.array_equal(numpy.around(preproc.background('A. [13C-glc] G2.5 0min', input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')],
-                       unlabeled_fragment[('Glutamate 146/41_146.0', 'Glutamate 146/41_41.0')]),8),
-                             numpy.around(numpy.array([0, 363.29546099999993, 239.47687500000029, 208.3296335, 0, 265.359962]),8))
+    print numpy.around(preproc.background(['TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)'], input_fragment[('2PG 186/79_186.0', '2PG 186/79_79.0')],
+                       unlabeled_fragment[('2PG 185/79_185.0', '2PG 185/79_79.0')]),7)
+    print numpy.array_equal(numpy.around(preproc.background(['TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)',
+                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)'], input_fragment[('2PG 186/79_186.0', '2PG 186/79_79.0')],
+                       unlabeled_fragment[('2PG 185/79_185.0', '2PG 185/79_79.0')]),5),
+                            numpy.around(numpy.array([777.054024, -453.250776, -448.934376, 288.428388, 679.4324487, 640.439964]),5))
 
 
 background_list = [1.23E+02, 3.81E+02, 0.00E+00, 3.85E+02, 2.43E+02, 0.00E+00]
