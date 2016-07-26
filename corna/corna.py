@@ -11,6 +11,8 @@ import helpers as hl
 warnings.simplefilter(action="ignore")
 
 
+read_data_file = hl.read_file
+
 def read_data_file(path):
     """
     This function reads the input file in xls, xlsx, txt and csv
