@@ -25,9 +25,10 @@ def read_multiquant_metadata(path):
 
     return mq_metdata
 
-# Multiquant
-def merge_mq_metadata(mq_df, metdata):
-    merged_data = fpy.mq_merge_dfs(mq_df, metdata)
+# Multiquants
+def merge_mq_metadata(mq_df, metdata, sample_metdata):
+    merged_data = fpy.mq_merge_dfs(mq_df, metdata, sample_metdata)
+    merged_data.fillna(0, inplace = True)
     return merged_data
 
 # Background correction for multiquant
@@ -39,6 +40,7 @@ def met_background_correction(metabolite, merged_data, background_sample, list_o
         list_of_samples = list_of_samples
     frag_key_df = fpy.frag_key(merged_data)
     std_model_mq = fp.standard_model(frag_key_df)
+    print std_model_mq
     fragments_dict = {}
     for frag_name, label_dict in std_model_mq.iteritems():
         if frag_name[2] == metabolite:
