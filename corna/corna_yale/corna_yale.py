@@ -1,16 +1,14 @@
 
-import warnings
+from .. import helpers as hl
+from .. import file_parser as fp
 
-import corna.helpers as hl
-import corna.file_parser as fp
-
-import file_parser_yale as fpy
-import corna.isotopomer as iso
-import algorithms_yale as algo
-import preprocess as preproc
+from . import file_parser_yale as fpy
+from .. import isotopomer as iso
+from . import algorithms_yale as algo
+from . import preprocess as preproc
 
 
-warnings.simplefilter(action = "ignore")
+
 
 
 # Multiquant

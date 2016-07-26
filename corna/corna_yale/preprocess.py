@@ -1,10 +1,9 @@
 
 import math
-
 import numpy as np
 from scipy.misc import comb
 
-import corna.helpers as hl
+from .. import helpers as hl
 
 def background_noise(unlabel_intensity, na, parent_atoms, parent_label, daughter_atoms, daughter_label):
     noise = unlabel_intensity*math.pow(na, parent_label-daughter_label)\

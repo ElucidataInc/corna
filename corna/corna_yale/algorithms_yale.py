@@ -1,5 +1,5 @@
 import numpy as np
-import corna.helpers as hl
+from .. import helpers as hl
 
 
 def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
