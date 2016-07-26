@@ -7,9 +7,8 @@ from scipy.misc import comb
 import corna.helpers as hl
 
 def background_noise(unlabel_intensity, na, parent_atoms, parent_label, daughter_atoms, daughter_label):
-    noise = unlabel_intensity*math.pow(na, parent_label-daughter_label)\
+    noise = unlabel_intensity*math.pow(na, parent_label)\
             *comb(parent_atoms - daughter_atoms, parent_label - daughter_label)\
-            *math.pow(na, daughter_label)\
             *comb(daughter_atoms, daughter_label)
     return noise
 
@@ -17,7 +16,7 @@ def backround_subtraction(input_intensity, noise):
     intensity = input_intensity - noise
     return intensity
 
-def background(sample_name, input_fragment_value, unlabeled_fragment_value):
+def background(list_of_replicates, input_fragment_value, unlabeled_fragment_value):
     parent_frag, daughter_frag = input_fragment_value[0]
     data = input_fragment_value[1]
     iso_elem = hl.get_isotope_element(parent_frag.isotracer)
@@ -26,14 +25,12 @@ def background(sample_name, input_fragment_value, unlabeled_fragment_value):
     na = hl.get_isotope_na(parent_frag.isotracer)
     daughter_atoms = daughter_frag.number_of_atoms(iso_elem)
     daughter_label = daughter_frag.get_num_labeled_atoms_isotope(parent_frag.isotracer)
-    input_intensities = data[sample_name]
     unlabeled_data = unlabeled_fragment_value[1]
-    unlabeled_intensities = unlabeled_data[sample_name]
     background_list = []
-    for i in range(len(input_intensities)):
-        noise = background_noise(unlabeled_intensities[i], na, parent_atoms,
+    for sample_name in list_of_replicates:
+        noise = background_noise(unlabeled_data[sample_name], na, parent_atoms,
                                  parent_label, daughter_atoms, daughter_label)
-        background = backround_subtraction(input_intensities[i], noise)
+        background = backround_subtraction(data[sample_name], noise)
         background_list.append(background)
     return background_list
 
