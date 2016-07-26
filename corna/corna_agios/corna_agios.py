@@ -1,28 +1,8 @@
 """"This module calls all the functions in the package. All user functions defined here."""
-import warnings
 from .. helpers import convert_labels_to_std
 from . file_parser_agios import melt_df, column_manipulation
 from . algorithms_agios import fragmentsdict_model, get_atoms_from_tracers
 from . na_correction import nacorrection
-
-
-warnings.simplefilter(action="ignore")
-
-
-
-# def merge_mvn_metadata(mv_df, metadata):
-#     """
-#     This function combines the MAVEN input file dataframe and the metadata
-#     file dataframe
-#     Args:
-#         input_data : MAVEN input data in form of pandas dataframe
-#         metadata : metadata in the form of pandas dataframe
-#     Returns:
-#         combined_data : dataframe with input data and metadata combined
-#     """
-
-#     merged_data = fp.maven_merge_dfs(mv_df, metadata)
-#     return merged_data
 
 
 def convert_inputdata_to_stdfrom(input_df):

@@ -11,35 +11,6 @@ from . import helpers
 warnings.simplefilter(action="ignore")
 
 
-# def read_file(path):
-#     """
-#     This function reads the input file in xls, xlsx, txt and csv
-#     format
-#     Args:
-#         path : path to input file
-#     Returns:
-#          input_file : input file in the form of pandas dataframe
-#     """
-#     df = helpers.read_file(path)
-#     return df
-
-
-
-# def convert_json_to_df(json_input):
-#     """
-#     This function takes input data in the form of json format and converts
-#     it in pandas dataframe
-#     Args:
-#         json_input : input data in form of json format
-#     Returns:
-#         json_to_df : pandas dataframe
-
-#     """
-#     df = helpers.json_to_df(json_input)
-
-#     return df
-
-
 def merge_dfs(df_list):
     """
     This function takes the list of dataframes as an input
@@ -52,18 +23,8 @@ def merge_dfs(df_list):
     combined_dfs = reduce(lambda left, right: pd.merge(left, right,
                                                        on=[config.LABEL_COL, config.SAMPLE_COL,
                                                            config.NAME_COL, config.FORMULA_COL]), df_list)
-
     return combined_dfs
 
-
-# def filter_df(df, colname_vals_dict):
-#     """
-#     This function filters the dataframe over single/multiple column name(s) and single/
-#     multiple column values
-#     """
-#     filtered_df = helpers.filter_df(df, colname_vals_dict)
-
-#     return filtered_df
 
 def get_na_value_dict():
     """
