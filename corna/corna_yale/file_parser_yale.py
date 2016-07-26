@@ -23,7 +23,7 @@ def mq_merge_dfs(df1, df2, df3):
                               right_on=config_yale.MQ_SAMPLE_NAME)
     except KeyError:
         raise KeyError('Missing columns:' + config_yale.MQ_FRAGMENT_COL + 'or' + config_yale.MQ_SAMPLE_NAME)
-
+    print get_replicates(df3, config_yale.MQ_SAMPLE_NAME, config_yale.COHORT_COL, config_yale.BACKGROUND_COL)[0]
     merged_df[config_yale.MASSINFO_COL] = merged_df[config_yale.MASSINFO_COL].str.replace(' / ', "_")
     merged_df.rename(columns={config_yale.MQ_FRAGMENT_COL: config_yale.NAME_COL,
                               config_yale.MQ_COHORT_NAME: config_yale.COHORT_COL}, inplace=True)
@@ -49,6 +49,14 @@ def remove_mq_stds(merged_df):
     remove_stds.pop(config_yale.ISOTRACER_COL)
     return remove_stds
 
+def get_replicates(sample_metadata, sample_name, cohort_name, background_sample):
+    sample_index_df = sample_metadata.set_index(sample_name)
+    sample_index_df['Background Cohort'] = sample_index_df[background_sample].map(sample_index_df[cohort_name])
+    replicate_groups = []
+    for cohorts in sample_index_df['Background Cohort'].unique():
+        newdf = sample_index_df[sample_index_df['Background Cohort'] == cohorts]
+        replicate_groups.append(newdf[background_sample].unique())
+    return replicate_groups
 
 def frag_key(df):
     """
