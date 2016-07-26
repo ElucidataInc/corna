@@ -1,6 +1,6 @@
 import numpy as np
 
-import config as conf
+from . import config as conf
 
 
 def get_sample_names(df):

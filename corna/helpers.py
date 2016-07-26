@@ -3,9 +3,9 @@ import pandas as pd
 import numpy as np
 import collections
 
-import constants as cs
-from formula import Formula
-from formulaschema import FormulaSchema
+from . import constants as cs
+from . formula import Formula
+from . formulaschema import FormulaSchema
 
 schema_obj = FormulaSchema()
 chemformula_schema = schema_obj.create_chemicalformula_schema()

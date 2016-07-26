@@ -2,11 +2,11 @@
 import warnings
 import pandas as pd
 
-from . import isotopomer
-from . import postprocess
-from . import output
-from . import config
-from . import helpers
+from . isotopomer import fragment_dict_to_std_model
+from . postprocess import replace_negative_to_zero, enrichment
+from . output import convert_dict_df
+from . import config as conf
+from . helpers import concatenate_dataframes_by_col, ISOTOPE_NA_MASS
 
 warnings.simplefilter(action="ignore")
 
@@ -21,8 +21,8 @@ def merge_dfs(df_list):
         combined_dfs : concatenated list of dataframes into one dataframe
     """
     combined_dfs = reduce(lambda left, right: pd.merge(left, right,
-                                                       on=[config.LABEL_COL, config.SAMPLE_COL,
-                                                           config.NAME_COL, config.FORMULA_COL]), df_list)
+                                                       on=[conf.LABEL_COL, conf.SAMPLE_COL,
+                                                           conf.NAME_COL, conf.FORMULA_COL]), df_list)
     return combined_dfs
 
 
@@ -31,7 +31,7 @@ def get_na_value_dict():
     This function returns the dictionary of default NA values (adapted from wiki)
     for all the isotopes
     """
-    na_mass_dict = helpers.ISOTOPE_NA_MASS
+    na_mass_dict = ISOTOPE_NA_MASS
     NA = na_mass_dict['NA']
     elements = na_mass_dict['Element']
     na_val_dict = {}
@@ -66,7 +66,7 @@ def replace_negatives(na_corr_dict, replace_negative=True):
     post_processed_dict = {}
 
     for metabolite, fragment_dict in na_corr_dict.iteritems():
-        post_processed_dict[metabolite] = postprocess.replace_negative_to_zero(fragment_dict,
+        post_processed_dict[metabolite] = replace_negative_to_zero(fragment_dict,
                                                                            replace_negative)
 
     return post_processed_dict
@@ -88,7 +88,7 @@ def fractional_enrichment(post_processed_out, decimals=4):
     frac_enrichment_dict = {}
 
     for metabolite, fragment_dict in post_processed_out.iteritems():
-        frac_enrichment_dict[metabolite] = postprocess.enrichment(fragment_dict, decimals)
+        frac_enrichment_dict[metabolite] = enrichment(fragment_dict, decimals)
 
     return frac_enrichment_dict
 
@@ -109,12 +109,12 @@ def convert_to_df(dict_output, parent, colname='col_name'):
     df_list = []
 
     for metabolite, fragment_dict in dict_output.iteritems():
-        std_model = isotopomer.fragment_dict_to_std_model(fragment_dict, parent)
-        model_to_df = output.convert_dict_df(std_model, parent)
+        std_model = fragment_dict_to_std_model(fragment_dict, parent)
+        model_to_df = convert_dict_df(std_model, parent)
         df_list.append(model_to_df)
-        model_to_df = helpers.concatenate_dataframes_by_col(df_list)
+        model_to_df = concatenate_dataframes_by_col(df_list)
 
-    model_to_df.rename(columns={config.INTENSITY_COL: str(colname)}, inplace=True)
+    model_to_df.rename(columns={conf.INTENSITY_COL: str(colname)}, inplace=True)
 
     return model_to_df
 

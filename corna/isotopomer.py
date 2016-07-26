@@ -1,6 +1,8 @@
-from model import Fragment
-import helpers as hl
 import numpy as np
+
+from . model import Fragment
+from . import helpers as hl
+
 
 def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
     if molecular_mass != None:

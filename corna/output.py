@@ -1,6 +1,7 @@
 import pandas as pd
-import config as conf
-import helpers as hl
+
+from . import config as conf
+from . helpers import LEVEL_0_COl, LEVEL_1_COL
 
 
 def convert_dict_df(nest_dict, parent):
@@ -21,11 +22,11 @@ def convert_dict_df(nest_dict, parent):
     else:
         final_df = df
     final_df.rename(columns={
-                        hl.LEVEL_0_COl:conf.LABEL_COL,
+                        LEVEL_0_COl:conf.LABEL_COL,
                         0:conf.SAMPLE_COL,
                         1:conf.INTENSITY_COL},
                     inplace=True)
-    final_df.pop(hl.LEVEL_1_COL)
+    final_df.pop(LEVEL_1_COL)
 
     return final_df
 
