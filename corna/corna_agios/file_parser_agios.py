@@ -1,7 +1,8 @@
 import pandas as pd
 
-import corna.helpers as hl
-import corna.config as conf
+from .. import config as conf
+from .. helpers import merge_dfs, VAR_COL, VAL_COL
+
 
 
 def maven_merge_dfs(df1, df2):
@@ -20,8 +21,8 @@ def maven_merge_dfs(df1, df2):
     long_form = melt_df(df1)
 
     try:
-        merged_df = hl.merge_dfs(long_form, df2, how='left',
-                                 left_on=hl.VAR_COL, right_on='sample')
+        merged_df = merge_dfs(long_form, df2, how='left',
+                                 left_on=VAR_COL, right_on='sample')
     except KeyError:
         raise KeyError('sample column not found in metadata')
 
@@ -45,7 +46,7 @@ def column_manipulation(df):
     df[conf.PARENT_COL] = df[conf.NAME_COL]
 
     df.rename(
-        columns={hl.VAR_COL: conf.SAMPLE_COL, hl.VAL_COL:conf.INTENSITY_COL},
+        columns={VAR_COL: conf.SAMPLE_COL, VAL_COL:conf.INTENSITY_COL},
         inplace=True)
 
     return df

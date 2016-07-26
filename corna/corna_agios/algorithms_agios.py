@@ -2,11 +2,12 @@
 import numpy as np
 from numpy.linalg import pinv
 
-import corna.helpers as hl
-import corna.file_parser as fp
-import corna.isotopomer as iso
+from . file_parser_agios import frag_key
+from .. helpers import get_isotope_element
+from .. file_parser import standard_model
+from .. isotopomer import bulk_insert_data_to_fragment
 
-import file_parser_agios as fpa
+
 
 def corr_matrix(iso_tracer, no_atom_tracer, na_dict):
     """
@@ -120,14 +121,14 @@ def fragmentsdict_model(merged_df):
         [Fragment object, {'sample_1': array([ 0.0164])}, False, 'Aceticacid']
     """
     fragments_dict = {}
-    frag_merge_df = fpa.frag_key(merged_df)
-    std_model_mvn = fp.standard_model(frag_merge_df)
+    frag_merge_df = frag_key(merged_df)
+    std_model_mvn = standard_model(frag_merge_df)
 
     for metabolite_name, label_dict  in std_model_mvn.iteritems():
         fragments_dict[metabolite_name] = {}
         for label, data in label_dict.iteritems():
             fragments_dict[metabolite_name].update(
-                iso.bulk_insert_data_to_fragment(metabolite_name, {label: data},  number=True))
+                bulk_insert_data_to_fragment(metabolite_name, {label: data},  number=True))
 
     return fragments_dict
 
@@ -213,7 +214,7 @@ def get_atoms_from_tracers(iso_tracers):
     trac_atoms = []
 
     for i in range(0, len(iso_tracers)):
-        element = hl.get_isotope_element(iso_tracers[i])
+        element = get_isotope_element(iso_tracers[i])
         trac_atoms.append(element)
 
     return trac_atoms
