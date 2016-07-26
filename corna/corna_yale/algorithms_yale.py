@@ -1,10 +1,10 @@
 import numpy as np
-from .. import helpers as hl
+from .. import helpers
 
 
 def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                       isotope, na, decimals):
-    iso_elem = hl.get_isotope_element(isotope)
+    iso_elem = helpers.get_isotope_element(isotope)
     p = parent_frag_m.number_of_atoms(iso_elem)
     d = daughter_frag_n.number_of_atoms(iso_elem)
     m = parent_frag_m.get_num_labeled_atoms_tracer()
@@ -16,7 +16,7 @@ def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intens
 
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                       isotope, na, decimals):
-    iso_elem = hl.get_isotope_element(isotope)
+    iso_elem = helpers.get_isotope_element(isotope)
     p = parent_frag_m.number_of_atoms(iso_elem)
     d = daughter_frag_n.number_of_atoms(iso_elem)
     m = parent_frag_m.get_num_labeled_atoms_isotope(isotope)
@@ -41,7 +41,7 @@ def na_correction_mimosa_by_fragment(fragments_dict, decimals):
         m_1_n_1 = (key[0]-1, key[1]-1)
         parent_frag_m, daughter_frag_n = value[0]
         isotope = parent_frag_m.isotracer
-        na = hl.get_isotope_na(isotope)
+        na = helpers.get_isotope_na(isotope)
         data = value[1]
         corrected_data = {}
         for sample_name, intensity_m_n in data.iteritems():
