@@ -39,9 +39,8 @@ def get_na_value_dict():
     atoms = set(elements.values())
 
     for atom in atoms:
-        isotope_dict = {isotope: iso_atom for isotope, iso_atom
-                        in elements.iteritems() if iso_atom == atom}
-        isotope_list = isotope_dict.keys()
+        isotope_list = [isotope for isotope, iso_atom
+                        in elements.iteritems() if iso_atom == atom]
         na_vals = [NA[val] for val in isotope_list]
         na_vals.sort(reverse=True)
         na_val_dict[atom] = na_vals
