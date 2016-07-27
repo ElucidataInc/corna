@@ -66,11 +66,13 @@ def frag_key(df):
     """
     This function creates a fragment key column in merged data based on parent information.
     """
+    def _extract_keys(x):
+        return (x[config_yale.NAME_COL],
+                x[config_yale.FORMULA_COL],
+                x[config_yale.PARENT_COL],
+                x[config_yale.PARENT_FORMULA_COL])
     try:
-        df[config_yale.FRAG_COL] = df.apply(lambda x : tuple([x[config_yale.NAME_COL],
-                                                              x[config_yale.FORMULA_COL],
-                                                              x[config_yale.PARENT_COL],
-                                                              x[config_yale.PARENT_FORMULA_COL]]), axis=1)
+        df[config_yale.FRAG_COL] = df.apply(_extract_keys, axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
     return df
