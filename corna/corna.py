@@ -1,5 +1,4 @@
 """"This module calls all the functions in the package. All user functions defined here."""
-import warnings
 import pandas as pd
 
 from . isotopomer import fragment_dict_to_std_model
@@ -7,8 +6,6 @@ from . postprocess import replace_negative_to_zero, enrichment
 from . output import convert_dict_df
 from . import config as conf
 from . helpers import concatenate_dataframes_by_col, ISOTOPE_NA_MASS
-
-warnings.simplefilter(action="ignore")
 
 
 def merge_dfs(df_list):
@@ -20,10 +17,13 @@ def merge_dfs(df_list):
     Returns:
         combined_dfs : concatenated list of dataframes into one dataframe
     """
-    combined_dfs = reduce(lambda left, right: pd.merge(left, right,
-                                                       on=[conf.LABEL_COL, conf.SAMPLE_COL,
-                                                           conf.NAME_COL, conf.FORMULA_COL]), df_list)
+    combined_dfs = reduce(_merge_two_dfs, df_list)
     return combined_dfs
+
+def _merge_two_dfs(df1, df2):
+    return pd.merge(df1, df2,
+                   on=[conf.LABEL_COL, conf.SAMPLE_COL,
+                       conf.NAME_COL, conf.FORMULA_COL])
 
 
 def get_na_value_dict():

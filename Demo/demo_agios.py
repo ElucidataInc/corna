@@ -13,7 +13,7 @@ path_dir = os.path.join(os.path.dirname(__file__), 'data')
 
 
 # read maven data
-maven_data = corna.read_file(path_dir + '/test_m0_2.csv')
+maven_data = corna.read_file(path_dir + '/test.csv')
 
 # For json input, use this funtion:
 #json_input = json.dumps(maven_data.to_dict())
@@ -24,16 +24,16 @@ maven_metadata = corna.read_file(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.maven_merge_dfs(maven_data, maven_metadata)
-print merge_mv_metdata
+
 # isotopic tracers
 #iso_tracers = ['C13']
-iso_tracers = ['C13', 'N15']
+iso_tracers = ['C13']
 
 # element to be corrected
 # in case of no indistinguishable elements, eleme corr is empty dictionary
 #eleme_corr = {}
 # in case of indistinguishable elements
-eleme_corr = {'C': ['H', 'O'], 'N':['S']}
+eleme_corr = {'C': ['H', 'O']}
 
 # NA values dict
 na_dict = corna.get_na_value_dict()
@@ -44,7 +44,7 @@ na_dict = corna.get_na_value_dict()
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
 na_corr_df = corna.convert_to_df(na_corr_dict, parent=False, colname='NA corrected')
-
+print na_corr_df['NA corrected'].sum()
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict, replace_negative = True)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, parent=False, colname='CorrIntensities-Replaced_negatives')
