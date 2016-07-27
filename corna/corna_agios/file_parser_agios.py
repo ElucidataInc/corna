@@ -17,7 +17,6 @@ def maven_merge_dfs(df1, df2):
     Returns:
         combined_data : dataframe with input data and metadata combined
     """
-
     long_form = melt_df(df1)
 
     try:
