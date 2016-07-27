@@ -1,7 +1,7 @@
 import pandas as pd
 
 from .. import config as conf
-from .. helpers import merge_dfs, VAR_COL, VAL_COL
+from .. helpers import merge_two_dfs, VAR_COL, VAL_COL
 
 
 
@@ -21,7 +21,7 @@ def maven_merge_dfs(df1, df2):
     long_form = melt_df(df1)
 
     try:
-        merged_df = merge_dfs(long_form, df2, how='left',
+        merged_df = merge_two_dfs(long_form, df2, how='left',
                                  left_on=VAR_COL, right_on='sample')
     except KeyError:
         raise KeyError('sample column not found in metadata')

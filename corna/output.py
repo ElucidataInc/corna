@@ -1,7 +1,8 @@
 import pandas as pd
 
 from . import config as conf
-from . helpers import LEVEL_0_COl, LEVEL_1_COL
+from . helpers import concatenate_dataframes_by_col, LEVEL_0_COl, LEVEL_1_COL
+from . isotopomer import fragment_dict_to_std_model
 
 
 def convert_dict_df(nest_dict, parent):
@@ -71,5 +72,42 @@ def lists_labeldict(df_list, frag_name, label_dict, parent):
             df_list.append(df)
 
     return (df, df_list)
+
+
+def convert_to_df(dict_output, parent, colname='col_name'):
+    """
+    This function convert the dictionary output from na_correction function, postprocessing
+    and frac_enrichment_dict to dataframe
+
+    Args:
+        dict_output : dictionary model to be converted into df
+        colname : specify name of column from which computation, the dictionary is obtained
+
+    Returns:
+        model_to_df : a pandas dataframe
+        :param parent:
+    """
+    df_list = []
+
+    for metabolite, fragment_dict in dict_output.iteritems():
+        std_model = fragment_dict_to_std_model(fragment_dict, parent)
+        model_to_df = convert_dict_df(std_model, parent)
+        df_list.append(model_to_df)
+        model_to_df = concatenate_dataframes_by_col(df_list)
+
+    model_to_df.rename(columns={conf.INTENSITY_COL: str(colname)}, inplace=True)
+
+    return model_to_df
+
+
+def save_to_csv(df, path):
+    """
+    This function saves the dataframe to specified path
+
+    Args:
+        df : dataframe to be saved in directory
+        path : path to directory
+    """
+    df.to_csv(path)
 
 

@@ -6,6 +6,8 @@ import collections
 from . import constants as cs
 from . formula import Formula
 from . formulaschema import FormulaSchema
+from . import config as conf
+
 
 schema_obj = FormulaSchema()
 chemformula_schema = schema_obj.create_chemicalformula_schema()
@@ -129,7 +131,7 @@ def concat_txts_into_df(directory):
     return pd.concat(data_frames)
 
 
-def merge_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
+def merge_two_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
     merged_df = pd.merge(df1, df2, how= how, left_on=left_on,
                              right_on=right_on)
     merged_df.drop(right_on, axis=1, inplace=True)
@@ -209,6 +211,46 @@ def get_formula(formula):
     return parsed_formula
 
 
+def merge_multiple_dfs(df_list):
+    """
+    This function takes the list of dataframes as an input
+    and concatenates the dataframes based on their column names
+    Args:
+        df_list : list of dataframes
+    Returns:
+        combined_dfs : concatenated list of dataframes into one dataframe
+    """
+    combined_dfs = reduce(_merge_dfs, df_list)
+    return combined_dfs
+
+
+def _merge_dfs(df1, df2):
+    return pd.merge(df1, df2,
+                   on=[conf.LABEL_COL, conf.SAMPLE_COL,
+                       conf.NAME_COL, conf.FORMULA_COL])
+
+
+def get_na_value_dict():
+    """
+    This function returns the dictionary of default NA values (adapted from wiki)
+    for all the isotopes
+    """
+    na_mass_dict = ISOTOPE_NA_MASS
+    NA = na_mass_dict['NA']
+    elements = na_mass_dict['Element']
+    na_val_dict = {}
+    atoms = set(elements.values())
+
+    for atom in atoms:
+        isotope_list = [isotope for isotope, iso_atom
+                        in elements.iteritems() if iso_atom == atom]
+        na_vals = [NA[val] for val in isotope_list]
+        na_vals.sort(reverse=True)
+        na_val_dict[atom] = na_vals
+
+    return na_val_dict
+
+
 def convert_labels_to_std(df, iso_tracers):
     """
     This function converts the labels C13N15-label-1-1 in the form
@@ -241,7 +283,7 @@ def convert_labels_to_std(df, iso_tracers):
                         if tracer != el1:
                             el = el1_num + '_' + tracer + '_0'
                             new_labels.append(el)
-
     df['Label'] = new_labels
-
     return df
+
+

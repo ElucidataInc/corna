@@ -140,7 +140,8 @@ def multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, lab_
                                                    eleme_corr, eleme_corr_list, lab_dict)
     icorr = multi_label_correc(na_dict, formula_dict,
                                     eleme_corr_list, intensities_list)
-
+    print len(icorr)
+    print sum(icorr)
     intens_idx_dict = multi_corr_inten_dict(eleme_corr, eleme_corr_list,
                                             no_atom_tracer, icorr, lab_dict)
 
