@@ -28,7 +28,7 @@ merge_mv_metdata = corna.maven_merge_dfs(maven_data, maven_metadata)
 
 # isotopic tracers
 #iso_tracers = ['C13']
-iso_tracers = ['C13']
+iso_tracers = ['C13', 'N15']
 
 # element to be corrected
 # in case of no indistinguishable elements, eleme corr is empty dictionary

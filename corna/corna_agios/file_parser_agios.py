@@ -52,8 +52,6 @@ def column_manipulation(df):
     return df
 
 
-
-
 def melt_df(df1):
     """
     This function melts the dataframe in long form based on some fixed columns
@@ -72,8 +70,25 @@ def melt_df(df1):
     except KeyError():
         raise KeyError('columns' + conf.NAME_COL + conf.LABEL_COL
                        + conf.FORMULA_COL + 'not found in input data')
-
     return long_form
+
+
+def convert_inputdata_to_stdfrom(input_df):
+    """
+    This function convert the input data file(maven format) into standard data model. It gives
+    the same format as in merged data (maven + metadata). This function can be used if the user
+    does not wish to input metadata file and proceed as it is with the input data file
+
+    Args:
+        input_df : MAVEN input data in the form of pandas dataframe
+    Returns:
+        std_form_df : dataframe with input data in standard data model format that can be
+                    used in further processing
+    """
+    long_form = melt_df(input_df)
+    std_form_df = column_manipulation(long_form)
+
+    return std_form_df
 
 
 def frag_key(df):
