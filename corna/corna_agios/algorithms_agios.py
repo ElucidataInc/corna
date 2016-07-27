@@ -4,7 +4,7 @@ from numpy.linalg import pinv
 
 from . file_parser_agios import frag_key
 from .. helpers import get_isotope_element
-from .. file_parser import standard_model
+from .. data_model import standard_model
 from .. isotopomer import bulk_insert_data_to_fragment
 
 

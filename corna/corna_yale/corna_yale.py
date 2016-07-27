@@ -1,6 +1,6 @@
 
 from .. import helpers
-from .. import file_parser as fp
+from .. import data_model as fp
 
 from .file_parser_yale import get_replicates, get_background_samples, frag_key, mq_merge_dfs
 from .algorithms_yale import na_correction_mimosa_by_fragment
