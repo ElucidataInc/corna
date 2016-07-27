@@ -256,34 +256,25 @@ def convert_labels_to_std(df, iso_tracers):
     This function converts the labels C13N15-label-1-1 in the form
     C13_1_N15_1
     """
-    new_labels = []
-    for labels in df['Label']:
-        if labels == 'C12 PARENT':
-            labe = ''
-            for tracs in iso_tracers:
-                labe = labe + tracs+'_0_'
-            new_labels.append(labe.strip('_'))
+    def process_label(label):
+        if label == 'C12 PARENT':
+            return '_'.join('{}_0'.format(t) for t in iso_tracers)
         else:
-            splitted = labels.split('-label-')
-            split2 = splitted[1].split('-')
-            isotopelist = chemformula_schema.parseString(splitted[0])
-            el1 = (''.join(str(x) for x in isotopelist[0]))
-            el1_num = el1 + '_'+ split2[0]
-            if len(iso_tracers) == 1:
-                new_labels.append(el1_num)
+            formula, enums = label.split('-label-')
+            isotopes = set(''.join(map(str,i)) for i in chemformula_schema.parseString(formula))
+            msg = """iso_tracers must have all isotopes from input data
+                    Got: {!r}
+                    Expected: {!r}
+                  """.format(iso_tracers, isotopes.union(iso_tracers))
+            assert set(isotopes).issubset(set(iso_tracers)), msg
+            # The final label must have all iso_tracers
+            # Use zeroes as default, else the number from given label
+            inmap = {i: 0 for i in iso_tracers}
+            inmap.update({i: n for i, n in zip(isotopes, enums.split('-'))})
+            # The order is important, so we don't map on inmap directly
+            return '_'.join("{}_{}".format(i,inmap[i]) for i in iso_tracers)
 
-            else:
-                try:
-                    el2 = '_'+(''.join(str(x) for x in isotopelist[1])) + '_' + split2[1]
-
-                    el = el1_num+el2
-                    new_labels.append(el)
-                except:
-                    for tracer in iso_tracers:
-                        if tracer != el1:
-                            el = el1_num + '_' + tracer + '_0'
-                            new_labels.append(el)
-    df['Label'] = new_labels
+    df['Label'] = [process_label(l) for l in df['Label']]
     return df
 
 

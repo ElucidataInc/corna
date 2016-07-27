@@ -12,7 +12,9 @@ path_dir = os.path.join(os.path.dirname(__file__), 'data')
 
 
 # read maven data
-maven_data = corna.read_file(path_dir + '/test.csv')
+maven_data = corna.read_file(path_dir + '/test_m0_2.csv')
+print maven_data
+#test_m0_2.csv
 
 # For json input, use this funtion:
 #json_input = json.dumps(maven_data.to_dict())

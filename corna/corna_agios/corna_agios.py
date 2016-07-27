@@ -18,8 +18,8 @@ def convert_inputdata_to_stdfrom(input_df):
                     used in further processing
     """
 
-    long_form = fp.melt_df(input_df)
-    std_form_df = fp.column_manipulation(long_form)
+    long_form = melt_df(input_df)
+    std_form_df = column_manipulation(long_form)
 
     return std_form_df
 
