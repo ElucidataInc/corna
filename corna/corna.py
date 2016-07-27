@@ -23,8 +23,8 @@ def merge_dfs(df_list):
 
 def _merge_two_dfs(df1, df2):
     return pd.merge(df1, df2,
-                   on=[conf.LABEL_COL, conf.SAMPLE_COL,
-                       conf.NAME_COL, conf.FORMULA_COL])
+                    on=[conf.LABEL_COL, conf.SAMPLE_COL,
+                        conf.NAME_COL, conf.FORMULA_COL])
 
 
 def get_na_value_dict():
