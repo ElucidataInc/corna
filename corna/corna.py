@@ -20,6 +20,7 @@ def merge_dfs(df_list):
     combined_dfs = reduce(_merge_two_dfs, df_list)
     return combined_dfs
 
+
 def _merge_two_dfs(df1, df2):
     return pd.merge(df1, df2,
                    on=[conf.LABEL_COL, conf.SAMPLE_COL,
