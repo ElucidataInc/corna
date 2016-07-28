@@ -1,4 +1,5 @@
 from . import config_yale
+from ..helpers import concat_txts_into_df, read_file
 
 def mq_merge_dfs(df1, df2, df3):
     """
@@ -76,3 +77,18 @@ def frag_key(df):
     except KeyError:
         raise KeyError('Missing columns in data')
     return df
+
+def read_multiquant(dir_path):
+    mq_df = concat_txts_into_df(dir_path)
+    return mq_df
+
+def read_multiquant_metadata(path):
+    mq_metdata = read_file(path)
+    return mq_metdata
+
+def merge_mq_metadata(mq_df, metdata, sample_metdata):
+    merged_data = mq_merge_dfs(mq_df, metdata, sample_metdata)
+    merged_data.fillna(0, inplace = True)
+    list_of_replicates = get_replicates(sample_metdata, config_yale.MQ_SAMPLE_NAME, config_yale.COHORT_COL, config_yale.BACKGROUND_COL)
+    sample_background = get_background_samples(sample_metdata, config_yale.MQ_SAMPLE_NAME, config_yale.BACKGROUND_COL)
+    return merged_data, list_of_replicates, sample_background

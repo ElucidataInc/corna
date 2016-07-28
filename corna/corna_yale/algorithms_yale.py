@@ -59,3 +59,12 @@ def na_correction_mimosa_by_fragment(fragments_dict, decimals):
 
         corrected_dict_mass[key] = [value[0], corrected_data, value[2], value[3]]
     return corrected_dict_mass
+
+def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
+    if all:
+        na_corrected_out = {}
+        for key, value in preprocessed_output.iteritems():
+            na_corrected_out[key] = na_correction_mimosa_by_fragment(value, decimals)
+    else:
+        na_corrected_out = na_correction_mimosa_by_fragment(preprocessed_output, decimals)
+    return na_corrected_out
