@@ -57,6 +57,7 @@ def get_isotope_natural(iso):
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
+
 def label_dict_to_key(label_dict):
     key = ''
 
@@ -65,6 +66,7 @@ def label_dict_to_key(label_dict):
     key = key.strip('_')
 
     return key
+
 
 def read_file(path):
     """
@@ -80,13 +82,13 @@ def read_file(path):
     excel = ['.xls', '.xlsx']
 
     if os.path.splitext(path)[1] in excel:
-        input_file = pd.read_excel(path, header = 0)
+        input_file = pd.read_excel(path, header=0)
 
     elif os.path.splitext(path)[1] == '.csv':
-        input_file = pd.read_csv(path, header = 0)
+        input_file = pd.read_csv(path, header=0)
 
     elif os.path.splitext(path)[1] == '.txt':
-        input_file = pd.read_table(path, header = 0)
+        input_file = pd.read_table(path, header=0)
 
     else:
         raise IOError('only csv/xls/xlsx/txt extensions are allowed')
@@ -106,7 +108,7 @@ def json_to_df(json_input):
         json_to_df : pandas dataframe
 
     """
-    #this should be the format of json input
+    # this should be the format of json input
     #json_input = json.dumps(input_data.to_dict())
     json_df = pd.read_json(json_input)
 
@@ -115,17 +117,17 @@ def json_to_df(json_input):
 
 def concat_txts_into_df(directory):
     data_frames = [read_file(os.path.join(directory, f))
-                      for f in os.listdir(directory)
-                      if f.endswith('.txt')]
+                   for f in os.listdir(directory)
+                   if f.endswith('.txt')]
 
     return pd.concat(data_frames)
 
 
-def merge_two_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
-    merged_df = pd.merge(df1, df2, how= how, left_on=left_on,
-                             right_on=right_on)
+def merge_two_dfs(df1, df2, how='left', left_on='col1', right_on='col2'):
+    merged_df = pd.merge(df1, df2, how=how, left_on=left_on,
+                         right_on=right_on)
     merged_df.drop(right_on, axis=1, inplace=True)
-    merged_df.fillna(0, inplace = True)
+    merged_df.fillna(0, inplace=True)
 
     return merged_df
 
@@ -145,10 +147,10 @@ def filter_df(df, colname_val_dict):
 def create_dict_from_isotope_label_list(isonumlist):
     label_dict = collections.OrderedDict()
 
-    for i in xrange(0,len(isonumlist),2):
+    for i in xrange(0, len(isonumlist), 2):
         try:
             get_isotope_element(isonumlist[i])
-            label_dict.update({isonumlist[i]: int(isonumlist[i+1])})
+            label_dict.update({isonumlist[i]: int(isonumlist[i + 1])})
         except KeyError:
             raise KeyError('The key must be an isotope')
         except ValueError:
@@ -195,6 +197,7 @@ def parse_polyatom(polyatom_string):
     polyatom = polyatomdata[0]
     return (polyatom.element, polyatom.number_atoms)
 
+
 def get_formula(formula):
     """Parsing formula to store as an element -> number of atoms dictionary"""
     parsed_formula = Formula(formula).parse_formula_to_elem_numatoms()
@@ -216,8 +219,8 @@ def merge_multiple_dfs(df_list):
 
 def _merge_dfs(df1, df2):
     return pd.merge(df1, df2,
-                   on=[conf.LABEL_COL, conf.SAMPLE_COL,
-                       conf.NAME_COL, conf.FORMULA_COL])
+                    on=[conf.LABEL_COL, conf.SAMPLE_COL,
+                        conf.NAME_COL, conf.FORMULA_COL])
 
 
 def get_na_value_dict():
@@ -251,7 +254,8 @@ def convert_labels_to_std(df, iso_tracers):
             return '_'.join('{}_0'.format(t) for t in iso_tracers)
         else:
             formula, enums = label.split('-label-')
-            isotopes = set(''.join(map(str,i)) for i in chemformula_schema.parseString(formula))
+            isotopes = set(''.join(map(str, i))
+                           for i in chemformula_schema.parseString(formula))
             msg = """iso_tracers must have all isotopes from input data
                     Got: {!r}
                     Expected: {!r}
@@ -262,9 +266,7 @@ def convert_labels_to_std(df, iso_tracers):
             inmap = {i: 0 for i in iso_tracers}
             inmap.update({i: n for i, n in zip(isotopes, enums.split('-'))})
             # The order is important, so we don't map on inmap directly
-            return '_'.join("{}_{}".format(i,inmap[i]) for i in iso_tracers)
+            return '_'.join("{}_{}".format(i, inmap[i]) for i in iso_tracers)
 
     df['Label'] = [process_label(l) for l in df['Label']]
     return df
-
-

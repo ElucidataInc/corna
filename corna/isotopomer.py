@@ -6,21 +6,27 @@ from . import helpers as hl
 
 def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
     if molecular_mass != None:
-        frag = Fragment(name, formula, isotracer=isotope, isotope_mass=isotope_mass, molecular_mass=molecular_mass)
+        frag = Fragment(name, formula, isotracer=isotope,
+                        isotope_mass=isotope_mass, molecular_mass=molecular_mass)
     elif mode != None:
-        frag = Fragment(name, formula, isotracer=isotope, isotope_mass=isotope_mass, mode=mode)
+        frag = Fragment(name, formula, isotracer=isotope,
+                        isotope_mass=isotope_mass, mode=mode)
     else:
-        frag = Fragment(name, formula, isotracer=isotope, isotope_mass=isotope_mass)
-    return {name:frag}
+        frag = Fragment(name, formula, isotracer=isotope,
+                        isotope_mass=isotope_mass)
+    return {name: frag}
+
 
 def create_fragment_from_number(name, formula, label_dict):
     frag = Fragment(name, formula, label_dict=label_dict)
-    return {name:frag}
+    return {name: frag}
+
 
 def create_combined_fragment(parent_fragment_dict, daughter_fragment_dict):
     parent_key, parent_fragment = parent_fragment_dict.items()[0]
     daughter_key, daughter_fragment = daughter_fragment_dict.items()[0]
     return {(parent_key, daughter_key): [parent_fragment, daughter_fragment]}
+
 
 def parse_label_mass(label_mass):
     massdata = label_mass.split('_')
@@ -52,8 +58,10 @@ def add_data_fragment(fragment_dict, data, label_info, name):
     validate_data(data)
     return {frag_key: [frag, data, label_info, name]}
 
+
 def parse_label_number(label_number):
     return hl.create_dict_from_isotope_label_list(label_number.split('_'))
+
 
 def insert_data_to_fragment_mass(frag_info, label, sample_dict, mode=None):
     label_mass_dict = parse_label_mass(label)
@@ -65,15 +73,18 @@ def insert_data_to_fragment_mass(frag_info, label, sample_dict, mode=None):
     parent_name = name + '_' + str(parent_mass)
     daughter_mass = label_mass_dict['daughter_mass']
     daughter_name = name + '_' + str(daughter_mass)
-    parent_frag = create_fragment_from_mass(parent_name, parent_formula, isotope, parent_mass, mode=mode)
+    parent_frag = create_fragment_from_mass(
+        parent_name, parent_formula, isotope, parent_mass, mode=mode)
     iso_ele, iso_mass = hl.parse_polyatom(isotope)
     if not hl.get_formula(daughter_formula).has_key(iso_ele):
         daughter_formula = daughter_formula + str(iso_ele) + '0'
-    daughter_frag = create_fragment_from_mass(daughter_name, daughter_formula, isotope, daughter_mass, mode=mode)
+    daughter_frag = create_fragment_from_mass(
+        daughter_name, daughter_formula, isotope, daughter_mass, mode=mode)
     frag = create_combined_fragment(parent_frag, daughter_frag)
     parent_frag_key, parent_frag_value = parent_frag.items()[0]
     label_info = parent_frag_value.check_if_unlabel()
     return add_data_fragment(frag, sample_dict, label_info, name)
+
 
 def insert_data_to_fragment_number(frag_info, label, sample_dict):
     label_number_dict = parse_label_number(label)
@@ -85,14 +96,18 @@ def insert_data_to_fragment_number(frag_info, label, sample_dict):
     label_info = frag_value.check_if_unlabel()
     return add_data_fragment(frag, sample_dict, label_info, name)
 
+
 def bulk_insert_data_to_fragment(frag_info, list_data_dict, mass=False, number=False):
     fragment_list = {}
     for key, value in list_data_dict.iteritems():
         if number:
-            fragment_list.update(insert_data_to_fragment_number(frag_info, key, value))
+            fragment_list.update(
+                insert_data_to_fragment_number(frag_info, key, value))
         elif mass:
-            fragment_list.update(insert_data_to_fragment_mass(frag_info, key, value))
+            fragment_list.update(
+                insert_data_to_fragment_mass(frag_info, key, value))
     return fragment_list
+
 
 def fragment_to_input_model_mass(fragment):
     parent_frag, daughter_frag = fragment[0]
@@ -101,10 +116,10 @@ def fragment_to_input_model_mass(fragment):
     name = fragment[3]
     key_tuple = (name, daughter_formula, parent_formula)
     label_dict_key = str(parent_frag.isotracer) + '_' + \
-                 str(parent_frag.isotope_mass) + '_' + \
-                 str(daughter_frag.isotope_mass)
+        str(parent_frag.isotope_mass) + '_' + \
+        str(daughter_frag.isotope_mass)
     label_dict_value = fragment[1]
-    return {key_tuple:{label_dict_key:label_dict_value}}
+    return {key_tuple: {label_dict_key: label_dict_value}}
 
 
 def fragment_to_input_model_number(fragment):
@@ -114,7 +129,8 @@ def fragment_to_input_model_number(fragment):
     key_tuple = (name, frag_formula)
     label_dict_key = hl.label_dict_to_key(frag.label_dict)
     label_dict_value = fragment[1]
-    return {key_tuple:{label_dict_key:label_dict_value}}
+    return {key_tuple: {label_dict_key: label_dict_value}}
+
 
 def fragment_dict_to_std_model(fragment_dict, parent):
     output_fragment_dict = {}

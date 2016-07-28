@@ -8,7 +8,6 @@ from .. data_model import standard_model
 from .. isotopomer import bulk_insert_data_to_fragment
 
 
-
 def corr_matrix(iso_tracer, no_atom_tracer, na_dict):
     """
     This function creates a correction matrix using correction vector or mass distribution vector
@@ -23,21 +22,23 @@ def corr_matrix(iso_tracer, no_atom_tracer, na_dict):
         correction_matrix: matrix to be used for correcting intensities
     """
 
-    correction_matrix = np.zeros((no_atom_tracer+1, no_atom_tracer+1))
+    correction_matrix = np.zeros((no_atom_tracer + 1, no_atom_tracer + 1))
 
     el_pur = [0, 1]
 
-    for i in range(no_atom_tracer+1):
+    for i in range(no_atom_tracer + 1):
 
         column = [1.]
 
         for na in range(i):
-            column = np.convolve(column, el_pur)[:no_atom_tracer+1]
-        for nb in range(no_atom_tracer-i):
+            column = np.convolve(column, el_pur)[:no_atom_tracer + 1]
+        for nb in range(no_atom_tracer - i):
             try:
-                column = np.convolve(column, na_dict[iso_tracer])[:no_atom_tracer+1]
+                column = np.convolve(column, na_dict[iso_tracer])[
+                    :no_atom_tracer + 1]
             except KeyError:
-                raise KeyError('Element not found in Natural Abundance dictionary', iso_tracer)
+                raise KeyError(
+                    'Element not found in Natural Abundance dictionary', iso_tracer)
         correction_matrix[:, i] = column
 
     return correction_matrix
@@ -62,8 +63,8 @@ def matrix_multiplication(correction_matrix, intensities):
     try:
         corrected_intensites = np.matmul(mat_inverse, inten_trasp)
     except ValueError:
-        raise ValueError('Matrix size = ' + str(len(mat_inverse)) + ' and intensities = ' \
-         + str(len(inten_trasp)) + ' Length does not match, \
+        raise ValueError('Matrix size = ' + str(len(mat_inverse)) + ' and intensities = '
+                         + str(len(inten_trasp)) + ' Length does not match, \
             hence cant be multiplied')
 
     return corrected_intensites
@@ -124,7 +125,7 @@ def fragmentsdict_model(merged_df):
     frag_merge_df = frag_key(merged_df)
     std_model_mvn = standard_model(frag_merge_df)
 
-    for metabolite_name, label_dict  in std_model_mvn.iteritems():
+    for metabolite_name, label_dict in std_model_mvn.iteritems():
         fragments_dict[metabolite_name] = {}
         for label, data in label_dict.iteritems():
             fragments_dict[metabolite_name].update(
@@ -152,7 +153,6 @@ def unique_samples_for_dict(fragments_dict):
     return sample_list
 
 
-
 def samp_label_dcit(iso_tracers, fragments_dict):
     """
     This function returns dictionary of the form { sample1: { 0 : val, 1: value },
@@ -176,9 +176,11 @@ def samp_label_dcit(iso_tracers, fragments_dict):
             lab_num = ()
             for isotopes in iso_tracers:
                 try:
-                    lab_num = lab_num + (info[0].get_num_labeled_atoms_isotope(str(isotopes)),)
+                    lab_num = lab_num + \
+                        (info[0].get_num_labeled_atoms_isotope(str(isotopes)),)
                 except KeyError:
-                    raise KeyError('Isotope not present in chemical formula', info[0])
+                    raise KeyError(
+                        'Isotope not present in chemical formula', info[0])
             dict_s[lab_num] = info[1][samp]
         samp_lab_dict[samp] = dict_s
 
@@ -195,7 +197,8 @@ def formuladict(fragments_dict):
     Returns:
         formula_dict : dictionary of the form {C:2, H:4, O:2}
     """
-    #all elements of fragments dictionary belong to same metabolite, so same formula
+    # all elements of fragments dictionary belong to same metabolite, so same
+    # formula
     fragment_info = fragments_dict.values()[0]
     formula_dict = fragment_info[0].get_formula()
 
@@ -286,22 +289,24 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
     for frag_name, frag_info in fragments_dict.iteritems():
 
         if len(iso_tracers) == 1:
-            lab_tup_key = (frag_info[0].get_num_labeled_atoms_isotope(iso_tracers[0]),)
+            lab_tup_key = (
+                frag_info[0].get_num_labeled_atoms_isotope(iso_tracers[0]),)
 
         elif len(iso_tracers) > 1:
             try:
                 lab_tup_key = []
                 for isotope in iso_tracers:
-                    lab_tup_key.append(frag_info[0].get_num_labeled_atoms_isotope(isotope))
+                    lab_tup_key.append(
+                        frag_info[0].get_num_labeled_atoms_isotope(isotope))
                 lab_tup_key = tuple(lab_tup_key)
             except KeyError:
-                raise KeyError('Name, Formula or Sample not found in input data file')
+                raise KeyError(
+                    'Name, Formula or Sample not found in input data file')
 
         nacorr_fragment_dict[frag_name] = [frag_info[0], lab_samp_dict[lab_tup_key],
                                            frag_info[2], frag_info[3]]
 
     return nacorr_fragment_dict
-
 
 
 def eleme_corr_to_list(iso_tracers, eleme_corr):
@@ -319,7 +324,6 @@ def eleme_corr_to_list(iso_tracers, eleme_corr):
             eleme_corr_list.append(eleme_corr[atoms])
 
     return sum(eleme_corr_list, [])
-
 
 
 def input_intens_list(num_label_comb, label_dict, indist_el_position):
@@ -362,6 +366,3 @@ def input_intens_list(num_label_comb, label_dict, indist_el_position):
             input_intensities.append(0)
 
     return input_intensities
-
-
-

@@ -4,7 +4,6 @@ from .. import config as conf
 from .. helpers import merge_two_dfs, VAR_COL, VAL_COL
 
 
-
 def maven_merge_dfs(df1, df2):
     """
     This function combines the MAVEN input file dataframe and the metadata
@@ -21,10 +20,9 @@ def maven_merge_dfs(df1, df2):
 
     try:
         merged_df = merge_two_dfs(long_form, df2, how='left',
-                                 left_on=VAR_COL, right_on='sample')
+                                  left_on=VAR_COL, right_on='sample')
     except KeyError:
         raise KeyError('sample column not found in metadata')
-
 
     df_std_form = column_manipulation(merged_df)
 
@@ -45,7 +43,7 @@ def column_manipulation(df):
     df[conf.PARENT_COL] = df[conf.NAME_COL]
 
     df.rename(
-        columns={VAR_COL: conf.SAMPLE_COL, VAL_COL:conf.INTENSITY_COL},
+        columns={VAR_COL: conf.SAMPLE_COL, VAL_COL: conf.INTENSITY_COL},
         inplace=True)
 
     return df
@@ -95,7 +93,8 @@ def frag_key(df):
     This function creates a fragment key column in merged data based on parent information.
     """
     try:
-        df[conf.FRAG_COL] = df.apply(lambda x : tuple([x[conf.NAME_COL], x[conf.FORMULA_COL]]), axis=1)
+        df[conf.FRAG_COL] = df.apply(lambda x: tuple(
+            [x[conf.NAME_COL], x[conf.FORMULA_COL]]), axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
     return df

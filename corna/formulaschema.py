@@ -18,6 +18,7 @@ class FormulaSchema(object):
         elements_and_molecular_weights : Dictionary of elements and
             molecular weights.Its a constant.
     """
+
     def __init__(self):
         """Initialise class with no arguments"""
 
@@ -39,8 +40,8 @@ class FormulaSchema(object):
         caps, lower, digits = self.set_schema_letters()
         alphabet = pyparsing.Word(caps, lower)
         number = pyparsing.Word(digits).setParseAction(self.convert_integers)
-        polyatom_schema = pyparsing.Group(alphabet("element")+\
-                                pyparsing.Optional(number, default=1)("number_atoms"))
+        polyatom_schema = pyparsing.Group(alphabet("element") +
+                                          pyparsing.Optional(number, default=1)("number_atoms"))
         return polyatom_schema
 
     def create_chemicalformula_schema(self):

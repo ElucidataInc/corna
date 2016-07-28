@@ -23,10 +23,10 @@ def convert_dict_df(nest_dict, parent):
     else:
         final_df = df
     final_df.rename(columns={
-                        LEVEL_0_COl:conf.LABEL_COL,
-                        0:conf.SAMPLE_COL,
-                        1:conf.INTENSITY_COL},
-                    inplace=True)
+        LEVEL_0_COl: conf.LABEL_COL,
+        0: conf.SAMPLE_COL,
+        1: conf.INTENSITY_COL},
+        inplace=True)
     final_df.pop(LEVEL_1_COL)
 
     return final_df
@@ -95,7 +95,8 @@ def convert_to_df(dict_output, parent, colname='col_name'):
         df_list.append(model_to_df)
         model_to_df = concatenate_dataframes_by_col(df_list)
 
-    model_to_df.rename(columns={conf.INTENSITY_COL: str(colname)}, inplace=True)
+    model_to_df.rename(
+        columns={conf.INTENSITY_COL: str(colname)}, inplace=True)
 
     return model_to_df
 
@@ -109,5 +110,3 @@ def save_to_csv(df, path):
         path : path to directory
     """
     df.to_csv(path)
-
-

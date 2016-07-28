@@ -54,7 +54,7 @@ def replace_negative_to_zero(corrected_dict):
         sample_int_dict = frag_info[1]
         dict_replaced_vals = replace_vals(sample_int_dict)
         post_proc_dict[frag_key] = [
-        frag_info[0], dict_replaced_vals, frag_info[2], frag_info[3]]
+            frag_info[0], dict_replaced_vals, frag_info[2], frag_info[3]]
 
     return post_proc_dict
 
@@ -75,7 +75,8 @@ def replace_negatives(na_corr_dict):
     post_processed_dict = {}
 
     for metabolite, fragment_dict in na_corr_dict.iteritems():
-        post_processed_dict[metabolite] = replace_negative_to_zero(fragment_dict)
+        post_processed_dict[
+            metabolite] = replace_negative_to_zero(fragment_dict)
 
     return post_processed_dict
 
@@ -126,10 +127,12 @@ def enrichment(fragments_dict, decimals):
         for sample_name, intensity in data.iteritems():
             if not sum_dict[sample_name] == 0:
                 fractional_data[sample_name] = np.around(
-                    intensity/sum_dict[sample_name], decimals)
+                    intensity / sum_dict[sample_name], decimals)
             else:
-                raise ValueError('sum of labels is zero for sample' + sample_name)
-        fragments_fractional[key] = [value[0], fractional_data, value[2], value[3]]
+                raise ValueError(
+                    'sum of labels is zero for sample' + sample_name)
+        fragments_fractional[key] = [
+            value[0], fractional_data, value[2], value[3]]
 
     return fragments_fractional
 
@@ -154,15 +157,3 @@ def fractional_enrichment(post_processed_out, decimals=4):
         frac_enrichment_dict[metabolite] = enrichment(fragment_dict, decimals)
 
     return frac_enrichment_dict
-
-
-
-
-
-
-
-
-
-
-
-
