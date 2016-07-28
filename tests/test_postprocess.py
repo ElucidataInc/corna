@@ -12,7 +12,7 @@ replaced_neg =  {'Acetic_C13_0': ['H4C2O2', {'sample_1': np.array([ 0])}, True, 
 
 
 def test_replace_negatives():
-	assert pp.replace_negative_to_zero(corrected_dict, replace_negative = True) == replaced_neg
+	assert pp.replace_negative_to_zero(corrected_dict) == replaced_neg
 
 def test_frac_enrch():
 	with pytest.raises(ValueError):

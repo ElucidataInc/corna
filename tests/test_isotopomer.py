@@ -51,6 +51,7 @@ def test_parse_label_number_num_error():
     with pytest.raises(ValueError):
      iso.parse_label_number('C13_N15')
 
+# below test cases removed from agios delivery
 def test_parse_label_mass():
     assert iso.parse_label_mass('C13_191_111') == {'tracer': 'C13', 'parent_mass': 191, 'daughter_mass': 111}
 
