@@ -27,7 +27,7 @@ setup(
         requirements,
     ],
     package_data={
-        '': ['*.bngl',],
+        '': ['*.bngl', '*.json']
     },
 
 )

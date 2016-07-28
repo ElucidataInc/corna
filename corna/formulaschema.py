@@ -21,15 +21,15 @@ class FormulaSchema(object):
     def __init__(self):
         """Initialise class with no arguments"""
 
-        self.elements_and_molecular_weights = constants.const_element_mol_weight_dict()
+        self.elements_and_molecular_weights = constants.ELE_ATOMIC_WEIGHTS
 
     @staticmethod
     def set_schema_letters():
         """define the letters and digits which will be part of the schema
         """
-        caps = constants.const_caps()
-        lower = constants.const_lower()
-        digits = constants.const_digit()
+        caps = constants.UPPER_CASE
+        lower = constants.LOWER_CASE
+        digits = constants.DIGITS
         return caps, lower, digits
 
     def create_polyatom_schema(self):

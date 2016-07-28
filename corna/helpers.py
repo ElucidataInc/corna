@@ -13,59 +13,49 @@ schema_obj = FormulaSchema()
 chemformula_schema = schema_obj.create_chemicalformula_schema()
 polyatomschema = schema_obj.create_polyatom_schema()
 
-ELE_ATOMIC_WEIGHTS = cs.const_element_mol_weight_dict()
-ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
-NA_DICT = cs.const_na_dict()
-LEVEL_0_COl = cs.const_col_level_0()
-LEVEL_1_COL = cs.const_col_level_1()
-VAR_COL = cs.const_variable()
-VAL_COL = cs.const_value()
-ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
+LEVEL_0_COl = cs.LEVEL_0_COL
+LEVEL_1_COL = cs.LEVEL_1_COL
+VAR_COL = cs.VAR_COL
+VAL_COL = cs.VAL_COL
 
 
 def get_atomic_weight(element):
     try:
-        return ELE_ATOMIC_WEIGHTS[element]
+        return cs.ELE_ATOMIC_WEIGHTS[element]
     except KeyError:
         raise KeyError('Element doesnt exist')
 
 
 def check_if_isotope_in_dict(iso):
-    return ISOTOPE_NA_MASS['Element'].has_key(iso)
+    return cs.ISOTOPE_NA_MASS['Element'].has_key(iso)
 
 
 def get_isotope_element(iso):
     try:
-        return ISOTOPE_NA_MASS['Element'][iso]
+        return cs.ISOTOPE_NA_MASS['Element'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 
 def get_isotope_mass(iso):
     try:
-        return ISOTOPE_NA_MASS['amu'][iso]
+        return cs.ISOTOPE_NA_MASS['amu'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 
 def get_isotope_na(iso):
     try:
-        return ISOTOPE_NA_MASS['NA'][iso]
+        return cs.ISOTOPE_NA_MASS['NA'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 
 def get_isotope_natural(iso):
     try:
-        return ISOTOPE_NA_MASS['Natural Isotope'][iso]
+        return cs.ISOTOPE_NA_MASS['Natural Isotope'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
-
-def get_sub_na_dict(elements):
-    sub_na_dict = {}
-    for element in elements:
-        sub_na_dict[element] = NA_DICT[element]
-    return sub_na_dict
 
 def label_dict_to_key(label_dict):
     key = ''
@@ -235,7 +225,7 @@ def get_na_value_dict():
     This function returns the dictionary of default NA values (adapted from wiki)
     for all the isotopes
     """
-    na_mass_dict = ISOTOPE_NA_MASS
+    na_mass_dict = cs.ISOTOPE_NA_MASS
     NA = na_mass_dict['NA']
     elements = na_mass_dict['Element']
     na_val_dict = {}
