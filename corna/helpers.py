@@ -13,11 +13,18 @@ schema_obj = FormulaSchema()
 chemformula_schema = schema_obj.create_chemicalformula_schema()
 polyatomschema = schema_obj.create_polyatom_schema()
 
+#defined here as needed for webtool
+ISOTOPE_NA_MASS = cs.ISOTOPE_NA_MASS
+
 LEVEL_0_COl = cs.LEVEL_0_COL
 LEVEL_1_COL = cs.LEVEL_1_COL
 VAR_COL = cs.VAR_COL
 VAL_COL = cs.VAL_COL
 
+
+def set_global_isotope_dict(isotope_dict):
+    global ISOTOPE_NA_MASS
+    ISOTOPE_NA_MASS = isotope_dict
 
 def get_atomic_weight(element):
     try:
@@ -27,33 +34,33 @@ def get_atomic_weight(element):
 
 
 def check_if_isotope_in_dict(iso):
-    return cs.ISOTOPE_NA_MASS['Element'].has_key(iso)
+    return ISOTOPE_NA_MASS['Element'].has_key(iso)
 
 
 def get_isotope_element(iso):
     try:
-        return cs.ISOTOPE_NA_MASS['Element'][iso]
+        return ISOTOPE_NA_MASS['Element'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 
 def get_isotope_mass(iso):
     try:
-        return cs.ISOTOPE_NA_MASS['amu'][iso]
+        return ISOTOPE_NA_MASS['amu'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 
 def get_isotope_na(iso):
     try:
-        return cs.ISOTOPE_NA_MASS['NA'][iso]
+        return ISOTOPE_NA_MASS['NA'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 
 def get_isotope_natural(iso):
     try:
-        return cs.ISOTOPE_NA_MASS['Natural Isotope'][iso]
+        return ISOTOPE_NA_MASS['Natural Isotope'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
