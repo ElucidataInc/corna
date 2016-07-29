@@ -2,10 +2,11 @@
 import numpy as np
 from numpy.linalg import pinv
 
-from . file_parser_agios import frag_key
-from .. helpers import get_isotope_element
-from .. data_model import standard_model
-from .. isotopomer import bulk_insert_data_to_fragment
+#from . file_parser_agios import frag_key
+from ... inputs.maven_parser import frag_key
+from ... helpers import get_isotope_element
+from ... data_model import standard_model
+from ... isotopomer import bulk_insert_data_to_fragment
 
 
 def corr_matrix(iso_tracer, no_atom_tracer, na_dict):

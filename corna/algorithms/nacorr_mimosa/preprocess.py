@@ -3,11 +3,12 @@ import math
 import numpy as np
 from scipy.misc import comb
 
-from .. import helpers
-from .. import data_model
-from ..isotopomer import bulk_insert_data_to_fragment
+from ... import helpers
+from ... import data_model
+from ... isotopomer import bulk_insert_data_to_fragment
 
-from .file_parser_yale import frag_key
+#from .file_parser_yale import frag_key
+from ... inputs.multiquant_parser import frag_key
 
 
 def background_noise(unlabel_intensity, na, parent_atoms, parent_label, daughter_atoms, daughter_label):

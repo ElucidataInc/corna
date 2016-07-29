@@ -1,5 +1,5 @@
 import numpy as np
-from .. import helpers
+from ... import helpers
 
 
 def na_correct_mimosa_algo(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,

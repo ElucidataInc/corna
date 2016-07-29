@@ -1,4 +1,4 @@
-from . import config_yale
+from .. import config as config_yale
 from ..helpers import concat_txts_into_df, read_file
 
 
