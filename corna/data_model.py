@@ -1,6 +1,8 @@
 import numpy as np
 
-from . import config as conf
+# XXX: Change before showing to Victor
+# Figure out a better way.
+from .inputs.column_conventions import multiquant as c
 
 
 def get_sample_names(df):
@@ -13,9 +15,9 @@ def get_sample_names(df):
         sample_list : list of unique sample names from data
     """
     try:
-        sample_list = df[conf.SAMPLE_COL].unique().tolist()
+        sample_list = df[c.SAMPLE].unique().tolist()
     except:
-        raise KeyError('Column' + conf.SAMPLE_COL + 'not found in dataframe')
+        raise KeyError('Column' + c.SAMPLE + 'not found in dataframe')
 
     return sample_list
 
@@ -25,19 +27,22 @@ def standard_model(df):
     This function convert the merged data into standard data model
     """
 
-    unique_frags = df[conf.FRAG_COL].unique().tolist()
+    unique_frags = df[c.FRAG].unique().tolist()
     std_model_dict = {}
 
     for frags in unique_frags:
-        df_subset = df[df[conf.FRAG_COL] == frags]
-        unq_labels = df_subset[conf.LABEL_COL].unique().tolist()
+        df_subset = df[df[c.FRAG] == frags]
+        unq_labels = df_subset[c.LABEL].unique().tolist()
         lab_dict = {}
         for label in unq_labels:
-            df_subset_on_labels = df_subset[df_subset[conf.LABEL_COL] == label]
-            label_frame = df_subset_on_labels.groupby(
-                conf.SAMPLE_COL)[conf.INTENSITY_COL].apply(lambda x: np.array(x.tolist()))
+            df_labels = df_subset[df_subset[c.LABEL] == label]
+            label_frame = df_labels.groupby(c.SAMPLE)[c.INTENSITY].apply(_to_np_array)
             label_dict = label_frame.to_dict()
             lab_dict[label] = label_dict
         std_model_dict[frags] = lab_dict
 
     return std_model_dict
+
+
+def _to_np_array(x):
+    return np.array(x.tolist())

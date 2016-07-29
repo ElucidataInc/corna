@@ -16,7 +16,7 @@ polyatomschema = schema_obj.create_polyatom_schema()
 #defined here as needed for webtool
 ISOTOPE_NA_MASS = cs.ISOTOPE_NA_MASS
 
-LEVEL_0_COl = cs.LEVEL_0_COL
+LEVEL_0_COL = cs.LEVEL_0_COL
 LEVEL_1_COL = cs.LEVEL_1_COL
 VAR_COL = cs.VAR_COL
 VAL_COL = cs.VAL_COL
@@ -226,8 +226,8 @@ def merge_multiple_dfs(df_list):
 
 def _merge_dfs(df1, df2):
     return pd.merge(df1, df2,
-                    on=[conf.LABEL_COL, conf.SAMPLE_COL,
-                        conf.NAME_COL, conf.FORMULA_COL])
+                    on=[c.LABEL, c.SAMPLE,
+                        c.NAME, c.FORMULA])
 
 
 def get_na_value_dict():
