@@ -49,8 +49,6 @@ def lists_labeldict(df_list, frag_name, label_dict, parent):
         (df, df_list) : final dataframe or list of dataframes to be appended
         :param parent:
     """
-    name = []
-    formula = []
     parent_list = []
     lab = []
     frames = []
@@ -60,15 +58,14 @@ def lists_labeldict(df_list, frag_name, label_dict, parent):
         for samp, intens in samp_dict.iteritems():
             for intensity in intens:
                 tup.append((samp, intensity))
-                name.append(frag_name[0])
-                formula.append(frag_name[1])
                 if parent:
                     parent_list.append(frag_name[2])
         lab.append(label)
         frames.append(pd.DataFrame(tup))
         df = pd.concat(frames, keys=lab).reset_index()
-        df[c.NAME] = name
-        df[c.FORMULA] = formula
+        # FIXME: Move frag_name to namedtuples, these magic indexes are ugly
+        df[c.NAME] = frag_name[0]
+        df[c.FORMULA] = frag_name[1]
         if parent:
             df[c.PARENT] = parent_list
             df_list.append(df)
