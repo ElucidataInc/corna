@@ -14,6 +14,7 @@ INTENSITY_COL = 'Intensity'
 
 # this should go in constants.py
 SAMPLE_COL = 'Sample Name'
+
 PARENT_COL = 'Unlabeled Fragment'
 FRAG_COL = 'frag_keys'
 MASSINFO_COL = 'Mass Info'

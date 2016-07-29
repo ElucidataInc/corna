@@ -1,5 +1,4 @@
-maven_columns = {'NAME_COL' :'Name', 'FORMULA_COL' : 'Formula', 'LABEL_COL' : 'Label',
-'SAMPLE_COL' : 'Sample Name', 'INTENSITY_COL' : 'Intensity'}
+maven_columns = {'NAME_COL' :'Name', 'FORMULA_COL' : 'Formula', 'LABEL_COL' : 'Label'}
 
 multiquant_columns = {'NAME_COL' : 'Name', 'FORMULA_COL' : 'Formula', 'LABEL_COL' : 'Label',
 'PARENT_COL' : 'Unlabeled Fragment', 'SAMPLE_COL' : 'Sample Name', 'INTENSITY_COL' : 'Intensity',
