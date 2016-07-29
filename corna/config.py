@@ -8,15 +8,13 @@ NAME_COL = 'Name'
 FORMULA_COL = 'Formula'
 # Column name of column containing label information
 LABEL_COL = 'Label'
-# Column name of column containing unlabeled fragment information
-PARENT_COL = 'Unlabeled Fragment'
-# Column name of column containing sample names
-SAMPLE_COL = 'Sample Name'
 # Column name of column containing intensity values
 INTENSITY_COL = 'Intensity'
 
 
 # this should go in constants.py
+SAMPLE_COL = 'Sample Name'
+PARENT_COL = 'Unlabeled Fragment'
 FRAG_COL = 'frag_keys'
 MASSINFO_COL = 'Mass Info'
 ISOTRACER_COL = 'Isotopic Tracer'
