@@ -8,7 +8,7 @@ config.NAME_COL = 'Name'
 
 # path to directory where data files are present - give the path the file
 # as this path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data/'
-path_dir = os.path.join(os.path.dirname(__file__), 'data')
+path_dir = os.path.join(os.path.dirname(__file__), 'data_agios')
 
 
 # read maven data

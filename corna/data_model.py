@@ -6,23 +6,6 @@ import numpy as np
 from . constants import FRAG_COL, LABEL_COL, SAMPLE_COL, INTENSITY_COL
 
 
-def get_sample_names(df):
-    """
-    This function gets the unique sample names from data
-
-    Args:
-        df : dataframe with Sample column
-    Returns:
-        sample_list : list of unique sample names from data
-    """
-    try:
-        sample_list = df[c.SAMPLE].unique().tolist()
-    except:
-        raise KeyError('Column' + c.SAMPLE + 'not found in dataframe')
-
-    return sample_list
-
-
 def standard_model(df):
     """
     This function convert the merged data into standard data model

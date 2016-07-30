@@ -1,5 +1,5 @@
 from . column_conventions import multiquant
-from ..helpers import concat_txts_into_df, read_file
+from ..helpers import concat_txts_into_df, read_file, get_unique_values
 
 
 def mq_merge_dfs(df1, df2, df3):
@@ -65,11 +65,11 @@ def get_replicates(sample_metadata, sample_name, cohort_name, background_sample)
         background_sample].map(sample_index_df[cohort_name])
     replicate_groups = []
     # std should not be present in sample_metadata
-    cohort_list = sample_index_df['Background Cohort'].unique()
+    cohort_list = get_unique_values(sample_index_df,'Background Cohort')
     for cohorts in cohort_list:
         newdf = sample_index_df[sample_index_df[
             'Background Cohort'] == cohorts]
-        replicate_groups.append(newdf[background_sample].unique())
+        replicate_groups.append(get_unique_values(newdf, background_sample))
     return replicate_groups
 
 

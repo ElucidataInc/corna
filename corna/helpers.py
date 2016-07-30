@@ -170,8 +170,10 @@ def get_unique_values(df, column_name):
     """
     This function gives the unique values from a column in the form of a list
     """
-
-    unique_val_list = np.unique(df[[str(column_name)]])
+    try:
+        unique_val_list = np.unique(df[[str(column_name)]])
+    except:
+        raise KeyError('Column' + column_name + 'not found in dataframe')
 
     return unique_val_list
 
