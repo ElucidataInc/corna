@@ -5,7 +5,7 @@ from numpy.linalg import pinv
 from ... inputs.maven_parser import frag_key
 from ... helpers import get_isotope_element
 from ... data_model import standard_model
-from ... isotopomer import bulk_insert_data_to_fragment
+from ... isotopomer import bulk_insert_data_to_fragment, Infopacket
 
 
 def corr_matrix(iso_tracer, no_atom_tracer, na_dict):
@@ -141,7 +141,7 @@ def unique_samples_for_dict(fragments_dict):
     """
 
     sample_list = list(set(sample for info in fragments_dict.values()
-                           for sample in info[1].keys()))
+                           for sample in info.data.keys()))
 
     return sample_list
 
@@ -170,11 +170,11 @@ def samp_label_dcit(iso_tracers, fragments_dict):
             for isotopes in iso_tracers:
                 try:
                     lab_num = lab_num + \
-                        (info[0].get_num_labeled_atoms_isotope(str(isotopes)),)
+                        (info.frag.get_num_labeled_atoms_isotope(str(isotopes)),)
                 except KeyError:
                     raise KeyError(
-                        'Isotope not present in chemical formula', info[0])
-            dict_s[lab_num] = info[1][samp]
+                        'Isotope not present in chemical formula', info.frag)
+            dict_s[lab_num] = info.data[samp]
         samp_lab_dict[samp] = dict_s
 
     return samp_lab_dict
@@ -193,7 +193,7 @@ def formuladict(fragments_dict):
     # all elements of fragments dictionary belong to same metabolite, so same
     # formula
     fragment_info = fragments_dict.values()[0]
-    formula_dict = fragment_info[0].get_formula()
+    formula_dict = fragment_info.frag.get_formula()
 
     return formula_dict
 
@@ -283,21 +283,21 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
 
         if len(iso_tracers) == 1:
             lab_tup_key = (
-                frag_info[0].get_num_labeled_atoms_isotope(iso_tracers[0]),)
+                frag_info.frag.get_num_labeled_atoms_isotope(iso_tracers[0]),)
 
         elif len(iso_tracers) > 1:
             try:
                 lab_tup_key = []
                 for isotope in iso_tracers:
                     lab_tup_key.append(
-                        frag_info[0].get_num_labeled_atoms_isotope(isotope))
+                        frag_info.frag.get_num_labeled_atoms_isotope(isotope))
                 lab_tup_key = tuple(lab_tup_key)
             except KeyError:
                 raise KeyError(
                     'Name, Formula or Sample not found in input data file')
 
-        nacorr_fragment_dict[frag_name] = [frag_info[0], lab_samp_dict[lab_tup_key],
-                                           frag_info[2], frag_info[3]]
+        nacorr_fragment_dict[frag_name] = Infopacket(frag_info.frag, lab_samp_dict[lab_tup_key],
+                                           frag_info.unlabeled, frag_info.name)
 
     return nacorr_fragment_dict
 

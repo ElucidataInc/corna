@@ -1,8 +1,12 @@
+from collections import namedtuple
+
 import numpy as np
 
 from . model import Fragment
 from . import helpers as hl
 
+
+Infopacket = namedtuple('Infopacket','frag data unlabeled name')
 
 def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
     if molecular_mass != None:
@@ -56,7 +60,7 @@ def add_data_fragment(fragment_dict, data, label_info, name):
     frag_key, frag = fragment_dict.items()[0]
     assert isinstance(data, dict)
     validate_data(data)
-    return {frag_key: [frag, data, label_info, name]}
+    return {frag_key: Infopacket(frag, data, label_info, name)}
 
 
 def parse_label_number(label_number):
@@ -122,13 +126,12 @@ def fragment_to_input_model_mass(fragment):
     return {key_tuple: {label_dict_key: label_dict_value}}
 
 
-def fragment_to_input_model_number(fragment):
-    frag = fragment[0]
-    frag_formula = frag.formula
-    name = fragment[3]
+def fragment_to_input_model_number(infopacket):
+    frag_formula = infopacket.frag.formula
+    name = infopacket.name
     key_tuple = (name, frag_formula)
-    label_dict_key = hl.label_dict_to_key(frag.label_dict)
-    label_dict_value = fragment[1]
+    label_dict_key = hl.label_dict_to_key(infopacket.frag.label_dict)
+    label_dict_value = infopacket.data
     return {key_tuple: {label_dict_key: label_dict_value}}
 
 
