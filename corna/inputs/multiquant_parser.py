@@ -1,6 +1,10 @@
+from collections import namedtuple
+
 from . column_conventions import multiquant
 from ..helpers import concat_txts_into_df, read_file, get_unique_values
 
+
+Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
 
 def mq_merge_dfs(df1, df2, df3):
     """
@@ -83,7 +87,7 @@ def frag_key(df):
     This function creates a fragment key column in merged data based on parent information.
     """
     def _extract_keys(x):
-        return (x[multiquant.NAME],
+        return Multiquantkey(x[multiquant.NAME],
                 x[multiquant.FORMULA],
                 x[multiquant.PARENT],
                 x[multiquant.PARENT_FORMULA])

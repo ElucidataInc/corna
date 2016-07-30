@@ -87,8 +87,8 @@ def met_background_correction(metabolite, merged_data, list_of_replicates, sampl
     std_model_mq = data_model.standard_model(frag_key_df)
     fragments_dict = {}
     for frag_name, label_dict in std_model_mq.iteritems():
-        if frag_name[2] == metabolite:
-            new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
+        if frag_name.parent == metabolite:
+            new_frag_name = (frag_name.name, frag_name.formula, frag_name.parent_formula)
             fragments_dict.update(bulk_insert_data_to_fragment(
                 new_frag_name, label_dict, mass=True))
     preprocessed_dict = bulk_background_correction(

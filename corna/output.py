@@ -1,12 +1,17 @@
+from collections import namedtuple
+
 import pandas as pd
 
 # XXX: Change before showing to Victor
 # Figure out a better way.
 from . inputs.column_conventions import multiquant as c
-from . helpers import concatenate_dataframes_by_col
+from . helpers import concatenate_dataframes_by_col, label_dict_to_key, get_key_from_single_value_dict
 from . constants import LEVEL_0_COL, LEVEL_1_COL
-from . isotopomer import fragment_dict_to_std_model
+from . inputs.maven_parser import MavenKey
+from . inputs.multiquant_parser import Multiquantkey
 
+
+OutKey = namedtuple('OutKey', 'name formula')
 
 def convert_dict_df(nest_dict, parent):
     """
@@ -20,6 +25,7 @@ def convert_dict_df(nest_dict, parent):
     """
     df_list = []
     for frag_name, label_dict in nest_dict.iteritems():
+        print 'frag_name', frag_name
         df, df_list = lists_labeldict(df_list, frag_name, label_dict, parent)
     if parent is True:
         final_df = pd.concat(df_list)
@@ -50,7 +56,6 @@ def lists_labeldict(df_list, frag_name, label_dict, parent):
         (df, df_list) : final dataframe or list of dataframes to be appended
         :param parent:
     """
-    parent_list = []
     lab = []
     frames = []
 
@@ -59,16 +64,13 @@ def lists_labeldict(df_list, frag_name, label_dict, parent):
         for samp, intens in samp_dict.iteritems():
             for intensity in intens:
                 tup.append((samp, intensity))
-                if parent:
-                    parent_list.append(frag_name[2])
         lab.append(label)
         frames.append(pd.DataFrame(tup))
         df = pd.concat(frames, keys=lab).reset_index()
         # FIXME: Move frag_name to namedtuples, these magic indexes are ugly
-        df[c.NAME] = frag_name[0]
-        df[c.FORMULA] = frag_name[1]
+        df[c.NAME] = frag_name.name
+        df[c.FORMULA] = frag_name.formula
         if parent:
-            df[c.PARENT] = parent_list
             df_list.append(df)
 
     return (df, df_list)
@@ -110,3 +112,35 @@ def save_to_csv(df, path):
         path : path to directory
     """
     df.to_csv(path)
+
+
+def fragment_to_output_model_mass(infopacket):
+    parent_frag, daughter_frag = infopacket.frag
+    daughter_formula = daughter_frag.formula
+    key_tuple = OutKey(infopacket.name, daughter_formula)
+    label_dict_key = str(parent_frag.isotracer) + '_' + \
+        str(parent_frag.isotope_mass) + '_' + \
+        str(daughter_frag.isotope_mass)
+    return {key_tuple: {label_dict_key: infopacket.data}}
+
+
+def fragment_to_output_model_number(infopacket):
+    key_tuple = OutKey(infopacket.name, infopacket.frag.formula)
+    label_dict_key = label_dict_to_key(infopacket.frag.label_dict)
+    return {key_tuple: {label_dict_key: infopacket.data}}
+
+
+def fragment_dict_to_std_model(fragment_dict, parent):
+    output_fragment_dict = {}
+    if parent:
+        for key, value in fragment_dict.iteritems():
+            output_fragment_dict.update(fragment_to_output_model_mass(value))
+    else:
+        for key, value in fragment_dict.iteritems():
+            label_dict = fragment_to_output_model_number(value)
+            curr_key = get_key_from_single_value_dict(label_dict)
+            try:
+                output_fragment_dict[curr_key].update(label_dict[curr_key])
+            except KeyError:
+                output_fragment_dict.update(label_dict)
+    return output_fragment_dict
