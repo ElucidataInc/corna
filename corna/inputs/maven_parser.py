@@ -2,6 +2,8 @@ import pandas as pd
 
 from .. import config as conf
 from .. helpers import merge_two_dfs, VAR_COL, VAL_COL
+from .. column_conventions import Maven as columns
+from .. constants import PARENT_COL, FRAG_COL
 
 
 def maven_merge_dfs(df1, df2):
@@ -40,7 +42,7 @@ def column_manipulation(df):
     Returns:
         df : df with added columns and standard column names
     """
-    df[conf.PARENT_COL] = df[conf.NAME_COL]
+    df[conf.PARENT_COL] = df[maven_columns['NAME_COL']]
 
     df.rename(
         columns={VAR_COL: conf.SAMPLE_COL, VAL_COL: conf.INTENSITY_COL},
