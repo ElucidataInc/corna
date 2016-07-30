@@ -1,8 +1,8 @@
 import os
 import json
 
-path_dir = os.path.dirname(__file__)
-with open(path_dir + '/element_data.json') as data_file:
+elementdata = os.path.join(os.path.dirname(__file__),'element_data.json')
+with open(elementdata) as data_file:
     data = json.load(data_file)
 
 ELE_ATOMIC_WEIGHTS = data["element_mol_weight_dict"]

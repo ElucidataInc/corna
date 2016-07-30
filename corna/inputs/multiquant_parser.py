@@ -1,4 +1,4 @@
-from . column_conventions import multiquant as c
+from . column_conventions import multiquant
 from ..helpers import concat_txts_into_df, read_file
 
 
@@ -19,28 +19,28 @@ def mq_merge_dfs(df1, df2, df3):
 
     try:
         merged_df = df1.merge(df2, how='inner',
-                              left_on=c.MQ_FRAGMENT,
-                              right_on=c.MQ_FRAGMENT)
-        merged_df.drop(c.MQ_COHORT_NAME, axis=1, inplace=True)
+                              left_on=multiquant.MQ_FRAGMENT,
+                              right_on=multiquant.MQ_FRAGMENT)
+        merged_df.drop(multiquant.MQ_COHORT_NAME, axis=1, inplace=True)
         merged_df = merged_df.merge(df3, how='inner',
-                                    left_on=c.MQ_SAMPLE_NAME,
-                                    right_on=c.MQ_SAMPLE_NAME)
+                                    left_on=multiquant.MQ_SAMPLE_NAME,
+                                    right_on=multiquant.MQ_SAMPLE_NAME)
     except KeyError:
-        raise KeyError('Missing columns:' + c.MQ_FRAGMENT +
-                       'or' + c.MQ_SAMPLE_NAME)
+        raise KeyError('Missing columns:' + multiquant.MQ_FRAGMENT +
+                       'or' + multiquant.MQ_SAMPLE_NAME)
 
-    merged_df[c.MASSINFO] = merged_df[
-        c.MASSINFO].str.replace(' / ', "_")
+    merged_df[multiquant.MASSINFO] = merged_df[
+        multiquant.MASSINFO].str.replace(' / ', "_")
     merged_df.rename(
-        columns={c.MQ_FRAGMENT: c.NAME}, inplace=True)
+        columns={multiquant.MQ_FRAGMENT: multiquant.NAME}, inplace=True)
     # first change Sample Name to Cohort Name, then Original Filename to Sample Name
     # refer to multiquant raw output
     merged_df.rename(
-        c={c.MQ_SAMPLE_NAME: c.SAMPLE}, inplace=True)
+        columns={multiquant.MQ_SAMPLE_NAME: multiquant.SAMPLE}, inplace=True)
     remove_stds = remove_mq_stds(merged_df)
     remove_stds.rename(columns={
-        "Component Name": c.NAME,
-        "Area": c.INTENSITY}, inplace=True)
+        "Component Name": multiquant.NAME,
+        "Area": multiquant.INTENSITY}, inplace=True)
     return remove_stds
 
 
@@ -49,14 +49,14 @@ def remove_mq_stds(merged_df):
     This function removes the standard samples from multiquant data
     """
     try:
-        remove_stds = merged_df[not merged_df[c.COHORT].str.contains("std")]
+        merged_df = merged_df[not merged_df[multiquant.COHORT].str.contains("std")]
     except:
-        raise KeyError('Std samples not found in' +
-                       c.COHORT + ' column')
-    remove_stds[c.LABEL] = remove_stds[c.ISOTRACER] + "_" + remove_stds[c.MASSINFO]
-    remove_stds.pop(c.MASSINFO)
-    remove_stds.pop(c.ISOTRACER)
-    return remove_stds
+        print ('Std samples not found in' + multiquant.COHORT + ' column')
+
+    merged_df[multiquant.LABEL] = merged_df[multiquant.ISOTRACER] + "_" + merged_df[multiquant.MASSINFO]
+    merged_df.pop(multiquant.MASSINFO)
+    merged_df.pop(multiquant.ISOTRACER)
+    return merged_df
 
 
 def get_replicates(sample_metadata, sample_name, cohort_name, background_sample):
@@ -83,12 +83,12 @@ def frag_key(df):
     This function creates a fragment key column in merged data based on parent information.
     """
     def _extract_keys(x):
-        return (x[c.NAME],
-                x[c.FORMULA],
-                x[c.PARENT],
-                x[c.PARENT_FORMULA])
+        return (x[multiquant.NAME],
+                x[multiquant.FORMULA],
+                x[multiquant.PARENT],
+                x[multiquant.PARENT_FORMULA])
     try:
-        df[c.FRAG] = df.apply(_extract_keys, axis=1)
+        df[multiquant.FRAG] = df.apply(_extract_keys, axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
     return df
@@ -108,7 +108,7 @@ def merge_mq_metadata(mq_df, metdata, sample_metdata):
     merged_data = mq_merge_dfs(mq_df, metdata, sample_metdata)
     merged_data.fillna(0, inplace=True)
     list_of_replicates = get_replicates(
-        sample_metdata, c.MQ_SAMPLE_NAME, c.COHORT, c.BACKGROUND)
+        sample_metdata, multiquant.MQ_SAMPLE_NAME, multiquant.COHORT, multiquant.BACKGROUND)
     sample_background = get_background_samples(
-        sample_metdata, c.MQ_SAMPLE_NAME, c.BACKGROUND)
+        sample_metdata, multiquant.MQ_SAMPLE_NAME, multiquant.BACKGROUND)
     return merged_data, list_of_replicates, sample_background

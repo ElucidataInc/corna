@@ -12,7 +12,7 @@ path_dir = os.path.join(os.path.dirname(__file__), 'data')
 
 
 # read maven data
-maven_data = corna.read_file(path_dir + '/test_m0_2.csv')
+maven_data = corna.read_file(path_dir + '/single_trac_indistinguish.csv')
 #print maven_data
 #test_m0_2.csv
 
