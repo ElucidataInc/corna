@@ -2,7 +2,6 @@ import pandas as pd
 
 from . column_conventions import maven as c
 from .. helpers import merge_two_dfs, VAR_COL, VAL_COL
-from .. column_conventions import Maven as columns
 from .. constants import PARENT_COL, FRAG_COL
 
 
