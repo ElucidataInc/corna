@@ -13,7 +13,7 @@ path_dir = os.path.join(os.path.dirname(__file__), 'data')
 
 # read maven data
 maven_data = corna.read_file(path_dir + '/test_m0_2.csv')
-print maven_data
+#print maven_data
 #test_m0_2.csv
 
 # For json input, use this funtion:
@@ -25,16 +25,16 @@ maven_metadata = corna.read_file(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.maven_merge_dfs(maven_data, maven_metadata)
-
+print merge_mv_metdata
 # isotopic tracers
 #iso_tracers = ['C13']
 iso_tracers = ['C13', 'N15']
 
 # element to be corrected
 # in case of no indistinguishable elements, eleme corr is empty dictionary
-#eleme_corr = {}
+eleme_corr = {}
 # in case of indistinguishable elements
-eleme_corr = {'C': ['H', 'O']}
+#eleme_corr = {'C': ['H', 'O']}
 
 # NA values dict
 na_dict = corna.get_na_value_dict()

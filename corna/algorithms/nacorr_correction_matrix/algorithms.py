@@ -2,7 +2,6 @@
 import numpy as np
 from numpy.linalg import pinv
 
-#from . file_parser_agios import frag_key
 from ... inputs.maven_parser import frag_key
 from ... helpers import get_isotope_element
 from ... data_model import standard_model

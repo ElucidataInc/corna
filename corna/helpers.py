@@ -4,6 +4,7 @@ import numpy as np
 import collections
 
 from . import constants as cs
+from . inputs.column_conventions import multiquant as c
 from . formula import Formula
 from . formulaschema import FormulaSchema
 from . import config as conf

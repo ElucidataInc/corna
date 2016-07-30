@@ -19,7 +19,6 @@ def maven_merge_dfs(df1, df2):
         combined_data : dataframe with input data and metadata combined
     """
     long_form = melt_df(df1)
-
     try:
         merged_df = merge_two_dfs(long_form, df2, how='left',
                                   left_on=VAR_COL, right_on='sample')

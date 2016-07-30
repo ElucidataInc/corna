@@ -3,7 +3,8 @@ import pandas as pd
 # XXX: Change before showing to Victor
 # Figure out a better way.
 from . inputs.column_conventions import multiquant as c
-from . helpers import concatenate_dataframes_by_col, LEVEL_0_COL, LEVEL_1_COL
+from . helpers import concatenate_dataframes_by_col
+from . constants import LEVEL_0_COL, LEVEL_1_COL
 from . isotopomer import fragment_dict_to_std_model
 
 
@@ -24,7 +25,7 @@ def convert_dict_df(nest_dict, parent):
         final_df = pd.concat(df_list)
     else:
         final_df = df
-    final_df.rename(c={
+    final_df.rename(columns={
         LEVEL_0_COL: c.LABEL,
         0: c.SAMPLE,
         1: c.INTENSITY},
@@ -95,7 +96,7 @@ def convert_to_df(dict_output, parent, colname='col_name'):
         model_to_df = concatenate_dataframes_by_col(df_list)
 
     model_to_df.rename(
-        c={c.INTENSITY: str(colname)}, inplace=True)
+        columns={c.INTENSITY: str(colname)}, inplace=True)
 
     return model_to_df
 
