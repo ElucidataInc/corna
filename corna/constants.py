@@ -17,6 +17,7 @@ LEVEL_1_COL = "level_1"
 INTENSITY_COL = 'Intensity'
 SAMPLE_COL = 'Sample Name'
 PARENT_COL = 'Unlabeled Fragment'
+LABEL_COL = 'Label'
 FRAG_COL = 'frag_keys'
 MASSINFO_COL = 'Mass Info'
 ISOTRACER_COL = 'Isotopic Tracer'
