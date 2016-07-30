@@ -61,14 +61,7 @@ def matrix_multiplication(correction_matrix, intensities):
     mat_inverse = pinv(matrix)
     inten_trasp = np.array(intensities).transpose()
 
-    try:
-        corrected_intensites = np.matmul(mat_inverse, inten_trasp)
-    except ValueError:
-        raise ValueError('Matrix size = ' + str(len(mat_inverse)) + ' and intensities = '
-                         + str(len(inten_trasp)) + ' Length does not match, \
-            hence cant be multiplied')
-
-    return corrected_intensites
+    return np.matmul(mat_inverse, inten_trasp)
 
 
 def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):

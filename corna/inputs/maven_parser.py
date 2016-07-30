@@ -1,6 +1,6 @@
 import pandas as pd
 
-from .. import config as conf
+from . column_conventions import maven as c
 from .. helpers import merge_two_dfs, VAR_COL, VAL_COL
 from .. column_conventions import Maven as columns
 from .. constants import PARENT_COL, FRAG_COL
@@ -42,10 +42,9 @@ def column_manipulation(df):
     Returns:
         df : df with added columns and standard column names
     """
-    df[conf.PARENT_COL] = df[maven_columns['NAME_COL']]
-
+    df[c.PARENT] = df[c.NAME]
     df.rename(
-        columns={VAR_COL: conf.SAMPLE_COL, VAL_COL: conf.INTENSITY_COL},
+        c={VAR_COL: c.SAMPLE, VAL_COL: c.INTENSITY},
         inplace=True)
 
     return df
@@ -60,15 +59,14 @@ def melt_df(df1):
         long_form : dataframe in long format
 
     """
-    fixed_cols = [conf.NAME_COL, conf.LABEL_COL, conf.FORMULA_COL]
+    fixed_cols = [c.NAME, c.LABEL, c.FORMULA]
 
     melt_cols = [x for x in df1.columns.tolist() if x not in fixed_cols]
 
     try:
         long_form = pd.melt(df1, id_vars=fixed_cols, value_vars=melt_cols)
     except KeyError():
-        raise KeyError('columns' + conf.NAME_COL + conf.LABEL_COL
-                       + conf.FORMULA_COL + 'not found in input data')
+        raise KeyError('columns {} not found in input data'.format(','.join(fixed_cols)))
     return long_form
 
 
@@ -95,8 +93,8 @@ def frag_key(df):
     This function creates a fragment key column in merged data based on parent information.
     """
     try:
-        df[conf.FRAG_COL] = df.apply(lambda x: tuple(
-            [x[conf.NAME_COL], x[conf.FORMULA_COL]]), axis=1)
+        df[c.FRAG] = df.apply(lambda x: tuple(
+            [x[c.NAME], x[c.FORMULA]]), axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
     return df

@@ -1,7 +1,9 @@
 import pandas as pd
 
-from . import config as conf
-from . helpers import concatenate_dataframes_by_col, LEVEL_0_COl, LEVEL_1_COL
+# XXX: Change before showing to Victor
+# Figure out a better way.
+from . inputs.column_conventions import multiquant as c
+from . helpers import concatenate_dataframes_by_col, LEVEL_0_COL, LEVEL_1_COL
 from . isotopomer import fragment_dict_to_std_model
 
 
@@ -22,10 +24,10 @@ def convert_dict_df(nest_dict, parent):
         final_df = pd.concat(df_list)
     else:
         final_df = df
-    final_df.rename(columns={
-        LEVEL_0_COl: conf.LABEL_COL,
-        0: conf.SAMPLE_COL,
-        1: conf.INTENSITY_COL},
+    final_df.rename(c={
+        LEVEL_0_COL: c.LABEL,
+        0: c.SAMPLE,
+        1: c.INTENSITY},
         inplace=True)
     final_df.pop(LEVEL_1_COL)
 
@@ -47,8 +49,6 @@ def lists_labeldict(df_list, frag_name, label_dict, parent):
         (df, df_list) : final dataframe or list of dataframes to be appended
         :param parent:
     """
-    name = []
-    formula = []
     parent_list = []
     lab = []
     frames = []
@@ -58,17 +58,16 @@ def lists_labeldict(df_list, frag_name, label_dict, parent):
         for samp, intens in samp_dict.iteritems():
             for intensity in intens:
                 tup.append((samp, intensity))
-                name.append(frag_name[0])
-                formula.append(frag_name[1])
                 if parent:
                     parent_list.append(frag_name[2])
         lab.append(label)
         frames.append(pd.DataFrame(tup))
         df = pd.concat(frames, keys=lab).reset_index()
-        df[conf.NAME_COL] = name
-        df[conf.FORMULA_COL] = formula
+        # FIXME: Move frag_name to namedtuples, these magic indexes are ugly
+        df[c.NAME] = frag_name[0]
+        df[c.FORMULA] = frag_name[1]
         if parent:
-            df[conf.PARENT_COL] = parent_list
+            df[c.PARENT] = parent_list
             df_list.append(df)
 
     return (df, df_list)
@@ -96,7 +95,7 @@ def convert_to_df(dict_output, parent, colname='col_name'):
         model_to_df = concatenate_dataframes_by_col(df_list)
 
     model_to_df.rename(
-        columns={conf.INTENSITY_COL: str(colname)}, inplace=True)
+        c={c.INTENSITY: str(colname)}, inplace=True)
 
     return model_to_df
 

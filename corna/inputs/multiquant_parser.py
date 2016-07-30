@@ -1,4 +1,4 @@
-from .. import config as config_yale
+from . column_conventions import multiquant as c
 from ..helpers import concat_txts_into_df, read_file
 
 
@@ -18,26 +18,29 @@ def mq_merge_dfs(df1, df2, df3):
     """
 
     try:
-        merged_df = df1.merge(df2, how='inner', left_on=config_yale.MQ_FRAGMENT_COL,
-                              right_on=config_yale.MQ_FRAGMENT_COL)
-        merged_df.drop(config_yale.MQ_COHORT_NAME, axis=1, inplace=True)
-        merged_df = merged_df.merge(df3, how='inner', left_on=config_yale.MQ_SAMPLE_NAME,
-                                    right_on=config_yale.MQ_SAMPLE_NAME)
+        merged_df = df1.merge(df2, how='inner',
+                              left_on=c.MQ_FRAGMENT,
+                              right_on=c.MQ_FRAGMENT)
+        merged_df.drop(c.MQ_COHORT_NAME, axis=1, inplace=True)
+        merged_df = merged_df.merge(df3, how='inner',
+                                    left_on=c.MQ_SAMPLE_NAME,
+                                    right_on=c.MQ_SAMPLE_NAME)
     except KeyError:
-        raise KeyError('Missing columns:' + config_yale.MQ_FRAGMENT_COL +
-                       'or' + config_yale.MQ_SAMPLE_NAME)
+        raise KeyError('Missing columns:' + c.MQ_FRAGMENT +
+                       'or' + c.MQ_SAMPLE_NAME)
 
-    merged_df[config_yale.MASSINFO_COL] = merged_df[
-        config_yale.MASSINFO_COL].str.replace(' / ', "_")
+    merged_df[c.MASSINFO] = merged_df[
+        c.MASSINFO].str.replace(' / ', "_")
     merged_df.rename(
-        columns={config_yale.MQ_FRAGMENT_COL: config_yale.NAME_COL}, inplace=True)
+        columns={c.MQ_FRAGMENT: c.NAME}, inplace=True)
     # first change Sample Name to Cohort Name, then Original Filename to Sample Name
     # refer to multiquant raw output
     merged_df.rename(
-        columns={config_yale.MQ_SAMPLE_NAME: config_yale.SAMPLE_COL}, inplace=True)
+        c={c.MQ_SAMPLE_NAME: c.SAMPLE}, inplace=True)
     remove_stds = remove_mq_stds(merged_df)
-    remove_stds.rename(columns={"Component Name": config_yale.NAME_COL,
-                                "Area": config_yale.INTENSITY_COL}, inplace=True)
+    remove_stds.rename(columns={
+        "Component Name": c.NAME,
+        "Area": c.INTENSITY}, inplace=True)
     return remove_stds
 
 
@@ -46,15 +49,13 @@ def remove_mq_stds(merged_df):
     This function removes the standard samples from multiquant data
     """
     try:
-        remove_stds = merged_df[
-            merged_df[config_yale.COHORT_COL].str.contains("std") == False]
+        remove_stds = merged_df[not merged_df[c.COHORT].str.contains("std")]
     except:
         raise KeyError('Std samples not found in' +
-                       config_yale.COHORT_COL + ' column')
-    remove_stds[config_yale.LABEL_COL] = remove_stds[
-        config_yale.ISOTRACER_COL] + "_" + remove_stds[config_yale.MASSINFO_COL]
-    remove_stds.pop(config_yale.MASSINFO_COL)
-    remove_stds.pop(config_yale.ISOTRACER_COL)
+                       c.COHORT + ' column')
+    remove_stds[c.LABEL] = remove_stds[c.ISOTRACER] + "_" + remove_stds[c.MASSINFO]
+    remove_stds.pop(c.MASSINFO)
+    remove_stds.pop(c.ISOTRACER)
     return remove_stds
 
 
@@ -82,12 +83,12 @@ def frag_key(df):
     This function creates a fragment key column in merged data based on parent information.
     """
     def _extract_keys(x):
-        return (x[config_yale.NAME_COL],
-                x[config_yale.FORMULA_COL],
-                x[config_yale.PARENT_COL],
-                x[config_yale.PARENT_FORMULA_COL])
+        return (x[c.NAME],
+                x[c.FORMULA],
+                x[c.PARENT],
+                x[c.PARENT_FORMULA])
     try:
-        df[config_yale.FRAG_COL] = df.apply(_extract_keys, axis=1)
+        df[c.FRAG] = df.apply(_extract_keys, axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
     return df
@@ -107,7 +108,7 @@ def merge_mq_metadata(mq_df, metdata, sample_metdata):
     merged_data = mq_merge_dfs(mq_df, metdata, sample_metdata)
     merged_data.fillna(0, inplace=True)
     list_of_replicates = get_replicates(
-        sample_metdata, config_yale.MQ_SAMPLE_NAME, config_yale.COHORT_COL, config_yale.BACKGROUND_COL)
+        sample_metdata, c.MQ_SAMPLE_NAME, c.COHORT, c.BACKGROUND)
     sample_background = get_background_samples(
-        sample_metdata, config_yale.MQ_SAMPLE_NAME, config_yale.BACKGROUND_COL)
+        sample_metdata, c.MQ_SAMPLE_NAME, c.BACKGROUND)
     return merged_data, list_of_replicates, sample_background
