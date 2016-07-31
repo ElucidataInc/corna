@@ -69,14 +69,13 @@ def parse_label_number(label_number):
 
 def insert_data_to_fragment_mass(frag_info, label, sample_dict, mode=None):
     label_mass_dict = parse_label_mass(label)
-    name = frag_info[0]
-    daughter_formula = frag_info[1]
-    parent_formula = frag_info[2]
+    daughter_formula = frag_info.formula
+    parent_formula = frag_info.parent_formula
     isotope = str(label_mass_dict['tracer'])
     parent_mass = label_mass_dict['parent_mass']
-    parent_name = name + '_' + str(parent_mass)
+    parent_name = frag_info.name + '_' + str(parent_mass)
     daughter_mass = label_mass_dict['daughter_mass']
-    daughter_name = name + '_' + str(daughter_mass)
+    daughter_name = frag_info.name + '_' + str(daughter_mass)
     parent_frag = create_fragment_from_mass(
         parent_name, parent_formula, isotope, parent_mass, mode=mode)
     iso_ele, iso_mass = hl.parse_polyatom(isotope)
@@ -87,18 +86,16 @@ def insert_data_to_fragment_mass(frag_info, label, sample_dict, mode=None):
     frag = create_combined_fragment(parent_frag, daughter_frag)
     parent_frag_key, parent_frag_value = parent_frag.items()[0]
     label_info = parent_frag_value.check_if_unlabel()
-    return add_data_fragment(frag, sample_dict, label_info, name)
+    return add_data_fragment(frag, sample_dict, label_info, frag_info.parent)
 
 
 def insert_data_to_fragment_number(frag_info, label, sample_dict):
     label_number_dict = parse_label_number(label)
-    name = frag_info[0]
-    frag_name = frag_info[0] + '_' + label
-    formula = frag_info[1]
-    frag = create_fragment_from_number(frag_name, formula, label_number_dict)
+    frag_name = frag_info.name + '_' + label
+    frag = create_fragment_from_number(frag_name, frag_info.formula, label_number_dict)
     frag_key, frag_value = frag.items()[0]
     label_info = frag_value.check_if_unlabel()
-    return add_data_fragment(frag, sample_dict, label_info, name)
+    return add_data_fragment(frag, sample_dict, label_info, frag_info.name)
 
 
 def bulk_insert_data_to_fragment(frag_info, list_data_dict, mass=False, number=False):

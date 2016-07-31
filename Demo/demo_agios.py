@@ -25,7 +25,6 @@ maven_metadata = corna.read_file(path_dir + '/metadata.csv')
 
 # merge maven files and metadata files
 merge_mv_metdata = corna.maven_merge_dfs(maven_data, maven_metadata)
-print merge_mv_metdata
 # isotopic tracers
 #iso_tracers = ['C13']
 iso_tracers = ['C13', 'N15']
@@ -45,7 +44,6 @@ na_dict = corna.get_na_value_dict()
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
 na_corr_df = corna.convert_to_df(na_corr_dict, parent=False, colname='NA corrected')
-print na_corr_df['NA corrected'].sum()
 # Replace negative values by zero on NA corrected data - optional
 postprocessed_out = corna.replace_negatives(na_corr_dict)
 postprocessed_out_df = corna.convert_to_df(postprocessed_out, parent=False, colname='CorrIntensities-Replaced_negatives')
@@ -62,7 +60,6 @@ merged_results_df = corna.merge_multiple_dfs(df_list)
 # any number of columns and column values can be filtered
 col_rename = {'Name': ['L-Methionine'], "Sample Name": ['sample_1', 'sample_2']}
 filtered_data = corna.filter_df(merged_results_df, col_rename)
-print filtered_data
 # save any dataframe at given path
 save_dfs = corna.save_to_csv(merged_results_df, path_dir + 'results.csv')
 

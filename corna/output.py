@@ -13,7 +13,7 @@ from . inputs.multiquant_parser import Multiquantkey
 
 OutKey = namedtuple('OutKey', 'name formula')
 
-def convert_dict_df(nest_dict, parent):
+def convert_dict_df(nest_dict):
     """
     This function convert the fragment dictionary model in dataframe
     Args:
@@ -23,25 +23,20 @@ def convert_dict_df(nest_dict, parent):
     Returns:
         final_df : final dataframe
     """
-    df_list = []
+
     for frag_name, label_dict in nest_dict.iteritems():
-        print 'frag_name', frag_name
-        df, df_list = lists_labeldict(df_list, frag_name, label_dict, parent)
-    if parent is True:
-        final_df = pd.concat(df_list)
-    else:
-        final_df = df
-    final_df.rename(columns={
+        df = lists_labeldict(frag_name, label_dict)
+    df.rename(columns={
         LEVEL_0_COL: c.LABEL,
         0: c.SAMPLE,
         1: c.INTENSITY},
         inplace=True)
-    final_df.pop(LEVEL_1_COL)
+    df.pop(LEVEL_1_COL)
 
-    return final_df
+    return df
 
 
-def lists_labeldict(df_list, frag_name, label_dict, parent):
+def lists_labeldict(frag_name, label_dict):
     """
     This function extracts lists of metabolite name, formula, parent from
     label dictionary model
@@ -67,13 +62,10 @@ def lists_labeldict(df_list, frag_name, label_dict, parent):
         lab.append(label)
         frames.append(pd.DataFrame(tup))
         df = pd.concat(frames, keys=lab).reset_index()
-        # FIXME: Move frag_name to namedtuples, these magic indexes are ugly
         df[c.NAME] = frag_name.name
         df[c.FORMULA] = frag_name.formula
-        if parent:
-            df_list.append(df)
 
-    return (df, df_list)
+    return df
 
 
 def convert_to_df(dict_output, parent, colname='col_name'):
@@ -93,7 +85,7 @@ def convert_to_df(dict_output, parent, colname='col_name'):
 
     for metabolite, fragment_dict in dict_output.iteritems():
         std_model = fragment_dict_to_std_model(fragment_dict, parent)
-        model_to_df = convert_dict_df(std_model, parent)
+        model_to_df = convert_dict_df(std_model)
         df_list.append(model_to_df)
         model_to_df = concatenate_dataframes_by_col(df_list)
 
@@ -134,7 +126,12 @@ def fragment_dict_to_std_model(fragment_dict, parent):
     output_fragment_dict = {}
     if parent:
         for key, value in fragment_dict.iteritems():
-            output_fragment_dict.update(fragment_to_output_model_mass(value))
+            label_dict = fragment_to_output_model_mass(value)
+            curr_key = get_key_from_single_value_dict(label_dict)
+            try:
+                output_fragment_dict[curr_key].update(label_dict[curr_key])
+            except KeyError:
+                output_fragment_dict.update(label_dict)
     else:
         for key, value in fragment_dict.iteritems():
             label_dict = fragment_to_output_model_number(value)
