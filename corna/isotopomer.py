@@ -1,8 +1,12 @@
+from collections import namedtuple
+
 import numpy as np
 
 from . model import Fragment
 from . import helpers as hl
 
+
+Infopacket = namedtuple('Infopacket','frag data unlabeled name')
 
 def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
     if molecular_mass != None:
@@ -56,7 +60,7 @@ def add_data_fragment(fragment_dict, data, label_info, name):
     frag_key, frag = fragment_dict.items()[0]
     assert isinstance(data, dict)
     validate_data(data)
-    return {frag_key: [frag, data, label_info, name]}
+    return {frag_key: Infopacket(frag, data, label_info, name)}
 
 
 def parse_label_number(label_number):
@@ -109,40 +113,3 @@ def bulk_insert_data_to_fragment(frag_info, list_data_dict, mass=False, number=F
     return fragment_list
 
 
-def fragment_to_input_model_mass(fragment):
-    parent_frag, daughter_frag = fragment[0]
-    parent_formula = parent_frag.formula
-    daughter_formula = daughter_frag.formula
-    name = fragment[3]
-    key_tuple = (name, daughter_formula, parent_formula)
-    label_dict_key = str(parent_frag.isotracer) + '_' + \
-        str(parent_frag.isotope_mass) + '_' + \
-        str(daughter_frag.isotope_mass)
-    label_dict_value = fragment[1]
-    return {key_tuple: {label_dict_key: label_dict_value}}
-
-
-def fragment_to_input_model_number(fragment):
-    frag = fragment[0]
-    frag_formula = frag.formula
-    name = fragment[3]
-    key_tuple = (name, frag_formula)
-    label_dict_key = hl.label_dict_to_key(frag.label_dict)
-    label_dict_value = fragment[1]
-    return {key_tuple: {label_dict_key: label_dict_value}}
-
-
-def fragment_dict_to_std_model(fragment_dict, parent):
-    output_fragment_dict = {}
-    if parent:
-        for key, value in fragment_dict.iteritems():
-            output_fragment_dict.update(fragment_to_input_model_mass(value))
-    else:
-        for key, value in fragment_dict.iteritems():
-            label_dict = fragment_to_input_model_number(value)
-            curr_key = hl.get_key_from_single_value_dict(label_dict)
-            try:
-                output_fragment_dict[curr_key].update(label_dict[curr_key])
-            except KeyError:
-                output_fragment_dict.update(label_dict)
-    return output_fragment_dict

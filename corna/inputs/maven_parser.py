@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 import pandas as pd
 
 from . column_conventions import maven as c
@@ -5,6 +7,8 @@ from .. helpers import merge_two_dfs
 #, VAR_COL, VAL_COL, SAMPLE_COL, INTENSITY_COL
 from .. constants import PARENT_COL, VAR_COL, VAL_COL, FRAG_COL, SAMPLE_COL, INTENSITY_COL
 
+
+MavenKey = namedtuple('MavenKey','name formula')
 
 def maven_merge_dfs(df1, df2):
     """
@@ -92,8 +96,8 @@ def frag_key(df):
     This function creates a fragment key column in merged data based on parent information.
     """
     try:
-        df[FRAG_COL] = df.apply(lambda x: tuple(
-            [x[c.NAME], x[c.FORMULA]]), axis=1)
+        df[FRAG_COL] = df.apply(lambda x: MavenKey(
+            x[c.NAME], x[c.FORMULA]), axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
     return df

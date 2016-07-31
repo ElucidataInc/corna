@@ -5,7 +5,7 @@ from scipy.misc import comb
 
 from ... import helpers
 from ... import data_model
-from ... isotopomer import bulk_insert_data_to_fragment
+from ... isotopomer import bulk_insert_data_to_fragment, Infopacket
 
 #from .file_parser_yale import frag_key
 from ... inputs.multiquant_parser import frag_key
@@ -24,8 +24,7 @@ def backround_subtraction(input_intensity, noise):
 
 
 def background(list_of_replicates, input_fragment_value, unlabeled_fragment_value):
-    parent_frag, daughter_frag = input_fragment_value[0]
-    data = input_fragment_value[1]
+    parent_frag, daughter_frag = input_fragment_value.frag
     iso_elem = helpers.get_isotope_element(parent_frag.isotracer)
     parent_label = parent_frag.get_num_labeled_atoms_isotope(
         parent_frag.isotracer)
@@ -34,14 +33,13 @@ def background(list_of_replicates, input_fragment_value, unlabeled_fragment_valu
     daughter_atoms = daughter_frag.number_of_atoms(iso_elem)
     daughter_label = daughter_frag.get_num_labeled_atoms_isotope(
         parent_frag.isotracer)
-    unlabeled_data = unlabeled_fragment_value[1]
     replicate_value = {}
     for replicate_group in list_of_replicates:
         background_list = []
         for each_replicate in replicate_group:
-            noise = background_noise(unlabeled_data[each_replicate], na, parent_atoms,
+            noise = background_noise(unlabeled_fragment_value.data[each_replicate], na, parent_atoms,
                                      parent_label, daughter_atoms, daughter_label)
-            background = backround_subtraction(data[each_replicate], noise)
+            background = backround_subtraction(input_fragment_value.data[each_replicate], noise)
             # bcause numpy array with one value
             background_list.append(background[0])
         background_value = max(background_list)
@@ -64,8 +62,7 @@ def bulk_background_correction(fragment_dict, list_of_replicates, sample_backgro
     unlabeled_fragment = []
     corrected_fragments_dict = {}
     for key, value in fragment_dict.iteritems():
-        unlabel = value[2]
-        if unlabel:
+        if value.unlabeled:
             unlabeled_fragment.append((key, value))
             input_fragments.append((key, value))
         else:
@@ -78,32 +75,30 @@ def bulk_background_correction(fragment_dict, list_of_replicates, sample_backgro
     for input_fragment in input_fragments:
         replicate_value = background(list_of_replicates, input_fragment[
                                      1], unlabeled_fragment[0][1])
-        data = input_fragment[1][1]
         corrected_sample_data = background_correction(
-            replicate_value, sample_background, data, decimals)
-        corrected_fragments_dict[input_fragment[0]] = [input_fragment[1][0], corrected_sample_data,
-                                                       input_fragment[1][2], input_fragment[1][3]]
+            replicate_value, sample_background, input_fragment[1].data, decimals)
+        corrected_fragments_dict[input_fragment[0]] = Infopacket(input_fragment[1].frag, corrected_sample_data,
+                                                       input_fragment[1].unlabeled, input_fragment[1].name)
     return corrected_fragments_dict
 
 
-def met_background_correction(metabolite, merged_data, list_of_replicates, sample_background, decimals=0):
-    frag_key_df = frag_key(merged_data)
-    std_model_mq = data_model.standard_model(frag_key_df)
-    fragments_dict = {}
-    for frag_name, label_dict in std_model_mq.iteritems():
-        if frag_name[2] == metabolite:
-            new_frag_name = (frag_name[0], frag_name[1], frag_name[3])
-            fragments_dict.update(bulk_insert_data_to_fragment(
-                new_frag_name, label_dict, mass=True))
-    preprocessed_dict = bulk_background_correction(
-        fragments_dict, list_of_replicates, sample_background, decimals)
-    return preprocessed_dict
+# def met_background_correction(metabolite, merged_data, list_of_replicates, sample_background, decimals=0):
+#     fragments_dict = {}
+#     for frag_name, label_dict in std_model_mq.iteritems():
+#         if frag_name.parent == metabolite:
+#             new_frag_name = (frag_name.name, frag_name.formula, frag_name.parent_formula)
+#             fragments_dict.update(bulk_insert_data_to_fragment(
+#                 new_frag_name, label_dict, mass=True))
+#     preprocessed_dict = bulk_background_correction(
+#         fragments_dict, list_of_replicates, sample_background, decimals)
+#     return preprocessed_dict
 
 
-def met_background_correction_all(merged_data, list_of_replicates, sample_background, decimals=0):
-    metab_names = helpers.get_unique_values(merged_data, 'Unlabeled Fragment')
+def met_background_correction(metabolite_frag_dict, list_of_replicates, sample_background, decimals=0):
     preprocessed_output_dict = {}
-    for metabolite in metab_names:
-        preprocessed_output_dict[metabolite] = met_background_correction(metabolite, merged_data,
-                                                                         list_of_replicates, sample_background, decimals)
+    for metabolite, fragments_dict in metabolite_frag_dict.iteritems():
+        preprocessed_output_dict[metabolite] = bulk_background_correction(fragments_dict,
+                                                                          list_of_replicates,
+                                                                          sample_background, decimals)
+
     return preprocessed_output_dict

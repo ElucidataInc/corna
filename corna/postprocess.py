@@ -1,5 +1,6 @@
 import numpy as np
 
+from .isotopomer import Infopacket
 
 def zero_if_negative(num):
     """
@@ -51,10 +52,10 @@ def replace_negative_to_zero(corrected_dict):
     post_proc_dict = {}
 
     for frag_key, frag_info in corrected_dict.iteritems():
-        sample_int_dict = frag_info[1]
+        sample_int_dict = frag_info.data
         dict_replaced_vals = replace_vals(sample_int_dict)
-        post_proc_dict[frag_key] = [
-            frag_info[0], dict_replaced_vals, frag_info[2], frag_info[3]]
+        post_proc_dict[frag_key] = Infopacket(
+            frag_info.frag, dict_replaced_vals, frag_info.unlabeled, frag_info.name)
 
     return post_proc_dict
 
@@ -92,13 +93,13 @@ def sum_intensities(fragments_dict):
         sum_dict :  dictionary of sum of all corrected intensities for each sample
     """
     all_values = fragments_dict.values()
-    sample_names = all_values[1][1].keys()
+    sample_names = all_values[1].data.keys()
     sum_dict = {}
 
     for sample_name in sample_names:
-        curr_arr = np.zeros(len(all_values[1][1][sample_name]))
+        curr_arr = np.zeros(len(all_values[1].data[sample_name]))
         for value in all_values:
-            curr_arr = curr_arr + value[1][sample_name]
+            curr_arr = curr_arr + value.data[sample_name]
         sum_dict[sample_name] = curr_arr
 
     return sum_dict
@@ -122,17 +123,16 @@ def enrichment(fragments_dict, decimals):
     sum_dict = sum_intensities(fragments_dict)
 
     for key, value in fragments_dict.iteritems():
-        data = value[1]
         fractional_data = {}
-        for sample_name, intensity in data.iteritems():
+        for sample_name, intensity in value.data.iteritems():
             if not sum_dict[sample_name] == 0:
                 fractional_data[sample_name] = np.around(
                     intensity / sum_dict[sample_name], decimals)
             else:
                 raise ValueError(
                     'sum of labels is zero for sample' + sample_name)
-        fragments_fractional[key] = [
-            value[0], fractional_data, value[2], value[3]]
+        fragments_fractional[key] = Infopacket(
+            value.frag, fractional_data, value.unlabeled, value.name)
 
     return fragments_fractional
 
