@@ -1,16 +1,18 @@
+import os
 import corna
 
 # path to directory where multiquant text data files are present
 #path_dir = '/Users/raa/OneDrive/Elucidata_Sini/NA_correction/Demo/data_yale/'
-path_dir = '/Users/raaisa/OneDrive/Elucidata/NA_Correction/Demo/data_yale/'
+path_dir = os.path.join(os.path.dirname(__file__), 'data_yale')
+
 
 # read multiquant data files and combine them
-mq_files = corna.read_multiquant(path_dir + 'tca_data_mq/')
+mq_files = corna.read_multiquant(os.path.join(path_dir,'tca_data_mq'))
 
 
 # read multiquant metadata file
-mq_metadata = corna.read_multiquant_metadata(path_dir + 'mq_metadata.xlsx')
-mq_sample_metadata = corna.read_multiquant_metadata(path_dir + 'metadata_samples.xlsx')
+mq_metadata = corna.read_multiquant_metadata(os.path.join(path_dir, 'mq_metadata.xlsx'))
+mq_sample_metadata = corna.read_multiquant_metadata(os.path.join(path_dir, 'metadata_samples.xlsx'))
 
 # merge multiquant files and metadata files
 merge_mq_metdata, list_of_replicates, sample_background = corna.merge_mq_metadata(mq_files, mq_metadata, mq_sample_metadata)
@@ -39,7 +41,6 @@ background_corr = corna.met_background_correction(background_corr_dict, list_of_
 # # convert background noise corrected dictionary to dataframe
 background_corr_df = corna.convert_to_df(background_corr, True, colname='Background correction')
 
-print background_corr_df
 
 #postprocessed_out_df =corna.merge_multiple_dfs([merge_mq_metdata, background_corr_df])
 #
@@ -56,6 +57,7 @@ postprocessed_out_df = corna.convert_to_df(postprocessed_out, True, colname='Rep
 # # calculate fractional enrichment on post processed data
 frac_enrichment = corna.fractional_enrichment(postprocessed_out)
 frac_enr_df = corna.convert_to_df(frac_enrichment, True, colname='Frac Enrichment')
+frac_enr_df = corna.merge_multiple_dfs([merge_mq_metdata, background_corr_df, na_corr_df, frac_enr_df])
 #
 # # save any dataframe at given path
 save_dfs = corna.save_to_csv(frac_enr_df, path_dir + 'frac_enrichment.csv')

@@ -5,7 +5,6 @@ from . column_conventions import multiquant
 from ..helpers import concat_txts_into_df, read_file, get_unique_values
 from ..isotopomer import bulk_insert_data_to_fragment
 
-
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
 
 def mq_merge_dfs(df1, df2, df3):
@@ -37,16 +36,12 @@ def mq_merge_dfs(df1, df2, df3):
 
     merged_df[multiquant.MASSINFO] = merged_df[
         multiquant.MASSINFO].str.replace(' / ', "_")
-    merged_df.rename(
-        columns={multiquant.MQ_FRAGMENT: multiquant.NAME}, inplace=True)
     # first change Sample Name to Cohort Name, then Original Filename to Sample Name
     # refer to multiquant raw output
     merged_df.rename(
         columns={multiquant.MQ_SAMPLE_NAME: multiquant.SAMPLE}, inplace=True)
     remove_stds = remove_mq_stds(merged_df)
-    remove_stds.rename(columns={
-        "Component Name": multiquant.NAME,
-        "Area": multiquant.INTENSITY}, inplace=True)
+    remove_stds.rename(columns={"Area": multiquant.INTENSITY}, inplace=True)
     return remove_stds
 
 
@@ -60,6 +55,8 @@ def remove_mq_stds(merged_df):
         print ('Std samples not found in' + multiquant.COHORT + ' column')
 
     merged_df[multiquant.LABEL] = merged_df[multiquant.ISOTRACER] + "_" + merged_df[multiquant.MASSINFO]
+    merged_df.rename(
+        columns={multiquant.PARENT: multiquant.NAME}, inplace=True)
     merged_df.pop(multiquant.MASSINFO)
     merged_df.pop(multiquant.ISOTRACER)
     return merged_df
@@ -89,9 +86,9 @@ def frag_key(df):
     This function creates a fragment key column in merged data based on parent information.
     """
     def _extract_keys(x):
-        return Multiquantkey(x[multiquant.NAME],
+        return Multiquantkey(x[multiquant.MQ_FRAGMENT],
                 x[multiquant.FORMULA],
-                x[multiquant.PARENT],
+                x[multiquant.NAME],
                 x[multiquant.PARENT_FORMULA])
     try:
         df[multiquant.FRAG] = df.apply(_extract_keys, axis=1)
@@ -124,7 +121,8 @@ def mq_df_to_fragmentdict(merged_df):
     std_model_mq = standard_model(frag_key_df)
     metabolite_frag_dict = {}
     for frag_name, label_dict in std_model_mq.iteritems():
-        curr_frag_name = (frag_name.name, frag_name.formula, frag_name.parent_formula)
+        curr_frag_name = Multiquantkey(frag_name.name, frag_name.formula,
+                                       frag_name.parent, frag_name.parent_formula)
         if metabolite_frag_dict.has_key(frag_name.parent):
             metabolite_frag_dict[frag_name.parent].update(bulk_insert_data_to_fragment(curr_frag_name,
                                                                               label_dict, mass=True))
