@@ -82,24 +82,23 @@ def bulk_background_correction(fragment_dict, list_of_replicates, sample_backgro
     return corrected_fragments_dict
 
 
-def met_background_correction(metabolite, merged_data, list_of_replicates, sample_background, decimals=0):
-    frag_key_df = frag_key(merged_data)
-    std_model_mq = data_model.standard_model(frag_key_df)
-    fragments_dict = {}
-    for frag_name, label_dict in std_model_mq.iteritems():
-        if frag_name.parent == metabolite:
-            new_frag_name = (frag_name.name, frag_name.formula, frag_name.parent_formula)
-            fragments_dict.update(bulk_insert_data_to_fragment(
-                new_frag_name, label_dict, mass=True))
-    preprocessed_dict = bulk_background_correction(
-        fragments_dict, list_of_replicates, sample_background, decimals)
-    return preprocessed_dict
+# def met_background_correction(metabolite, merged_data, list_of_replicates, sample_background, decimals=0):
+#     fragments_dict = {}
+#     for frag_name, label_dict in std_model_mq.iteritems():
+#         if frag_name.parent == metabolite:
+#             new_frag_name = (frag_name.name, frag_name.formula, frag_name.parent_formula)
+#             fragments_dict.update(bulk_insert_data_to_fragment(
+#                 new_frag_name, label_dict, mass=True))
+#     preprocessed_dict = bulk_background_correction(
+#         fragments_dict, list_of_replicates, sample_background, decimals)
+#     return preprocessed_dict
 
 
-def met_background_correction_all(merged_data, list_of_replicates, sample_background, decimals=0):
-    metab_names = helpers.get_unique_values(merged_data, 'Unlabeled Fragment')
+def met_background_correction(metabolite_frag_dict, list_of_replicates, sample_background, decimals=0):
     preprocessed_output_dict = {}
-    for metabolite in metab_names:
-        preprocessed_output_dict[metabolite] = met_background_correction(metabolite, merged_data,
-                                                                         list_of_replicates, sample_background, decimals)
+    for metabolite, fragments_dict in metabolite_frag_dict.iteritems():
+        preprocessed_output_dict[metabolite] = bulk_background_correction(fragments_dict,
+                                                                          list_of_replicates,
+                                                                          sample_background, decimals)
+
     return preprocessed_output_dict

@@ -23,7 +23,9 @@ save_dfs = corna.save_to_csv(merge_mq_metdata, path_dir + 'merged_input_data.csv
 # filtered_data = corna.filtering_df(merge_mq_metdata, num_col=2, col1="Time",
 #                                 list_col1_vals=['0min','30min'], col2="Glucose Concentration", list_col2_vals=["G7"])
 #
-background_corr = corna.met_background_correction_all(merge_mq_metdata, list_of_replicates, sample_background)
+background_corr_dict = corna.mq_df_to_fragmentdict(merge_mq_metdata)
+
+background_corr = corna.met_background_correction(background_corr_dict, list_of_replicates, sample_background)
 # # background noise correction on filtered data
 # #background_corr = corna.met_background_correction_all(filtered_data, 'Q. [13C-glc] G7 0min')
 #
@@ -36,10 +38,13 @@ background_corr = corna.met_background_correction_all(merge_mq_metdata, list_of_
 #
 # # convert background noise corrected dictionary to dataframe
 background_corr_df = corna.convert_to_df(background_corr, True, colname='Background correction')
-#
+
+print background_corr_df
+
+#postprocessed_out_df =corna.merge_multiple_dfs([merge_mq_metdata, background_corr_df])
 #
 # # NA correction method on background noise corrected data
-nacorr_dict = corna.na_correction_mimosa(background_corr, all = True)
+nacorr_dict = corna.na_correction_mimosa(background_corr)
 #
 na_corr_df = corna.convert_to_df(nacorr_dict, True, colname='NA corrected')
 # print na_corr_df

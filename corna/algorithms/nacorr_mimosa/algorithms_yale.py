@@ -3,6 +3,8 @@ from ... import helpers
 from ... isotopomer import Infopacket
 
 
+
+
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                                  isotope, na, decimals):
     iso_elem = helpers.get_isotope_element(isotope)
@@ -53,13 +55,8 @@ def na_correction_mimosa_by_fragment(fragments_dict, decimals):
     return corrected_dict_mass
 
 
-def na_correction_mimosa(preprocessed_output, all=False, decimals=2):
-    if all:
-        na_corrected_out = {}
-        for key, value in preprocessed_output.iteritems():
-            na_corrected_out[key] = na_correction_mimosa_by_fragment(
-                value, decimals)
-    else:
-        na_corrected_out = na_correction_mimosa_by_fragment(
-            preprocessed_output, decimals)
+def na_correction_mimosa(metabolite_frag_dict, decimals=2):
+    na_corrected_out = {}
+    for metabolite, fragmentdict in metabolite_frag_dict.iteritems():
+        na_corrected_out[metabolite] = na_correction_mimosa_by_fragment(fragmentdict, decimals)
     return na_corrected_out

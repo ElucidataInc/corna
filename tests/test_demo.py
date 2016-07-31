@@ -51,7 +51,7 @@ na_corr_out_malate = corna.filtering_df(na_corr_out, num_col=1, col1='name',
                                                                 'Malate 137/119'])
 
 # NA correction method on background noise corrected data
-nacorr_dict = corna.na_correction_mimosa(postprocessed_out_malate, all = False)
+nacorr_dict = corna.na_correction_mimosa('Citrate 196/67'',postprocessed_out_malate)
 na_postprocessed_out_malate = corna.replace_negatives(nacorr_dict, all=False)
 na_corr_df_malate = corna.convert_to_df(na_postprocessed_out_malate, True, colname='NA corrected')
 

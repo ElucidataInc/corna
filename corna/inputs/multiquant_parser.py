@@ -1,7 +1,9 @@
 from collections import namedtuple
 
+from ..data_model import standard_model
 from . column_conventions import multiquant
 from ..helpers import concat_txts_into_df, read_file, get_unique_values
+from ..isotopomer import bulk_insert_data_to_fragment
 
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
@@ -116,3 +118,17 @@ def merge_mq_metadata(mq_df, metdata, sample_metdata):
     sample_background = get_background_samples(
         sample_metdata, multiquant.MQ_SAMPLE_NAME, multiquant.BACKGROUND)
     return merged_data, list_of_replicates, sample_background
+
+def mq_df_to_fragmentdict(merged_df):
+    frag_key_df = frag_key(merged_df)
+    std_model_mq = standard_model(frag_key_df)
+    metabolite_frag_dict = {}
+    for frag_name, label_dict in std_model_mq.iteritems():
+        curr_frag_name = (frag_name.name, frag_name.formula, frag_name.parent_formula)
+        if metabolite_frag_dict.has_key(frag_name.parent):
+            metabolite_frag_dict[frag_name.parent].update(bulk_insert_data_to_fragment(curr_frag_name,
+                                                                              label_dict, mass=True))
+        else:
+            metabolite_frag_dict[frag_name.parent] = bulk_insert_data_to_fragment(curr_frag_name,
+                                                                              label_dict, mass=True)
+    return metabolite_frag_dict
