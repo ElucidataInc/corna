@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from corna.corna_agios.na_correction import na_correction
+from corna.algorithms.nacorr_correction_matrix.na_correction import na_correction
 from corna.output import convert_to_df
 
 

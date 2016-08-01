@@ -5,7 +5,7 @@ import pandas as pd
 import corna.helpers as hl
 from corna.model import Fragment
 from corna import isotopomer as iso
-from corna.corna_agios import algorithms_agios as algo
+from corna.algorithms.nacorr_correction_matrix import algorithms as algo
 
 
 iso_tracer = ['C13']

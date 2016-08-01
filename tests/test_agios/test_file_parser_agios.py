@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-import corna.corna_agios.file_parser_agios as fp
+import corna.inputs.maven_parser as fp
 
 
 

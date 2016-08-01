@@ -8,11 +8,11 @@ config.NAME_COL = 'Name'
 
 # path to directory where data files are present - give the path the file
 # as this path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data/'
-path_dir = os.path.join(os.path.dirname(__file__), 'data_agios')
+path_dir = os.path.join(os.path.dirname(__file__), 'data')
 
 
 # read maven data
-maven_data = corna.read_file(path_dir + '/single_trac_indistinguish.csv')
+maven_data = corna.read_file(path_dir + '/test_m0_2.csv')
 #print maven_data
 #test_m0_2.csv
 
@@ -55,7 +55,7 @@ frac_enr_df = corna.convert_to_df(frac_enrichment, parent=False, colname='Frac E
 # combine results - dataframe with na correction column, frac enrichment column and post processed column
 df_list = [na_corr_df, frac_enr_df, postprocessed_out_df, merge_mv_metdata]
 merged_results_df = corna.merge_multiple_dfs(df_list)
-
+print merged_results_df
 # filter any dataframe as per requirement.
 # any number of columns and column values can be filtered
 col_rename = {'Name': ['L-Methionine'], "Sample Name": ['sample_1', 'sample_2']}
