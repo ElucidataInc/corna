@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 import corna.file_parser as fp
-import corna.corna_agios.file_parser_agios as fpa
+import corna.inputs.maven_parser as fpa
 
 
 def test_unq_sample():
