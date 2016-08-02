@@ -105,7 +105,7 @@ def multi_label_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
     return icorr
 
 
-def fragmentsdict_model(merged_df):
+def fragmentsdict_model(merged_df, intensity_col):
     """
     This function converts the dataframe into fragment dictionary model
     Args:
@@ -116,7 +116,7 @@ def fragmentsdict_model(merged_df):
     """
     fragments_dict = {}
     frag_merge_df = frag_key(merged_df)
-    std_model_mvn = standard_model(frag_merge_df)
+    std_model_mvn = standard_model(frag_merge_df, intensity_col)
 
     for metabolite_name, label_dict in std_model_mvn.iteritems():
         fragments_dict[metabolite_name] = {}

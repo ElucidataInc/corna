@@ -4,10 +4,10 @@ import numpy as np
 # Figure out a better way.
 #from .inputs.column_conventions import multiquant as c
 from . helpers import get_unique_values
-from . constants import FRAG_COL, LABEL_COL, SAMPLE_COL, INTENSITY_COL
+from . constants import FRAG_COL, LABEL_COL, SAMPLE_COL
 
 
-def standard_model(df):
+def standard_model(df, intensity_col):
     """
     This function convert the merged data into standard data model
     """
@@ -21,7 +21,7 @@ def standard_model(df):
         lab_dict = {}
         for label in unq_labels:
             df_labels = df_subset[df_subset[LABEL_COL] == label]
-            label_frame = df_labels.groupby(SAMPLE_COL)[INTENSITY_COL].apply(_to_np_array)
+            label_frame = df_labels.groupby(SAMPLE_COL)[intensity_col].apply(_to_np_array)
             label_dict = label_frame.to_dict()
             lab_dict[label] = label_dict
         std_model_dict[frags] = lab_dict

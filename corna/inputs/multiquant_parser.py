@@ -4,6 +4,7 @@ from ..data_model import standard_model
 from . column_conventions import multiquant
 from ..helpers import concat_txts_into_df, read_file, get_unique_values
 from ..isotopomer import bulk_insert_data_to_fragment
+from ..constants import INTENSITY_COL
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
 
@@ -116,9 +117,9 @@ def merge_mq_metadata(mq_df, metdata, sample_metdata):
         sample_metdata, multiquant.MQ_SAMPLE_NAME, multiquant.BACKGROUND)
     return merged_data, list_of_replicates, sample_background
 
-def mq_df_to_fragmentdict(merged_df):
+def mq_df_to_fragmentdict(merged_df, intensity_col=INTENSITY_COL):
     frag_key_df = frag_key(merged_df)
-    std_model_mq = standard_model(frag_key_df)
+    std_model_mq = standard_model(frag_key_df, intensity_col)
     metabolite_frag_dict = {}
     for frag_name, label_dict in std_model_mq.iteritems():
         curr_frag_name = Multiquantkey(frag_name.name, frag_name.formula,

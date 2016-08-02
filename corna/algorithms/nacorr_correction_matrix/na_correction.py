@@ -10,9 +10,9 @@ from ... helpers import convert_labels_to_std
 from . algorithms import samp_label_dcit, get_atoms_from_tracers, formuladict, check_labels_corrdict, \
     label_sample_dict, fragmentdict_model, input_intens_list, eleme_corr_to_list, multi_label_correc, \
     fragmentsdict_model
+from ...constants import INTENSITY_COL
 
-
-def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
+def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, intensity_col=INTENSITY_COL):
     """
     This function  is a wrapper over nacorr_each_metab performs na correction for all
     metabolites given in input data file for single and multiple tracers and
@@ -31,7 +31,7 @@ def na_correction(merged_df, iso_tracers, eleme_corr, na_dict):
     """
     eleme_corr_invalid_entry(iso_tracers, eleme_corr)
     std_label_df = convert_labels_to_std(merged_df, iso_tracers)
-    metabolite_dict = fragmentsdict_model(std_label_df)
+    metabolite_dict = fragmentsdict_model(std_label_df, intensity_col)
     na_corr_dict = {}
 
     for metabolite, fragments_dict in metabolite_dict.iteritems():
