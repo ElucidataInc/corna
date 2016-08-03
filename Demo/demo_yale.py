@@ -16,6 +16,7 @@ mq_sample_metadata = corna.read_multiquant_metadata(os.path.join(path_dir, 'meta
 
 # merge multiquant files and metadata files
 merge_mq_metdata, list_of_replicates, sample_background = corna.merge_mq_metadata(mq_files, mq_metadata, mq_sample_metadata)
+
 save_dfs = corna.save_to_csv(merge_mq_metdata, path_dir + 'merged_input_data.csv')
 # filter merged data as per requirement
 #citrate_G7 = corna.filtering_df(merge_mq_metdata, num_col=2, col1="Name",
