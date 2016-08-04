@@ -38,12 +38,12 @@ def get_atomic_weight(element):
 
 
 def check_if_isotope_in_dict(iso):
-    return ISOTOPE_NA_MASS['Element'].has_key(iso)
+    return ISOTOPE_NA_MASS['element'].has_key(iso)
 
 
 def get_isotope_element(iso):
     try:
-        return ISOTOPE_NA_MASS['Element'][iso]
+        return ISOTOPE_NA_MASS['element'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
@@ -57,14 +57,14 @@ def get_isotope_mass(iso):
 
 def get_isotope_na(iso):
     try:
-        return ISOTOPE_NA_MASS['NA'][iso]
+        return ISOTOPE_NA_MASS['naValue'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 
 def get_isotope_natural(iso):
     try:
-        return ISOTOPE_NA_MASS['Natural Isotope'][iso]
+        return ISOTOPE_NA_MASS['naturalIsotope'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
