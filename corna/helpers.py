@@ -27,6 +27,9 @@ def set_global_isotope_dict(isotope_dict):
     global ISOTOPE_NA_MASS
     ISOTOPE_NA_MASS = isotope_dict
 
+def get_global_isotope_dict():
+    return ISOTOPE_NA_MASS
+
 def get_atomic_weight(element):
     try:
         return cs.ELE_ATOMIC_WEIGHTS[element]
