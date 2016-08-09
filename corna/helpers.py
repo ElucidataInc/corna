@@ -242,8 +242,8 @@ def get_na_value_dict():
     for all the isotopes
     """
     na_mass_dict = cs.ISOTOPE_NA_MASS
-    NA = na_mass_dict['NA']
-    elements = na_mass_dict['Element']
+    NA = na_mass_dict['naValue']
+    elements = na_mass_dict['element']
     na_val_dict = {}
     atoms = set(elements.values())
 
