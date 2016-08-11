@@ -50,8 +50,8 @@ def parse_label_mass(label_mass):
 
 
 def validate_data(data):
-    if not hl.check_if_all_elems_same_type(data.keys(), str):
-        raise TypeError('Sample names should be of type string')
+    if not hl.check_if_all_elems_same_type(data.keys(), basestring):
+        raise TypeError('Sample Names should be of type unicode or string')
     if not hl.check_if_all_elems_same_type(data.values(), np.ndarray):
         raise TypeError('Intensities should be of type numpy arrays')
 

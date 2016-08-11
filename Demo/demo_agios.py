@@ -8,11 +8,11 @@ config.NAME_COL = 'Name'
 
 # path to directory where data files are present - give the path the file
 # as this path_dir = '/Users/sininagpal/OneDrive/Elucidata_Sini/NA_correction/Demo/data/'
-path_dir = os.path.join(os.path.dirname(__file__), 'data')
+path_dir = os.path.join(os.path.dirname(__file__), 'data_agios')
 
 
 # read maven data
-maven_data = corna.read_file(path_dir + '/test_m0_2.csv')
+maven_data = corna.read_file(path_dir + '/testfiles/aceticacid.csv')
 #print maven_data
 #test_m0_2.csv
 
@@ -26,14 +26,16 @@ maven_metadata = corna.read_file(path_dir + '/metadata.csv')
 # merge maven files and metadata files
 merge_mv_metdata = corna.maven_merge_dfs(maven_data, maven_metadata)
 # isotopic tracers
-#iso_tracers = ['C13']
-iso_tracers = ['C13', 'N15']
+iso_tracers = ['H2']
+#iso_tracers = ['C13', 'N15']
 
 # element to be corrected
 # in case of no indistinguishable elements, eleme corr is empty dictionary
 eleme_corr = {}
 # in case of indistinguishable elements
+
 eleme_corr = {'C': ['H', 'O'], 'N':['S']}
+
 
 # NA values dict
 na_dict = corna.get_na_value_dict()
@@ -59,7 +61,7 @@ merged_results_df = corna.merge_multiple_dfs(df_list)
 print merged_results_df
 # filter any dataframe as per requirement.
 # any number of columns and column values can be filtered
-col_rename = {'Name': ['L-Methionine'], "Sample Name": ['sample_1', 'sample_2']}
+col_rename = {'Name': ['L-Methionine'], "Sample": ['sample_1', 'sample_2']}
 filtered_data = corna.filter_df(merged_results_df, col_rename)
 # save any dataframe at given path
 save_dfs = corna.save_to_csv(merged_results_df, path_dir + 'results.csv')
