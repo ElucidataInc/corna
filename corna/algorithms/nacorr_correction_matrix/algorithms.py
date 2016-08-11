@@ -90,7 +90,6 @@ def multi_label_matrix(na_dict, formula_dict, eleme_corr_list):
 
         matrix_tracer = corr_matrix(str(trac), no_atom_tracer, na_dict)
         correction_matrix = np.kron(correction_matrix, matrix_tracer)
-
     return correction_matrix
 
 
@@ -101,7 +100,6 @@ def multi_label_correc(na_dict, formula_dict, eleme_corr_list, intensities_list)
     """
     M = multi_label_matrix(na_dict, formula_dict, eleme_corr_list)
     icorr = matrix_multiplication(M, intensities_list)
-
     return icorr
 
 
@@ -298,7 +296,6 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
 
         nacorr_fragment_dict[frag_name] = Infopacket(frag_info.frag, lab_samp_dict[lab_tup_key],
                                            frag_info.unlabeled, frag_info.name)
-
     return nacorr_fragment_dict
 
 
@@ -357,5 +354,4 @@ def input_intens_list(num_label_comb, label_dict, indist_el_position):
                 input_intensities.append(0)
         else:
             input_intensities.append(0)
-
     return input_intensities

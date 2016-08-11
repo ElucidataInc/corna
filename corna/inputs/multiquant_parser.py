@@ -1,8 +1,11 @@
+import os
+import pandas as pd
 from collections import namedtuple
 
 from ..data_model import standard_model
+from . column_conventions import multiquant as c
 from . column_conventions import multiquant
-from ..helpers import concat_txts_into_df, read_file, get_unique_values
+from ..helpers import read_file, get_unique_values
 from ..isotopomer import bulk_insert_data_to_fragment
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
@@ -97,6 +100,23 @@ def frag_key(df):
     return df
 
 
+def concat_txts_into_df(directory):
+    txt_files = []
+    txt_files += [each for each in os.listdir(directory) if each.endswith('.txt')]
+
+    df_list= []
+    for files in txt_files:
+        df = read_file(directory + '/' + files)
+        col_headers =  df.columns.tolist()
+        check_mq_column_headers(col_headers)
+        df_list.append(df)
+        df_list.append(read_file(directory + '/' + files))
+    concat_df = pd.concat(df_list)
+
+    return concat_df
+
+
+
 def read_multiquant(dir_path):
     mq_df = concat_txts_into_df(dir_path)
     return mq_df
@@ -105,6 +125,17 @@ def read_multiquant(dir_path):
 def read_multiquant_metadata(path):
     mq_metdata = read_file(path)
     return mq_metdata
+
+def check_mq_column_headers(col_headers):
+    """
+    This function verifies that all defasult columns are present in input
+    text files for multiquant
+    """
+    col_names = [c.MQ_SAMPLE_NAME, c.MQ_COHORT_NAME, c.MQ_FRAGMENT, c.MASSINFO, c.AREA, c.MODIFIED]
+    err_msg = """Column not found in input text file
+            Column: {!r}
+          """.format(list(set(col_names) - set(col_headers)))
+    assert set(col_names) == set(col_headers), err_msg
 
 
 def merge_mq_metadata(mq_df, metdata, sample_metdata):

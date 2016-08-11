@@ -72,5 +72,9 @@ def test_parse_label_mass_key_error():
         iso.parse_label_mass('191_111')
     assert err.value.message == 'First part of the key must be an isotope'
 
+
+
+
+
 # def test_create_fragment_from_mass():
 #     iso.create_fragment_from_mass('Citrate 191', '', parent, isotope, isotope_mass, molecular_mass=None, mode=None)

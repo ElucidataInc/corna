@@ -123,12 +123,28 @@ def json_to_df(json_input):
     return json_df
 
 
-def concat_txts_into_df(directory):
-    data_frames = [read_file(os.path.join(directory, f))
-                   for f in os.listdir(directory)
-                   if f.endswith('.txt')]
+# def concat_txts_into_df(directory):
+#     #data_frames = [read_file(os.path.join(directory, f))
+#     #               for f in os.listdir(directory)
+#     #               if f.endswith('.txt')]
 
-    return pd.concat(data_frames)
+#     txt_files = []
+
+#     txt_files += [each for each in os.listdir(directory) if each.endswith('.txt')]
+
+#     df_list= []
+#     for files in txt_files:
+#         df = read_file(directory + '/' + files)
+#         col_head =  df.columns.tolist()
+#         assert(set(col_head), set(default_cols))
+#         df_list.append(df)
+#         df_list.append(read_file(directory + '/' + files))
+
+#     concat_df = pd.concat(df_list)
+
+#     return concat_df
+
+    #return pd.concat(data_frames)
 
 
 def merge_two_dfs(df1, df2, how='left', left_on='col1', right_on='col2'):
