@@ -1,15 +1,73 @@
 import os
 import pandas as pd
 from collections import namedtuple
+import warnings
 
 from ..data_model import standard_model
-from . column_conventions import multiquant as c
 from . column_conventions import multiquant
 from ..helpers import read_file, get_unique_values
 from ..isotopomer import bulk_insert_data_to_fragment
 from ..constants import INTENSITY_COL
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
+
+def concat_txts_into_df(directory):
+    """read text files with same column names and merge them to one
+    dataframe
+    Args:
+        directory: path of the directory containing the text files
+    Returns:
+        merged dataframe
+    """
+    txt_files = []
+    txt_files += [each for each in os.listdir(directory) if each.endswith('.txt')]
+    df_list= []
+    col_names = [multiquant.MQ_SAMPLE_NAME, multiquant.MQ_FRAGMENT, multiquant.MASSINFO, multiquant.AREA]
+    for files in txt_files:
+        df = read_file(directory + '/' + files)
+        col_headers =  df.columns.tolist()
+        check_mq_column_headers(col_headers, col_names)
+        df_list.append(df)
+    concat_df = pd.concat(df_list).reset_index(drop=True)
+
+    return concat_df
+
+def read_multiquant(dir_path):
+    mq_df = concat_txts_into_df(dir_path)
+    return mq_df
+
+def read_multiquant_metadata(path):
+    """read metadata file"""
+    mq_metdata = read_file(path)
+    col_headers = mq_metdata.columns.values
+    col_names = [multiquant.PARENT, multiquant.MQ_FRAGMENT,
+                 multiquant.FORMULA, multiquant.PARENT_FORMULA]
+    check_mq_column_headers(col_headers, col_names)
+    return mq_metdata
+
+def read_sample_metadata(path):
+    """read metadata file"""
+    std_smpl_metadata = read_file(path)
+    col_headers = std_smpl_metadata.columns.values
+    col_names = [multiquant.MQ_SAMPLE_NAME]
+    check_mq_column_headers(col_headers, col_names)
+
+    bg_corr_col_names = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
+    try:
+        check_mq_column_headers(col_headers, bg_corr_col_names)
+    except AssertionError:
+        warnings.warn("Background Correction can't be performed")
+
+    return std_smpl_metadata
+
+def check_mq_column_headers(col_headers, col_names):
+    """
+    This function verifies that all defasult columns are present in input
+    text files for multiquant
+    """
+    err_msg = """Required column/s not found, Column: {!r}""".format(list(set(col_names) - set(col_headers)))
+    assert set(col_names).issubset(set(col_headers)), err_msg
+
 
 def mq_merge_meta(input_data, metadata):
     """
@@ -104,44 +162,6 @@ def frag_key(df):
     except KeyError:
         raise KeyError('Missing columns in data')
     return df
-
-
-def concat_txts_into_df(directory):
-    txt_files = []
-    txt_files += [each for each in os.listdir(directory) if each.endswith('.txt')]
-
-    df_list= []
-    for files in txt_files:
-        df = read_file(directory + '/' + files)
-        col_headers =  df.columns.tolist()
-        check_mq_column_headers(col_headers)
-        df_list.append(df)
-        df_list.append(read_file(directory + '/' + files))
-    concat_df = pd.concat(df_list)
-
-    return concat_df
-
-
-def read_multiquant(dir_path):
-    mq_df = concat_txts_into_df(dir_path)
-    return mq_df
-
-
-def read_multiquant_metadata(path):
-    mq_metdata = read_file(path)
-    return mq_metdata
-
-def check_mq_column_headers(col_headers):
-    """
-    This function verifies that all defasult columns are present in input
-    text files for multiquant
-    """
-    col_names = [c.MQ_SAMPLE_NAME, c.MQ_COHORT_NAME, c.MQ_FRAGMENT, c.MASSINFO, c.AREA, c.MODIFIED]
-    err_msg = """Column not found in input text file
-            Column: {!r}
-          """.format(list(set(col_names) - set(col_headers)))
-    assert set(col_names) == set(col_headers), err_msg
-
 
 def merge_mq_metadata(mq_df, metdata, sample_metdata):
     merged_data = mq_merge_dfs(mq_df, metdata, sample_metdata)

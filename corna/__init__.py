@@ -2,7 +2,7 @@ from . helpers import read_file, json_to_df, filter_df, merge_multiple_dfs, get_
 
 from . inputs.maven_parser import maven_merge_dfs, convert_inputdata_to_stdfrom
 
-from . inputs.multiquant_parser import read_multiquant, read_multiquant_metadata, merge_mq_metadata, mq_df_to_fragmentdict
+from . inputs.multiquant_parser import read_multiquant, read_multiquant_metadata, read_sample_metadata, merge_mq_metadata, mq_df_to_fragmentdict
 
 from . algorithms.nacorr_correction_matrix.na_correction import na_correction
 
