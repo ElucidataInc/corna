@@ -233,7 +233,8 @@ class Fragment(Ion, Label):
                 return True
             else:
                 raise OverflowError('Number of labeled atoms must be '
-                                    'less than/equal to total number of atoms')
+                                    'less than/equal to total number of atoms: '
+                                    + self.name + ' ' + self.formula)
         except KeyError:
             raise KeyError('Labeled element not in formula')
 
