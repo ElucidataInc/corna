@@ -52,11 +52,6 @@ def read_sample_metadata(path):
     col_names = [multiquant.MQ_SAMPLE_NAME]
     check_mq_column_headers(col_headers, col_names)
 
-    bg_corr_col_names = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
-    try:
-        check_mq_column_headers(col_headers, bg_corr_col_names)
-    except AssertionError:
-        warnings.warn("Background Correction can't be performed")
 
     return std_smpl_metadata
 
@@ -94,9 +89,18 @@ def mq_merge_meta(input_data, metadata):
     return merged_df
 
 def merge_samples(merged_df, sample_metadata):
-    if sample_metadata is not None:
+    col_headers = sample_metadata.columns.values
+    bg_corr_col_names = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
+    try:
+        check_mq_column_headers(col_headers, bg_corr_col_names)
+        if sample_metadata is not None:
             merged_df = merged_df.merge(sample_metadata, how='inner',
                                     on=[multiquant.MQ_SAMPLE_NAME, multiquant.MQ_COHORT_NAME])
+    except AssertionError:
+        warnings.warn("Background Correction can't be performed")
+        merged_df = merged_df.merge(sample_metadata, how='inner',
+                                    on=[multiquant.MQ_SAMPLE_NAME])
+
     # first change Sample Name to Cohort Name, then Original Filename to Sample
     # refer to multiquant raw output
     merged_df.rename(
@@ -168,7 +172,15 @@ def merge_mq_metadata(mq_df, metdata, sample_metdata):
     merged_data.fillna(0, inplace=True)
     list_of_replicates = []
     sample_background = []
+
     if sample_metdata is not None:
+        col_headers = merged_data.columns.values
+        bg_corr_col_names = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
+        try:
+            check_mq_column_headers(col_headers, bg_corr_col_names)
+        except AssertionError:
+            return merged_data, list_of_replicates, sample_background
+
         list_of_replicates = get_replicates(
             sample_metdata, multiquant.MQ_SAMPLE_NAME, multiquant.MQ_COHORT_NAME, multiquant.BACKGROUND)
         sample_background = get_background_samples(
