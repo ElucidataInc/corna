@@ -123,7 +123,7 @@ def remove_mq_stds(merged_df):
     try:
         merged_df = merged_df[not merged_df[multiquant.COHORT].str.contains("std")]
     except:
-        print ('Std samples not found in' + multiquant.COHORT + ' column')
+        warnings.warn('Std samples not found in' + multiquant.COHORT + ' column')
 
     merged_df[multiquant.LABEL] = merged_df[multiquant.ISOTRACER] + "_" + merged_df[multiquant.MASSINFO]
     merged_df.rename(
