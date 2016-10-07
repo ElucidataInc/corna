@@ -90,10 +90,14 @@ def mq_merge_meta(input_data, metadata):
 
 def merge_samples(merged_df, sample_metadata):
     if sample_metadata is not None:
-        col_headers = sample_metadata.columns.values
-        bg_corr_col_names = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
+        col_headers_sample = sample_metadata.columns.values
+        col_headers_merged = merged_df.columns.values
+        bg_corr_col_names_sample = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
+        bg_corr_col_names_merged = [multiquant.MQ_COHORT_NAME]
         try:
-            check_mq_column_headers(col_headers, bg_corr_col_names)
+            check_mq_column_headers(col_headers_sample, bg_corr_col_names_sample)
+            check_mq_column_headers(col_headers_merged, bg_corr_col_names_merged)
+
             merged_df = merged_df.merge(sample_metadata, how='inner',
                                     on=[multiquant.MQ_SAMPLE_NAME, multiquant.MQ_COHORT_NAME])
         except AssertionError:
