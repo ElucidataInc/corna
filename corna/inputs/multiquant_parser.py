@@ -89,16 +89,16 @@ def mq_merge_meta(input_data, metadata):
     return merged_df
 
 def merge_samples(merged_df, sample_metadata):
-    col_headers = sample_metadata.columns.values
-    bg_corr_col_names = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
-    try:
-        check_mq_column_headers(col_headers, bg_corr_col_names)
-        if sample_metadata is not None:
+    if sample_metadata is not None:
+        col_headers = sample_metadata.columns.values
+        bg_corr_col_names = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
+        try:
+            check_mq_column_headers(col_headers, bg_corr_col_names)
             merged_df = merged_df.merge(sample_metadata, how='inner',
                                     on=[multiquant.MQ_SAMPLE_NAME, multiquant.MQ_COHORT_NAME])
-    except AssertionError:
-        warnings.warn("Background Correction can't be performed")
-        merged_df = merged_df.merge(sample_metadata, how='inner',
+        except AssertionError:
+            warnings.warn("Background Correction can't be performed")
+            merged_df = merged_df.merge(sample_metadata, how='inner',
                                     on=[multiquant.MQ_SAMPLE_NAME])
 
     # first change Sample Name to Cohort Name, then Original Filename to Sample
