@@ -179,7 +179,7 @@ def merge_mq_metadata(mq_df, metdata, sample_metdata):
 
     if sample_metdata is not None:
         col_headers = merged_data.columns.values
-        bg_corr_col_names = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
+        bg_corr_col_names = [multiquant.BACKGROUND, multiquant.COHORT]
         try:
             check_mq_column_headers(col_headers, bg_corr_col_names)
         except AssertionError:
