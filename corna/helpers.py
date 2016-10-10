@@ -249,7 +249,7 @@ def merge_multiple_dfs(df_list):
 def _merge_dfs(df1, df2):
     return pd.merge(df1, df2,
                     on=[c.LABEL, c.SAMPLE,
-                        c.NAME, c.FORMULA])
+                        c.NAME])
 
 
 def get_na_value_dict():

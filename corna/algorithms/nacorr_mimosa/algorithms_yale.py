@@ -6,8 +6,6 @@ from ... import helpers
 from ... isotopomer import Infopacket
 
 
-
-
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                                  isotope, na, decimals):
     iso_elem = helpers.get_isotope_element(isotope)
