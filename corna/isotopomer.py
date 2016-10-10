@@ -43,7 +43,7 @@ def parse_label_mass(label_mass):
         raise IndexError('The key should have three components, isotope, parent mass '
                          'and daughter mass separated by _ in the same order')
     except KeyError:
-        raise KeyError('First part of the key must be an isotope')
+        raise KeyError('Isotope should be part of the constants')
     except ValueError:
         raise ValueError('Masses should be convertible to floats')
     return {'tracer': isotracer, 'parent_mass': parent_mass, 'daughter_mass': daughter_mass}
