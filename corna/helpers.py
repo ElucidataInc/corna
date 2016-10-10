@@ -243,6 +243,7 @@ def merge_multiple_dfs(df_list):
         combined_dfs : concatenated list of dataframes into one dataframe
     """
     combined_dfs = reduce(_merge_dfs, df_list)
+    combined_dfs = combined_dfs.T.drop_duplicates().T
     return combined_dfs
 
 
