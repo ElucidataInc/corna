@@ -1,3 +1,6 @@
+import multiprocessing as mp
+from functools import partial
+
 import numpy as np
 from ... import helpers
 from ... isotopomer import Infopacket
@@ -55,8 +58,17 @@ def na_correction_mimosa_by_fragment(fragments_dict, decimals):
     return corrected_dict_mass
 
 
+def nacorr_mp(decimals,tuple):
+    metabolite = tuple[0]
+    fragment_dict = tuple[1]
+    corr_fragment_dict = na_correction_mimosa_by_fragment(fragment_dict, decimals)
+    return (metabolite, corr_fragment_dict)
+
 def na_correction_mimosa(metabolite_frag_dict, decimals=2):
-    na_corrected_out = {}
-    for metabolite, fragmentdict in metabolite_frag_dict.iteritems():
-        na_corrected_out[metabolite] = na_correction_mimosa_by_fragment(fragmentdict, decimals)
+    pool = mp.Pool(mp.cpu_count()-1)
+    nacorr_part = partial(nacorr_mp, decimals)
+    nacorrected_list = pool.map(nacorr_part, metabolite_frag_dict.iteritems())
+    pool.close()
+    na_corrected_out = {metab_info[0]:metab_info[1] for metab_info in nacorrected_list}
     return na_corrected_out
+
