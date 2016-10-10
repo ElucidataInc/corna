@@ -84,17 +84,11 @@ def bulk_background_correction(fragment_dict, list_of_replicates, sample_backgro
     return corrected_fragments_dict
 
 
-def backgroundcorr_mp(list_of_replicates, sample_background, decimals, tuple):
-    metabolite = tuple[0]
-    fragment_dict = tuple[1]
-    corr_fragment_dict = bulk_background_correction(fragment_dict, list_of_replicates, sample_background, decimals)
-    return (metabolite, corr_fragment_dict)
-
 def met_background_correction(metabolite_frag_dict, list_of_replicates, sample_background, decimals=0):
-    pool = mp.Pool(mp.cpu_count()-1)
-    bgcorr_part = partial(backgroundcorr_mp, list_of_replicates, sample_background, decimals)
-    bgcorr_list = pool.map(bgcorr_part, metabolite_frag_dict.iteritems())
-    pool.close()
-    bgcorr_out = {metab_info[0]:metab_info[1] for metab_info in bgcorr_list}
-    return bgcorr_out
+    preprocessed_output_dict = {}
+    for metabolite, fragments_dict in metabolite_frag_dict.iteritems():
+        preprocessed_output_dict[metabolite] = bulk_background_correction(fragments_dict,
+                                                                          list_of_replicates,
+                                                                          sample_background, decimals)
 
+    return preprocessed_output_dict
