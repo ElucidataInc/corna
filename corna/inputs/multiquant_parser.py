@@ -100,6 +100,8 @@ def merge_samples(merged_df, sample_metadata):
             assert set(sample_metadata[multiquant.BACKGROUND]).issubset(set(sample_metadata[multiquant.MQ_SAMPLE_NAME]))
             merged_df = merged_df.merge(sample_metadata, how='inner',
                                     on=[multiquant.MQ_SAMPLE_NAME, multiquant.MQ_COHORT_NAME])
+            if merged_df.empty:
+                raise Exception('Empty Merge, no common entries to process, please check input files')
         except AssertionError:
             warnings.warn("Background Correction can't be performed")
             merged_df = merged_df.merge(sample_metadata, how='inner',
