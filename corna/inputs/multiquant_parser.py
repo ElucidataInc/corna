@@ -97,7 +97,7 @@ def merge_samples(merged_df, sample_metadata):
         try:
             check_mq_column_headers(col_headers_sample, bg_corr_col_names_sample)
             check_mq_column_headers(col_headers_merged, bg_corr_col_names_merged)
-
+            assert set(sample_metadata[multiquant.BACKGROUND]).issubset(set(sample_metadata[multiquant.MQ_SAMPLE_NAME]))
             merged_df = merged_df.merge(sample_metadata, how='inner',
                                     on=[multiquant.MQ_SAMPLE_NAME, multiquant.MQ_COHORT_NAME])
         except AssertionError:
