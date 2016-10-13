@@ -62,7 +62,7 @@ def nacorr_mp(decimals,tuple):
     return (metabolite, corr_fragment_dict)
 
 def na_correction_mimosa(metabolite_frag_dict, decimals=2):
-    pool = mp.Pool(mp.cpu_count()-1)
+    pool = mp.Pool(mp.cpu_count())
     nacorr_part = partial(nacorr_mp, decimals)
     nacorrected_list = pool.map(nacorr_part, metabolite_frag_dict.iteritems())
     pool.close()
