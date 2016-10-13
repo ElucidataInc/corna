@@ -5,7 +5,6 @@ import numpy as np
 from ... import helpers
 from ... isotopomer import Infopacket
 
-
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                                  isotope, na, decimals):
     iso_elem = helpers.get_isotope_element(isotope)
@@ -19,7 +18,7 @@ def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, 
     return np.around(corrected_intensity, decimals)
 
 
-def arrange_fragments_by_mass(fragments_dict):
+def change_fragment_keys_to_mass(fragments_dict):
     fragment_dict_mass = {}
     for key, value in fragments_dict.iteritems():
         parent_frag, daughter_frag = value.frag
@@ -29,7 +28,7 @@ def arrange_fragments_by_mass(fragments_dict):
 
 
 def na_correction_mimosa_by_fragment(fragments_dict, decimals):
-    fragment_dict_mass = arrange_fragments_by_mass(fragments_dict)
+    fragment_dict_mass = change_fragment_keys_to_mass(fragments_dict)
     corrected_dict_mass = {}
     for key, value in fragment_dict_mass.iteritems():
         m_1_n = (key[0] - 1, key[1])

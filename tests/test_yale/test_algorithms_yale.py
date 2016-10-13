@@ -3,59 +3,126 @@ import corna.algorithms.nacorr_mimosa.algorithms_yale as algo
 import corna.isotopomer as iso
 from corna.inputs.multiquant_parser import Multiquantkey
 
-unlabeld_fragment = iso.insert_data_to_fragment_mass(Multiquantkey('2PG 185/79', 'O3P', '2PG 185/79', 'C3H6O7P'), 'C13_185.0_79.0',
-                                                      {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': numpy.array([ 62608.]),
-      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': numpy.array([ 58642.]),
-      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': numpy.array([ 59951.]),
-      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': numpy.array([ 62521.]),
-      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': numpy.array([ 59689.]),
-      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': numpy.array([ 57204.])})
+data_input = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': numpy.array([1967.77]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': numpy.array([1446.77]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': numpy.array([747.77]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': numpy.array([1926.77]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': numpy.array([1969.77]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': numpy.array([661.77])}
 
-input_fragment = iso.insert_data_to_fragment_mass(Multiquantkey('2PG 186/79', 'O3P', '2PG 185/79','C3H6O7P'), 'C13_186.0_79.0',
-                                                  {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': numpy.array([ 1968.]),
-                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': numpy.array([ 1447.]),
-                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': numpy.array([ 748.]),
-                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': numpy.array([ 1927.]),
-                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': numpy.array([ 1970.]),
-                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': numpy.array([ 662.])})
+data_unlabel = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': numpy.array([ 62610]),
+      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': numpy.array([ 58640]),
+      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': numpy.array([ 59950]),
+      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': numpy.array([ 62520]),
+      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': numpy.array([ 59690]),
+      'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': numpy.array([ 57200])}
+
+corrected_data_input = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': numpy.array([-55.07]),
+                             'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': numpy.array([-456.52]),
+                             'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': numpy.array([-1214.13]),
+                             'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': numpy.array([-94.]),
+                             'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': numpy.array([ 43.33]),
+                             'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': numpy.array([-1211.27])}
+
+corrected_data_unlabel = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': numpy.array([ 64676.13]),
+                          'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': numpy.array([ 60575.12]),
+                          'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': numpy.array([ 61928.35]),
+                          'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': numpy.array([ 64583.16]),
+                          'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': numpy.array([ 61659.77]),
+                          'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': numpy.array([ 59087.6])}
+
+unlabeled_fragment = iso.insert_data_to_fragment_mass(Multiquantkey('2PG 185/79', 'O3P', '2PG 185/79', 'C3H6O7P'),
+                                                      'C13_185.0_79.0', data_unlabel)
+
+input_fragment = iso.insert_data_to_fragment_mass(Multiquantkey('2PG 186/79', 'O3P', '2PG 185/79','C3H6O7P'),
+                                                  'C13_186.0_79.0', data_input)
+
+
+parent_frag_input = input_fragment[('2PG 186/79_186.0', '2PG 186/79_79.0')][0][0]
+daughter_frag_input = input_fragment[('2PG 186/79_186.0', '2PG 186/79_79.0')][0][1]
+
+parent_frag_unlabeled = unlabeled_fragment[('2PG 185/79_185.0', '2PG 185/79_79.0')][0][0]
+daughter_frag_unlabeled = unlabeled_fragment[('2PG 185/79_185.0', '2PG 185/79_79.0')][0][1]
+
+
+fragment_dict = dict(unlabeled_fragment, **input_fragment)
+
+corrected_fragment_dict = {(186.0, 79.0): iso.Infopacket(frag=[parent_frag_input, daughter_frag_input],
+                                                                                      data = corrected_data_input, unlabeled=False, name='2PG 185/79'),
+                                                         (185.0, 79.0): iso.Infopacket(frag=[parent_frag_unlabeled, daughter_frag_unlabeled],
+                                                                                      data = corrected_data_unlabel, unlabeled=True, name='2PG 185/79')}
+
+unlabeled_fragment_dhap = iso.insert_data_to_fragment_mass(Multiquantkey('DHAP 169/97', 'H2O4P', 'DHAP 169/97', 'C3H6O6P'), 'C13_169.0_97.0',
+                                                      {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':numpy.array([51670]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)':numpy.array([52360]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)':numpy.array([52540]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)':numpy.array([56580]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)':numpy.array([52580]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)':numpy.array([58990])})
+
+
+input_fragment_dhap = iso.insert_data_to_fragment_mass(Multiquantkey('DHAP 170/97', 'H2O4P', 'DHAP 169/97','C3H6O6P'), 'C13_170.0_97.0',
+                                                  {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':numpy.array([1292.67]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)':numpy.array([901.67]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)':numpy.array([1292.67]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)':numpy.array([1468.67]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)':numpy.array([1511.67]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)':numpy.array([1946.67])})
+
+corrected_data_unlabel_dhap = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':numpy.array([53375.11]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)':numpy.array([54087.88]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)':numpy.array([54273.82]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)':numpy.array([58447.14]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)':numpy.array([54315.14]),
+                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)':numpy.array([60936.67])}
+
+corrected_data_input_dhap = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':numpy.array([-384.00]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)':numpy.array([-806.37]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)':numpy.array([-412.71]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)':numpy.array([-366.16]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)':numpy.array([-190.21]),
+                                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)':numpy.array([42.83])}
+
+
+parent_frag_input_dhap = input_fragment_dhap[('DHAP 170/97_170.0', 'DHAP 170/97_97.0')][0][0]
+daughter_frag_input_dhap = input_fragment_dhap[('DHAP 170/97_170.0', 'DHAP 170/97_97.0')][0][1]
+
+parent_frag_unlabeled_dhap = unlabeled_fragment_dhap[('DHAP 169/97_169.0', 'DHAP 169/97_97.0')][0][0]
+daughter_frag_unlabeled_dhap = unlabeled_fragment_dhap[('DHAP 169/97_169.0', 'DHAP 169/97_97.0')][0][1]
+
+corrected_fragment_dict_dhap = {(169.0, 97.0): iso.Infopacket(frag=[parent_frag_unlabeled_dhap, daughter_frag_unlabeled_dhap],
+                                                                                      data = corrected_data_unlabel_dhap, unlabeled=True, name='DHAP 169/97'),
+                                                         (170.0, 97.0): iso.Infopacket(frag=[parent_frag_input_dhap, daughter_frag_input_dhap],
+                                                                                      data = corrected_data_input_dhap, unlabeled=False, name='DHAP 169/97')}
+
+fragment_dict_dhap = dict(unlabeled_fragment_dhap, **input_fragment_dhap)
+
+metabolite_frag_dict = {'dhap':fragment_dict_dhap, '2pg': fragment_dict}
+corrected_metabolite_dict = {'dhap': corrected_fragment_dict_dhap, '2pg': corrected_fragment_dict}
 
 def test_na_correct_mimosa_array():
-    print algo.na_correct_mimosa_algo_array(input_fragment[('2PG 186/79_186.0', '2PG 186/79_79.0')][0][0],
-                                            input_fragment[('2PG 186/79_186.0', '2PG 186/79_79.0')][0][1],
-                                            numpy.array[59689., 59951., 57204., 58642., 62608., 62521.],
-                                            numpy.zeros(6),
-                                            numpy.zeros(6),
-                                            'C13',
-                                            0.011,
-                                            2)
+    assert algo.na_correct_mimosa_algo_array(parent_frag_input, daughter_frag_input, numpy.array([1967.77]),
+                                             numpy.array([62610]), numpy.array([0.]), 'C13', 0.011, 2) == numpy.array([-55.07])
 
+def test_arrange_fragments_by_mass():
+    assert algo.change_fragment_keys_to_mass(fragment_dict) == {(186.0, 79.0): iso.Infopacket(frag=[parent_frag_input, daughter_frag_input],
+                                                                                      data = data_input, unlabeled=False, name='2PG 185/79'),
+                                                         (185.0, 79.0): iso.Infopacket(frag=[parent_frag_unlabeled, daughter_frag_unlabeled],
+                                                                                      data = data_unlabel, unlabeled=True, name='2PG 185/79')}
 
+def test_na_correction_mimosa_by_fragment():
+    assert algo.na_correction_mimosa_by_fragment(fragment_dict, 2) == corrected_fragment_dict
 
+def test_nacorr_mp():
+    assert algo.nacorr_mp(2, ('2PG 185/79', fragment_dict)) == ('2PG 185/79', corrected_fragment_dict)
 
-
-
-
-# def test_na_correct_mimosa():
-#     assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
-#                                   input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
-#                                   2055, 40820, 0, 'C13', 0.011) == 798.3600000000001
-
-# def test_na_correct_mimosa_zero():
-#     assert algo.na_correct_mimosa_algo(input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][0],
-#                                   input_fragment[('Glutamate 147/41_147.0', 'Glutamate 147/41_41.0')][0][1],
-#                                   769, 87550, 0, 'C13', 0.011) == 0
-
-
-# def test_arrange_fragments_by_mass():
-#     test_dict = algo.arrange_fragments_by_mass(glutamate_146_41)
-#     for key, value in glutamate_146_41_output_dict.iteritems():
-#         assert test_dict[key] == value
-
-# def test_na_correction_mimosa_by_fragment():
-#     test_dict = algo.na_correction_mimosa_by_fragment(glutamate_146_41)
-#     test_data = test_dict[(147.0, 42.0)][1]
-#     assert numpy.array_equal(numpy.around(test_data['F. [13C-glc] G2.5 120min'],8), numpy.around(numpy.array([991.7099655, 522.23934132,
-#                                                                                  2790.3025836, 0., 1768.9036688,
-
-#                                                                                  2126.6667507 ]),8))
-
+def test_na_correction_mimosa():
+    test_dict = algo.na_correction_mimosa(metabolite_frag_dict)
+    for key, value in test_dict['dhap'].iteritems():
+        assert corrected_fragment_dict_dhap[key].data == value.data
+        assert corrected_fragment_dict_dhap[key].unlabeled == value.unlabeled
+        assert corrected_fragment_dict_dhap[key].name == value.name
+    for key, value in test_dict['2pg'].iteritems():
+        assert corrected_fragment_dict[key].data == value.data
+        assert corrected_fragment_dict[key].unlabeled == value.unlabeled
+        assert corrected_fragment_dict[key].name == value.name
