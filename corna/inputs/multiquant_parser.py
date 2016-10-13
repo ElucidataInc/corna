@@ -82,7 +82,8 @@ def mq_merge_meta(input_data, metadata):
         merged_df = input_data.merge(metadata, how='inner',
                               left_on=multiquant.MQ_FRAGMENT,
                               right_on=multiquant.MQ_FRAGMENT)
-
+        if merged_df.empty:
+                raise Exception('Empty Merge, no common entries to process, please check input files')
     except KeyError:
         raise KeyError('Missing columns: ' + multiquant.MQ_FRAGMENT)
     merged_df[multiquant.MASSINFO] = merged_df[multiquant.MASSINFO].str.replace(' / ', "_")
