@@ -13,9 +13,7 @@ def zero_if_negative(num):
         1. zero if num is negative
         2. number itself if num is non negative
     """
-    if num < 0:
-        return 0
-    return num
+    return 0 if num < 0 else num
 
 
 def replace_vals(sample_int_dict):
