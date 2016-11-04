@@ -8,6 +8,7 @@ from scipy.misc import comb
 from ... import helpers
 from ... import data_model
 from ... isotopomer import bulk_insert_data_to_fragment, Infopacket
+from ... import constants
 
 #from .file_parser_yale import frag_key
 from ... inputs.multiquant_parser import frag_key
@@ -25,13 +26,13 @@ def backround_subtraction(input_intensity, noise):
     return intensity
 
 
-def background(list_of_replicates, input_fragment_value, unlabeled_fragment_value):
+def background(list_of_replicates, input_fragment_value, unlabeled_fragment_value, isotope_dict):
     parent_frag, daughter_frag = input_fragment_value.frag
     iso_elem = helpers.get_isotope_element(parent_frag.isotracer)
     parent_label = parent_frag.get_num_labeled_atoms_isotope(
         parent_frag.isotracer)
     parent_atoms = parent_frag.number_of_atoms(iso_elem)
-    na = helpers.get_isotope_na(parent_frag.isotracer)
+    na = helpers.get_isotope_na(parent_frag.isotracer, isotope_dict)
     daughter_atoms = daughter_frag.number_of_atoms(iso_elem)
     daughter_label = daughter_frag.get_num_labeled_atoms_isotope(
         parent_frag.isotracer)
@@ -59,7 +60,7 @@ def background_correction(replicates, sample_background, sample_data, decimals):
     return corrected_sample_data
 
 
-def bulk_background_correction(fragment_dict, list_of_replicates, sample_background, decimals):
+def bulk_background_correction(fragment_dict, list_of_replicates, sample_background, isotope_dict, decimals):
     input_fragments = []
     unlabeled_fragment = []
     corrected_fragments_dict = {}
@@ -76,7 +77,7 @@ def bulk_background_correction(fragment_dict, list_of_replicates, sample_backgro
                              'Please check metadata or raw data files')
     for input_fragment in input_fragments:
         replicate_value = background(list_of_replicates, input_fragment[
-                                     1], unlabeled_fragment[0][1])
+            1], unlabeled_fragment[0][1], isotope_dict)
         corrected_sample_data = background_correction(
             replicate_value, sample_background, input_fragment[1].data, decimals)
         corrected_fragments_dict[input_fragment[0]] = Infopacket(input_fragment[1].frag, corrected_sample_data,
@@ -84,11 +85,11 @@ def bulk_background_correction(fragment_dict, list_of_replicates, sample_backgro
     return corrected_fragments_dict
 
 
-def met_background_correction(metabolite_frag_dict, list_of_replicates, sample_background, decimals=0):
+def met_background_correction(metabolite_frag_dict, list_of_replicates, sample_background, isotope_dict=constants.ISOTOPE_NA_MASS, decimals=0):
     preprocessed_output_dict = {}
     for metabolite, fragments_dict in metabolite_frag_dict.iteritems():
         preprocessed_output_dict[metabolite] = bulk_background_correction(fragments_dict,
                                                                           list_of_replicates,
-                                                                          sample_background, decimals)
+                                                                          sample_background, isotope_dict, decimals)
 
     return preprocessed_output_dict

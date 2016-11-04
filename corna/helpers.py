@@ -14,7 +14,7 @@ chemformula_schema = schema_obj.create_chemicalformula_schema()
 polyatomschema = schema_obj.create_polyatom_schema()
 
 #defined here as needed for webtool
-ISOTOPE_NA_MASS = cs.ISOTOPE_NA_MASS
+#ISOTOPE_NA_MASS = cs.ISOTOPE_NA_MASS
 
 LEVEL_0_COL = cs.LEVEL_0_COL
 LEVEL_1_COL = cs.LEVEL_1_COL
@@ -22,12 +22,12 @@ VAR_COL = cs.VAR_COL
 VAL_COL = cs.VAL_COL
 
 
-def set_global_isotope_dict(isotope_dict):
-    global ISOTOPE_NA_MASS
-    ISOTOPE_NA_MASS = isotope_dict
-
-def get_global_isotope_dict():
-    return ISOTOPE_NA_MASS
+# def set_global_isotope_dict(isotope_dict):
+#     global ISOTOPE_NA_MASS
+#     ISOTOPE_NA_MASS = isotope_dict
+#
+# def get_global_isotope_dict():
+#     return ISOTOPE_NA_MASS
 
 def get_atomic_weight(element):
     try:
@@ -54,9 +54,9 @@ def get_isotope_mass(iso):
         raise KeyError('Check available isotope list', iso)
 
 
-def get_isotope_na(iso):
+def get_isotope_na(iso, isotope_dict=ISOTOPE_NA_MASS):
     try:
-        return ISOTOPE_NA_MASS['naValue'][iso]
+        return isotope_dict['naValue'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
@@ -252,14 +252,13 @@ def _merge_dfs(df1, df2):
                         c.NAME])
 
 
-def get_na_value_dict():
+def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
     """
     This function returns the dictionary of default NA values (adapted from wiki)
     for all the isotopes
     """
-    na_mass_dict = cs.ISOTOPE_NA_MASS
-    NA = na_mass_dict['naValue']
-    elements = na_mass_dict['element']
+    NA = isotope_dict['naValue']
+    elements = cs.ISOTOPE_NA_MASS['element']
     na_val_dict = {}
     atoms = set(elements.values())
 

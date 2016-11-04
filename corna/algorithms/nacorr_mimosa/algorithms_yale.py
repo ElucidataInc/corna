@@ -4,6 +4,7 @@ from functools import partial
 import numpy as np
 from ... import helpers
 from ... isotopomer import Infopacket
+from ...constants import ISOTOPE_NA_MASS
 
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                                  isotope, na, decimals):
@@ -27,7 +28,7 @@ def change_fragment_keys_to_mass(fragments_dict):
     return fragment_dict_mass
 
 
-def na_correction_mimosa_by_fragment(fragments_dict, decimals):
+def na_correction_mimosa_by_fragment(fragments_dict, isotope_dict, decimals):
     fragment_dict_mass = change_fragment_keys_to_mass(fragments_dict)
     corrected_dict_mass = {}
     for key, value in fragment_dict_mass.iteritems():
@@ -35,7 +36,7 @@ def na_correction_mimosa_by_fragment(fragments_dict, decimals):
         m_1_n_1 = (key[0] - 1, key[1] - 1)
         parent_frag_m, daughter_frag_n = value.frag
         isotope = parent_frag_m.isotracer
-        na = helpers.get_isotope_na(isotope)
+        na = helpers.get_isotope_na(isotope, isotope_dict)
         corrected_data = {}
         for sample_name, intensity_m_n in value.data.iteritems():
             try:
@@ -55,15 +56,15 @@ def na_correction_mimosa_by_fragment(fragments_dict, decimals):
     return corrected_dict_mass
 
 
-def nacorr_mp(decimals,tuple):
+def nacorr_mp(isotope_dict, decimals, tuple):
     metabolite = tuple[0]
     fragment_dict = tuple[1]
-    corr_fragment_dict = na_correction_mimosa_by_fragment(fragment_dict, decimals)
+    corr_fragment_dict = na_correction_mimosa_by_fragment(fragment_dict, isotope_dict, decimals)
     return (metabolite, corr_fragment_dict)
 
-def na_correction_mimosa(metabolite_frag_dict, decimals=2):
+def na_correction_mimosa(metabolite_frag_dict, isotope_dict=ISOTOPE_NA_MASS, decimals=2):
     pool = mp.Pool(mp.cpu_count())
-    nacorr_part = partial(nacorr_mp, decimals)
+    nacorr_part = partial(nacorr_mp, isotope_dict, decimals)
     nacorrected_list = pool.map(nacorr_part, metabolite_frag_dict.iteritems())
     pool.close()
     na_corrected_out = {metab_info[0]:metab_info[1] for metab_info in nacorrected_list}

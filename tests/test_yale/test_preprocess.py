@@ -1,5 +1,7 @@
 from collections import OrderedDict
 import numpy
+from corna.constants import ISOTOPE_NA_MASS
+
 import corna.algorithms.nacorr_mimosa.preprocess as preproc
 import corna.isotopomer as iso
 from corna.inputs.multiquant_parser import Multiquantkey
@@ -141,9 +143,8 @@ def test_backround_subtraction():
 
 
 def test_background():
-    background_dict = preproc.background(list_of_replicates,
-                                          input_fragment[('2PG 186/79_186.0', '2PG 186/79_79.0')],
-                                          unlabeled_fragment[('2PG 185/79_185.0', '2PG 185/79_79.0')])
+    background_dict = preproc.background(list_of_replicates, input_fragment[('2PG 186/79_186.0', '2PG 186/79_79.0')],
+                                         unlabeled_fragment[('2PG 185/79_185.0', '2PG 185/79_79.0')], isotope_dict=ISOTOPE_NA_MASS)
     assert all(val == 777.05402400000048 for val in background_dict.values())
 
 def test_background_correction():
@@ -168,7 +169,7 @@ def test_background_correction():
 
 
 def test_bulk_background_correction():
-    test_dict = preproc.bulk_background_correction(fragment_dict, list_of_replicates, sample_background, 0)
+    test_dict = preproc.bulk_background_correction(fragment_dict, list_of_replicates, sample_background, ISOTOPE_NA_MASS, 0)
     for key, value in test_dict.iteritems():
         assert corrected_fragment_dict[key].data == value.data
 

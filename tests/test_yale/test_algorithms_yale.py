@@ -2,6 +2,7 @@ import numpy
 import corna.algorithms.nacorr_mimosa.algorithms_yale as algo
 import corna.isotopomer as iso
 from corna.inputs.multiquant_parser import Multiquantkey
+from corna.constants import ISOTOPE_NA_MASS
 
 data_input = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': numpy.array([1967.77]),
                                                    'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': numpy.array([1446.77]),
@@ -111,10 +112,10 @@ def test_arrange_fragments_by_mass():
                                                                                       data = data_unlabel, unlabeled=True, name='2PG 185/79')}
 
 def test_na_correction_mimosa_by_fragment():
-    assert algo.na_correction_mimosa_by_fragment(fragment_dict, 2) == corrected_fragment_dict
+    assert algo.na_correction_mimosa_by_fragment(fragment_dict, ISOTOPE_NA_MASS, 2) == corrected_fragment_dict
 
 def test_nacorr_mp():
-    assert algo.nacorr_mp(2, ('2PG 185/79', fragment_dict)) == ('2PG 185/79', corrected_fragment_dict)
+    assert algo.nacorr_mp(ISOTOPE_NA_MASS, 2, ('2PG 185/79', fragment_dict)) == ('2PG 185/79', corrected_fragment_dict)
 
 def test_na_correction_mimosa():
     test_dict = algo.na_correction_mimosa(metabolite_frag_dict)
