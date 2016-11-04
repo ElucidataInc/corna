@@ -1,6 +1,6 @@
 from . helpers import read_file, json_to_df, filter_df, merge_multiple_dfs, get_na_value_dict, set_global_isotope_dict, get_global_isotope_dict
 
-from . inputs.maven_parser import maven_merge_dfs, convert_inputdata_to_stdfrom
+from . inputs.maven_parser import maven_merge_dfs, convert_inputdata_to_stdfrom, convert_std_label_key_to_maven_label
 
 from . inputs.multiquant_parser import read_multiquant, read_multiquant_metadata, read_sample_metadata, merge_mq_metadata, mq_df_to_fragmentdict
 
