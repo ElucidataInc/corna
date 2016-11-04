@@ -2,6 +2,7 @@ from collections import namedtuple
 
 import pandas as pd
 
+from corna.helpers import create_dict_from_isotope_label_list, chemformula_schema
 from . column_conventions import maven as c
 from .. helpers import merge_two_dfs
 #, VAR_COL, VAL_COL, SAMPLE_COL, INTENSITY_COL
@@ -100,4 +101,56 @@ def frag_key(df):
             x[c.NAME], x[c.FORMULA]), axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
+    return df
+
+
+def convert_std_label_key_to_maven_label(df):
+    #TODO: File format change should lead to removal
+    #of these fucntions
+    """
+    This function converts the labels C13_1_N15_1 in the form
+    C13N15-label-1-1
+    """
+    def process_label(label):
+        label_dict = create_dict_from_isotope_label_list(label.split('_'))
+        if all(num_isotopes == 0 for num_isotopes in label_dict.values()):
+            return 'C12 PARENT'
+        else:
+            isotrac_string = ''
+            num_string = ''
+            for isotrac, num_iso in label_dict.iteritems():
+                if num_iso != 0:
+                    isotrac_string = isotrac_string + isotrac
+                    num_string = num_string +'-' + str(num_iso)
+            return isotrac_string + '-label' + num_string
+
+    df['Label'] = [process_label(l) for l in df['Label']]
+    return df
+
+
+def convert_labels_to_std(df, iso_tracers):
+    """
+    This function converts the labels C13N15-label-1-1 in the form
+    C13_1_N15_1
+    """
+    def process_label(label):
+        if label == 'C12 PARENT':
+            return '_'.join('{}_0'.format(t) for t in iso_tracers)
+        else:
+            formula, enums = label.split('-label-')
+            isotopes = set(''.join(map(str, i))
+                           for i in chemformula_schema.parseString(formula))
+            msg = """iso_tracers must have all isotopes from input data
+                    Got: {!r}
+                    Expected: {!r}
+                  """.format(iso_tracers, isotopes.union(iso_tracers))
+            assert set(isotopes).issubset(set(iso_tracers)), msg
+            # The final label must have all iso_tracers
+            # Use zeroes as default, else the number from given label
+            inmap = {i: 0 for i in iso_tracers}
+            inmap.update({i: n for i, n in zip(isotopes, enums.split('-'))})
+            # The order is important, so we don't map on inmap directly
+            return '_'.join("{}_{}".format(i, inmap[i]) for i in iso_tracers)
+
+    df['Label'] = [process_label(l) for l in df['Label']]
     return df

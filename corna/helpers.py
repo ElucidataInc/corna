@@ -1,14 +1,13 @@
-import os
-import pandas as pd
-import numpy as np
 import collections
+import os
+
+import numpy as np
+import pandas as pd
 
 from . import constants as cs
-from . inputs.column_conventions import multiquant as c
 from . formula import Formula
 from . formulaschema import FormulaSchema
-from . import config as conf
-
+from . inputs.column_conventions import multiquant as c
 
 schema_obj = FormulaSchema()
 chemformula_schema = schema_obj.create_chemicalformula_schema()
@@ -274,29 +273,3 @@ def get_na_value_dict():
     return na_val_dict
 
 
-def convert_labels_to_std(df, iso_tracers):
-    """
-    This function converts the labels C13N15-label-1-1 in the form
-    C13_1_N15_1
-    """
-    def process_label(label):
-        if label == 'C12 PARENT':
-            return '_'.join('{}_0'.format(t) for t in iso_tracers)
-        else:
-            formula, enums = label.split('-label-')
-            isotopes = set(''.join(map(str, i))
-                           for i in chemformula_schema.parseString(formula))
-            msg = """iso_tracers must have all isotopes from input data
-                    Got: {!r}
-                    Expected: {!r}
-                  """.format(iso_tracers, isotopes.union(iso_tracers))
-            assert set(isotopes).issubset(set(iso_tracers)), msg
-            # The final label must have all iso_tracers
-            # Use zeroes as default, else the number from given label
-            inmap = {i: 0 for i in iso_tracers}
-            inmap.update({i: n for i, n in zip(isotopes, enums.split('-'))})
-            # The order is important, so we don't map on inmap directly
-            return '_'.join("{}_{}".format(i, inmap[i]) for i in iso_tracers)
-
-    df['Label'] = [process_label(l) for l in df['Label']]
-    return df

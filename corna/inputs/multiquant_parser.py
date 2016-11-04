@@ -1,13 +1,14 @@
 import os
-import pandas as pd
-from collections import namedtuple
 import warnings
+from collections import namedtuple
 
-from ..data_model import standard_model
+import pandas as pd
+
 from . column_conventions import multiquant
+from ..constants import INTENSITY_COL
+from ..data_model import standard_model
 from ..helpers import read_file, get_unique_values
 from ..isotopomer import bulk_insert_data_to_fragment
-from ..constants import INTENSITY_COL
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
 
@@ -208,3 +209,5 @@ def mq_df_to_fragmentdict(merged_df, intensity_col=INTENSITY_COL):
             metabolite_frag_dict[frag_name.parent] = bulk_insert_data_to_fragment(curr_frag_name,
                                                                               label_dict, mass=True)
     return metabolite_frag_dict
+
+

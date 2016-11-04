@@ -6,7 +6,7 @@ dictionary model which can further be used in post processing function, converti
 import numpy as np
 from itertools import product
 
-from ... helpers import convert_labels_to_std
+from corna.inputs.maven_parser import convert_labels_to_std
 from . algorithms import samp_label_dcit, get_atoms_from_tracers, formuladict, check_labels_corrdict, \
     label_sample_dict, fragmentdict_model, input_intens_list, eleme_corr_to_list, multi_label_correc, \
     fragmentsdict_model
