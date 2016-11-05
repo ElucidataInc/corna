@@ -1,4 +1,4 @@
-from . helpers import read_file, json_to_df, filter_df, merge_multiple_dfs, get_na_value_dict, parse_polyatom
+from . helpers import read_file, json_to_df, filter_df, merge_multiple_dfs, get_na_value_dict, parse_polyatom, get_global_isotope_dict
 
 from . inputs.maven_parser import maven_merge_dfs, convert_inputdata_to_stdfrom, convert_std_label_key_to_maven_label
 

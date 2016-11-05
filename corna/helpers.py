@@ -26,8 +26,8 @@ VAL_COL = cs.VAL_COL
 #     global ISOTOPE_NA_MASS
 #     ISOTOPE_NA_MASS = isotope_dict
 #
-# def get_global_isotope_dict():
-#     return ISOTOPE_NA_MASS
+def get_global_isotope_dict():
+     return cs.ISOTOPE_NA_MASS
 
 def get_atomic_weight(element):
     try:
