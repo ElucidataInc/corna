@@ -272,3 +272,10 @@ def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
     return na_val_dict
 
 
+def check_column_headers(col_headers, col_names):
+    """
+    This function verifies that all defasult columns are present in input
+    text files for multiquant
+    """
+    err_msg = """Required column/s not found, Column: {!r}""".format(list(set(col_names) - set(col_headers)))
+    assert set(col_names).issubset(set(col_headers)), err_msg

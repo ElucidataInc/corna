@@ -2,9 +2,8 @@ from collections import namedtuple
 
 import pandas as pd
 
-from corna.helpers import create_dict_from_isotope_label_list, chemformula_schema
 from . column_conventions import maven as c
-from .. helpers import merge_two_dfs
+from .. helpers import merge_two_dfs, create_dict_from_isotope_label_list, chemformula_schema, check_column_headers
 #, VAR_COL, VAL_COL, SAMPLE_COL, INTENSITY_COL
 from .. constants import PARENT_COL, VAR_COL, VAL_COL, FRAG_COL, SAMPLE_COL, INTENSITY_COL
 
@@ -26,9 +25,9 @@ def maven_merge_dfs(df1, df2):
     long_form = melt_df(df1)
     try:
         merged_df = merge_two_dfs(long_form, df2, how='left',
-                                  left_on=VAR_COL, right_on='sample')
+                                  left_on=VAR_COL, right_on=c.SAMPLE)
     except KeyError:
-        raise KeyError('sample column not found in metadata')
+        raise KeyError(c.SAMPLE + ' column not found in metadata')
 
     df_std_form = column_manipulation(merged_df)
 
@@ -64,8 +63,9 @@ def melt_df(df1):
 
     """
     fixed_cols = [c.NAME, c.LABEL, c.FORMULA]
-
-    melt_cols = [x for x in df1.columns.tolist() if x not in fixed_cols]
+    col_headers = df1.columns.tolist()
+    check_column_headers(col_headers, fixed_cols)
+    melt_cols = [x for x in col_headers if x not in fixed_cols]
 
     try:
         long_form = pd.melt(df1, id_vars=fixed_cols, value_vars=melt_cols)
@@ -88,7 +88,6 @@ def convert_inputdata_to_stdfrom(input_df):
     """
     long_form = melt_df(input_df)
     std_form_df = column_manipulation(long_form)
-
     return std_form_df
 
 

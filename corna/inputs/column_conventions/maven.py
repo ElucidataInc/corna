@@ -2,3 +2,4 @@
 NAME = 'Name'
 FORMULA = 'Formula'
 LABEL = 'Label'
+SAMPLE = 'Sample'

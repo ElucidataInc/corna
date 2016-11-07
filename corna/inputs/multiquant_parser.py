@@ -7,7 +7,7 @@ import pandas as pd
 from . column_conventions import multiquant
 from ..constants import INTENSITY_COL
 from ..data_model import standard_model
-from ..helpers import read_file, get_unique_values
+from ..helpers import read_file, get_unique_values, check_column_headers
 from ..isotopomer import bulk_insert_data_to_fragment
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
@@ -27,7 +27,7 @@ def concat_txts_into_df(directory):
     for files in txt_files:
         df = read_file(directory + '/' + files)
         col_headers =  df.columns.tolist()
-        check_mq_column_headers(col_headers, col_names)
+        check_column_headers(col_headers, col_names)
         df_list.append(df)
     concat_df = pd.concat(df_list).reset_index(drop=True)
 
@@ -43,7 +43,7 @@ def read_multiquant_metadata(path):
     col_headers = mq_metdata.columns.values
     col_names = [multiquant.PARENT, multiquant.MQ_FRAGMENT,
                  multiquant.FORMULA, multiquant.PARENT_FORMULA]
-    check_mq_column_headers(col_headers, col_names)
+    check_column_headers(col_headers, col_names)
     return mq_metdata
 
 def read_sample_metadata(path):
@@ -51,18 +51,10 @@ def read_sample_metadata(path):
     std_smpl_metadata = read_file(path)
     col_headers = std_smpl_metadata.columns.values
     col_names = [multiquant.MQ_SAMPLE_NAME]
-    check_mq_column_headers(col_headers, col_names)
+    check_column_headers(col_headers, col_names)
 
 
     return std_smpl_metadata
-
-def check_mq_column_headers(col_headers, col_names):
-    """
-    This function verifies that all defasult columns are present in input
-    text files for multiquant
-    """
-    err_msg = """Required column/s not found, Column: {!r}""".format(list(set(col_names) - set(col_headers)))
-    assert set(col_names).issubset(set(col_headers)), err_msg
 
 
 def mq_merge_meta(input_data, metadata):
@@ -97,8 +89,8 @@ def merge_samples(merged_df, sample_metadata):
         bg_corr_col_names_sample = [multiquant.BACKGROUND, multiquant.MQ_COHORT_NAME]
         bg_corr_col_names_merged = [multiquant.MQ_COHORT_NAME]
         try:
-            check_mq_column_headers(col_headers_sample, bg_corr_col_names_sample)
-            check_mq_column_headers(col_headers_merged, bg_corr_col_names_merged)
+            check_column_headers(col_headers_sample, bg_corr_col_names_sample)
+            check_column_headers(col_headers_merged, bg_corr_col_names_merged)
             assert set(sample_metadata[multiquant.BACKGROUND]).issubset(set(sample_metadata[multiquant.MQ_SAMPLE_NAME]))
             merged_df = merged_df.merge(sample_metadata, how='inner',
                                     on=[multiquant.MQ_SAMPLE_NAME, multiquant.MQ_COHORT_NAME])
@@ -185,7 +177,7 @@ def merge_mq_metadata(mq_df, metdata, sample_metdata):
         col_headers = merged_data.columns.values
         bg_corr_col_names = [multiquant.BACKGROUND, multiquant.COHORT]
         try:
-            check_mq_column_headers(col_headers, bg_corr_col_names)
+            check_column_headers(col_headers, bg_corr_col_names)
         except AssertionError:
             return merged_data, list_of_replicates, sample_background
 
