@@ -67,10 +67,10 @@ def melt_df(df1):
     check_column_headers(col_headers, fixed_cols)
     melt_cols = [x for x in col_headers if x not in fixed_cols]
 
-    try:
-        long_form = pd.melt(df1, id_vars=fixed_cols, value_vars=melt_cols)
-    except KeyError():
-        raise KeyError('columns {} not found in input data'.format(','.join(fixed_cols)))
+    #try:
+    long_form = pd.melt(df1, id_vars=fixed_cols, value_vars=melt_cols)
+    #except KeyError():
+    #    raise KeyError('columns {} not found in input data'.format(','.join(fixed_cols)))
     return long_form
 
 
