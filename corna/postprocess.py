@@ -128,7 +128,7 @@ def enrichment(fragments_dict, decimals):
                     intensity / sum_dict[sample_name], decimals)
             else:
                 raise ValueError(
-                    'sum of labels is zero for sample' + sample_name)
+                    'sum of labels is zero for sample ' + sample_name + ' of ' + value.name)
         fragments_fractional[key] = Infopacket(
             value.frag, fractional_data, value.unlabeled, value.name)
 
