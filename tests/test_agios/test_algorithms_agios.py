@@ -4,7 +4,7 @@ import pandas as pd
 
 import corna.helpers as hl
 from corna.model import Fragment
-from corna import isotopomer as iso
+import corna.isotopomer as iso
 from corna.algorithms.nacorr_correction_matrix import algorithms as algo
 
 
@@ -33,7 +33,8 @@ correc_inten_dict = {'sample_1': {(0, 1): np.array([ 0.0619]), (0, 0): np.array(
        (4, 0): np.array([ 0.])}}
 
 acetic_frag = Fragment('Acetic','H4C2O2',label_dict={'C13':0})
-fragments_dict = {'Acetic_C13_0': [acetic_frag,{'sample_1': np.array([ 0.3624])}, True, 'Acetic']}
+fragments_dict = {'Acetic_C13_0': iso.Infopacket(frag=acetic_frag, data={'sample_1': np.array([ 0.3624])},
+                                unlabeled=True, name='Acetic')}
 
 label_list = [(0, 1), (0, 0), (3, 0), (3, 1), (2, 1), (2, 0), (5, 0), \
                  (5, 1), (1, 0), (4, 1), (1, 1), (4, 0)]
