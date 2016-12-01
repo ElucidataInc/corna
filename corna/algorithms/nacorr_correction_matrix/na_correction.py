@@ -76,18 +76,15 @@ def nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict):
     """
 
     samp_lab_dict = samp_label_dcit(iso_tracers, fragments_dict)
-
     trac_atoms = get_atoms_from_tracers(iso_tracers)
-
     formula_dict = formuladict(fragments_dict)
-
     correc_inten_dict = {}
 
     for samp_name, label_dict in samp_lab_dict.iteritems():
 
         inten_index_dict = multi_trac_na_correc(
             iso_tracers, trac_atoms, eleme_corr, formula_dict, label_dict, na_dict)
-
+        print 'inten_index_dict', inten_index_dict
         correc_inten_dict[samp_name] = inten_index_dict
 
     nacorr_dict_model = corr_int_dict_model(
@@ -174,6 +171,7 @@ def multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, lab_
     This function returns the list of corrected intensities in order of tuple list for multi
     tracer na correction
     """
+    print 'eleme_corr', eleme_corr
     if not eleme_corr:
         eleme_corr_list = trac_atoms
     else:
@@ -185,8 +183,10 @@ def multi_trac_na_correc(iso_tracers, trac_atoms, eleme_corr, formula_dict, lab_
 
     intensities_list = multi_trac_intensities_list(no_atom_tracer,
                                                    eleme_corr, eleme_corr_list, lab_dict)
+    print 'intensities_list', intensities_list
     icorr = multi_label_correc(na_dict, formula_dict,
                                eleme_corr_list, intensities_list)
+    print 'icorr', icorr
     intens_idx_dict = multi_corr_inten_dict(eleme_corr, eleme_corr_list,
                                             no_atom_tracer, icorr, lab_dict)
     return intens_idx_dict
