@@ -180,7 +180,8 @@ def merge_mq_metadata(mq_df, metdata, sample_metdata):
             check_column_headers(col_headers, bg_corr_col_names)
         except AssertionError:
             return merged_data, list_of_replicates, sample_background
-
+        #consider only those sample names which are present in raw file
+        sample_metdata = sample_metdata[sample_metdata[multiquant.MQ_SAMPLE_NAME].isin(merged_data[multiquant.SAMPLE])]
         list_of_replicates = get_replicates(
             sample_metdata, multiquant.MQ_SAMPLE_NAME, multiquant.MQ_COHORT_NAME, multiquant.BACKGROUND)
         sample_background = get_background_samples(
