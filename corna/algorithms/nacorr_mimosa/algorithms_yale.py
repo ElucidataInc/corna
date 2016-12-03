@@ -42,11 +42,11 @@ def na_correction_mimosa_by_fragment(fragments_dict, isotope_dict, decimals):
             try:
                 intensity_m_1_n = fragment_dict_mass[m_1_n].data[sample_name]
             except KeyError:
-                intensity_m_1_n = np.zeros(len(intensity_m_n))
+                intensity_m_1_n = 0
             try:
                 intensity_m_1_n_1 = fragment_dict_mass[m_1_n_1].data[sample_name]
             except KeyError:
-                intensity_m_1_n_1 = np.zeros(len(intensity_m_n))
+                intensity_m_1_n_1 = 0
             corrected_data[sample_name] = na_correct_mimosa_algo_array(parent_frag_m,
                                                                        daughter_frag_n, intensity_m_n, intensity_m_1_n,
                                                                        intensity_m_1_n_1, isotope, na, decimals)
