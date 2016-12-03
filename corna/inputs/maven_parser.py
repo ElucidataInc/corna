@@ -30,7 +30,6 @@ def maven_merge_dfs(df1, df2):
         raise KeyError(c.SAMPLE + ' column not found in metadata')
 
     df_std_form = column_manipulation(merged_df)
-
     return df_std_form
 
 
