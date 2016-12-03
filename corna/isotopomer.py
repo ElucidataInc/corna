@@ -1,6 +1,5 @@
 from collections import namedtuple
-
-import numpy as np
+import numbers
 
 from . model import Fragment
 from . import helpers as hl
@@ -52,8 +51,8 @@ def parse_label_mass(label_mass):
 def validate_data(data):
     if not hl.check_if_all_elems_same_type(data.keys(), basestring):
         raise TypeError('Sample Names should be of type unicode or string')
-    if not hl.check_if_all_elems_same_type(data.values(), np.ndarray):
-        raise TypeError('Intensities should be of type numpy arrays')
+    if not hl.check_if_all_elems_same_type(data.values(), numbers.Number):
+        raise TypeError('Intensities should be numerical values')
 
 
 def add_data_fragment(fragment_dict, data, label_info, name):
