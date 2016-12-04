@@ -27,9 +27,8 @@ def replace_vals(sample_int_dict):
     """
     dict_replaced_vals = {}
 
-    for sample, intensity_list in sample_int_dict.iteritems():
-        intensity_list = map(zero_if_negative, intensity_list)
-        dict_replaced_vals[sample] = np.array(intensity_list)
+    for sample, intensity in sample_int_dict.iteritems():
+        dict_replaced_vals[sample] = zero_if_negative(intensity)
 
     return dict_replaced_vals
 
@@ -95,10 +94,10 @@ def sum_intensities(fragments_dict):
     sum_dict = {}
 
     for sample_name in sample_names:
-        curr_arr = np.zeros(len(all_values[1].data[sample_name]))
+        curr_val = 0
         for value in all_values:
-            curr_arr = curr_arr + value.data[sample_name]
-        sum_dict[sample_name] = curr_arr
+            curr_val = curr_val + value.data[sample_name]
+        sum_dict[sample_name] = curr_val
 
     return sum_dict
 
