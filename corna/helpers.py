@@ -279,3 +279,6 @@ def check_column_headers(col_headers, col_names):
     """
     err_msg = """Required column/s not found, Column: {!r}""".format(list(set(col_names) - set(col_headers)))
     assert set(col_names).issubset(set(col_headers)), err_msg
+
+def first_sub_second(a, b):
+    return [item for item in a if item not in b]
