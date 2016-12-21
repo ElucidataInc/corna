@@ -77,9 +77,6 @@ def insert_data_to_fragment_mass(frag_info, label, sample_dict, mode=None):
     daughter_name = frag_info.name + '_' + str(daughter_mass)
     parent_frag = create_fragment_from_mass(
         parent_name, parent_formula, isotope, parent_mass, mode=mode)
-    iso_ele, iso_mass = hl.parse_polyatom(isotope)
-    if not hl.get_formula(daughter_formula).has_key(iso_ele):
-        daughter_formula = daughter_formula + str(iso_ele) + '0'
     daughter_frag = create_fragment_from_mass(
         daughter_name, daughter_formula, isotope, daughter_mass, mode=mode)
     frag = create_combined_fragment(parent_frag, daughter_frag)
