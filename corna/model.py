@@ -3,6 +3,8 @@ Ion is given by name and formula of chemical species, label is collection of fun
 to validate a label obtained from mass of species or label information given in form of
 dictionary. Fragment class inherits these classes. It represnts an Ion with label present in it.
 """
+import warnings
+
 import helpers as hl
 
 
@@ -46,7 +48,8 @@ class Ion():
             num_atoms = parsed_formula[element]
             return num_atoms
         except KeyError:
-            raise KeyError("Element not in formula", element)
+            warnings.warn("Element not in formula: " + element)
+            return 0
 
     def get_mol_weight(self):
         """calculate molecular weight
@@ -93,7 +96,7 @@ class Label():
             try:
                 return label_dict[isotope]
             except KeyError:
-                raise KeyError('Isotope not present in label dictionary')
+                return 0
         else:
             raise KeyError('Isotope not available in constants', isotope)
 
@@ -236,7 +239,7 @@ class Fragment(Ion, Label):
                                     'less than/equal to total number of atoms: '
                                     + self.name + ' ' + self.formula)
         except KeyError:
-            raise KeyError('Labeled element not in formula')
+            warnings.warn('Labeled element not in formula: ' + self.formula)
 
     def effective_mol_mass(self, mode, molecular_mass):
         """effective molecular mass in diff mass spec modes
