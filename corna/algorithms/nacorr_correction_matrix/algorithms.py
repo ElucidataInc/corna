@@ -80,7 +80,6 @@ def fragmentsdict_model(merged_df, intensity_col):
     fragments_dict = {}
     frag_merge_df = frag_key(merged_df)
     std_model_mvn = standard_model(frag_merge_df, intensity_col)
-
     for metabolite_name, label_dict in std_model_mvn.iteritems():
         fragments_dict[metabolite_name] = {}
         for label, data in label_dict.iteritems():
