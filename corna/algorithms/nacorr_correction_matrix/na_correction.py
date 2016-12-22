@@ -4,14 +4,13 @@ and performs na correction (na_correction function). The output is given in the 
 dictionary model which can further be used in post processing function, converting to dataframr, etc
 """
 
-import time
 import numpy as np
-from ... helpers import get_isotope_element, first_sub_second
 import pandas as pd
+
+from corna.helpers import get_isotope_element, first_sub_second
 from corna.inputs.maven_parser import convert_labels_to_std
-from . algorithms import label_sample_df, formuladict, fragmentdict_model, \
-    fragmentsdict_model, make_all_corr_matrices
-from ...constants import INTENSITY_COL
+import corna.algorithms.nacorr_correction_matrix.algorithms as algo
+from corna.constants import INTENSITY_COL
 
 
 def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
@@ -49,11 +48,11 @@ def nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict):
         nacorr_dict_model : fragments dictionary with corrected intensity values
     """
 
-    lab_samp_df = label_sample_df(iso_tracers, fragments_dict)
-    formula_dict = formuladict(fragments_dict)
-    corr_mats = make_all_corr_matrices(iso_tracers, formula_dict, na_dict, eleme_corr)
+    lab_samp_df = algo.label_sample_df(iso_tracers, fragments_dict)
+    formula_dict = algo.formuladict(fragments_dict)
+    corr_mats = algo.make_all_corr_matrices(iso_tracers, formula_dict, na_dict, eleme_corr)
     df_corr_C_N = correct_label_sample_df(iso_tracers, lab_samp_df, corr_mats)
-    nacorr_dict_model = fragmentdict_model(
+    nacorr_dict_model = algo.fragmentdict_model(
         iso_tracers, fragments_dict, df_corr_C_N)
     return nacorr_dict_model
 
@@ -87,24 +86,13 @@ def multiplying_with_matrix(isotracer, corr_mats, curr_df):
     return corr_df
 
 def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, intensity_col=INTENSITY_COL):
-    print 'in single core process'
     eleme_corr_invalid_entry(iso_tracers, eleme_corr)
-    start = time.time()
     std_label_df = convert_labels_to_std(merged_df, iso_tracers)
-    stop = time.time()
-    print 'convert_labels_to_std', stop-start
-    start = time.time()
-    metabolite_dict = fragmentsdict_model(std_label_df, intensity_col)
-    stop = time.time()
-    print 'metabolite dict', stop-start
-    start = time.time()
-    na_corr_dict = {}
+    metabolite_dict = algo.fragmentsdict_model(std_label_df, intensity_col)
 
+    na_corr_dict = {}
     for metabolite, fragments_dict in metabolite_dict.iteritems():
         na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict)
-
-    stop = time.time()
-    print 'nacorrected_list', stop-start
 
     return na_corr_dict
 
