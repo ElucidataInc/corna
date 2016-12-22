@@ -3,8 +3,7 @@ This module is a wrapper around algorithms.py. It calls different functions from
 and performs na correction (na_correction function). The output is given in the form of fragments
 dictionary model which can further be used in post processing function, converting to dataframr, etc
 """
-import multiprocessing as mp
-from functools import partial
+
 import time
 import numpy as np
 from ... helpers import get_isotope_element, first_sub_second
@@ -87,51 +86,25 @@ def multiplying_with_matrix(isotracer, corr_mats, curr_df):
     corr_df.index.name = isotracer
     return corr_df
 
-def nacorr_multi_process(iso_tracers, eleme_corr, na_dict, tuple):
-    metabolite = tuple[0]
-    fragments_dict = tuple[1]
-    corr_fragment_dict = nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict)
-    return (metabolite, corr_fragment_dict)
-
 def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, intensity_col=INTENSITY_COL):
-    pool = mp.Pool(mp.cpu_count())
-    nacorr_part = partial(nacorr_multi_process, iso_tracers, eleme_corr, na_dict)
+    print 'in single core process'
     eleme_corr_invalid_entry(iso_tracers, eleme_corr)
     start = time.time()
     std_label_df = convert_labels_to_std(merged_df, iso_tracers)
     stop = time.time()
     print 'convert_labels_to_std', stop-start
     start = time.time()
-    print 'I am after convertlabel'
     metabolite_dict = fragmentsdict_model(std_label_df, intensity_col)
     stop = time.time()
     print 'metabolite dict', stop-start
     start = time.time()
-    nacorrected_list = pool.map(nacorr_part, metabolite_dict.iteritems())
+    na_corr_dict = {}
+
+    for metabolite, fragments_dict in metabolite_dict.iteritems():
+        na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict)
+
     stop = time.time()
     print 'nacorrected_list', stop-start
-    na_corrected_out = {metab_info[0]:metab_info[1] for metab_info in nacorrected_list}
-    pool.close()
-    return na_corrected_out
 
-# def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, intensity_col=INTENSITY_COL):
-#     eleme_corr_invalid_entry(iso_tracers, eleme_corr)
-#     start = time.time()
-#     std_label_df = convert_labels_to_std(merged_df, iso_tracers)
-#     stop = time.time()
-#     print 'convert_labels_to_std', stop-start
-#     start = time.time()
-#     metabolite_dict = fragmentsdict_model(std_label_df, intensity_col)
-#     stop = time.time()
-#     print 'metabolite dict', stop-start
-#     start = time.time()
-#     na_corr_dict = {}
-#
-#     for metabolite, fragments_dict in metabolite_dict.iteritems():
-#         na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict)
-#
-#     stop = time.time()
-#     print 'nacorrected_list', stop-start
-#
-#     return na_corr_dict
+    return na_corr_dict
 
