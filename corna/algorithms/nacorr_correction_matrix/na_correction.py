@@ -60,7 +60,7 @@ def nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict):
 def correct_label_sample_df(isotracers, lab_samp_df, corr_mats):
     curr_df = lab_samp_df
     if len(isotracers) == 1:
-        curr_df = multiplying_df_with_matrix(isotracers[0], corr_mats, curr_df)
+        curr_df = multiplying_df_with_matrix(isotracers[0], corr_mats[isotracers[0]], curr_df)
     else:
         for isotracer in isotracers:
             index_cols = first_sub_second(isotracers, [isotracer])
@@ -69,7 +69,7 @@ def correct_label_sample_df(isotracers, lab_samp_df, corr_mats):
             keys=[]
             for group_no, group in group_by_index_cols:
                 group.index = group.index.get_level_values(isotracer)
-                corr_df = multiplying_df_with_matrix(isotracer, corr_mats, group)
+                corr_df = multiplying_df_with_matrix(isotracer, corr_mats[isotracer], group)
                 L.append(corr_df)
                 keys.append(group_no)
             curr_df = pd.concat(L, keys=keys, names=index_cols)
@@ -77,7 +77,7 @@ def correct_label_sample_df(isotracers, lab_samp_df, corr_mats):
 
     return curr_df.to_dict(orient='index')
 
-def multiplying_df_with_matrix(isotracer, corr_mats, curr_df):
+def multiplying_df_with_matrix(isotracer, corr_mat_for_isotracer, curr_df):
     """This function takes the correction matrix for given isotracer and multiplies
     it with the sample values of the dataframe to give corrected sample values
     Example:
@@ -92,9 +92,9 @@ def multiplying_df_with_matrix(isotracer, corr_mats, curr_df):
          0  0.2079  0.9702
 	     1  0.3421  0.1198
     """
-    num_rows, num_cols = corr_mats[isotracer].shape
+    num_rows, num_cols = corr_mat_for_isotracer.shape
     curr_df = curr_df.reindex(np.arange(num_cols)).fillna(0)
-    corr_data = np.matmul(corr_mats[isotracer], curr_df.values)
+    corr_data = np.matmul(corr_mat_for_isotracer, curr_df.values)
     corr_df = pd.DataFrame(index=pd.index.np.arange(num_rows),columns=curr_df.columns, data=corr_data)
     corr_df.index.name = isotracer
     return corr_df
