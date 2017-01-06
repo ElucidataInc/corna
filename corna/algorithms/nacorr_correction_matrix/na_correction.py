@@ -78,6 +78,20 @@ def correct_label_sample_df(isotracers, lab_samp_df, corr_mats):
     return curr_df.to_dict(orient='index')
 
 def multiplying_with_matrix(isotracer, corr_mats, curr_df):
+    """This function takes the correction matrix for given isotracer and multiplies
+    it with the sample values of the dataframe to give corrected sample values
+    Example:
+        C13 Sample1 Sample2
+        0   0.21    0.98
+        1   0.34    0.11
+        multiplied with matrix [0.99 0]
+                               [0.01 1]
+        will give output
+
+        C13 Sample1 Sample2
+         0  0.2079  0.9702
+	     1  0.3421  0.1198
+    """
     num_rows, num_cols = corr_mats[isotracer].shape
     curr_df = curr_df.reindex(np.arange(num_cols)).fillna(0)
     corr_data = np.matmul(corr_mats[isotracer], curr_df.values)
