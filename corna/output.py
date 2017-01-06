@@ -53,11 +53,8 @@ def lists_labeldict(frag_name, label_dict):
     lab = []
     frames = []
     for label, samp_dict in label_dict.iteritems():
-        tup = []
-        for samp, intens in samp_dict.iteritems():
-            tup.append((samp, intens))
         lab.append(label)
-        frames.append(pd.DataFrame(tup))
+        frames.append(pd.DataFrame(list(samp_dict.iteritems())))
         df = pd.concat(frames, keys=lab).reset_index()
         df[c.NAME] = frag_name.name
         df[c.FORMULA] = frag_name.formula
