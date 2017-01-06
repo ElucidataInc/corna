@@ -48,7 +48,7 @@ class Ion():
             num_atoms = parsed_formula[element]
             return num_atoms
         except KeyError:
-            warnings.warn("Element not in formula: " + element)
+            warnings.warn('{} {}'.format("Element not in formula: ", element))
             return 0
 
     def get_mol_weight(self):
@@ -239,7 +239,7 @@ class Fragment(Ion, Label):
                                     'less than/equal to total number of atoms: '
                                     + self.name + ' ' + self.formula)
         except KeyError:
-            warnings.warn('Labeled element not in formula: ' + self.formula)
+            warnings.warn('{} {}'.format('Labeled element not in formula: ', self.formula))
 
     def effective_mol_mass(self, mode, molecular_mass):
         """effective molecular mass in diff mass spec modes
