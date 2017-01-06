@@ -60,7 +60,7 @@ def nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict):
 def correct_label_sample_df(isotracers, lab_samp_df, corr_mats):
     curr_df = lab_samp_df
     if len(isotracers) == 1:
-        curr_df = multiplying_with_matrix(isotracers[0], corr_mats, curr_df)
+        curr_df = multiplying_df_with_matrix(isotracers[0], corr_mats, curr_df)
     else:
         for isotracer in isotracers:
             index_cols = first_sub_second(isotracers, [isotracer])
@@ -69,7 +69,7 @@ def correct_label_sample_df(isotracers, lab_samp_df, corr_mats):
             keys=[]
             for group_no, group in group_by_index_cols:
                 group.index = group.index.get_level_values(isotracer)
-                corr_df = multiplying_with_matrix(isotracer, corr_mats, group)
+                corr_df = multiplying_df_with_matrix(isotracer, corr_mats, group)
                 L.append(corr_df)
                 keys.append(group_no)
             curr_df = pd.concat(L, keys=keys, names=index_cols)
@@ -77,7 +77,7 @@ def correct_label_sample_df(isotracers, lab_samp_df, corr_mats):
 
     return curr_df.to_dict(orient='index')
 
-def multiplying_with_matrix(isotracer, corr_mats, curr_df):
+def multiplying_df_with_matrix(isotracer, corr_mats, curr_df):
     """This function takes the correction matrix for given isotracer and multiplies
     it with the sample values of the dataframe to give corrected sample values
     Example:
