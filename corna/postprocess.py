@@ -98,10 +98,7 @@ def sum_intensities(fragments_dict):
     sum_dict = {}
 
     for sample_name in sample_names:
-        curr_val = 0
-        for value in all_values:
-            curr_val = curr_val + value.data[sample_name]
-        sum_dict[sample_name] = curr_val
+        sum_dict[sample_name] = sum(value.data[sample_name] for value in all_values)
 
     return sum_dict
 
