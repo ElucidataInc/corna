@@ -125,30 +125,6 @@ def json_to_df(json_input):
     return json_df
 
 
-# def concat_txts_into_df(directory):
-#     #data_frames = [read_file(os.path.join(directory, f))
-#     #               for f in os.listdir(directory)
-#     #               if f.endswith('.txt')]
-
-#     txt_files = []
-
-#     txt_files += [each for each in os.listdir(directory) if each.endswith('.txt')]
-
-#     df_list= []
-#     for files in txt_files:
-#         df = read_file(directory + '/' + files)
-#         col_head =  df.columns.tolist()
-#         assert(set(col_head), set(default_cols))
-#         df_list.append(df)
-#         df_list.append(read_file(directory + '/' + files))
-
-#     concat_df = pd.concat(df_list)
-
-#     return concat_df
-
-    #return pd.concat(data_frames)
-
-
 def merge_two_dfs(df1, df2, how='left', left_on='col1', right_on='col2'):
     merged_df = pd.merge(df1, df2, how=how, left_on=left_on,
                          right_on=right_on)
@@ -242,14 +218,13 @@ def merge_multiple_dfs(df_list):
         combined_dfs : concatenated list of dataframes into one dataframe
     """
     combined_dfs = reduce(_merge_dfs, df_list)
-    combined_dfs = combined_dfs.T.drop_duplicates().T
     return combined_dfs
 
 
 def _merge_dfs(df1, df2):
     return pd.merge(df1, df2,
                     on=[c.LABEL, c.SAMPLE,
-                        c.NAME])
+                        c.NAME, c.FORMULA])
 
 
 def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
@@ -279,3 +254,6 @@ def check_column_headers(col_headers, col_names):
     """
     err_msg = """Required column/s not found, Column: {!r}""".format(list(set(col_names) - set(col_headers)))
     assert set(col_names).issubset(set(col_headers)), err_msg
+
+def first_sub_second(a, b):
+    return [item for item in a if item not in b]

@@ -38,13 +38,13 @@ def background(list_of_replicates, input_fragment_value, unlabeled_fragment_valu
         parent_frag.isotracer)
     replicate_value = {}
     for replicate_group in list_of_replicates:
+
         background_list = []
         for each_replicate in replicate_group:
             noise = background_noise(unlabeled_fragment_value.data[each_replicate], na, parent_atoms,
                                      parent_label, daughter_atoms, daughter_label)
             background = backround_subtraction(input_fragment_value.data[each_replicate], noise)
-            # bcause numpy array with one value
-            background_list.append(background[0])
+            background_list.append(background)
         background_value = max(background_list)
         for each_replicate in replicate_group:
             replicate_value[each_replicate] = background_value

@@ -19,7 +19,7 @@ def test_na_corr_single_tracer():
 	   'Intensity': {0: 0.3624, 1: 0.040349999999999997, 2: 0.59724999999999995}, \
 	    'Formula': {0: 'H4C2O2', 1: 'H4C2O2', 2: 'H4C2O2'}, \
 	    'info2': {0: 'culture_1', 1: 'culture_1', 2: 'culture_1'}, \
-	     'Sample Name': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
+	     'Sample': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
 
 	eleme_corr = {}
 
@@ -39,7 +39,7 @@ def test_na_corr_single_trac_indist():
 	   'Intensity': {0: 0.2274, 1: 0.4361, 2: 0.25405}, \
 	    'Formula': {0: 'H4C2O2', 1: 'H4C2O2', 2: 'H4C2O2'}, \
 	    'info2': {0: 'culture_1', 1: 'culture_1', 2: 'culture_1'}, \
-	     'Sample Name': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
+	     'Sample': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
 
 	eleme_corr = {'C': ['H', 'O']}
 
@@ -67,7 +67,7 @@ def test_na_corr_multi_trac():
 		'Formula': {0: 'C5H10NO2S', 1: 'C5H10NO2S',
 		2: 'C5H10NO2S', 3: 'C5H10NO2S', 4: 'C5H10NO2S', 5: 'C5H10NO2S', 6: 'C5H10NO2S',
 		7: 'C5H10NO2S', 8: 'C5H10NO2S', 9: 'C5H10NO2S', 10: 'C5H10NO2S', 11: 'C5H10NO2S'},
-		'Sample Name': {0: 'sample_1', 1: 'sample_1',
+		'Sample': {0: 'sample_1', 1: 'sample_1',
 		2: 'sample_1', 3: 'sample_1', 4: 'sample_1', 5: 'sample_1', 6: 'sample_1',
 		7: 'sample_1', 8: 'sample_1', 9: 'sample_1', 10: 'sample_1', 11: 'sample_1'}})
 
@@ -100,7 +100,7 @@ def test_na_corr_multi_trac_indist():
 		11: 0.48973500000000003},
 		'Formula': {0: 'C5H10NO2S', 1: 'C5H10NO2S', 2: 'C5H10NO2S', 3: 'C5H10NO2S', 4: 'C5H10NO2S',
 		5: 'C5H10NO2S', 6: 'C5H10NO2S', 7: 'C5H10NO2S', 8: 'C5H10NO2S', 9: 'C5H10NO2S', 10: 'C5H10NO2S',
-		11: 'C5H10NO2S'}, 'Sample Name': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1',
+		11: 'C5H10NO2S'}, 'Sample': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1',
 		 3: 'sample_1', 4: 'sample_1', 5: 'sample_1', 6: 'sample_1', 7: 'sample_1', 8: 'sample_1',
 		 9: 'sample_1', 10: 'sample_1', 11: 'sample_1'}})
 

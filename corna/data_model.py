@@ -21,7 +21,7 @@ def standard_model(df, intensity_col):
         lab_dict = {}
         for label in unq_labels:
             df_labels = df_subset[df_subset[LABEL_COL] == label]
-            label_frame = df_labels.groupby(SAMPLE_COL)[intensity_col].apply(_to_np_array)
+            label_frame = df_labels.groupby(SAMPLE_COL)[intensity_col].apply(_to_float)
             label_dict = label_frame.to_dict()
             lab_dict[label] = label_dict
         std_model_dict[frags] = lab_dict
@@ -29,5 +29,5 @@ def standard_model(df, intensity_col):
     return std_model_dict
 
 
-def _to_np_array(x):
-    return np.array(x.tolist())
+def _to_float(x):
+    return x.tolist()[0]

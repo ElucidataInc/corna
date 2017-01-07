@@ -18,12 +18,11 @@ def convert_dict_df(nest_dict):
     This function convert the fragment dictionary model in dataframe
     Args:
         nest_dict : dictionary of the form ('L-Methionine', 'C5H10NO2S'):
-        {'C13_1': {'sample_1': array([  3.18407678e-07])}, 'C13_0': {'sample_1': array([ 0.48557866])}..}
+        {'C13_1': {'sample_1': 3.18407678e-07}, 'C13_0': {'sample_1': 0.48557866}..}
 
     Returns:
         final_df : final dataframe
     """
-
     for frag_name, label_dict in nest_dict.iteritems():
         df = lists_labeldict(frag_name, label_dict)
     df.rename(columns={
@@ -53,14 +52,14 @@ def lists_labeldict(frag_name, label_dict):
     """
     lab = []
     frames = []
-
     for label, samp_dict in label_dict.iteritems():
-        tup = []
-        for samp, intens in samp_dict.iteritems():
-            for intensity in intens:
-                tup.append((samp, intensity))
         lab.append(label)
-        frames.append(pd.DataFrame(tup))
+
+        #TODO: explain why there is a need of conversion of dict to
+        #list of tuples when pd.DataFrame accept dict. Currently, it shows
+        #error - ValueError: If using all scalar values, you must pass an index
+
+        frames.append(pd.DataFrame(list(samp_dict.iteritems())))
         df = pd.concat(frames, keys=lab).reset_index()
         df[c.NAME] = frag_name.name
         df[c.FORMULA] = frag_name.formula

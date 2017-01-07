@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 
 from .isotopomer import Infopacket
 
@@ -27,9 +28,8 @@ def replace_vals(sample_int_dict):
     """
     dict_replaced_vals = {}
 
-    for sample, intensity_list in sample_int_dict.iteritems():
-        intensity_list = map(zero_if_negative, intensity_list)
-        dict_replaced_vals[sample] = np.array(intensity_list)
+    for sample, intensity in sample_int_dict.iteritems():
+        dict_replaced_vals[sample] = zero_if_negative(intensity)
 
     return dict_replaced_vals
 
@@ -72,7 +72,6 @@ def replace_negatives(na_corr_dict):
 
     """
     post_processed_dict = {}
-
     for metabolite, fragment_dict in na_corr_dict.iteritems():
         post_processed_dict[
             metabolite] = replace_negative_to_zero(fragment_dict)
@@ -95,10 +94,7 @@ def sum_intensities(fragments_dict):
     sum_dict = {}
 
     for sample_name in sample_names:
-        curr_arr = np.zeros(len(all_values[1].data[sample_name]))
-        for value in all_values:
-            curr_arr = curr_arr + value.data[sample_name]
-        sum_dict[sample_name] = curr_arr
+        sum_dict[sample_name] = sum(value.data[sample_name] for value in all_values)
 
     return sum_dict
 
@@ -127,8 +123,9 @@ def enrichment(fragments_dict, decimals):
                 fractional_data[sample_name] = np.around(
                     intensity / sum_dict[sample_name], decimals)
             else:
-                raise ValueError(
-                    'sum of labels is zero for sample ' + sample_name + ' of ' + value.name)
+                fractional_data[sample_name] = 0
+                warnings.warn("{} {} {} {}".format('sum of labels is zero for sample ', sample_name.encode('utf-8'),
+                                                   ' of ', (value.name).encode('utf-8')))
         fragments_fractional[key] = Infopacket(
             value.frag, fractional_data, value.unlabeled, value.name)
 
