@@ -1,7 +1,3 @@
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
 import numpy as np
 import warnings
 
@@ -128,7 +124,8 @@ def enrichment(fragments_dict, decimals):
                     intensity / sum_dict[sample_name], decimals)
             else:
                 fractional_data[sample_name] = 0
-                warnings.warn('sum of labels is zero for sample ' + str(sample_name) + ' of ' + str(value.name))
+                warnings.warn("{} {} {} {}".format('sum of labels is zero for sample ', sample_name.encode('utf-8'),
+                                                   ' of ', (value.name).encode('utf-8')))
         fragments_fractional[key] = Infopacket(
             value.frag, fractional_data, value.unlabeled, value.name)
 
