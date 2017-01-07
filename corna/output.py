@@ -54,6 +54,11 @@ def lists_labeldict(frag_name, label_dict):
     frames = []
     for label, samp_dict in label_dict.iteritems():
         lab.append(label)
+
+        #TODO: explain why there is a need of conversion of dict to
+        #list of tuples when pd.DataFrame accept dict. Currently, it shows
+        #error - ValueError: If using all scalar values, you must pass an index
+
         frames.append(pd.DataFrame(list(samp_dict.iteritems())))
         df = pd.concat(frames, keys=lab).reset_index()
         df[c.NAME] = frag_name.name
