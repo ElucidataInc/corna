@@ -3,6 +3,8 @@ Ion is given by name and formula of chemical species, label is collection of fun
 to validate a label obtained from mass of species or label information given in form of
 dictionary. Fragment class inherits these classes. It represnts an Ion with label present in it.
 """
+import warnings
+
 import helpers as hl
 
 
@@ -13,6 +15,7 @@ class Ion():
         name (string): Name of the ion
         formula (string): Chemical formula
     """
+
     def __init__(self, name, formula):
         """initialise Ion class
         Args:
@@ -45,7 +48,8 @@ class Ion():
             num_atoms = parsed_formula[element]
             return num_atoms
         except KeyError:
-            raise KeyError("Element not in formula", element)
+            warnings.warn('{} {}'.format("Element not in formula: ", element))
+            return 0
 
     def get_mol_weight(self):
         """calculate molecular weight
@@ -53,13 +57,15 @@ class Ion():
             mw (float): molecular weight
         """
         parsed_formula = self.get_formula()
-        mw=0
-        for sym,qty in parsed_formula.iteritems():
-            mw = mw + hl.get_atomic_weight(sym)*qty
+        mw = 0
+        for sym, qty in parsed_formula.iteritems():
+            mw = mw + hl.get_atomic_weight(sym) * qty
         return mw
+
 
 class Label():
     """Collection of label validation functions"""
+
     def check_if_valid_isotope(self, isotope_list):
         """
         Args:
@@ -69,12 +75,11 @@ class Label():
             bool: if valid returns true else false
         """
         if isinstance(isotope_list, str):
-            isotope_list = [isotope_list,]
+            isotope_list = [isotope_list, ]
         if all(hl.check_if_isotope_in_dict(iso) for iso in isotope_list):
             return True
         else:
             return False
-
 
     def get_num_labeled_atoms(self, isotope, label_dict):
         """get number of labeled atoms of an isotope in label dictionary
@@ -91,7 +96,7 @@ class Label():
             try:
                 return label_dict[isotope]
             except KeyError:
-                raise KeyError('Isotope not present in label dictionary')
+                return 0
         else:
             raise KeyError('Isotope not available in constants', isotope)
 
@@ -110,11 +115,14 @@ class Label():
             nat_iso = hl.get_isotope_natural(isotope)
             if nat_iso == isotope:
                 return 0
-            atom_excess_mass = hl.get_isotope_mass(isotope) - hl.get_isotope_mass(nat_iso)
-            number_label = int(round((isotopic_mass - molecular_mass)/atom_excess_mass))
+            atom_excess_mass = hl.get_isotope_mass(
+                isotope) - hl.get_isotope_mass(nat_iso)
+            number_label = int(
+                round((isotopic_mass - molecular_mass) / atom_excess_mass))
             return number_label
         else:
             raise KeyError('Isotope not available in constants', isotope)
+
 
 class Fragment(Ion, Label):
     """Combines ion and label information
@@ -124,6 +132,7 @@ class Fragment(Ion, Label):
         label_dict (dict): Dictionary containing label information of the ion
         isotope -> number of atoms
     """
+
     def __init__(self, name, formula, **kwargs):
         """initialise fragment
         Args:
@@ -137,7 +146,7 @@ class Fragment(Ion, Label):
             molecular_mass (float): molecular mass of the molecule
             mode (string): positive or negative mode (pos/neg)
         """
-        #TODO: create function to get isotope mass
+        # TODO: create function to get isotope mass
         Ion.__init__(self, name, formula)
         self.label_dict = self.get_label_dict(**kwargs)
 
@@ -173,8 +182,8 @@ class Fragment(Ion, Label):
         if kwargs.has_key('label_dict'):
             label_dict = kwargs['label_dict']
         elif kwargs.has_key('isotracer') and kwargs.has_key('isotope_mass'):
-            isotope = kwargs['isotracer']
-            isotope_mass = kwargs['isotope_mass']
+            self.isotracer = kwargs['isotracer']
+            self.isotope_mass = kwargs['isotope_mass']
             try:
                 mol_mass = kwargs['molecular_mass']
             except:
@@ -183,7 +192,7 @@ class Fragment(Ion, Label):
                 mode = kwargs['mode']
             except:
                 mode = None
-            label_dict = self.create_label_dict_from_mass(isotope, isotope_mass,
+            label_dict = self.create_label_dict_from_mass(self.isotracer, self.isotope_mass,
                                                           mode=mode, molecular_mass=mol_mass)
         else:
             raise KeyError('Fragment should contain label information')
@@ -227,9 +236,10 @@ class Fragment(Ion, Label):
                 return True
             else:
                 raise OverflowError('Number of labeled atoms must be '
-                                        'less than/equal to total number of atoms')
+                                    'less than/equal to total number of atoms: '
+                                    + self.name + ' ' + self.formula)
         except KeyError:
-            raise KeyError('Labeled element not in formula')
+            warnings.warn('{} {}'.format('Labeled element not in formula: ', self.formula))
 
     def effective_mol_mass(self, mode, molecular_mass):
         """effective molecular mass in diff mass spec modes

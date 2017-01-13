@@ -1,10 +1,10 @@
 # chemicalFormulas.py
 #
 # Copyright (c) 2003, 2007, Paul McGuire
-
+#
 """Define possible schema for a chemical formula"""
 import pyparsing
-import constants as constants
+from . import constants
 
 
 class FormulaSchema(object):
@@ -18,18 +18,19 @@ class FormulaSchema(object):
         elements_and_molecular_weights : Dictionary of elements and
             molecular weights.Its a constant.
     """
+
     def __init__(self):
         """Initialise class with no arguments"""
 
-        self.elements_and_molecular_weights = constants.const_element_mol_weight_dict()
+        self.elements_and_molecular_weights = constants.ELE_ATOMIC_WEIGHTS
 
     @staticmethod
     def set_schema_letters():
         """define the letters and digits which will be part of the schema
         """
-        caps = constants.const_caps()
-        lower = constants.const_lower()
-        digits = constants.const_digit()
+        caps = constants.UPPER_CASE
+        lower = constants.LOWER_CASE
+        digits = constants.DIGITS
         return caps, lower, digits
 
     def create_polyatom_schema(self):
@@ -39,8 +40,8 @@ class FormulaSchema(object):
         caps, lower, digits = self.set_schema_letters()
         alphabet = pyparsing.Word(caps, lower)
         number = pyparsing.Word(digits).setParseAction(self.convert_integers)
-        polyatom_schema = pyparsing.Group(alphabet("element")+\
-                                pyparsing.Optional(number, default=1)("number_atoms"))
+        polyatom_schema = pyparsing.Group(alphabet("element") +
+                                          pyparsing.Optional(number, default=1)("number_atoms"))
         return polyatom_schema
 
     def create_chemicalformula_schema(self):

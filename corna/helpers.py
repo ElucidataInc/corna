@@ -1,63 +1,72 @@
-import os
-import pandas as pd
-import numpy as np
 import collections
+import os
 
-import constants as cs
-from formula import Formula
-from formulaschema import FormulaSchema
+import numpy as np
+import pandas as pd
+
+from . import constants as cs
+from . formula import Formula
+from . formulaschema import FormulaSchema
+from . inputs.column_conventions import multiquant as c
 
 schema_obj = FormulaSchema()
 chemformula_schema = schema_obj.create_chemicalformula_schema()
 polyatomschema = schema_obj.create_polyatom_schema()
 
-ELE_ATOMIC_WEIGHTS = cs.const_element_mol_weight_dict()
-ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
-NA_DICT = cs.const_na_dict()
-LEVEL_0_COl = cs.const_col_level_0()
-LEVEL_1_COL = cs.const_col_level_1()
-VAR_COL = cs.const_variable()
-VAL_COL = cs.const_value()
-ISOTOPE_NA_MASS = cs.const_isotope_na_mass()
+#defined here as needed for webtool
+#ISOTOPE_NA_MASS = cs.ISOTOPE_NA_MASS
+
+LEVEL_0_COL = cs.LEVEL_0_COL
+LEVEL_1_COL = cs.LEVEL_1_COL
+VAR_COL = cs.VAR_COL
+VAL_COL = cs.VAL_COL
+
+
+# def set_global_isotope_dict(isotope_dict):
+#     global ISOTOPE_NA_MASS
+#     ISOTOPE_NA_MASS = isotope_dict
+#
+def get_global_isotope_dict():
+     return cs.ISOTOPE_NA_MASS
 
 def get_atomic_weight(element):
     try:
-        return ELE_ATOMIC_WEIGHTS[element]
+        return cs.ELE_ATOMIC_WEIGHTS[element]
     except KeyError:
         raise KeyError('Element doesnt exist')
 
+
 def check_if_isotope_in_dict(iso):
-    return ISOTOPE_NA_MASS['Element'].has_key(iso)
+    return cs.ISOTOPE_NA_MASS['element'].has_key(iso)
+
 
 def get_isotope_element(iso):
     try:
-        return ISOTOPE_NA_MASS['Element'][iso]
+        return cs.ISOTOPE_NA_MASS['element'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
+
 
 def get_isotope_mass(iso):
     try:
-        return ISOTOPE_NA_MASS['amu'][iso]
+        return cs.ISOTOPE_NA_MASS['amu'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
-def get_isotope_na(iso):
+
+def get_isotope_na(iso, isotope_dict=cs.ISOTOPE_NA_MASS):
     try:
-        return ISOTOPE_NA_MASS['NA'][iso]
+        return isotope_dict['naValue'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
+
 
 def get_isotope_natural(iso):
     try:
-        return ISOTOPE_NA_MASS['Natural Isotope'][iso]
+        return cs.ISOTOPE_NA_MASS['naturalIsotope'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
-def get_sub_na_dict(elements):
-    sub_na_dict = {}
-    for element in elements:
-        sub_na_dict[element] = NA_DICT[element]
-    return sub_na_dict
 
 def label_dict_to_key(label_dict):
     key = ''
@@ -67,6 +76,7 @@ def label_dict_to_key(label_dict):
     key = key.strip('_')
 
     return key
+
 
 def read_file(path):
     """
@@ -82,17 +92,16 @@ def read_file(path):
     excel = ['.xls', '.xlsx']
 
     if os.path.splitext(path)[1] in excel:
-        input_file = pd.read_excel(path, header = 0)
+        input_file = pd.read_excel(path, header=0)
 
     elif os.path.splitext(path)[1] == '.csv':
-        input_file = pd.read_csv(path, header = 0)
+        input_file = pd.read_csv(path, header=0)
 
     elif os.path.splitext(path)[1] == '.txt':
-        input_file = pd.read_table(path, header = 0)
+        input_file = pd.read_table(path, header=0)
 
     else:
         raise IOError('only csv/xls/xlsx/txt extensions are allowed')
-
 
     return input_file
 
@@ -109,80 +118,41 @@ def json_to_df(json_input):
         json_to_df : pandas dataframe
 
     """
-    #this should be the format of json input
+    # this should be the format of json input
     #json_input = json.dumps(input_data.to_dict())
-
     json_df = pd.read_json(json_input)
 
     return json_df
 
 
-def concat_txts_into_df(direc):
-
-    txt_files = []
-
-    txt_files += [each for each in os.listdir(direc) if each.endswith('.txt')]
-
-    df_list= []
-
-    for files in txt_files:
-        df_list.append(read_file(direc + files))
-
-    concat_df = pd.concat(df_list)
-
-    return concat_df
-
-def merge_dfs(df1, df2, how = 'left', left_on = 'col1', right_on = 'col2'):
-
-    merged_df = pd.merge(df1, df2, how= how, left_on=left_on,
-                             right_on=right_on)
-
-    #merged_df.drop(right_on, axis=0, inplace=True)
+def merge_two_dfs(df1, df2, how='left', left_on='col1', right_on='col2'):
+    merged_df = pd.merge(df1, df2, how=how, left_on=left_on,
+                         right_on=right_on)
     merged_df.drop(right_on, axis=1, inplace=True)
-
-
-    merged_df.fillna(0, inplace = True)
+    merged_df.fillna(0, inplace=True)
 
     return merged_df
 
 
-def filter_df(df, column_name, column_value):
+def filter_df(df, colname_val_dict):
     """
-    This function filters the dataframe over single column name and single column
-    value
+    This function filters the dataframe over single/multiple column name(s) and single/
+    multiple column values
     """
 
-    #write test if col name not string
-    filtered_df = df[df[str(column_name)] == column_value]
+    for col_name, col_val_list in colname_val_dict.iteritems():
+        filtered_df = df[(df[str(col_name)].isin(col_val_list))]
 
-    if filtered_df.empty == 'TRUE':
-        raise ValueError('column value does not exist in dataframe', column_value)
+        return filtered_df
 
-    return filtered_df
-
-
-def filtering_df(df, num_col=3, col1='col1', list_col1_vals=[], col2='col2', list_col2_vals=[], col3='col3', list_col3_vals=[]):
-    """
-    This function allows filtering of dataframe over multiple columns and multiple columns values (maximum three)
-    """
-    if num_col==1:
-        filtered_df = df[(df[str(col1)].isin(list_col1_vals))]
-
-    elif num_col==2:
-        filtered_df = df[(df[str(col1)].isin(list_col1_vals)) & (df[str(col2)].isin(list_col2_vals))]
-
-    elif num_col==3:
-        filtered_df = df[(df[str(col1)].isin(list_col1_vals)) & (df[str(col2)].isin(list_col2_vals)) & (df[str(col3)].isin(list_col3_vals))]
-
-    return filtered_df
 
 def create_dict_from_isotope_label_list(isonumlist):
     label_dict = collections.OrderedDict()
 
-    for i in xrange(0,len(isonumlist),2):
+    for i in xrange(0, len(isonumlist), 2):
         try:
             get_isotope_element(isonumlist[i])
-            label_dict.update({isonumlist[i]: int(isonumlist[i+1])})
+            label_dict.update({isonumlist[i]: int(isonumlist[i + 1])})
         except KeyError:
             raise KeyError('The key must be an isotope')
         except ValueError:
@@ -194,8 +164,10 @@ def get_unique_values(df, column_name):
     """
     This function gives the unique values from a column in the form of a list
     """
-
-    unique_val_list = np.unique(df[[str(column_name)]])
+    try:
+        unique_val_list = np.unique(df[[str(column_name)]])
+    except:
+        raise KeyError('Column' + column_name + 'not found in dataframe')
 
     return unique_val_list
 
@@ -207,6 +179,7 @@ def get_key_from_single_value_dict(inputdict):
         raise OverflowError('Dictionary not single key, value pair')
     return key
 
+
 def get_value_from_single_value_dict(inputdict):
     if len(inputdict) == 1:
         key, value = inputdict.items()[0]
@@ -214,16 +187,20 @@ def get_value_from_single_value_dict(inputdict):
         raise OverflowError('Dictionary not single key, value pair')
     return value
 
+
 def check_if_all_elems_same_type(inputlist, classname):
     return all(isinstance(x, classname) for x in inputlist)
 
-def concatentate_dataframes_by_col(df_list):
+
+def concatenate_dataframes_by_col(df_list):
     return pd.concat(df_list)
+
 
 def parse_polyatom(polyatom_string):
     polyatomdata = polyatomschema.parseString(polyatom_string)
     polyatom = polyatomdata[0]
     return (polyatom.element, polyatom.number_atoms)
+
 
 def get_formula(formula):
     """Parsing formula to store as an element -> number of atoms dictionary"""
@@ -231,39 +208,52 @@ def get_formula(formula):
     return parsed_formula
 
 
-def convert_labels_to_std(df, iso_tracers):
+def merge_multiple_dfs(df_list):
     """
-    This function converts the labels C13N15-label-1-1 in the form
-    C13_1_N15_1
+    This function takes the list of dataframes as an input
+    and concatenates the dataframes based on their column names
+    Args:
+        df_list : list of dataframes
+    Returns:
+        combined_dfs : concatenated list of dataframes into one dataframe
     """
-    new_labels = []
-    for labels in df['Label']:
-        if labels == 'C12 PARENT':
-            labe = ''
-            for tracs in iso_tracers:
-                labe = labe + tracs+'_0_'
-            new_labels.append(labe.strip('_'))
-        else:
-            splitted = labels.split('-label-')
-            split2 = splitted[1].split('-')
-            isotopelist = chemformula_schema.parseString(splitted[0])
-            el1 = (''.join(str(x) for x in isotopelist[0]))
-            el1_num = el1 + '_'+ split2[0]
-            if len(iso_tracers) == 1:
-                new_labels.append(el1_num)
+    combined_dfs = reduce(_merge_dfs, df_list)
+    return combined_dfs
 
-            else:
-                try:
-                    el2 = '_'+(''.join(str(x) for x in isotopelist[1])) + '_' + split2[1]
 
-                    el = el1_num+el2
-                    new_labels.append(el)
-                except:
-                    for tracer in iso_tracers:
-                        if tracer != el1:
-                            el = el1_num + '_' + tracer + '_0'
-                            new_labels.append(el)
+def _merge_dfs(df1, df2):
+    return pd.merge(df1, df2,
+                    on=[c.LABEL, c.SAMPLE,
+                        c.NAME, c.FORMULA])
 
-    df['Label'] = new_labels
 
-    return df
+def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
+    """
+    This function returns the dictionary of default NA values (adapted from wiki)
+    for all the isotopes
+    """
+    NA = isotope_dict['naValue']
+    elements = cs.ISOTOPE_NA_MASS['element']
+    na_val_dict = {}
+    atoms = set(elements.values())
+
+    for atom in atoms:
+        isotope_list = [isotope for isotope, iso_atom
+                        in elements.iteritems() if iso_atom == atom]
+        na_vals = [NA[val] for val in isotope_list]
+        na_vals.sort(reverse=True)
+        na_val_dict[atom] = na_vals
+
+    return na_val_dict
+
+
+def check_column_headers(col_headers, col_names):
+    """
+    This function verifies that all defasult columns are present in input
+    text files for multiquant
+    """
+    err_msg = """Required column/s not found, Column: {!r}""".format(list(set(col_names) - set(col_headers)))
+    assert set(col_names).issubset(set(col_headers)), err_msg
+
+def first_sub_second(a, b):
+    return [item for item in a if item not in b]

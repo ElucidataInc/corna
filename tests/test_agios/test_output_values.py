@@ -1,6 +1,8 @@
 import pytest
 import pandas as pd
-import corna.corna as corna
+from corna.algorithms.nacorr_correction_matrix.na_correction import na_correction
+from corna.output import convert_to_df
+
 
 
 
@@ -17,12 +19,12 @@ def test_na_corr_single_tracer():
 	   'Intensity': {0: 0.3624, 1: 0.040349999999999997, 2: 0.59724999999999995}, \
 	    'Formula': {0: 'H4C2O2', 1: 'H4C2O2', 2: 'H4C2O2'}, \
 	    'info2': {0: 'culture_1', 1: 'culture_1', 2: 'culture_1'}, \
-	     'Sample Name': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
+	     'Sample': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
 
 	eleme_corr = {}
 
-	na_corr_dict = corna.na_correction(df, single_tracers, eleme_corr, na_dict)
-	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+	na_corr_dict = na_correction(df, single_tracers, eleme_corr, na_dict)
+	na_corr_df = convert_to_df(na_corr_dict, False, colname='NA corrected')
 
 	output_list = [0.59613019390581723, 0.0023185595567866008, 0.40155124653739621]
 
@@ -37,12 +39,12 @@ def test_na_corr_single_trac_indist():
 	   'Intensity': {0: 0.2274, 1: 0.4361, 2: 0.25405}, \
 	    'Formula': {0: 'H4C2O2', 1: 'H4C2O2', 2: 'H4C2O2'}, \
 	    'info2': {0: 'culture_1', 1: 'culture_1', 2: 'culture_1'}, \
-	     'Sample Name': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
+	     'Sample': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
 
 	eleme_corr = {'C': ['H', 'O']}
 
-	na_corr_dict = corna.na_correction(df, single_tracers, eleme_corr, na_dict)
-	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+	na_corr_dict = na_correction(df, single_tracers, eleme_corr, na_dict)
+	na_corr_df = convert_to_df(na_corr_dict, False, colname='NA corrected')
 
 	output_list = [0.2783720710600131, 0.52118757080316813, 0.3026855833807266]
 
@@ -65,19 +67,19 @@ def test_na_corr_multi_trac():
 		'Formula': {0: 'C5H10NO2S', 1: 'C5H10NO2S',
 		2: 'C5H10NO2S', 3: 'C5H10NO2S', 4: 'C5H10NO2S', 5: 'C5H10NO2S', 6: 'C5H10NO2S',
 		7: 'C5H10NO2S', 8: 'C5H10NO2S', 9: 'C5H10NO2S', 10: 'C5H10NO2S', 11: 'C5H10NO2S'},
-		'Sample Name': {0: 'sample_1', 1: 'sample_1',
+		'Sample': {0: 'sample_1', 1: 'sample_1',
 		2: 'sample_1', 3: 'sample_1', 4: 'sample_1', 5: 'sample_1', 6: 'sample_1',
 		7: 'sample_1', 8: 'sample_1', 9: 'sample_1', 10: 'sample_1', 11: 'sample_1'}})
 
 	eleme_corr = {}
 
-	na_corr_dict = corna.na_correction(df, multi_tracers, eleme_corr, na_dict)
-	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+	na_corr_dict = na_correction(df, multi_tracers, eleme_corr, na_dict)
+	na_corr_df = convert_to_df(na_corr_dict, False, colname='NA corrected')
 
-	output_list = [2.6016225533332996e-07, 0.3967531185142435, -9.8844997716120012e-05,
+	output_list = [0.00064617771744998609, 0.3967531185142435, -9.8844997716120012e-05,
 	7.0170861504082293e-05, -0.00024013579424740682, -0.00018698767698716368,
-	0.0030976144330255844, -0.00048382556594077245, -4.9943479640610513e-06,
-	0.00064617771744998609, -2.6604348209106283e-06, 0.60045010712919833]
+	0.0030976144330255844, -0.00048382556594077245, -2.6604348209106283e-06,
+	-4.9943479640610513e-06, 2.6016225533332996e-07, 0.60045010712919833]
 
 	assert na_corr_df['NA corrected'].tolist() == output_list
 
@@ -98,19 +100,19 @@ def test_na_corr_multi_trac_indist():
 		11: 0.48973500000000003},
 		'Formula': {0: 'C5H10NO2S', 1: 'C5H10NO2S', 2: 'C5H10NO2S', 3: 'C5H10NO2S', 4: 'C5H10NO2S',
 		5: 'C5H10NO2S', 6: 'C5H10NO2S', 7: 'C5H10NO2S', 8: 'C5H10NO2S', 9: 'C5H10NO2S', 10: 'C5H10NO2S',
-		11: 'C5H10NO2S'}, 'Sample Name': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1',
+		11: 'C5H10NO2S'}, 'Sample': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1',
 		 3: 'sample_1', 4: 'sample_1', 5: 'sample_1', 6: 'sample_1', 7: 'sample_1', 8: 'sample_1',
 		 9: 'sample_1', 10: 'sample_1', 11: 'sample_1'}})
 
 	eleme_corr = {'C': ['H']}
 
-	na_corr_dict = corna.na_correction(df, multi_tracers, eleme_corr, na_dict)
-	na_corr_df = corna.convert_to_df(na_corr_dict, colname = 'NA corrected')
+	na_corr_dict = na_correction(df, multi_tracers, eleme_corr, na_dict)
+	na_corr_df = convert_to_df(na_corr_dict, False, colname='NA corrected')
 
-	output_list = [0.0063239074820523374, 0.40215442709008198, 0.016489750088414929,
-	 -0.0032216908381774477, -0.031526293342053771, 0.15881269215932281, -0.0064943180078375707,
-	 0.0011640245763342482, -0.0060388880912154832, -0.075954704287110375, 0.030179296768192233,
-	 0.59811258028877923]
+	output_list = [-0.075954704287110375, 0.40215442709008198, 0.016489750088414929, -0.0032216908381774477,
+	-0.031526293342053771, 0.15881269215932281, -0.0064943180078375707,
+	0.0011640245763342482, 0.030179296768192233, -0.0060388880912154832,
+	 0.0063239074820523374, 0.59811258028877923]
 
 	assert na_corr_df['NA corrected'].tolist() == output_list
 

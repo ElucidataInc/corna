@@ -17,39 +17,38 @@ def test_check_if_isotope_in_dict_false():
     assert help.check_if_isotope_in_dict('C14') == False
 
 def test_get_isotope_details():
-    assert help.get_isotope('C13') == 'C'
+    assert help.get_isotope_element('C13') == 'C'
 
 def test_get_isotope_na():
     assert help.get_isotope_na('C13') == 0.011
 
-def	test_get_isotope_mass():
+def    test_get_isotope_mass():
     assert help.get_isotope_mass('C13') == 13
 
 def test_get_isotope_natural():
     assert help.get_isotope_natural('C13') == 'C12'
 
 def test_get_isotope_keyerror():
-    with pytest.raises(KeyError) as err:
-        help.get_isotope('Ind5')
-    assert err.value.args == ('Check available isotope list', 'Ind5')
+    assert not help.check_if_isotope_in_dict('Ind5')
 
 def test_label_dict_to_key():
-    assert help.label_dict_to_key({'C13':2, 'N14':4}) == 'N14_4_C13_2'
+    assert help.label_dict_to_key({'C13':2, 'N14':4}) == 'C13_2_N14_4'
 
 def test_read_file():
-	path = 'incorrectpath.xlsx'
-	with pytest.raises(IOError):
-		file_in = help.read_file(path)
+    path = 'incorrectpath.xlsx'
+    with pytest.raises(IOError):
+        file_in = help.read_file(path)
 
 def test_read_file_ext():
-	path = 'no_or_invalid_extension'
-	with pytest.raises(IOError):
-		file_in = help.read_file(path)
+    path = 'no_or_invalid_extension'
+    with pytest.raises(IOError):
+        file_in = help.read_file(path)
 
 def test_filter_df():
-	df = pd.DataFrame({'col1': [1, 2, 3], 'col2': [2, 2, 2]})
-	with pytest.raises(KeyError):
-		filter_df = help.filter_df(df, 'col_1', 10)
+    df = pd.DataFrame({'col1': [1, 2, 3], 'col2': [2, 2, 2]})
+    filter_dict = {'col_1': [1]}
+    with pytest.raises(KeyError):
+        filter_df = help.filter_df(df, filter_dict)
 
 def test_create_dict_from_isotope_label_list():
     assert help.create_dict_from_isotope_label_list(['C13',2,'N15',5]) == {'C13': 2, 'N15': 5}
@@ -61,7 +60,7 @@ def test_create_dict_from_isotope_label_list_missing_number():
 
 def test_create_dict_from_isotope_label_list_no_isotope():
     with pytest.raises(KeyError) as err:
-        help. create_dict_from_isotope_label_list([6, 'C13','N15',5])
+        help.create_dict_from_isotope_label_list([6, 'C13','N15',5])
     assert err.value.message == 'The key must be an isotope'
 
 def test_get_key_from_single_value_dict():
@@ -73,9 +72,6 @@ def test_get_value_from_single_value_dict():
 def test_get_key_from_single_value_dict_len_error():
     with pytest.raises(OverflowError):
         help.get_key_from_single_value_dict({'C13':1, 'C14':2})
-
-def test_parse_polyatom():
-    assert help.parse_polyatom('C13') == ('C',13)
 
 def test_get_formula():
     assert help.get_formula('C6H12O6') == {'C':6, 'H':12, 'O':6}
