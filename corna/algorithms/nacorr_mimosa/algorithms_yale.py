@@ -1,4 +1,3 @@
-import multiprocessing as mp
 from functools import partial
 
 import numpy as np
@@ -56,17 +55,10 @@ def na_correction_mimosa_by_fragment(fragments_dict, isotope_dict, decimals):
     return corrected_dict_mass
 
 
-def nacorr_mp(isotope_dict, decimals, tuple):
-    metabolite = tuple[0]
-    fragment_dict = tuple[1]
-    corr_fragment_dict = na_correction_mimosa_by_fragment(fragment_dict, isotope_dict, decimals)
-    return (metabolite, corr_fragment_dict)
-
 def na_correction_mimosa(metabolite_frag_dict, isotope_dict=ISOTOPE_NA_MASS, decimals=2):
-    pool = mp.Pool(mp.cpu_count())
-    nacorr_part = partial(nacorr_mp, isotope_dict, decimals)
-    nacorrected_list = pool.map(nacorr_part, metabolite_frag_dict.iteritems())
-    pool.close()
-    na_corrected_out = {metab_info[0]:metab_info[1] for metab_info in nacorrected_list}
-    return na_corrected_out
+    na_corr_dict = {}
+    for metabolite, fragments_dict in metabolite_frag_dict.iteritems():
+        na_corr_dict[metabolite] = na_correction_mimosa_by_fragment(fragments_dict, isotope_dict, decimals)
+
+    return na_corr_dict
 
