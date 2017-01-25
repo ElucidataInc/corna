@@ -23,9 +23,6 @@ def test_arrange_fragments_by_mass():
 def test_na_correction_mimosa_by_fragment():
     assert algo.na_correction_mimosa_by_fragment(fragment_dict, ISOTOPE_NA_MASS, 2) == corrected_fragment_dict
 
-def test_nacorr_mp():
-    assert algo.nacorr_mp(ISOTOPE_NA_MASS, 2, ('2PG 185/79', fragment_dict)) == ('2PG 185/79', corrected_fragment_dict)
-
 def test_na_correction_mimosa():
     test_dict = algo.na_correction_mimosa(metabolite_frag_dict)
     for key, value in test_dict['dhap'].iteritems():

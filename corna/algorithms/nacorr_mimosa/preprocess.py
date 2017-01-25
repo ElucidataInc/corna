@@ -1,4 +1,3 @@
-import multiprocessing as mp
 from functools import partial
 
 import math
@@ -10,7 +9,6 @@ from ... import data_model
 from ... isotopomer import bulk_insert_data_to_fragment, Infopacket
 from ... import constants
 
-#from .file_parser_yale import frag_key
 from ... inputs.multiquant_parser import frag_key
 
 
