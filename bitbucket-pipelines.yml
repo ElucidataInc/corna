@@ -17,7 +17,7 @@ pipelines:
           - echo "Pipelines run only on develop branch"
           
   branches:
-    CI:
+    develop:
       - step:
          script:
             - echo "BUILD IMAGE SUCESSFULLY DONE"
