@@ -93,7 +93,7 @@ def check_data_frame_empty(data_frame):
     :param data_frame:
     :return: Boolean
     """
-    return data_frame.emty
+    return data_frame.empty
 
 
 @handle_error
@@ -111,6 +111,3 @@ def validate_input_file(path):
 
     if check_data_frame_empty(data_frame):
         return "The data frame is empty, cannot proceed further"
-    else:
-        #####can proceed further here with required column
-        pass
