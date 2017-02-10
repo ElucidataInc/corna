@@ -33,9 +33,9 @@ def read_input_file(path):
          input_file : input file in the form of pandas dataframe
     """
 
-    excel = ['.xls', '.xlsx']
+    excel_file_extension = ['.xls', '.xlsx']
 
-    if os.path.splitext(path)[1] in excel:
+    if os.path.splitext(path)[1] in excel_file_extension:
         input_file = pd.read_excel(path, header=0)
 
     elif os.path.splitext(path)[1] == '.csv':
@@ -48,3 +48,5 @@ def read_input_file(path):
         raise IOError('only csv/xls/xlsx/txt extensions are allowed')
 
     return input_file
+
+
