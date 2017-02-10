@@ -86,4 +86,14 @@ def check_file_empty(path):
     else:
         return False
 
+def check_data_frame_empty(data_frame):
+    """
+    This function check if the data frame is empty.
+    It returns boolean response based on the check.
+
+    :param data_frame:
+    :return: Boolean
+    """
+    return data_frame.emty
+
 
