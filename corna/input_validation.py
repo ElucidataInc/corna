@@ -1,3 +1,8 @@
-def maven_input_validation():
-
-    pass
+def check_required_column(data_frame,*arg):
+    required_column_names=[column_name.upper() for column_name in arg]
+    data_frame_columns=[column_name.upper() for column_name in data_frame.columns.tolist()]
+    missing_column=list()
+    for column_name in required_column_names:
+        if column_name not in data_frame_columns:
+            missing_column.append(column_name)
+    return missing_column
