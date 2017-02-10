@@ -39,7 +39,6 @@ def check_required_column(data_frame,*arg):
             missing_column.append(column_name)
     return missing_column
 
-@handle_error
 def read_input_file(path):
     """
     This function reads the input file and returns a Pandas Data Frame.
@@ -97,3 +96,21 @@ def check_data_frame_empty(data_frame):
     return data_frame.emty
 
 
+@handle_error
+def validate_input_file(path):
+    """
+    This function will validate the file using the functions defined
+    above.
+    :param path:
+    :return:
+    """
+    if check_file_empty(path):
+        data_frame=read_input_file(path)
+    else:
+        return "The file is empty, cannot proceed further"
+
+    if check_data_frame_empty(data_frame):
+        return "The data frame is empty, cannot proceed further"
+    else:
+        #####can proceed further here with required column
+        pass
