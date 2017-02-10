@@ -50,3 +50,20 @@ def read_input_file(path):
     return input_file
 
 
+
+def check_file_empty(path):
+    """
+    This function checks for the file size. We are assuming an empty
+    file is of zero size. It will return Boolean after checking the
+    file size.
+    :param path: Input file path
+    :return: Boolean
+    """
+    file_info = os.stat(path)
+
+    if file_info.st_size > 0:
+        return True
+    else:
+        return False
+
+
