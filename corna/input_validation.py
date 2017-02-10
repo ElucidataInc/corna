@@ -1,3 +1,6 @@
+import os
+import pandas as pd
+
 def check_required_column(data_frame,*arg):
     """
     This function takes data frame and column_name as an argumnet.
@@ -16,3 +19,32 @@ def check_required_column(data_frame,*arg):
         if column_name not in data_frame_columns:
             missing_column.append(column_name)
     return missing_column
+
+def read_input_file(path):
+    """
+    This function reads the input file and returns a Pandas Data Frame.
+    First it is checking for the extension and then it calls for required
+    pandas function to convert the file. It also raises IOerror if the file
+    is other than .xlsx,.xls,.csv,.txt
+    Args:
+        path : path to input file
+
+    Returns:
+         input_file : input file in the form of pandas dataframe
+    """
+
+    excel = ['.xls', '.xlsx']
+
+    if os.path.splitext(path)[1] in excel:
+        input_file = pd.read_excel(path, header=0)
+
+    elif os.path.splitext(path)[1] == '.csv':
+        input_file = pd.read_csv(path, header=0)
+
+    elif os.path.splitext(path)[1] == '.txt':
+        input_file = pd.read_table(path, header=0)
+
+    else:
+        raise IOError('only csv/xls/xlsx/txt extensions are allowed')
+
+    return input_file
