@@ -1,6 +1,25 @@
 import os
 import pandas as pd
 
+
+def make_decorator(errors=(Exception, ), default_value=''):
+
+    def decorator(func):
+
+        def new_func(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except errors, e:
+                print "Got error! ", repr(e)
+                return default_value
+
+        return new_func
+
+    return decorator
+
+handle_error=make_decorator((KeyError, NameError,IOError), default_value='default')
+
+
 def check_required_column(data_frame,*arg):
     """
     This function takes data frame and column_name as an argumnet.
@@ -20,6 +39,7 @@ def check_required_column(data_frame,*arg):
             missing_column.append(column_name)
     return missing_column
 
+@handle_error
 def read_input_file(path):
     """
     This function reads the input file and returns a Pandas Data Frame.
