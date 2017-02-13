@@ -61,17 +61,12 @@ def read_input_file(path):
 def check_file_empty(path):
     """
     This function checks for the file size. We are assuming an empty
-    file is of zero size. It will return Boolean after checking the
-    file size.
+    file is of zero size. It will raise error if file is of 0 mb size.
     :param path: Input file path
     :return: Boolean
     """
-    file_info = os.stat(path)
+    if not os.stat(path) == 0 : raise custom_exception.FileEmptyError
 
-    if file_info.st_size > 0:
-        return True
-    else:
-        return False
 
 def check_data_frame_empty(data_frame):
     """
