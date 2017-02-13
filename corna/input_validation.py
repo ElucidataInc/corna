@@ -1,23 +1,6 @@
+import custom_exception
 import os
 import pandas as pd
-
-
-def make_decorator(errors=(Exception, ), default_value=''):
-
-    def decorator(func):
-
-        def new_func(*args, **kwargs):
-            try:
-                return func(*args, **kwargs)
-            except errors, e:
-                print "Got error! ", repr(e)
-                return default_value
-
-        return new_func
-
-    return decorator
-
-handle_error=make_decorator((KeyError, NameError,IOError), default_value='default')
 
 
 def get_missing_required_column(data_frame,*arg):
@@ -62,7 +45,7 @@ def read_input_file(path):
         input_file = pd.read_table(path, header=0)
 
     else:
-        raise IOError('only csv/xls/xlsx/txt extensions are allowed')
+        raise custom_exception.FileExtensionError
 
     return input_file
 
@@ -94,7 +77,7 @@ def check_data_frame_empty(data_frame):
     return data_frame.empty
 
 
-@handle_error
+@custom_exception.handleError
 def validate_input_file(path):
     """
     This function will validate the file using the functions defined
