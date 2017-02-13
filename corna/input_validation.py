@@ -65,7 +65,7 @@ def check_file_empty(path):
     :param path: Input file path
     :return: Boolean
     """
-    if not os.stat(path) == 0 : raise custom_exception.FileEmptyError
+    if os.stat(path) == 0 : raise custom_exception.FileEmptyError
 
 
 def check_data_frame_empty(data_frame):
