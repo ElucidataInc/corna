@@ -14,6 +14,11 @@ class DataFrameEmptyError(Exception):
     def __init__(self, arg = 'There is no data to process.'):
         self.message = arg
 
+class MissingRequiredColumnError(Exception):
+    def __init__(self, column_list):
+        self.message="The required column %s are not present" % ','.join(column_list)
+
+
 def handleError(function):
     def runFunction(*args,**kwargs):
         try:
@@ -32,6 +37,10 @@ def handleError(function):
             raise
 
         except DataFrameEmptyError as e:
+            print e.message
+            raise
+
+        except MissingRequiredColumnError as e:
             print e.message
             raise
 
