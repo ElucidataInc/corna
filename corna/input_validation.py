@@ -66,9 +66,9 @@ def check_file_empty(path):
     This function checks for the file size. We are assuming an empty
     file is of zero size. It will raise error if file is of 0 mb size.
     :param path: Input file path
-    :return: Boolean
+    :return:
     """
-    if os.stat(path) == 0 : raise FileEmptyError
+    if os.stat(path).st_size == 0 : raise FileEmptyError
 
 
 def check_data_frame_empty(data_frame):
@@ -79,7 +79,7 @@ def check_data_frame_empty(data_frame):
     data_frame is empty.
 
     :param data_frame:
-    :return: Boolean
+    :return:
     """
     if data_frame.empty: raise DataFrameEmptyError
 
