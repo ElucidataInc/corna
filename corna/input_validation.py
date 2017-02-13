@@ -20,7 +20,7 @@ def make_decorator(errors=(Exception, ), default_value=''):
 handle_error=make_decorator((KeyError, NameError,IOError), default_value='default')
 
 
-def check_required_column(data_frame,*arg):
+def get_missing_required_column(data_frame,*arg):
     """
     This function takes data frame and column_name as an argumnet.
     It checks whether the required columns is present in a data_
@@ -33,11 +33,9 @@ def check_required_column(data_frame,*arg):
     """
     required_column_names=[column_name.upper() for column_name in arg]
     data_frame_columns=[column_name.upper() for column_name in data_frame.columns.tolist()]
-    missing_column=list()
-    for column_name in required_column_names:
-        if column_name not in data_frame_columns:
-            missing_column.append(column_name)
-    return missing_column
+
+    return [column_name for column_name in required_column_names
+                    if column_name not in data_frame_columns ]
 
 def read_input_file(path):
     """
