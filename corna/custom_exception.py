@@ -10,7 +10,9 @@ class FileEmptyError(Exception):
     def __init__(self, arg = 'The file is empty. No data to process.'):
         self.message = arg
 
-
+class DataFrameEmptyError(Exception):
+    def __init__(self, arg = 'There is no data to process.'):
+        self.message = arg
 
 def handleError(function):
     def runFunction(*args,**kwargs):
@@ -26,6 +28,10 @@ def handleError(function):
             raise
 
         except FileExistError as e:
+            print e.message
+            raise
+
+        except DataFrameEmptyError as e:
             print e.message
             raise
 

@@ -71,12 +71,12 @@ def check_file_empty(path):
 def check_data_frame_empty(data_frame):
     """
     This function check if the data frame is empty.
-    It returns boolean response based on the check.
+    If data frame is empty it raises DataFrameEmptyError.
 
     :param data_frame:
     :return: Boolean
     """
-    return data_frame.empty
+    if data_frame.empty: raise custom_exception.DataFrameEmptyError
 
 
 @custom_exception.handleError
