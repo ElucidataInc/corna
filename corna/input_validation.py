@@ -2,6 +2,13 @@ import custom_exception
 import os
 import pandas as pd
 
+def check_if_file_exist(path):
+    """
+    This function will raise error if file does not exist in given path.
+    :param path:
+    :return:
+    """
+    if not os.path.isfile(path) : raise custom_exception.FileExistError
 
 def get_missing_required_column(data_frame,*arg):
     """
