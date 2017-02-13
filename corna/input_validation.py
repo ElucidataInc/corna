@@ -1,7 +1,9 @@
-import custom_exception
+from custom_exception import handleError,FileExtensionError,FileEmptyError
+from custom_exception import MissingRequiredColumnError,FileExistError
+from custom_exception import  DataFrameEmptyError
+from inputs.column_conventions import maven as c
 import os
 import pandas as pd
-from inputs.column_conventions import maven as c
 
 def check_if_file_exist(path):
     """
@@ -9,7 +11,7 @@ def check_if_file_exist(path):
     :param path:
     :return:
     """
-    if not os.path.isfile(path) : raise custom_exception.FileExistError
+    if not os.path.isfile(path) : raise FileExistError
 
 def get_missing_required_column(data_frame,*arg):
     """
@@ -53,7 +55,7 @@ def read_input_file(path):
         input_file = pd.read_table(path, header=0)
 
     else:
-        raise custom_exception.FileExtensionError
+        raise FileExtensionError
 
     return input_file
 
@@ -66,7 +68,7 @@ def check_file_empty(path):
     :param path: Input file path
     :return: Boolean
     """
-    if os.stat(path) == 0 : raise custom_exception.FileEmptyError
+    if os.stat(path) == 0 : raise FileEmptyError
 
 
 def check_data_frame_empty(data_frame):
@@ -77,10 +79,10 @@ def check_data_frame_empty(data_frame):
     :param data_frame:
     :return: Boolean
     """
-    if data_frame.empty: raise custom_exception.DataFrameEmptyError
+    if data_frame.empty: raise DataFrameEmptyError
 
 
-@custom_exception.handleError
+@handleError
 def validate_input_file(path):
     """
     This function will validate the file using the functions defined
@@ -95,5 +97,5 @@ def validate_input_file(path):
 
     required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
     missing_columns = get_missing_required_column(data_frame, *required_columns_raw_data)
-    
-    if missing_columns: raise custom_exception.MissingRequiredColumnError(missing_columns)
+
+    if missing_columns: raise MissingRequiredColumnError(missing_columns)
