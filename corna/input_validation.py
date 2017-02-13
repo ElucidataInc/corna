@@ -5,13 +5,17 @@ from inputs.column_conventions import maven as c
 import os
 import pandas as pd
 
+#getting required columns for input file
+required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
+
 def check_if_file_exist(path):
     """
     This function will raise error if file does not exist in given path.
     :param path:
     :return:
     """
-    if not os.path.isfile(path) : raise FileExistError
+    if not os.path.isfile(path):
+        raise FileExistError
 
 def get_missing_required_column(data_frame,*arg):
     """
@@ -68,7 +72,8 @@ def check_file_empty(path):
     :param path: Input file path
     :return:
     """
-    if os.stat(path).st_size == 0 : raise FileEmptyError
+    if os.stat(path).st_size == 0:
+        raise FileEmptyError
 
 
 def check_data_frame_empty(data_frame):
@@ -81,11 +86,12 @@ def check_data_frame_empty(data_frame):
     :param data_frame:
     :return:
     """
-    if data_frame.empty: raise DataFrameEmptyError
+    if data_frame.empty:
+        raise DataFrameEmptyError
 
 
 @handleError
-def validate_input_file(path):
+def validate_input_file(path,required_columns_name):
     """
     This function will validate the file using the functions defined
     above.
@@ -97,7 +103,8 @@ def validate_input_file(path):
     data_frame = read_input_file(path)
     check_data_frame_empty(data_frame)
 
-    required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
-    missing_columns = get_missing_required_column(data_frame, *required_columns_raw_data)
 
-    if missing_columns: raise MissingRequiredColumnError(missing_columns)
+    missing_columns = get_missing_required_column(data_frame, *required_columns_name)
+
+    if missing_columns:
+        raise MissingRequiredColumnError(missing_columns)
