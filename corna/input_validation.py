@@ -73,8 +73,10 @@ def check_file_empty(path):
 
 def check_data_frame_empty(data_frame):
     """
-    This function check if the data frame is empty.
-    If data frame is empty it raises DataFrameEmptyError.
+    This function takes data_frame as an argument and with the help of
+    Pandas inbuilt function it checks if the data_frame empty or not.
+    The function raises custom error DataFrameEmptyError if the input
+    data_frame is empty.
 
     :param data_frame:
     :return: Boolean

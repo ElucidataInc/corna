@@ -1,3 +1,14 @@
+"""
+This file handles the exception raise during validation of input files.
+For each exception a class is associated so that we can add methods acc-
+ording to the need.
+
+This file also contains handle error function which can be used as decorator
+to catch the exception raises. 
+
+
+"""
+
 class FileExistError(Exception):
     def __init__(self, arg = 'The file does not exist. Check again.'):
         self.message = arg
