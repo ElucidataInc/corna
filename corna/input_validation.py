@@ -1,6 +1,7 @@
 import custom_exception
 import os
 import pandas as pd
+from inputs.column_conventions import maven as c
 
 def check_if_file_exist(path):
     """
@@ -87,10 +88,12 @@ def validate_input_file(path):
     :param path:
     :return:
     """
-    if check_file_empty(path):
-        data_frame=read_input_file(path)
-    else:
-        return "The file is empty, cannot proceed further"
+    check_if_file_exist(path)
+    check_file_empty(path)
+    data_frame = read_input_file(path)
+    check_data_frame_empty(data_frame)
 
-    if check_data_frame_empty(data_frame):
-        return "The data frame is empty, cannot proceed further"
+    required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
+    missing_columns = get_missing_required_column(data_frame, *required_columns_raw_data)
+    
+    if missing_columns: raise custom_exception.MissingRequiredColumnError(missing_columns)
