@@ -28,3 +28,5 @@ def validate_input_file(path,required_columns_name):
 
     if missing_columns:
         raise MissingRequiredColumnError(missing_columns)
+
+    return data_frame
