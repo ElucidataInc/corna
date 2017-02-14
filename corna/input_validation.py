@@ -75,6 +75,28 @@ def check_missing(input_data_frame):
 
     return output_dataframe
 
+@handleError
+def check_duplicate(input_data_frame, axis=0, column_list=[]):
+    """
+    This function checks for a duplicate value in a column. It
+    saves the state duplicate if any duplicate value is found.
+    :param input_data_frame:
+    :param axis: 
+    :param column_list:
+    :return:
+    """
+    resultant_dataframe=pd.DataFrame()
+    print column_list
+    for column in column_list:
+            column_dataframe = pd.DataFrame()
+            column_dataframe['state']=input_data_frame.duplicated(column)
+            column_dataframe['column_name']=column
+            column_dataframe['row_number']=column_dataframe.index
+            resultant_dataframe=resultant_dataframe.append(column_dataframe)
+    output_dataframe=resultant_dataframe.loc[resultant_dataframe['state']==True]
+    output_dataframe['state'] = "duplicate"
+    return output_dataframe
+
 def check_postive_numerical_value(cell_value):
     try :
         value=float(cell_value)
