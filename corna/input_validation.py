@@ -5,6 +5,7 @@ from custom_exception import handleError,MissingRequiredColumnError
 from inputs.column_conventions import maven as c
 import os
 import pandas as pd
+import numbers
 
 #getting required columns for input file
 required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
@@ -45,30 +46,33 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
     :param function_list: list of validatin function
     :return: resultant dataframe
     """
-    resultant_dataframe=pd.DataFrame()
+    resultant_dataframe = pd.DataFrame()
     for function in function_list:
-        column_dataframe=pd.DataFrame()
+        column_dataframe = pd.DataFrame()
         for column in column_list:
-            function_name=function.__name__
-            column_dataframe['status']=input_data_frame[column].apply(function)
-            column_dataframe['column_name'],column_dataframe['function_name']=column,function_name
-            resultant_dataframe=resultant_dataframe.append(column_dataframe)
-    return resultant_dataframe
+            column_dataframe['state'] = input_data_frame[column].apply(function)
+            column_dataframe['column_name'] = column
+            column_dataframe['row_number'] = column_dataframe.index
+            resultant_dataframe = resultant_dataframe.append(column_dataframe)
+    output_dataframe = resultant_dataframe.loc[resultant_dataframe['state'] != 'correct']
+    return output_dataframe
 
 @handleError
 def check_missing(input_data_frame):
     """
     This function returns the data frame containing state of every cell which has
     missing value. We are using pandas.isnull method.
-    
+
     :param input_data_frame:
     :return: resultant data frame
     """
     missing_dataframe = input_data_frame.isnull()
-    missing_dataframe['function_name'] = 'missing'
     missing_dataframe['row_number'] = missing_dataframe.index
-    resultant_dataframe= pd.melt(missing_dataframe, id_vars=['function_name', 'row_number'],
-                                 var_name='column_name')
-    return resultant_dataframe
+    resultant_dataframe = pd.melt(missing_dataframe, id_vars=['row_number'],
+                                  var_name='column_name', value_name='state')
+    output_dataframe = resultant_dataframe.loc[resultant_dataframe['state'] == True]
+    output_dataframe['state'] = "missing"
+
+    return output_dataframe
 
 
