@@ -75,4 +75,12 @@ def check_missing(input_data_frame):
 
     return output_dataframe
 
-
+def check_postive_numerical_value(cell_value):
+    try :
+        value=float(cell_value)
+        if value<0:
+            return 'negative'
+        else:
+            return 'correct'
+    except ValueError:
+        return 'invalid'
