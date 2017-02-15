@@ -8,7 +8,7 @@ import pandas as pd
 import numbers
 import re
 import constants as cs
-from corna.helpers import chemformula_schema
+from corna.helpers import chemformula_schema,get_formula
 
 #getting required columns for input file
 required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
@@ -108,24 +108,30 @@ def check_postive_numerical_value(cell_value):
         else:
             return 'correct'
     except ValueError:
-        return 'invalid'
+        return 'invalid_intensity_value'
 
 def check_label_column_format(label):
     if label == 'C12 PARENT':
         return 'correct'
     else:
         if not '-label-' in label:
-            return 'invalid'
+            return 'invalid_label'
         formula, enums = label.split('-label-')
         if not re.match("^[A-Za-z0-9]*$", formula):
-            return 'invalid'
+            return 'invalid_label'
         if not re.match("^[0-9-]*$", enums):
-            return 'invalid'
+            return 'invalid_labe'
         isotopes = set(''.join(map(str, i)) for i in chemformula_schema.parseString(formula))
         elements = set(cs.data['isotope_na_mass']["element"])
         if not isotopes.issubset(elements):
-            return 'invalid'
+            return 'invalid_label'
         number_of_isotopes = set(enums.split('-'))
         if not len(isotopes) == len(number_of_isotopes):
-            return 'invalid'
+            return 'invalid_label'
+
+def check_formula_is_correct(formula):
+    try :
+        get_formula(formula)
+    except KeyError :
+        return 'invalid_formula'
 
