@@ -204,12 +204,15 @@ def get_label(label):
     :param label: label value
     :return: dict
     """
-    
-    label_formula, enums = label.split('-label-')
-    label_isotopes = list(''.join(map(str, i)) for i in chemformula_schema.parseString(label_formula))
-    label_number_of_elements = list(int(x) for x in enums.split('-'))
-    label_element_pattern = re.compile("([a-zA-Z]+)([0-9]+)")
-    label_elements = [label_element_pattern.match(isotope).group(1) for isotope in label_isotopes]
-    parsed_label = dict(zip(label_elements, label_number_of_elements))
 
-    return parsed_label
+    if label=='C12 PARENT':
+        return {'C':1}
+    else:
+        label_formula, enums = label.split('-label-')
+        label_isotopes = list(''.join(map(str, i)) for i in chemformula_schema.parseString(label_formula))
+        label_number_of_elements = list(int(x) for x in enums.split('-'))
+        label_element_pattern = re.compile("([a-zA-Z]+)([0-9]+)")
+        label_elements = [label_element_pattern.match(isotope).group(1) for isotope in label_isotopes]
+        parsed_label = dict(zip(label_elements, label_number_of_elements))
+
+        return parsed_label
