@@ -61,7 +61,7 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
     return output_dataframe
 
 @handleError
-def validator_for_two_column(input_data_frame,check_column='',required_column='', function=''):
+def validator_for_two_column(input_data_frame,check_column = '',required_column = '', function = ''):
     """
     This is basically a schema for performing two column validation checks.
     The check column is validated with the help of required column value.
@@ -97,7 +97,7 @@ def check_missing(input_data_frame):
     missing_dataframe = input_data_frame.isnull()
     missing_dataframe['row_number'] = missing_dataframe.index
     resultant_dataframe = pd.melt(missing_dataframe, id_vars=['row_number'],
-                                  var_name='column_name', value_name='state')
+                                  var_name = 'column_name', value_name='state')
     output_dataframe = resultant_dataframe.loc[resultant_dataframe['state'] == True]
     output_dataframe['state'] = "missing"
 
@@ -117,18 +117,18 @@ def check_duplicate(input_data_frame, axis=0, column_list=[]):
     print column_list
     for column in column_list:
             column_dataframe = pd.DataFrame()
-            column_dataframe['state']=input_data_frame.duplicated(column)
-            column_dataframe['column_name']=column
-            column_dataframe['row_number']=column_dataframe.index
-            resultant_dataframe=resultant_dataframe.append(column_dataframe)
-    output_dataframe=resultant_dataframe.loc[resultant_dataframe['state']==True]
+            column_dataframe['state'] = input_data_frame.duplicated(column)
+            column_dataframe['column_name'] = column
+            column_dataframe['row_number'] = column_dataframe.index
+            resultant_dataframe = resultant_dataframe.append(column_dataframe)
+    output_dataframe = resultant_dataframe.loc[resultant_dataframe['state'] == True]
     output_dataframe['state'] = "duplicate"
     return output_dataframe
 
 def check_postive_numerical_value(cell_value):
     try :
-        value=float(cell_value)
-        if value<0:
+        value = float(cell_value)
+        if value < 0:
             return 'negative'
         else:
             return 'correct'
@@ -173,23 +173,23 @@ def check_label_in_formula(label,formula):
     :return: state
     """
 
-    if not check_label_column_format(label)=='correct':
+    if not check_label_column_format(label) == 'correct':
         return 'label_not_correct'
-    if not check_formula_is_correct(formula)=='correct':
+    if not check_formula_is_correct(formula) == 'correct':
         return 'formula_not_correct'
 
-    parsed_label=get_label(label)
+    parsed_label = get_label(label)
     parsed_formula = get_formula(formula)
 
-    label_element_set=set(parsed_label.keys())
-    formula_element_set=set(parsed_formula.keys())
+    label_element_set = set(parsed_label.keys())
+    formula_element_set = set(parsed_formula.keys())
 
     if not label_element_set.issubset(formula_element_set) :
         return "label_not_in_formula"
 
 
     for element in label_element_set:
-        if not parsed_label[element]<=parsed_formula[element]:
+        if not parsed_label[element] <= parsed_formula[element]:
             return "element_in_label_more_than_formula"
 
     return 'correct'
