@@ -153,12 +153,13 @@ def check_label_column_format(label):
         number_of_isotopes = set(enums.split('-'))
         if not len(isotopes) == len(number_of_isotopes):
             return 'invalid_label'
+        return 'correct'
 
 def check_formula_is_correct(formula):
     try :
         get_formula(formula)
         return 'correct'
-    except KeyError :
+    except :
         return 'invalid_formula'
 
 def check_label_in_formula(label,formula):
@@ -203,7 +204,7 @@ def get_label(label):
     :param label: label value
     :return: dict
     """
-
+    
     label_formula, enums = label.split('-label-')
     label_isotopes = list(''.join(map(str, i)) for i in chemformula_schema.parseString(label_formula))
     label_number_of_elements = list(int(x) for x in enums.split('-'))
