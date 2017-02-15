@@ -135,3 +135,55 @@ def check_formula_is_correct(formula):
     except KeyError :
         return 'invalid_formula'
 
+def check_label_in_formula(label,formula):
+    """
+    This function checks if all label element are in formula.
+    Also label element must be less than or equal to corresponding
+    element in formula.
+
+    :param label: label value of column
+    :param formula: formula value of column
+    :return: state
+    """
+
+    if not check_label_column_format(label)=='correct':
+        return 'label_not_correct'
+    if not check_formula_is_correct(formula)=='correct':
+        return 'formula_not_correct'
+
+    parsed_label=get_label(label)
+    parsed_formula = get_formula(formula)
+
+    label_element_set=set(parsed_label.keys())
+    formula_element_set=set(parsed_formula.keys())
+
+    if not label_element_set.issubset(formula_element_set) :
+        return "label_not_in_formula"
+
+
+    for element in label_element_set:
+        if not parsed_label[element]<=parsed_formula[element]:
+            return "element_in_label_more_than_formula"
+
+    return 'correct'
+
+def get_label(label):
+    """
+    This function takes label value as an argument and parsed it to
+    save dictionary  as element,value pair. For ex:
+    label= C13N15-label-4-5
+    dict={'C': 4, 'N': 5}
+
+    :param label: label value
+    :return: dict
+    """
+
+    label_formula, enums = label.split('-label-')
+    label_isotopes = list(''.join(map(str, i)) for i in chemformula_schema.parseString(label_formula))
+    label_number_of_elements = list(int(x) for x in enums.split('-'))
+    label_element_pattern = re.compile("([a-zA-Z]+)([0-9]+)")
+    label_elements = [label_element_pattern.match(isotope).group(1) for isotope in label_isotopes]
+    parsed_label = dict(zip(label_elements, label_number_of_elements))
+
+    return parsed_label
+
