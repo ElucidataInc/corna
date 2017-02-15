@@ -6,6 +6,9 @@ from inputs.column_conventions import maven as c
 import os
 import pandas as pd
 import numbers
+import re
+import constants as cs
+from corna.helpers import chemformula_schema
 
 #getting required columns for input file
 required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
@@ -81,7 +84,7 @@ def check_duplicate(input_data_frame, axis=0, column_list=[]):
     This function checks for a duplicate value in a column. It
     saves the state duplicate if any duplicate value is found.
     :param input_data_frame:
-    :param axis: 
+    :param axis:
     :param column_list:
     :return:
     """
@@ -106,3 +109,23 @@ def check_postive_numerical_value(cell_value):
             return 'correct'
     except ValueError:
         return 'invalid'
+
+def check_label_column_format(label):
+    if label == 'C12 PARENT':
+        return 'correct'
+    else:
+        if not '-label-' in label:
+            return 'invalid'
+        formula, enums = label.split('-label-')
+        if not re.match("^[A-Za-z0-9]*$", formula):
+            return 'invalid'
+        if not re.match("^[0-9-]*$", enums):
+            return 'invalid'
+        isotopes = set(''.join(map(str, i)) for i in chemformula_schema.parseString(formula))
+        elements = set(cs.data['isotope_na_mass']["element"])
+        if not isotopes.issubset(elements):
+            return 'invalid'
+        number_of_isotopes = set(enums.split('-'))
+        if not len(isotopes) == len(number_of_isotopes):
+            return 'invalid'
+
