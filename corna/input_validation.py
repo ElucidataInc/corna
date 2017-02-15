@@ -61,6 +61,31 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
     return output_dataframe
 
 @handleError
+def validator_for_two_column(input_data_frame,check_column='',required_column='', function=''):
+    """
+    This is basically a schema for performing two column validation checks.
+    The check column is validated with the help of required column value.
+    The resultant data frame is returned which contains state for cell
+    which function is applied.
+
+    :param input_data_frame: the data frame on which validation is to be applied
+    :param check_column: the column on which check is to be performed
+    :param required_column: the column which helps in performing check
+    :param function: validatin function
+    :return: resultant dataframe
+    """
+    resultant_dataframe = pd.DataFrame()
+
+    resultant_dataframe['state'] = input_data_frame.apply(
+                                    lambda x: function(x[check_column], x[required_column]), axis=1)
+
+    resultant_dataframe['column_name'] = check_column
+    resultant_dataframe['row_number'] = resultant_dataframe.index
+    output_dataframe = resultant_dataframe.loc[resultant_dataframe['state'] != 'correct']
+
+    return output_dataframe
+
+@handleError
 def check_missing(input_data_frame):
     """
     This function returns the data frame containing state of every cell which has
@@ -132,6 +157,7 @@ def check_label_column_format(label):
 def check_formula_is_correct(formula):
     try :
         get_formula(formula)
+        return 'correct'
     except KeyError :
         return 'invalid_formula'
 
@@ -186,4 +212,3 @@ def get_label(label):
     parsed_label = dict(zip(label_elements, label_number_of_elements))
 
     return parsed_label
-
