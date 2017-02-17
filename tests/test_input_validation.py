@@ -1,8 +1,8 @@
 from corna.custom_exception import FileExtensionError,FileEmptyError
 from corna.custom_exception import MissingRequiredColumnError,FileExistError
 from corna.custom_exception import DataFrameEmptyError
-from corna.input_validation import check_if_file_exist,check_file_empty
-from corna.input_validation import read_input_file,check_data_frame_empty
+from corna.dataframe_validator import check_if_file_exist,check_file_empty
+from corna.dataframe_validator import read_input_file,check_data_frame_empty
 from corna.input_validation import validate_input_file
 import pytest
 import os
