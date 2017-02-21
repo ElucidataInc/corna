@@ -16,6 +16,8 @@ from . postprocess import replace_negatives, fractional_enrichment
 
 from . output import convert_to_df, save_to_csv
 
+from . inputs.maven_parser import read_input_file
+
 #from . corna_yale.file_parser_yale import read_multiquant, read_multiquant_metadata, merge_mq_metadata
 
 #from . corna_yale.preprocess import met_background_correction, met_background_correction_all
