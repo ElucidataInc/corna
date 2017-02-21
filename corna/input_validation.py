@@ -145,7 +145,7 @@ def check_label_column_format(label):
         if not re.match("^[A-Za-z0-9]*$", formula):
             return 'invalid_label'
         if not re.match("^[0-9-]*$", enums):
-            return 'invalid_labe'
+            return 'invalid_label'
         isotopes = set(''.join(map(str, i)) for i in chemformula_schema.parseString(formula))
         elements = set(cs.data['isotope_na_mass']["element"])
         if not isotopes.issubset(elements):
