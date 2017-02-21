@@ -1,4 +1,11 @@
 from collections import namedtuple
+from corna.input_validation import check_missing,check_duplicate
+from corna.input_validation import validator_column_wise,validator_for_two_column
+from corna.input_validation import check_formula_is_correct
+from corna.input_validation import check_postive_numerical_value
+from corna.input_validation import check_label_column_format,check_label_in_formula
+from corna.validation_report_class import ValidationReport
+from corna.input_validation import validate_input_file
 
 import pandas as pd
 
@@ -152,3 +159,66 @@ def convert_labels_to_std(df, iso_tracers):
 
     df['Label'] = [process_label(l) for l in df['Label']]
     return df
+
+
+def filtered_data_frame(maven_data_frame, metadata_data_frame):
+    """
+    This function returns filtered maven_dataframe , only those
+    sample columns is returned which are present in metadata_dataframe
+    sample list. It first get the intersection of maven_data_frame
+    columns with all the entries of Sample in metadataframe.
+
+    :param maven_data_frame:
+    :param metadata_data_frame:
+    :return:
+    """
+    filtered_metadata_frame = metadata_data_frame.drop_duplicates(required_columns_metadata)
+    metadata_sample_column_set = set(filtered_metadata_frame[c.SAMPLE].tolist())
+    maven_sample_list = set(maven_data_frame.columns.values.tolist())
+    intersection_sample_list = list(maven_sample_list.intersection(metadata_sample_column_set))
+    if intersection_sample_list:
+        maven_data_frame_column = required_columns_raw_data+intersection_sample_list
+        filtered_maven_dataframe = maven_data_frame[maven_data_frame_column]
+    else:
+        raise
+    return filtered_maven_dataframe
+
+
+def read_input_file(maven_file_path, maven_sample_metadata_path):
+    """
+    This function reads maven and metadata file, convert it to dataframe and
+    checks for validation of files and returns merged output with validation
+    logs.
+    :param maven_file_path:
+    :param maven_sample_metadata_path:
+    :return:
+    """
+    vr = ValidationReport()
+    input_maven_data_frame = validate_input_file(maven_file_path, required_columns_raw_data)
+    if maven_sample_metadata_path:
+        metadata_data_frame = validate_input_file(maven_sample_metadata_path, required_columns_metadata)
+        maven_data_frame = filtered_data_frame(input_maven_data_frame, metadata_data_frame)
+    else:
+        maven_data_frame = input_maven_data_frame
+    vr.append(check_missing(maven_data_frame))
+    vr.append(check_duplicate(maven_data_frame, 0, [['Name', 'Label']]))
+    sample_column = [column for column in list(maven_data_frame)
+                     if column not in required_columns_raw_data]
+
+    vr.append(validator_column_wise(maven_data_frame, 0, sample_column, [check_postive_numerical_value]))
+    vr.append(validator_column_wise(maven_data_frame, 0, [c.LABEL], [check_label_column_format]))
+    vr.append(validator_column_wise(maven_data_frame, 0, [c.FORMULA], [check_formula_is_correct]))
+    vr.append(validator_for_two_column(maven_data_frame, c.LABEL, c.FORMULA, check_label_in_formula))
+    vr.generate_report()
+    vr.generate_action()
+    vr.decide_action()
+    corrected_maven_df = vr.take_action(maven_data_frame)
+    logs = vr.generate_warning_error_list_of_strings()
+    merge_df = pd.DataFrame()
+    if vr.action['action'] != 'Stop_Tool':
+        if maven_sample_metadata_path:
+            merge_df = maven_merge_dfs(corrected_maven_df,metadata_data_frame)
+        else:
+            merge_df = convert_inputdata_to_stdfrom(corrected_maven_df)
+
+    return merge_df, logs
