@@ -2,7 +2,7 @@ from dataframe_validator import check_if_file_exist,check_data_frame_empty
 from dataframe_validator import check_file_empty,read_input_file
 from dataframe_validator import get_missing_required_column
 from custom_exception import handleError,MissingRequiredColumnError
-from inputs.column_conventions import maven as c
+from inputs.column_conventions import maven
 import os
 import pandas as pd
 import numbers
@@ -11,7 +11,7 @@ import constants as con
 from corna.helpers import chemformula_schema,get_formula
 
 #getting required columns for input file
-required_columns_raw_data = [con.NAME, con.LABEL, con.FORMULA]
+required_columns_raw_data = [maven.NAME, maven.LABEL, maven.FORMULA]
 
 
 
@@ -54,15 +54,16 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
     for function in function_list:
         column_dataframe = pd.DataFrame()
         for column in column_list:
-            column_dataframe['state'] = input_data_frame[column].apply(function)
-            column_dataframe['column_name'] = column
-            column_dataframe['row_number'] = column_dataframe.index
+            column_dataframe[con.COLUMN_STATE] = input_data_frame[column].apply(function)
+            column_dataframe[con.COLUMN_NAME] = column
+            column_dataframe[con.COLUMN_ROW] = column_dataframe.index
             resultant_dataframe = resultant_dataframe.append(column_dataframe)
-    output_dataframe = resultant_dataframe.loc[resultant_dataframe['state'] != 'correct']
+    output_dataframe = resultant_dataframe.loc[resultant_dataframe
+                                               [con.COLUMN_STATE] != con.VALID_STATE]
     return output_dataframe
 
 @handleError
-def validator_for_two_column(input_data_frame,check_column = '',required_column = '', function = ''):
+def validator_for_two_column(input_data_frame, check_column='', required_column='', function=''):
     """
     This is basically a schema for performing two column validation checks.
     The check column is validated with the help of required column value.
@@ -77,12 +78,13 @@ def validator_for_two_column(input_data_frame,check_column = '',required_column 
     """
     resultant_dataframe = pd.DataFrame()
 
-    resultant_dataframe['state'] = input_data_frame.apply(
+    resultant_dataframe[con.COLUMN_STATE] = input_data_frame.apply(
                                     lambda x: function(x[check_column], x[required_column]), axis=1)
 
-    resultant_dataframe['column_name'] = check_column
-    resultant_dataframe['row_number'] = resultant_dataframe.index
-    output_dataframe = resultant_dataframe.loc[resultant_dataframe['state'] != 'correct']
+    resultant_dataframe[con.COLUMN_NAME] = check_column
+    resultant_dataframe[con.COLUMN_ROW] = resultant_dataframe.index
+    output_dataframe = resultant_dataframe.loc[resultant_dataframe
+                                            [con.COLUMN_STATE] != con.VALID_STATE]
 
     return output_dataframe
 
@@ -96,11 +98,11 @@ def check_missing(input_data_frame):
     :return: resultant data frame
     """
     missing_dataframe = input_data_frame.isnull()
-    missing_dataframe['row_number'] = missing_dataframe.index
-    resultant_dataframe = pd.melt(missing_dataframe, id_vars=['row_number'],
-                                  var_name = 'column_name', value_name='state')
-    output_dataframe = resultant_dataframe.loc[resultant_dataframe['state'] == True]
-    output_dataframe['state'] = "missing"
+    missing_dataframe[con.COLUMN_ROW] = missing_dataframe.index
+    resultant_dataframe = pd.melt(missing_dataframe, id_vars=[con.COLUMN_ROW],
+                                  var_name = con.COLUMN_NAME, value_name=con.COLUMN_STATE)
+    output_dataframe = resultant_dataframe.loc[resultant_dataframe[con.COLUMN_STATE] == True]
+    output_dataframe[con.COLUMN_STATE] = con.MISSING_STATE
 
     return output_dataframe
 
@@ -118,23 +120,23 @@ def check_duplicate(input_data_frame, axis=0, column_list=[]):
     print column_list
     for column in column_list:
             column_dataframe = pd.DataFrame()
-            column_dataframe['state'] = input_data_frame.duplicated(column)
-            column_dataframe['column_name'] = '-'.join(column)
-            column_dataframe['row_number'] = column_dataframe.index
+            column_dataframe[con.COLUMN_STATE] = input_data_frame.duplicated(column)
+            column_dataframe[con.COLUMN_NAME] = '-'.join(column)
+            column_dataframe[con.COLUMN_ROW] = column_dataframe.index
             resultant_dataframe = resultant_dataframe.append(column_dataframe)
-    output_dataframe = resultant_dataframe.loc[resultant_dataframe['state'] == True]
-    output_dataframe['state'] = "duplicate"
+    output_dataframe = resultant_dataframe.loc[resultant_dataframe[con.COLUMN_STATE] == True]
+    output_dataframe[con.COLUMN_STATE] = con.DUPLICATE_STATE
     return output_dataframe
 
 def check_postive_numerical_value(cell_value):
     try :
         value = float(cell_value)
         if value < 0:
-            return 'negative'
+            return con.INTENSITY_STATE_NEGATIVE
         else:
-            return 'correct'
+            return con.VALID_STATE
     except ValueError:
-        return 'invalid_intensity_value'
+        return con.INTENSITY_STATE_INVALID
 
 
 def check_label_column_format(label):
@@ -147,12 +149,13 @@ def check_label_column_format(label):
         else:
             return con.LABEL_STATE_INVALID
 
+
 def check_formula_is_correct(formula):
     try :
         get_formula(formula)
-        return 'correct'
+        return con.VALID_STATE
     except :
-        return 'invalid_formula'
+        return con.FORMULA_STATE_INVALID
 
 def check_label_in_formula(label,formula):
     """
@@ -165,26 +168,33 @@ def check_label_in_formula(label,formula):
     :return: state
     """
 
-    if not check_label_column_format(label) == 'correct':
-        return 'label_not_correct'
-    if not check_formula_is_correct(formula) == 'correct':
-        return 'formula_not_correct'
+    if not check_label_column_format(label) == con.VALID_STATE:
+        return con.LABEL_STATE_NOT_CORRECT
+    if not check_formula_is_correct(formula) == con.VALID_STATE:
+        return con.FORMULA_STATE_INVALID
 
-    parsed_label = get_label(label)
-    parsed_formula = get_formula(formula)
+    try:
+        parsed_label = get_label(label)
+        parsed_formula = get_formula(formula)
 
-    label_element_set = set(parsed_label.keys())
-    formula_element_set = set(parsed_formula.keys())
+        if parsed_label == con.UNLABELLED_LABEL_DICT:
+            return con.VALID_STATE
 
-    if not label_element_set.issubset(formula_element_set) :
-        return "label_not_in_formula"
+        label_element_set = set(parsed_label.keys())
+        formula_element_set = set(parsed_formula.keys())
+
+        if not label_element_set.issubset(formula_element_set) :
+            return con.LABEL_STATE_NOT_FORMULA
 
 
-    for element in label_element_set:
-        if not parsed_label[element] <= parsed_formula[element]:
-            return "element_in_label_more_than_formula"
+        for element in label_element_set:
+            if not parsed_label[element] <= parsed_formula[element]:
+                return con.LABEL_STATE_NUMBER_MORE_FORMULA
 
-    return 'correct'
+        return con.VALID_STATE
+    except Exception:
+        return con.LABEL_STATE_INVALID
+
 
 def get_label(label):
     """
@@ -197,14 +207,21 @@ def get_label(label):
     :return: dict
     """
 
-    if label=='C12 PARENT':
-        return {'C':1}
+    if label == con.UNLABELLED_LABEL:
+        return con.UNLABELLED_LABEL_DICT
     else:
-        label_formula, enums = label.split('-label-')
-        label_isotopes = list(''.join(map(str, i)) for i in chemformula_schema.parseString(label_formula))
-        label_number_of_elements = list(int(x) for x in enums.split('-'))
-        label_element_pattern = re.compile("([a-zA-Z]+)([0-9]+)")
-        label_elements = [label_element_pattern.match(isotope).group(1) for isotope in label_isotopes]
-        parsed_label = dict(zip(label_elements, label_number_of_elements))
+        try:
+            label_formula, enums = label.split('-label-')
+            label_isotopes = list(''.join(map(str, i))
+                                  for i in chemformula_schema.parseString(label_formula))
+            label_number_of_elements = list(int(x) for x in enums.split('-'))
 
-        return parsed_label
+            if len(label_isotopes) != len(label_number_of_elements):
+                return None
+            label_element_pattern = re.compile("([a-zA-Z]+)([0-9]+)")
+            label_elements = [label_element_pattern.match(isotope).group(1)
+                              for isotope in label_isotopes]
+            parsed_label = dict(zip(label_elements, label_number_of_elements))
+            return parsed_label
+        except Exception:
+            return None
