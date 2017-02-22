@@ -140,7 +140,7 @@ def check_postive_numerical_value(cell_value):
 
 
 def check_label_column_format(label):
-    if label == con.UNLABELLED_LABEL:
+    if label == con.UNLABELLED_LABEL or label is None:
         return con.VALID_STATE
     else:
         parsed_label = get_label(label)
@@ -151,10 +151,13 @@ def check_label_column_format(label):
 
 
 def check_formula_is_correct(formula):
-    try :
-        get_formula(formula)
-        return con.VALID_STATE
-    except :
+    try:
+        if pd.isnull(formula):
+            return con.VALID_STATE
+        else:
+            get_formula(formula)
+            return con.VALID_STATE
+    except:
         return con.FORMULA_STATE_INVALID
 
 def check_label_in_formula(label,formula):
@@ -170,9 +173,10 @@ def check_label_in_formula(label,formula):
 
     if not check_label_column_format(label) == con.VALID_STATE:
         return con.LABEL_STATE_NOT_CORRECT
-    if not check_formula_is_correct(formula) == con.VALID_STATE:
+    if not check_formula_is_correct(formula) == con.VALID_STATE :
         return con.FORMULA_STATE_INVALID
-
+    if label is None or pd.isnull(formula):
+        return con.VALID_STATE
     try:
         parsed_label = get_label(label)
         parsed_formula = get_formula(formula)
@@ -225,3 +229,4 @@ def get_label(label):
             return parsed_label
         except Exception:
             return None
+
