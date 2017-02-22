@@ -7,11 +7,12 @@ import os
 import pandas as pd
 import numbers
 import re
-import constants as cs
+import constants as con
 from corna.helpers import chemformula_schema,get_formula
 
 #getting required columns for input file
-required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
+required_columns_raw_data = [con.NAME, con.LABEL, con.FORMULA]
+
 
 
 @handleError
@@ -135,25 +136,16 @@ def check_postive_numerical_value(cell_value):
     except ValueError:
         return 'invalid_intensity_value'
 
+
 def check_label_column_format(label):
-    if label == 'C12 PARENT':
-        return 'correct'
+    if label == con.UNLABELLED_LABEL:
+        return con.VALID_STATE
     else:
-        if not '-label-' in label:
-            return 'invalid_label'
-        formula, enums = label.split('-label-')
-        if not re.match("^[A-Za-z0-9]*$", formula):
-            return 'invalid_label'
-        if not re.match("^[0-9-]*$", enums):
-            return 'invalid_label'
-        isotopes = set(''.join(map(str, i)) for i in chemformula_schema.parseString(formula))
-        elements = set(cs.data['isotope_na_mass']["element"])
-        if not isotopes.issubset(elements):
-            return 'invalid_label'
-        number_of_isotopes = set(enums.split('-'))
-        if not len(isotopes) == len(number_of_isotopes):
-            return 'invalid_label'
-        return 'correct'
+        parsed_label = get_label(label)
+        if parsed_label and set(parsed_label).issubset(con.ELEMENT_LIST):
+            return con.VALID_STATE
+        else:
+            return con.LABEL_STATE_INVALID
 
 def check_formula_is_correct(formula):
     try :
