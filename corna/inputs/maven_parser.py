@@ -1,16 +1,14 @@
 from collections import namedtuple
+
 import pandas as pd
 
-from column_conventions import maven as c
-from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
-from corna.helpers import chemformula_schema, check_column_headers
-from corna.constants import PARENT_COL, VAR_COL, VAL_COL, FRAG_COL, SAMPLE_COL, INTENSITY_COL
-
+from . column_conventions import maven as c
+from .. helpers import merge_two_dfs, create_dict_from_isotope_label_list, chemformula_schema, check_column_headers
 #, VAR_COL, VAL_COL, SAMPLE_COL, INTENSITY_COL
+from .. constants import PARENT_COL, VAR_COL, VAL_COL, FRAG_COL, SAMPLE_COL, INTENSITY_COL
+
+
 MavenKey = namedtuple('MavenKey','name formula')
-#required column headers for raw and metadata file
-required_columns_raw_data = [c.NAME, c.LABEL, c.FORMULA]
-required_columns_metadata = [c.SAMPLE]
 
 def maven_merge_dfs(df1, df2):
     """
@@ -154,26 +152,3 @@ def convert_labels_to_std(df, iso_tracers):
 
     df['Label'] = [process_label(l) for l in df['Label']]
     return df
-
-
-def filtered_data_frame(maven_data_frame,metadata_data_frame):
-    """
-    This function returns filtered maven_dataframe , only those
-    sample columns is returned which are present in metadata_dataframe
-    sample list. It first get the intersection of maven_data_frame
-    columns with all the entries of Sample in metadataframe.
-
-    :param maven_data_frame:
-    :param metadata_data_frame:
-    :return:
-    """
-    filtered_metadata_frame = metadata_data_frame.drop_duplicates(required_columns_metadata)
-    metadata_sample_column_set = set(filtered_metadata_frame[c.SAMPLE].tolist())
-    maven_sample_list = set(maven_data_frame.columns.values.tolist())
-    intersection_sample_list = list(maven_sample_list.intersection(metadata_sample_column_set))
-    if intersection_sample_list:
-        maven_data_frame_column = required_columns_raw_data+intersection_sample_list
-        filtered_maven_dataframe = maven_data_frame[maven_data_frame_column]
-    else:
-        raise
-    return filtered_maven_dataframe
