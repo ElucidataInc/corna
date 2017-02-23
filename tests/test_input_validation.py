@@ -13,7 +13,6 @@ import pytest
 import os
 import pandas as pd
 
-
 def test_check_if_file_exist():
     dir_path = os.path.dirname(os.path.abspath(__file__))
     file_not_exist_path = os.path.join(dir_path, "test_input_validation_data", "maven_data.py")
@@ -63,38 +62,38 @@ def test_required_column_missing():
 
 def test_check_positive_numerical_value():
 
-    assert check_postive_numerical_value(14) == 'correct'
-    assert check_postive_numerical_value(-19) == 'negative'
-    assert check_postive_numerical_value('test123') == 'invalid_intensity_value'
+    assert check_postive_numerical_value(14) == constant.VALID_STATE
+    assert check_postive_numerical_value(-19) == constant.INTENSITY_STATE_NEGATIVE
+    assert check_postive_numerical_value('test123') == constant.INTENSITY_STATE_INVALID
 
 
 def test_check_label_column_format():
 
-    assert check_label_column_format('C12 PARENT') == 'correct'
-    assert check_label_column_format('C13-label-2') == 'correct'
-    assert check_label_column_format('C13-2') == 'invalid_label'
-    assert check_label_column_format('C13-label-a') == 'invalid_label'
-    assert check_label_column_format('C11-N15-label-1-2') == 'invalid_label'
+    assert check_label_column_format('C12 PARENT') == constant.VALID_STATE
+    assert check_label_column_format('C13-label-2') == constant.VALID_STATE
+    assert check_label_column_format('C13-2') == constant.LABEL_STATE_INVALID
+    assert check_label_column_format('C13-label-a') == constant.LABEL_STATE_INVALID
+    assert check_label_column_format('C11-N15-label-1-2') == constant.LABEL_STATE_INVALID
 
 
 def test_label_in_formula():
 
-    assert check_label_in_formula('C13-label-2','C10H12N5O6P') == 'correct'
-    assert check_label_in_formula('C13-label-6', 'C5H12N5O6P') == 'element_in_label_more_than_formula'
-    assert check_label_in_formula('C13-label-6', 'H12N5O6P') == 'label_not_in_formula'
+    assert check_label_in_formula('C13-label-2','C10H12N5O6P') == constant.VALID_STATE
+    assert check_label_in_formula('C13-label-6', 'C5H12N5O6P') == constant.LABEL_STATE_NUMBER_MORE_FORMULA
+    assert check_label_in_formula('C13-label-6', 'H12N5O6P') == constant.LABEL_STATE_NOT_FORMULA
 
 
 def test_get_label():
 
-    assert get_label('C12 PARENT') == {'C': 1}
+    assert get_label('C12 PARENT') == {'C': 0, 'N': 0}
     assert get_label('C13-label-6') == {'C': 6}
     assert get_label('C13N15-label-4-5') == {'C': 4, 'N': 5}
 
 
 def test_check_formula_is_correct():
 
-    assert check_formula_is_correct('C5H12N5O6P') == 'correct'
-    assert check_formula_is_correct('C5H12N5O6PLO') == 'invalid_formula'
+    assert check_formula_is_correct('C5H12N5O6P') == constant.VALID_STATE
+    assert check_formula_is_correct('C5H12N5O6PLO') == constant.FORMULA_STATE_INVALID
 
 
 def test_check_duplicate():
