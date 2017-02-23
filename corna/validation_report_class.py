@@ -79,3 +79,32 @@ class ValidationReport():
                             if result_object[key][con.VALIDATION_WARNING]]
 
         return self.result
+
+    def generate_action(self):
+        """
+        This function geneartes the action to be taken for each validation
+        result and save the action report as key value pair where key is
+        the row number.
+
+        :return: dict object
+        """
+
+        for row in self.warning_row:
+            for entries in self.result[row][con.VALIDATION_WARNING]:
+
+                if entries[1] == con.MISSING_STATE:
+                    if entries[0] not in self.required_column_list:
+                        action = con.VALIDATION_ACTION_FILL_NA
+                    else:
+                        action = con.VALIDATION_ACTION_DROP
+                    entries.append(action)
+                if entries[1] == con.DUPLICATE_STATE:
+                    action = con.VALIDATION_ACTION_DROP
+                    entries.append(action)
+
+        for row in self.error_row:
+            for entries in self.result[row][con.VALIDATION_ERROR]:
+                action = con.VALIDATION_ACTION_STOP
+                entries.append(action)
+
+        return self.result
