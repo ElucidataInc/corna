@@ -163,3 +163,28 @@ class ValidationReport():
         self.warning_error_dict[con.VALIDATION_WARNING][con.VALIDATION_ACTION] = self.action_messages
 
         return resultant_dataframe
+
+    def generate_warning_error_list_of_strings(self):
+        """
+        This function generates the report of validation check in the form
+        of list of strings.
+
+        :return: dict object
+        """
+
+        for row in self.result.keys():
+            if self.result[row][con.VALIDATION_WARNING]:
+                msg = []
+                for warning in self.result[row][con.VALIDATION_WARNING]:
+                    msg.append("column <b>{c[0]}</b> has <b>{c[1]}</b> value".format(c=warning))
+                final_msg = "Row Number <b>%i</b> : " % row + " , ".join(msg)
+                self.warning_error_dict[con.VALIDATION_WARNING][con.VALIDATION_MESSAGE].append(final_msg)
+
+            if self.result[row][con.VALIDATION_ERROR]:
+                msg = []
+                for error in self.result[row][con.VALIDATION_ERROR]:
+                    msg.append("column <b>{c[0]}</b> has <b>{c[1]}</b> value".format(c=error))
+                final_msg = "Row Number <b>%i</b> : " % row + " , ".join(msg)
+                self.warning_error_dict[con.VALIDATION_ERROR].append(final_msg)
+
+        return self.warning_error_dict
