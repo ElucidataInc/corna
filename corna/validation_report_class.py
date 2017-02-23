@@ -136,3 +136,30 @@ class ValidationReport():
             self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_OK
 
         return self.action
+
+    def take_action(self, data_frame):
+        """
+        With the help of action report this function perform actions on the
+        row also it returns the filtered data frame after performing the action.
+
+        :param data_frame:
+        :return: data_frame
+        """
+        resultant_dataframe = pd.DataFrame()
+        list_of_rows_to_drop = []
+        if not self.action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_STOP:
+            resultant_dataframe = data_frame
+            for rows in [rows for rows in self.action if rows not in [con.VALIDATION_ACTION]]:
+                for row in self.action[rows]:
+                    if row[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_DROP:
+                        list_of_rows_to_drop.append(rows)
+                        action_msg = "Row is Dropped"
+                        break
+                    if row[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_FILL_NA:
+                        resultant_dataframe.set_value(rows, row['column'], 0)
+                        action_msg = "Missing value of columns replaced with 0"
+                self.action_messages.append(action_msg)
+            resultant_dataframe.drop(resultant_dataframe.index[list_of_rows_to_drop], inplace=True)
+        self.warning_error_dict[con.VALIDATION_WARNING][con.VALIDATION_ACTION] = self.action_messages
+
+        return resultant_dataframe
