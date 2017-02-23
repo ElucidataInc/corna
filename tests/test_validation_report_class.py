@@ -34,3 +34,9 @@ class TestValidationReport:
         df = pd.DataFrame({'column_name': 'Name', 'row_number': 1, 'state': 'missing'}, index=[0])
         self.validation.report_dataframe = df
         assert self.validation.decide_action()['action'] == 'Row_Wise_Action'
+
+    def test_take_action(self):
+        df = pd.DataFrame({'column_name': 'Name', 'row_number': 1, 'state': 'missing'}, index=[0])
+        self.validation.report_dataframe = df
+        new_df = self.validation.take_action(df)
+        assert new_df.empty
