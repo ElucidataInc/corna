@@ -1,7 +1,6 @@
 from corna.validation_report_class import ValidationReport
-import pytest
 import pandas as pd
-from corna.model import Ion
+
 
 class TestValidationReport:
 
@@ -14,37 +13,31 @@ class TestValidationReport:
         del cls.validation
 
     def test_append(self):
-        df = pd.DataFrame({'column_name': 'Name', 'row_number': 1, 'state': 'missing'}, index=[0])
+        df = pd.DataFrame({'column_name': 'Name', 'row_number': 0, 'state': 'missing'}, index=[0])
         self.validation.append(df)
         assert self.validation.report_dataframe.equals(df)
 
     def test_generate_report(self):
-        df = pd.DataFrame({'column_name': 'Name', 'row_number': 1, 'state': 'missing'}, index=[0])
+        df = pd.DataFrame({'column_name': 'Name', 'row_number': 0, 'state': 'missing'}, index=[0])
         self.validation.report_dataframe = df
-        test_result = {1: {'warning': [['Name', 'missing']], 'error': []}}
+        test_result = {0: {'warning': [['Name', 'missing']], 'errors': []}}
         assert self.validation.generate_report() == test_result
 
     def test_generate_action(self):
-        df = pd.DataFrame({'column_name': 'Name', 'row_number': 1, 'state': 'missing'}, index=[0])
+        df = pd.DataFrame({'column_name': 'Name', 'row_number': 0, 'state': 'missing'}, index=[0])
         self.validation.report_dataframe = df
-        test_result = {1: {'warning': [['Name', 'missing', 'DROP']], 'error': []}}
+        test_result = {0: {'warning': [['Name', 'missing', 'DROP']], 'errors': []}}
         assert self.validation.generate_action() == test_result
 
     def test_decide_action(self):
-        df = pd.DataFrame({'column_name': 'Name', 'row_number': 1, 'state': 'missing'}, index=[0])
+        df = pd.DataFrame({'column_name': 'Name', 'row_number': 0, 'state': 'missing'}, index=[0])
         self.validation.report_dataframe = df
         assert self.validation.decide_action()['action'] == 'Row_Wise_Action'
 
     def test_take_action(self):
-        df = pd.DataFrame({'column_name': 'Name', 'row_number': 1, 'state': 'missing'}, index=[0])
+        df = pd.DataFrame({'column_name': 'Name', 'row_number': 0, 'state': 'missing'}, index=[0])
         self.validation.report_dataframe = df
         new_df = self.validation.take_action(df)
         assert new_df.empty
 
-    def test_generate_warning_error_list_of_strings(self):
-        df = pd.DataFrame({'column_name': 'Name', 'row_number': 1, 'state': 'missing'}, index=[0])
-        self.validation.report_dataframe = df
-        test_result = {'warning': {'action': ['Row is Dropped'],
-                                   'message': ['Row Number 1 : column Name has missing value']},
-                       'error': []}
-        assert self.validation.generate_warning_error_list_of_strings() == test_result
+
