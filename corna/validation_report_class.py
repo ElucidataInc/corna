@@ -108,3 +108,31 @@ class ValidationReport():
                 entries.append(action)
 
         return self.result
+
+    def decide_action(self):
+        """
+            This function with the help of report object decide final action
+            to be taken on row . If there is any error then it will simply
+            commads to STOP_TOOL.
+
+        :param data_frame:
+        :return: dict object
+        """
+
+        if self.error_row:
+            self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_STOP
+
+
+        elif self.warning_row:
+            self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_ROW_WISE
+            for row in self.warning_row:
+                column_state_action_list = []
+                for entries in self.result[row][con.VALIDATION_WARNING]:
+                    column_state_action_list.append({'column': entries[0],
+                                                     con.COLUMN_STATE: entries[1],
+                                                     con.VALIDATION_ACTION: entries[2]})
+                self.action[row] = column_state_action_list
+        else:
+            self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_OK
+
+        return self.action
