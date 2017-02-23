@@ -41,3 +41,41 @@ class ValidationReport():
     def append(self, dataframe):
         # append the data frame to the global report data frame
         self.report_dataframe = self.report_dataframe.append(dataframe)
+
+    def generate_report(self):
+        """
+        This function generates the report in the form of dict object
+        based on the values of report data frame.
+
+        :TODO : remove the hard coded values of column names and state.
+                so that it is easy to make it more generalise.
+
+        :return: dict object
+        """
+        result_object = {}
+        row_key = list(self.report_dataframe.groupby([con.COLUMN_ROW]).groups.keys())
+        for key in row_key:
+            row_df = self.report_dataframe.loc[self.report_dataframe[con.COLUMN_ROW] == key]
+            warning = []
+            error = []
+            row_object = {}
+            for index, row in row_df.iterrows():
+                if row[con.COLUMN_STATE] == con.MISSING_STATE:
+                    warning.append([row[con.COLUMN_NAME], row[con.COLUMN_STATE]])
+                elif row[con.COLUMN_STATE] == con.DUPLICATE_STATE:
+                    warning.append([row[con.COLUMN_NAME], row[con.COLUMN_STATE]])
+                else:
+                    error.append([row[con.COLUMN_NAME], row[con.COLUMN_STATE]])
+
+            row_object[con.VALIDATION_WARNING] = warning
+            row_object[con.VALIDATION_ERROR] = error
+            result_object[row[con.COLUMN_ROW]] = row_object
+
+        self.result = result_object
+        self.invalid_row = result_object.keys()
+        self.error_row = [key for key in result_object.keys()
+                          if result_object[key][con.VALIDATION_ERROR]]
+        self.warning_row = [key for key in result_object.keys()
+                            if result_object[key][con.VALIDATION_WARNING]]
+
+        return self.result
