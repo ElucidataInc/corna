@@ -37,3 +37,7 @@ class ValidationReport():
         self.warning_error_dict = {con.VALIDATION_WARNING: {con.VALIDATION_MESSAGE: [],
                                                             con.VALIDATION_ACTION: []},
                                    con.VALIDATION_ERROR: []}
+
+    def append(self, dataframe):
+        # append the data frame to the global report data frame
+        self.report_dataframe = self.report_dataframe.append(dataframe)
