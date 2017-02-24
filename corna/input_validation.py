@@ -9,15 +9,16 @@ import pandas as pd
 import re
 
 #getting required columns for input file
-required_columns_raw_data = [maven.NAME, maven.LABEL, maven.FORMULA]
+REQUIRED_COLUMNS = [maven.NAME, maven.LABEL, maven.FORMULA]
 
 
 
 @handleError
 def validate_input_file(path,required_columns_name):
     """
-    This function will validate the file using the functions defined
-    above.
+    This is the function for checking basic validation of file.
+    If any exception raises during validation check , handleError
+    decorator will catch it and processed accordingly.
     :param path:
     :return:
     """
@@ -201,10 +202,14 @@ def check_label_in_formula(label,formula):
 def get_label(label):
     """
     This function takes label value as an argument and parsed it to
-    save dictionary  as element,value pair. For ex:
+    save as dictionary in the form of element,value pair. For ex:
     label= C13N15-label-4-5
     dict={'C': 4, 'N': 5}
+    First this function splits the label from "-label-" into two list
+    after spliting the two list is parsed and then map correspondingly.
 
+    if there is any exception we are returning NONE , assuming LABEL is
+    not in correct format.
     :param label: label value
     :return: dict
     """
