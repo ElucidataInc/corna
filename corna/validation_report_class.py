@@ -201,16 +201,3 @@ class ValidationReport():
     def action_drop_rows(df, row_list):
         output_df = df.drop(df.index[row_list], inplace=True)
         return output_df
-
-    def get_corrected_df(self,df):
-        """
-        This method calls each method which will leads to corrected df.
-
-        :param df:
-        :return:
-        """
-
-        self.generate_action()
-        self.decide_action()
-        corrected_df = self.take_action(df)
-        return corrected_df
