@@ -50,17 +50,16 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
     :param function_list: list of validatin function
     :return: resultant dataframe
     """
-    resultant_dataframe = pd.DataFrame()
+    resultant_df = get_df()
     for function in function_list:
         column_dataframe = pd.DataFrame()
         for column in column_list:
             column_dataframe[con.COLUMN_STATE] = input_data_frame[column].apply(function)
             column_dataframe[con.COLUMN_NAME] = column
             column_dataframe[con.COLUMN_ROW] = column_dataframe.index
-            resultant_dataframe = resultant_dataframe.append(column_dataframe)
-    output_dataframe = resultant_dataframe.loc[resultant_dataframe
-                                               [con.COLUMN_STATE] != con.VALID_STATE]
-    return output_dataframe
+            resultant_df = resultant_df.append(column_dataframe)
+    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] != con.VALID_STATE]
+    return output_df
 
 @handleError
 def validator_for_two_column(input_data_frame, check_column='', required_column='', function=''):
@@ -234,7 +233,8 @@ def get_label(label):
         except Exception:
             return None
 
-def get_resultant_df():
+
+def get_df():
     """
     This function will return a empty pandas df for now. In future there can be need where
      we need a predefined df so then this function can be modified.
