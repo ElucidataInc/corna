@@ -206,8 +206,9 @@ def get_label(label):
     First this function splits the label from "-label-" into two list
     after spliting the two list is parsed and then map correspondingly.
 
-    if there is any exception we are returning NONE , assuming LABEL is
-    not in correct format.
+    If there is any exception we are returning NONE , assuming LABEL is
+    not in correct format.The none case is handled by the function from
+    this fucntion will be called.
     :param label: label value
     :return: dict
     """
