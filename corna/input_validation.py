@@ -10,7 +10,6 @@ import re
 REQUIRED_COLUMNS = [maven.NAME, maven.LABEL, maven.FORMULA]
 
 
-
 @custom_exception.handleError
 def validate_input_file(path,required_columns_name):
     """
@@ -35,6 +34,7 @@ def validate_input_file(path,required_columns_name):
         raise custom_exception.MissingRequiredColumnError(missing_columns)
 
     return df
+
 
 @custom_exception.handleError
 def validator_column_wise(input_data_frame, axis=0, column_list=[], function_list=[]):
@@ -234,3 +234,11 @@ def get_label(label):
         except Exception:
             return None
 
+def get_resultant_df():
+    """
+    This function will return a empty pandas df for now. In future there can be need where
+     we need a predefined df so then this function can be modified.
+    :return:
+    """
+    df = pd.DataFrame()
+    return df
