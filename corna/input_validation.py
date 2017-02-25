@@ -53,7 +53,7 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
     """
     resultant_df = get_df()
     for function in function_list:
-        column_df = pd.DataFrame()
+        column_df = get_df()
         for column in column_list:
             column_df[con.COLUMN_STATE] = input_data_frame[column].apply(function)
             column_df[con.COLUMN_NAME] = column
@@ -103,8 +103,8 @@ def check_missing(input_df):
 
     return output_df
 
-@handleError
-def check_duplicate(input_data_frame, axis=0, column_list=[]):
+@custom_exception.handleError
+def check_duplicate(input_df, axis=0, column_list=[]):
     """
     This function checks for a duplicate value in a column. It
     saves the state duplicate if any duplicate value is found.
@@ -113,20 +113,19 @@ def check_duplicate(input_data_frame, axis=0, column_list=[]):
     :param column_list:
     :return:
     """
-    resultant_dataframe=pd.DataFrame()
-    print column_list
+    resultant_df = get_df()
     for column in column_list:
-            column_dataframe = pd.DataFrame()
-            column_dataframe[con.COLUMN_STATE] = input_data_frame.duplicated(column)
-            column_dataframe[con.COLUMN_NAME] = '-'.join(column)
-            column_dataframe[con.COLUMN_ROW] = column_dataframe.index
-            resultant_dataframe = resultant_dataframe.append(column_dataframe)
-    output_dataframe = resultant_dataframe.loc[resultant_dataframe[con.COLUMN_STATE] == True]
-    output_dataframe[con.COLUMN_STATE] = con.DUPLICATE_STATE
-    return output_dataframe
+            column_df = get_df()
+            column_df[con.COLUMN_STATE] = input_df.duplicated(column)
+            column_df[con.COLUMN_NAME] = '-'.join(column)
+            column_df[con.COLUMN_ROW] = column_df.index
+            resultant_dataframe = resultant_df.append(column_df)
+    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] == True]
+    output_df[con.COLUMN_STATE] = con.DUPLICATE_STATE
+    return output_df
 
 def check_postive_numerical_value(cell_value):
-    try :
+    try:
         value = float(cell_value)
         if value < 0:
             return con.INTENSITY_STATE_NEGATIVE
@@ -156,6 +155,7 @@ def check_formula_is_correct(formula):
             return con.VALID_STATE
     except:
         return con.FORMULA_STATE_INVALID
+
 
 def check_label_in_formula(label,formula):
     """
@@ -251,5 +251,5 @@ def change_df_to_std_report_form(df):
     :return:
     """
     output_df = pd.melt(df, id_vars=[con.COLUMN_ROW],
-            var_name=con.COLUMN_NAME, value_name=con.COLUMN_STATE)
+                        var_name=con.COLUMN_NAME, value_name=con.COLUMN_STATE)
     return output_df
