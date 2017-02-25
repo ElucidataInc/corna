@@ -40,9 +40,10 @@ def validate_input_file(path,required_columns_name):
 def validator_column_wise(input_data_frame, axis=0, column_list=[], function_list=[]):
     """
     This is basically a schema for performing column wise validation checks.
-    Validaton functions are passed as an argumnet.
-    The resultant data frame is returned which contains state for cell
-    which function is applied.
+    Validaton functions are passed as an argumnet. First we are iterating over function
+    then for columns. So every column is checked for every function. The nested for is
+    required to give the output_df in defined format of ['row_number','column_name,'state']
+
 
     :param input_data_frame: the data frame on which validation is to be applied
     :param axis: for defining row wise or column wise operations
@@ -52,16 +53,16 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
     """
     resultant_df = get_df()
     for function in function_list:
-        column_dataframe = pd.DataFrame()
+        column_df = pd.DataFrame()
         for column in column_list:
-            column_dataframe[con.COLUMN_STATE] = input_data_frame[column].apply(function)
-            column_dataframe[con.COLUMN_NAME] = column
-            column_dataframe[con.COLUMN_ROW] = column_dataframe.index
-            resultant_df = resultant_df.append(column_dataframe)
+            column_df[con.COLUMN_STATE] = input_data_frame[column].apply(function)
+            column_df[con.COLUMN_NAME] = column
+            column_df[con.COLUMN_ROW] = column_df.index
+            resultant_df = resultant_df.append(column_df)
     output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] != con.VALID_STATE]
     return output_df
 
-@handleError
+@custom_exception.handleError
 def validator_for_two_column(input_data_frame, check_column='', required_column='', function=''):
     """
     This is basically a schema for performing two column validation checks.
@@ -75,7 +76,7 @@ def validator_for_two_column(input_data_frame, check_column='', required_column=
     :param function: validatin function
     :return: resultant dataframe
     """
-    resultant_dataframe = pd.DataFrame()
+    resultant_df = get_df()
 
     resultant_dataframe[con.COLUMN_STATE] = input_data_frame.apply(
                                     lambda x: function(x[check_column], x[required_column]), axis=1)
