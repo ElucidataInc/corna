@@ -4,8 +4,13 @@ from inputs.column_conventions import maven as c
 import os
 import pandas as pd
 
-#getting required columns for input file
-required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
+
+REQUIRED_COLUMNS_RAW_DATA = (c.NAME, c.LABEL, c.FORMULA)
+KNOWN_EXTENSION = { '.xls' : pd.read_excel,
+                    '.xlsx': pd.read_excel,
+                    '.csv' : pd.read_csv,
+                    '.txt' : pd.read_txt
+                  }
 
 def check_if_file_exist(path):
     """
@@ -18,7 +23,7 @@ def check_if_file_exist(path):
     else:
         return False
 
-def check_missing_required_column(data_frame,*arg):
+def check_required_column(data_frame,*arg):
     """
     This function takes data frame and column_name as an argumnet.
     Then it converts all the column header in UPPER CASE, after this
@@ -45,30 +50,21 @@ def read_input_file(path):
     """
     This function reads the input file and returns a Pandas Data Frame.
     First it is checking for the extension and then it calls for required
-    pandas function to convert the file. It also raises IOerror if the file
-    is other than .xlsx,.xls,.csv,.txt
+    pandas function to convert the file. It also raises FileExtensionError if the file
+    is other than known extensions.
     Args:
         path : path to input file
 
     Returns:
          input_file : input file in the form of pandas dataframe
     """
-
-    excel_file_extension = ['.xls', '.xlsx']
-
-    if os.path.splitext(path)[1] in excel_file_extension:
-        input_file = pd.read_excel(path, header=0)
-
-    elif os.path.splitext(path)[1] == '.csv':
-        input_file = pd.read_csv(path, header=0)
-
-    elif os.path.splitext(path)[1] == '.txt':
-        input_file = pd.read_table(path, header=0)
-
-    else:
+    extension_of_file = get_extension(path)
+    if extension_of_file not in KNOWN_EXTENSION.keys():
         raise FileExtensionError
+    else:
+        return KNOWN_EXTENSION[extension_of_file](path, header=0)
 
-    return input_file
+
 
 
 
@@ -95,3 +91,17 @@ def check_data_frame_empty(data_frame):
     """
     if data_frame.empty:
         raise DataFrameEmptyError
+
+
+def get_extension(path):
+    """
+    This function takes file path and returns the extension of the file.
+    :param path:
+    :return:
+    """
+    extension = os.path.splitext(path)[1]
+    return extension
+
+
+
+
