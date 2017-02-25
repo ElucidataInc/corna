@@ -86,7 +86,7 @@ def validator_for_two_column(input_data_frame, check_column='', required_column=
     output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] != con.VALID_STATE]
     return output_df
 
-@handleError
+@custom_exception.handleError
 def check_missing(input_data_frame):
     """
     This function returns the data frame containing state of every cell which has
@@ -97,8 +97,7 @@ def check_missing(input_data_frame):
     """
     missing_dataframe = input_data_frame.isnull()
     missing_dataframe[con.COLUMN_ROW] = missing_dataframe.index
-    resultant_dataframe = pd.melt(missing_dataframe, id_vars=[con.COLUMN_ROW],
-                                  var_name = con.COLUMN_NAME, value_name=con.COLUMN_STATE)
+    resultant_dataframe = change_df_to_std_report_form(missing_dataframe)
     output_dataframe = resultant_dataframe.loc[resultant_dataframe[con.COLUMN_STATE] == True]
     output_dataframe[con.COLUMN_STATE] = con.MISSING_STATE
 
@@ -241,3 +240,16 @@ def get_df():
     """
     df = pd.DataFrame()
     return df
+
+
+def change_df_to_std_report_form(df):
+    """
+    This function will change the input dataframe to standard dataframe of validation report.
+    This is required becuase some validation can be applied to multiple column but we need
+    our report dataframe to be single row column wise. We are using pandas melt to convert it
+    to long form from wide form. It is melting the df using 'row_number' and 'column_name'
+    :return:
+    """
+    output_df = pd.melt(df, id_vars=[con.COLUMN_ROW],
+            var_name=con.COLUMN_NAME, value_name=con.COLUMN_STATE)
+    return output_df
