@@ -9,29 +9,37 @@ required_columns_raw_data = (c.NAME, c.LABEL, c.FORMULA)
 
 def check_if_file_exist(path):
     """
-    This function will raise error if file does not exist in given path.
+    This function will return False if file does not exist in given path.
     :param path:
     :return:
     """
-    if not os.path.isfile(path):
-        raise FileExistError
+    if os.path.isfile(path):
+        return True
+    else:
+        return False
 
-def get_missing_required_column(data_frame,*arg):
+def check_missing_required_column(data_frame,*arg):
     """
     This function takes data frame and column_name as an argumnet.
-    It checks whether the required columns is present in a data_
-    farme or not. It will populates the list of all the column name
-    which are not present in data frame.
+    Then it converts all the column header in UPPER CASE, after this
+    it checks whether the required columns is present in provided data_
+    farme or not. It will return True if all the required columns are
+    present otherwise it will return false with list of missing columns.
 
     :param data_frame: The data frame which we need to assert
     :param arg: all the column name as argument
     :return: missing column list
     """
-    required_column_names=[column_name.upper() for column_name in arg]
-    data_frame_columns=[column_name.upper() for column_name in data_frame.columns.tolist()]
+    required_column_names = [column_name.upper() for column_name in arg]
+    data_frame_columns = [column_name.upper() for column_name in data_frame.columns.tolist()]
 
-    return [column_name for column_name in required_column_names
-                    if column_name not in data_frame_columns ]
+    missing_columns = [column_name for column_name in required_column_names
+                       if column_name not in data_frame_columns]
+
+    if missing_columns:
+        return False, missing_columns
+    else:
+        return True, missing_columns
 
 def read_input_file(path):
     """
