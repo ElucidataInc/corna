@@ -17,11 +17,8 @@ def check_if_file_exist(path):
     :param path:
     :return:
     """
-    if os.path.isfile(path):
-        return True
-    else:
-        return False
-
+    return os.path.isfile(path)
+    
 
 def check_required_column(data_frame,*arg):
     """
