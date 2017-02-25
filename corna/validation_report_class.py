@@ -1,6 +1,14 @@
+"""
+TODO: this module has scope where it can be refactored to make it more robust.
+separate class can be made for Action etc.
+"""
+
+
+
 from corna import constants as con
 from inputs.column_conventions import maven as c
 import pandas as pd
+
 
 class ValidationReport():
     """
@@ -45,7 +53,9 @@ class ValidationReport():
     def generate_report(self):
         """
         This function generates the report in the form of dict object
-        based on the values of report data frame.
+        based on the values of report data frame. First it will find how
+        unique row number then for each row it forms a df , then iterarting
+        over that df it saves error and warning.
 
         :TODO : remove the hard coded values of column names and state.
                 so that it is easy to make it more generalise.
@@ -112,16 +122,13 @@ class ValidationReport():
     def decide_action(self):
         """
             This function with the help of report object decide final action
-            to be taken on row . If there is any error then it will simply
-            commads to STOP_TOOL.
-
+            to be taken on row . If there is any error then simply it
+            save STOP_TOOL and halts there.
         :param data_frame:
         :return: dict object
         """
-
         if self.error_row:
             self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_STOP
-
 
         elif self.warning_row:
             self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_ROW_WISE
@@ -141,7 +148,8 @@ class ValidationReport():
         """
         With the help of action report this function perform actions on the
         row also it returns the filtered data frame after performing the action.
-
+        TODO: now using if and else to take the action because only two actions
+        are there , need to change this when there are nuber of actions.
         :param data_frame:
         :return: data_frame
         """
@@ -150,16 +158,15 @@ class ValidationReport():
         if not self.action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_STOP:
             resultant_dataframe = data_frame
             for rows in [rows for rows in self.action if rows not in [con.VALIDATION_ACTION]]:
-                for row in self.action[rows]:
-                    if row[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_DROP:
+                for each_action in self.action[rows]:
+                    if each_action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_DROP:
                         list_of_rows_to_drop.append(rows)
                         action_msg = "Row is Dropped"
-                        break
-                    if row[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_FILL_NA:
-                        resultant_dataframe.set_value(rows, row['column'], 0)
+                    else :
+                        resultant_dataframe.set_value(rows, each_action['column'], 0)
                         action_msg = "Missing value of columns replaced with 0"
                 self.action_messages.append(action_msg)
-            resultant_dataframe.drop(resultant_dataframe.index[list_of_rows_to_drop], inplace=True)
+            output_df = self.action_drop_rows(resultant_dataframe,list_of_rows_to_drop)
         self.warning_error_dict[con.VALIDATION_WARNING][con.VALIDATION_ACTION] = self.action_messages
 
         return resultant_dataframe
@@ -188,3 +195,8 @@ class ValidationReport():
                 self.warning_error_dict[con.VALIDATION_ERROR].append(final_msg)
 
         return self.warning_error_dict
+
+    @staticmethod
+    def action_drop_rows(df, row_list):
+        output_df = df.drop(df.index[row_list], inplace=True)
+        return output_df
