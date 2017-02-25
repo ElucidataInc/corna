@@ -29,7 +29,7 @@ def validate_input_file(path,required_columns_name):
     if not dataframe_validator.check_df_empty(df):
         raise custom_exception.DataFrameEmptyError
     missing_column_status,missing_columns = dataframe_validator.\
-                                             check_required_column(df,required_columns_name)[0]
+                                             check_required_column(df,*required_columns_name)
     if not missing_column_status:
         raise custom_exception.MissingRequiredColumnError(missing_columns)
 
