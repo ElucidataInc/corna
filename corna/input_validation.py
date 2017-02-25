@@ -1,9 +1,7 @@
 import constants as con
 from corna.helpers import chemformula_schema,get_formula
-from custom_exception import handleError,MissingRequiredColumnError
-from dataframe_validator import check_if_file_exist,check_data_frame_empty
-from dataframe_validator import check_file_empty,read_input_file
-from dataframe_validator import get_missing_required_column
+import dataframe_validator
+import custom_exception
 from inputs.column_conventions import maven
 import pandas as pd
 import re
@@ -13,7 +11,7 @@ REQUIRED_COLUMNS = [maven.NAME, maven.LABEL, maven.FORMULA]
 
 
 
-@handleError
+@custom_exception.handleError
 def validate_input_file(path,required_columns_name):
     """
     This is the function for checking basic validation of file.
@@ -22,20 +20,23 @@ def validate_input_file(path,required_columns_name):
     :param path:
     :return:
     """
-    check_if_file_exist(path)
-    check_file_empty(path)
-    data_frame = read_input_file(path)
-    check_data_frame_empty(data_frame)
 
+    if not dataframe_validator.check_if_file_exist(path):
+        raise custom_exception.FileExistError
+    if not dataframe_validator.check_file_empty(path):
+        raise custom_exception.FileEmptyError
 
-    missing_columns = get_missing_required_column(data_frame, *required_columns_name)
+    df = dataframe_validator.read_input_file(path)
+    if not dataframe_validator.check_df_empty(df):
+        raise custom_exception.DataFrameEmptyError
+    missing_column_status,missing_columns = dataframe_validator.\
+                                             check_required_column(df,REQUIRED_COLUMNS)[0]
+    if not missing_column_status:
+        raise custom_exception.MissingRequiredColumnError(missing_columns)
 
-    if missing_columns:
-        raise MissingRequiredColumnError(missing_columns)
+    return df
 
-    return data_frame
-
-@handleError
+@custom_exception.handleError
 def validator_column_wise(input_data_frame, axis=0, column_list=[], function_list=[]):
     """
     This is basically a schema for performing column wise validation checks.
