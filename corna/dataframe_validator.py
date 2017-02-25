@@ -1,16 +1,15 @@
-from custom_exception import FileExtensionError,FileEmptyError
-from custom_exception import FileExistError,DataFrameEmptyError
+import custom_exception
 from inputs.column_conventions import maven as c
 import os
 import pandas as pd
 
 
 REQUIRED_COLUMNS_RAW_DATA = (c.NAME, c.LABEL, c.FORMULA)
-KNOWN_EXTENSION = { '.xls' : pd.read_excel,
-                    '.xlsx': pd.read_excel,
-                    '.csv' : pd.read_csv,
-                    '.txt' : pd.read_txt
-                  }
+KNOWN_EXTENSION = {'.xls': pd.read_excel,
+                   '.xlsx': pd.read_excel,
+                   '.csv': pd.read_csv,
+                   '.txt': pd.read_table}
+
 
 def check_if_file_exist(path):
     """
@@ -22,6 +21,7 @@ def check_if_file_exist(path):
         return True
     else:
         return False
+
 
 def check_required_column(data_frame,*arg):
     """
@@ -46,6 +46,7 @@ def check_required_column(data_frame,*arg):
     else:
         return True, missing_columns
 
+
 def read_input_file(path):
     """
     This function reads the input file and returns a Pandas Data Frame.
@@ -60,12 +61,9 @@ def read_input_file(path):
     """
     extension_of_file = get_extension(path)
     if extension_of_file not in KNOWN_EXTENSION.keys():
-        raise FileExtensionError
+        raise custom_exception.FileExtensionError
     else:
         return KNOWN_EXTENSION[extension_of_file](path, header=0)
-
-
-
 
 
 def check_file_empty(path):
@@ -76,7 +74,9 @@ def check_file_empty(path):
     :return:
     """
     if os.stat(path).st_size == 0:
-        raise FileEmptyError
+        return False
+    else:
+        return True
 
 
 def check_data_frame_empty(data_frame):
@@ -90,7 +90,9 @@ def check_data_frame_empty(data_frame):
     :return:
     """
     if data_frame.empty:
-        raise DataFrameEmptyError
+        return False
+    else:
+        return True
 
 
 def get_extension(path):
