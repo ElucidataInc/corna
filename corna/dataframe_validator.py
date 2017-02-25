@@ -69,9 +69,9 @@ def read_input_file(path):
 def check_file_empty(path):
     """
     This function checks for the file size. We are assuming an empty
-    file is of zero size. It will raise error if file is of 0 mb size.
+    file is of 0 size. It will return false if file is of 0 mb size.
     :param path: Input file path
-    :return:
+    :return: Boolean
     """
     if os.stat(path).st_size == 0:
         return False
@@ -79,17 +79,16 @@ def check_file_empty(path):
         return True
 
 
-def check_data_frame_empty(data_frame):
+def check_df_empty(df):
     """
     This function takes data_frame as an argument and with the help of
     Pandas inbuilt function it checks if the data_frame empty or not.
-    The function raises custom error DataFrameEmptyError if the input
-    data_frame is empty.
+    The function return false if the df is empty.
 
-    :param data_frame:
-    :return:
+    :param: data_frame
+    :return: boolean
     """
-    if data_frame.empty:
+    if df.empty:
         return False
     else:
         return True
