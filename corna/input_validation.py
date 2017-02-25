@@ -216,11 +216,7 @@ def get_label(label):
         return con.UNLABELLED_LABEL_DICT
     else:
         try:
-            label_formula, enums = label.split('-label-')
-            label_isotopes = list(''.join(map(str, i))
-                                  for i in chemformula_schema.parseString(label_formula))
-            label_number_of_elements = list(int(x) for x in enums.split('-'))
-
+            label_isotopes,label_number_of_elements = get_isotopes_name_and_number(label)
             if len(label_isotopes) != len(label_number_of_elements):
                 return None
             label_element_pattern = re.compile("([a-zA-Z]+)([0-9]+)")
@@ -253,3 +249,17 @@ def change_df_to_std_report_form(df):
     output_df = pd.melt(df, id_vars=[con.COLUMN_ROW],
                         var_name=con.COLUMN_NAME, value_name=con.COLUMN_STATE)
     return output_df
+
+def get_isotopes_name_and_number(label):
+    """
+    This fucntion take label value and returns isotopes present and
+    its corresponding number. It first splits the label from "-label-"
+    then take out each isotope and its number.
+    :param label:
+    :return:
+    """
+    label_all_element, label_all_number = label.split('-label-')
+    label_isotopes = list(''.join(map(str, i))
+                          for i in chemformula_schema.parseString(label_all_element))
+    label_number_of_elements = list(int(x) for x in label_all_number.split('-'))
+    return label_isotopes, label_number_of_elements
