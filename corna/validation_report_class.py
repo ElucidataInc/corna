@@ -122,7 +122,8 @@ class ValidationReport():
     def decide_action(self):
         """
             This function with the help of report object decide final action
-            to be taken on row . If there is any error then simply it
+            to be taken on row i.e it decides if the row is being dropped,
+            or individual column action is to be taken. If there is any error then simply it
             save STOP_TOOL and halts there.
         :param data_frame:
         :return: dict object
@@ -169,7 +170,7 @@ class ValidationReport():
             output_df = self.action_drop_rows(resultant_dataframe,list_of_rows_to_drop)
         self.warning_error_dict[con.VALIDATION_WARNING][con.VALIDATION_ACTION] = self.action_messages
 
-        return resultant_dataframe
+        return output_df
 
     def generate_warning_error_list_of_strings(self):
         """
@@ -200,3 +201,16 @@ class ValidationReport():
     def action_drop_rows(df, row_list):
         output_df = df.drop(df.index[row_list], inplace=True)
         return output_df
+
+    def get_corrected_df(self,df):
+        """
+        This method calls each method which will leads to corrected df.
+
+        :param df:
+        :return:
+        """
+
+        self.generate_action()
+        self.decide_action()
+        corrected_df = self.take_action(df)
+        return corrected_df
