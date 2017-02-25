@@ -53,9 +53,9 @@ class ValidationReport():
         :return: dict object
         """
         result_object = {}
-        row_key = list(self.report_dataframe.groupby([con.COLUMN_ROW]).groups.keys())
-        for key in row_key:
-            row_df = self.report_dataframe.loc[self.report_dataframe[con.COLUMN_ROW] == key]
+        row_having_error = self.report_dataframe.row_number.unique()
+        for each_row in row_having_error:
+            row_df = self.report_dataframe.loc[self.report_dataframe[con.COLUMN_ROW] == each_row]
             warning = []
             error = []
             row_object = {}
