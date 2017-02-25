@@ -29,7 +29,7 @@ def validate_input_file(path,required_columns_name):
     if not dataframe_validator.check_df_empty(df):
         raise custom_exception.DataFrameEmptyError
     missing_column_status,missing_columns = dataframe_validator.\
-                                             check_required_column(df,REQUIRED_COLUMNS)[0]
+                                             check_required_column(df,required_columns_name)[0]
     if not missing_column_status:
         raise custom_exception.MissingRequiredColumnError(missing_columns)
 
@@ -78,15 +78,13 @@ def validator_for_two_column(input_data_frame, check_column='', required_column=
     """
     resultant_df = get_df()
 
-    resultant_dataframe[con.COLUMN_STATE] = input_data_frame.apply(
+    resultant_df[con.COLUMN_STATE] = input_data_frame.apply(
                                     lambda x: function(x[check_column], x[required_column]), axis=1)
 
-    resultant_dataframe[con.COLUMN_NAME] = check_column
-    resultant_dataframe[con.COLUMN_ROW] = resultant_dataframe.index
-    output_dataframe = resultant_dataframe.loc[resultant_dataframe
-                                            [con.COLUMN_STATE] != con.VALID_STATE]
-
-    return output_dataframe
+    resultant_df[con.COLUMN_NAME] = check_column
+    resultant_df[con.COLUMN_ROW] = resultant_df.index
+    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] != con.VALID_STATE]
+    return output_df
 
 @handleError
 def check_missing(input_data_frame):
