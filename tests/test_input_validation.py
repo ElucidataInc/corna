@@ -41,10 +41,11 @@ def test_data_frame_empty():
 
 def test_required_column_missing():
     dir_path = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(dir_path, "test_input_validation_data", "nacorr_test_1.xlsx")
+    file_path = os.path.join(dir_path, "test_input_validation_data", "test_maven_upload_acetic.csv")
+    df = pd.read_csv(file_path)
     test_required_column = ['NaMe','LABEl','Formula','XYZ']
 
-    assert check_required_column(file_path,*test_required_column)[0] == False
+    assert check_required_column(df,*test_required_column)[0] == False
 
 
 
