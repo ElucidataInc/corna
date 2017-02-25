@@ -23,6 +23,12 @@ class TestValidationReport:
         test_result = {0: {'warning': [['Name', 'missing']], 'errors': []}}
         assert self.validation.generate_report() == test_result
 
+    def test_get_corrected_df(self):
+        df = pd.DataFrame({'column_name': 'Name', 'row_number': 0, 'state': 'missing'}, index=[0])
+        self.validation.report_dataframe = df
+        new_df = self.validation.take_action(df)
+        assert new_df.empty
+
     def test_generate_action(self):
         df = pd.DataFrame({'column_name': 'Name', 'row_number': 0, 'state': 'missing'}, index=[0])
         self.validation.report_dataframe = df
@@ -39,5 +45,6 @@ class TestValidationReport:
         self.validation.report_dataframe = df
         new_df = self.validation.take_action(df)
         assert new_df.empty
+
 
 
