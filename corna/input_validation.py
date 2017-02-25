@@ -87,7 +87,7 @@ def validator_for_two_column(input_data_frame, check_column='', required_column=
     return output_df
 
 @custom_exception.handleError
-def check_missing(input_data_frame):
+def check_missing(input_df):
     """
     This function returns the data frame containing state of every cell which has
     missing value. We are using pandas.isnull method.
@@ -95,13 +95,13 @@ def check_missing(input_data_frame):
     :param input_data_frame:
     :return: resultant data frame
     """
-    missing_dataframe = input_data_frame.isnull()
-    missing_dataframe[con.COLUMN_ROW] = missing_dataframe.index
-    resultant_dataframe = change_df_to_std_report_form(missing_dataframe)
-    output_dataframe = resultant_dataframe.loc[resultant_dataframe[con.COLUMN_STATE] == True]
-    output_dataframe[con.COLUMN_STATE] = con.MISSING_STATE
+    missing_df = input_df.isnull()
+    missing_df[con.COLUMN_ROW] = missing_df.index
+    resultant_df = change_df_to_std_report_form(missing_df)
+    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] == True]
+    output_df[con.COLUMN_STATE] = con.MISSING_STATE
 
-    return output_dataframe
+    return output_df
 
 @handleError
 def check_duplicate(input_data_frame, axis=0, column_list=[]):
