@@ -313,8 +313,7 @@ def get_isotopes_name_and_number(label):
     :return: isotopes in label and number of elements
     """
     label_all_element, label_all_number = label.split('-label-')
-    label_isotopes = list(''.join(map(str, i))
-                          for i in chemformula_schema.parseString(label_all_element))
+    label_isotopes = get_isotope_name(label_all_element)
     label_number_of_elements = list(int(x) for x in label_all_number.split('-'))
     return label_isotopes, label_number_of_elements
 
@@ -329,5 +328,9 @@ def get_isotope_name(list_of_istope_with_number):
                       for isotope in list_of_istope_with_number]
 
     return label_elements
+
+def get_seperated_label_isotope_name_number(label):
+    label_all_element, label_all_number = label.split('-label-')
+    label_isotopes = get_isotope_name(label_all_element)
 
 
