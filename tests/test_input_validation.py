@@ -18,7 +18,7 @@ def test_check_if_file_exist():
 def test_check_file_empty():
     dir_path = os.path.dirname(os.path.abspath(__file__))
     empty_file_path = os.path.join(dir_path, "test_input_validation_data", "nacorr_test_1.txt")
-    assert dataframe_validator.check_file_empty(empty_file_path) == False
+    assert dataframe_validator.check_file_empty(empty_file_path) == True
 
 def test_read_input_file():
     dir_path = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +31,7 @@ def test_read_input_file():
 
 def test_data_frame_empty():
     data_frame=pd.DataFrame()
-    assert dataframe_validator.check_df_empty(data_frame) == False
+    assert dataframe_validator.check_df_empty(data_frame) == True
 
 def test_required_column_missing():
     dir_path = os.path.dirname(os.path.abspath(__file__))
@@ -118,7 +118,7 @@ def test_validator_column_wise():
     maven_df = pd.read_csv(maven_raw_intensity_not_correct_raw_file)
 
     result_df = input_validation.validator_column_wise(maven_df,0,['sample_1'],
-                                                       [input_validation.check_postive_numerical_value])
+                                                       [input_validation.check_intensity_value])
     assert result_df.iloc[0]['state'] == 'negative'
     assert result_df.iloc[1]['state'] == 'invalid_intensity_value'
 
@@ -129,9 +129,8 @@ def test_get_isotope_name():
 
 
 def test_get_istopes_name_and_number():
-    label = 'C13-N15-label-1-2'
+    label = 'C13N15-label-1-2'
     label_isotopes,label_number = input_validation.get_isotopes_name_and_number(label)
 
-    print label_isotopes,label_number
-
-
+    assert label_isotopes == ['C','N']
+    assert label_number == [1,2]
