@@ -13,7 +13,26 @@ REQUIRED_COLUMNS = [maven.NAME, maven.LABEL, maven.FORMULA]
 
 
 @custom_exception.handleError
-def validate_input_file(path,required_columns_name):
+def validate_input_file(path):
+    """
+    This is the function for checking basic validation of file.
+    If any exception raises during validation check , handleError
+    decorator will catch it and processed accordingly.
+    :param path:
+    :return:
+    """
+
+    if not dataframe_validator.check_if_file_exist(path):
+        raise custom_exception.FileExistError
+
+    if not dataframe_validator.check_file_empty(path):
+        raise custom_exception.FileEmptyError
+
+    return True
+
+
+@custom_exception.handleError
+def validate_input_file(df,required_columns_name):
     """
     This is the function for checking basic validation of file.
     If any exception raises during validation check , handleError
