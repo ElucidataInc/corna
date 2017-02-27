@@ -78,13 +78,13 @@ class ValidationReport():
 
             for index, row in row_df.iterrows():
 
+                warning_or_error_msg = [each_row[con.COLUMN_NAME], each_row[con.COLUMN_STATE]]
 
-                if row[con.COLUMN_STATE] in warning_state:
-                    row_object[con.VALIDATION_WARNING].append([each_row[con.COLUMN_NAME],
-                                                               each_row[con.COLUMN_STATE]])
+                if row[con.COLUMN_STATE] in con.WARNING_STATE:
+                    row_object[con.VALIDATION_WARNING].append(warning_or_error_msg)
                 else:
-                    row_object[con.VALIDATION_ERROR].append([each_row[con.COLUMN_NAME],
-                                                             each_row[con.COLUMN_STATE]])
+                    row_object[con.VALIDATION_ERROR].append(warning_or_error_msg)
+
             result_object[row[con.COLUMN_ROW]] = row_object
 
         self.result = result_object
@@ -217,8 +217,3 @@ class ValidationReport():
     def get_slice_df_with_row(df,row):
 
         return df.loc[df[con.COLUMN_ROW] == row]
-
-    @staticmethod
-    def append_to_list(list,value):
-
-        return list.append(value)
