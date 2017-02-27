@@ -1,13 +1,7 @@
-"""
-TODO: this module has scope where it can be refactored to make it more robust.
-separate class can be made for Action etc.
-"""
-
-
+import pandas as pd
 
 from corna import constants as con
 from inputs.column_conventions import maven as c
-import pandas as pd
 
 
 class ValidationReport():
@@ -53,32 +47,44 @@ class ValidationReport():
     def generate_report(self):
         """
         This function generates the report in the form of dict object
-        based on the values of report data frame. First it will find how
-        unique row number then for each row it forms a df , then iterarting
+        based on the values of report data frame. First it will find
+        unique row number then for each row it forms a df , then iterating
         over that df it saves error and warning.
+        For ex:
+        if report_df :
+            row_number    column_name       state
+                  1           label      invalid_label
+                  1           formula    invalid formula
+                  4           label      invalid_label
+                  19          Sample1    negative
+        row_having_error = [1,4,19]
 
-        :TODO : remove the hard coded values of column names and state.
-                so that it is easy to make it more generalise.
+        then result:
+        {'1':{'warning': [['label','invalid_label],['formula','invalid_formula]], 'errors':[]},
+             '4':{'warning':[['label','invalid_label']],'errors':[]},
+             '19':{'warning':[],'errors':['Sample1','negative]}}
+
+
 
         :return: dict object
         """
         result_object = {}
-        row_having_error = self.report_dataframe.row_number.unique()
-        for each_row in row_having_error:
-            row_df = self.report_dataframe.loc[self.report_dataframe[con.COLUMN_ROW] == each_row]
-            warning = []
-            error = []
-            row_object = {}
-            for index, row in row_df.iterrows():
-                if row[con.COLUMN_STATE] == con.MISSING_STATE:
-                    warning.append([row[con.COLUMN_NAME], row[con.COLUMN_STATE]])
-                elif row[con.COLUMN_STATE] == con.DUPLICATE_STATE:
-                    warning.append([row[con.COLUMN_NAME], row[con.COLUMN_STATE]])
-                else:
-                    error.append([row[con.COLUMN_NAME], row[con.COLUMN_STATE]])
+        row_having_error = self.get_unique_row_having_error(self)
 
-            row_object[con.VALIDATION_WARNING] = warning
-            row_object[con.VALIDATION_ERROR] = error
+        for each_row in row_having_error:
+
+            row_df = self.get_slice_df_with_row(self.report_dataframe,each_row)
+            row_object = {con.VALIDATION_WARNING: [], con.VALIDATION_ERROR: []}
+
+            for index, row in row_df.iterrows():
+
+
+                if row[con.COLUMN_STATE] in warning_state:
+                    row_object[con.VALIDATION_WARNING].append([each_row[con.COLUMN_NAME],
+                                                               each_row[con.COLUMN_STATE]])
+                else:
+                    row_object[con.VALIDATION_ERROR].append([each_row[con.COLUMN_NAME],
+                                                             each_row[con.COLUMN_STATE]])
             result_object[row[con.COLUMN_ROW]] = row_object
 
         self.result = result_object
@@ -201,3 +207,18 @@ class ValidationReport():
     def action_drop_rows(df, row_list):
         output_df = df.drop(df.index[row_list], inplace=True)
         return output_df
+
+    @staticmethod
+    def get_unique_row_having_error(self):
+
+        return self.report_dataframe.row_number.unique()
+
+    @staticmethod
+    def get_slice_df_with_row(df,row):
+
+        return df.loc[df[con.COLUMN_ROW] == row]
+
+    @staticmethod
+    def append_to_list(list,value):
+
+        return list.append(value)
