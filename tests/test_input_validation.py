@@ -122,3 +122,16 @@ def test_validator_column_wise():
     assert result_df.iloc[0]['state'] == 'negative'
     assert result_df.iloc[1]['state'] == 'invalid_intensity_value'
 
+
+def test_get_isotope_name():
+
+    assert input_validation.get_isotope_name(['C13','N15']) == ['C','N']
+
+
+def test_get_istopes_name_and_number():
+    label = 'C13-N15-label-1-2'
+    label_isotopes,label_number = input_validation.get_isotopes_name_and_number(label)
+
+    print label_isotopes,label_number
+
+
