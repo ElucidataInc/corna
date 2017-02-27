@@ -33,8 +33,7 @@ class MissingRequiredColumnError(Exception):
 def handleError(function):
     def runFunction(*args,**kwargs):
         try:
-            result=function(*args)
-            return result
+            return function(*args)
         except FileEmptyError as e:
             print e.message
             raise
