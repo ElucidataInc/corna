@@ -70,10 +70,8 @@ def check_file_empty(path):
     :param path: Input file path
     :return: Boolean
     """
-    if os.stat(path).st_size == 0:
-        return False
-    else:
-        return True
+    return os.stat(path).st_size == 0
+
 
 
 def check_df_empty(df):
@@ -85,17 +83,15 @@ def check_df_empty(df):
     :param: data_frame
     :return: boolean
     """
-    if df.empty:
-        return False
-    else:
-        return True
+    return df.empty
+
 
 
 def get_extension(path):
     """
     This function takes file path and returns the extension of the file.
     :param path:
-    :return:
+    :return:extension of the file
     """
     extension = os.path.splitext(path)[1]
     return extension
