@@ -256,7 +256,6 @@ def get_label(label):
     not in correct format.The none case is handled by the function from
     this fucntion will be called.
     for ex: label = C13-N15-label-1-2
-            label_isotopes = ['C13','N15']
             label_number_of_elements = [1,2]
             label_isotopes = ['C','N']
             parsed_label = {'C':1,'N':2}
@@ -274,8 +273,7 @@ def get_label(label):
 
             if len(label_isotopes) != len(label_number_of_elements):
                 return None
-            label_elements = get_isotope_name(label_isotopes)
-            parsed_label = dict(zip(label_elements, label_number_of_elements))
+            parsed_label = dict(zip(label_isotopes, label_number_of_elements))
 
             return parsed_label
 
@@ -313,13 +311,16 @@ def get_isotopes_name_and_number(label):
     :return: isotopes in label and number of elements
     """
     label_all_element, label_all_number = label.split('-label-')
-    label_isotopes = get_isotope_name(label_all_element)
+    label_isotopes_list = list(str(x) for x in label_all_element.split('-'))
+    label_isotopes = get_isotope_name(label_isotopes_list)
     label_number_of_elements = list(int(x) for x in label_all_number.split('-'))
+
     return label_isotopes, label_number_of_elements
 
 def get_isotope_name(list_of_istope_with_number):
     """
     This function will sepearte isotope from its atomic number and returns the list.
+    Here using regex to spliting C13 in 'C' and '13'.
     :param istope_with_number: istope in the form C13,N15 etc.
     :return: seperated isotope C,N etc.
     """
