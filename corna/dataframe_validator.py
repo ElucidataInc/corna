@@ -14,8 +14,8 @@ KNOWN_EXTENSION = {'.xls': pd.read_excel,
 def check_if_file_exist(path):
     """
     This function will return False if file does not exist in given path.
-    :param path:
-    :return:
+    :param path: absolute path
+    :return: Boolean
     """
     return os.path.isfile(path)
     

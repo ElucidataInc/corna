@@ -76,6 +76,8 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
     :param column_list: column of data frame on which validation is to be applied
     :param function_list: list of validatin function
     :return: resultant dataframe
+
+    TODO: Using vectorization can be implemented in more better way.
     """
     resultant_df = get_df()
     for function in function_list:
