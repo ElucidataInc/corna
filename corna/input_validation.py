@@ -19,7 +19,7 @@ def validate_input_file(path):
     If any exception raises during validation check , handleError
     decorator will catch it and processed accordingly.
     :param path:
-    :return:
+    :return: True, if no exception is raised
     """
 
     if not dataframe_validator.check_if_file_exist(path):
@@ -32,21 +32,16 @@ def validate_input_file(path):
 
 
 @custom_exception.handleError
-def validate_input_file(df,required_columns_name):
+def validate_df(df, required_columns_name):
     """
     This is the function for checking basic validation of file.
     If any exception raises during validation check , handleError
     decorator will catch it and processed accordingly.
     :param path:
-    :return:
+    :return:True, if no exception is raised
     """
 
-    if not dataframe_validator.check_if_file_exist(path):
-        raise custom_exception.FileExistError
-    if not dataframe_validator.check_file_empty(path):
-        raise custom_exception.FileEmptyError
 
-    df = dataframe_validator.read_input_file(path)
     if not dataframe_validator.check_df_empty(df):
         raise custom_exception.DataFrameEmptyError
     missing_column_status,missing_columns = dataframe_validator.\
@@ -54,7 +49,7 @@ def validate_input_file(df,required_columns_name):
     if not missing_column_status:
         raise custom_exception.MissingRequiredColumnError(missing_columns)
 
-    return df
+    return True
 
 
 @custom_exception.handleError
