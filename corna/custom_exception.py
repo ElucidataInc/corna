@@ -4,7 +4,7 @@ For each exception a class is associated so that we can add methods acc-
 ording to the need.
 
 This file also contains handle error function which can be used as decorator
-to catch the exception raises. 
+to catch the exception raises.
 
 
 """
@@ -33,8 +33,7 @@ class MissingRequiredColumnError(Exception):
 def handleError(function):
     def runFunction(*args,**kwargs):
         try:
-            function(*args)
-
+            return function(*args)
         except FileEmptyError as e:
             print e.message
             raise
@@ -58,4 +57,5 @@ def handleError(function):
         except Exception as f:
             print "Error Not Known"
             raise
+
     return runFunction
