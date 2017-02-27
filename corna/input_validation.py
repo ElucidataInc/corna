@@ -58,6 +58,18 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
     then for columns. So every column is checked for every function. The nested for is
     required to give the output_df in defined format of ['row_number','column_name,'state']
 
+    for ex:input_df =              Name     Label   Sample1     Sample2
+                         0           A         X      0.16        -0.18
+                         1           B         Y      -0.15        asa
+
+            if this function is called with parameters:
+            column_list =['Sample1','Sample2']
+            function = check_intensity_value
+
+            output_df = row_number column_name     state
+                          0           Sample2    negative
+                          1           Sample1    negative
+                          1           Sample2    invalid_value
 
     :param input_data_frame: the data frame on which validation is to be applied
     :param axis: for defining row wise or column wise operations
@@ -83,6 +95,22 @@ def validator_for_two_column(input_data_frame, check_column='', required_column=
     The check column is validated with the help of required column value.
     The resultant data frame is returned which contains state for cell
     which function is applied.
+
+    for ex:input_df =               Name        Label          Formula    Sample1     Sample2
+                         0           A     C13N15-label-1-2      C2H6O       0.16        -0.18
+                         1           B        C12 PARENT         C2H6O       -0.15        asa
+                         2           C       C13-label-5         C2H6O       0.15        0.20
+
+    if this function is called with parameters:
+            check_column = Label
+            required_column = Formula
+            function = check_label_in_formula
+
+
+            output_df = row_number  column_name          state
+                          0            label        label_not_in_formula
+                          1            label        label_not_in_formula
+
 
     :param input_data_frame: the data frame on which validation is to be applied
     :param check_column: the column on which check is to be performed
@@ -171,8 +199,11 @@ def check_label_column_format(label):
     value is missing we are treating it as correct state here becuase that case
     is handled when checking for missing value. Also the case of label value = 'C12 PARENT'
     is also correct.
+    for ex: label = 'C13N15-label-1-2' ---> correct
+            label = 'C13N15-label-1' ---> invalid
+            label = 'C12 PARENT' ---> correct
 
-    :param label:
+    :param label: label value
     :return: State (ex. Invalid, Correct etc.)
     """
     if label == con.UNLABELLED_LABEL or pd.isnull(label):
@@ -193,8 +224,8 @@ def check_formula_is_correct(formula):
     because that case is handled when checking for missing value.
     Example: C2H6O -->correct
              XY12C2 -->invalid
-    :param formula:
-    :return:
+    :param formula: formula value
+    :return: state
     """
     try:
         if pd.isnull(formula):
@@ -211,6 +242,15 @@ def check_label_in_formula(label,formula):
     This function checks if all label element are in formula.
     Also label element must be less than or equal to corresponding
     element in formula.
+    For ex1: label = C13N15-label-1-2
+            formula = C2H6O
+            here N is not present in formual therefore,
+            state = label_not_in_formula
+
+        ex2: label = C13-label-1
+            formula = C2H6O
+            everything correct here,
+            state = correct
 
     :param label: label value of column
     :param formula: formula value of column
@@ -286,7 +326,7 @@ def get_df():
     """
     This function will return a empty pandas df for now. In future there can be need where
      we need a predefined df so then this function can be modified.
-    :return:
+    :return: empty dataframe
     """
     return pd.DataFrame()
 
@@ -297,7 +337,19 @@ def change_df_to_std_report_form(df):
     This is required becuase some validation can be applied to multiple column but we need
     our report dataframe to be single row column wise. We are using pandas melt to convert it
     to long form from wide form. It is melting the df using 'row_number' and 'column_name'
-    :return:
+    for ex: input_df = row_number     Name     Label  Sample
+                         0           True     False   True
+                         1           False    True    False
+
+            output_df = row_number column_name  state
+                            0           Name       True
+                            0           Label      False
+                            0           Sample     True
+                            1           Name       False
+                            1           Label      True
+                            1           Sample     False
+
+    :return: dataframe in longformat
     """
     output_df = pd.melt(df, id_vars=[con.COLUMN_ROW],
                         var_name=con.COLUMN_NAME, value_name=con.COLUMN_STATE)
