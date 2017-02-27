@@ -3,6 +3,8 @@ import pandas as pd
 from corna import constants as con
 from inputs.column_conventions import maven as c
 
+REQUIRED_COLUMN_LIST = [c.NAME, c.LABEL, c.FORMULA]
+
 
 class ValidationReport():
     """
@@ -57,9 +59,12 @@ class ValidationReport():
                   1           formula    invalid formula
                   4           label      invalid_label
                   19          Sample1    negative
+
         row_having_error = [1,4,19]
 
-        then result:
+        in between loop, warning_or_error_msg = ['label','invalid_label']
+
+        and final result:
         {'1':{'warning': [['label','invalid_label],['formula','invalid_formula]], 'errors':[]},
              '4':{'warning':[['label','invalid_label']],'errors':[]},
              '19':{'warning':[],'errors':['Sample1','negative]}}
@@ -68,7 +73,7 @@ class ValidationReport():
 
         :return: dict object
         """
-        result_object = {}
+
         row_having_error = self.get_unique_row_having_error(self)
 
         for each_row in row_having_error:
@@ -78,48 +83,36 @@ class ValidationReport():
 
             for index, row in row_df.iterrows():
 
-                warning_or_error_msg = [each_row[con.COLUMN_NAME], each_row[con.COLUMN_STATE]]
+                warning_or_error_msg = [row[con.COLUMN_NAME], row[con.COLUMN_STATE]]
 
                 if row[con.COLUMN_STATE] in con.WARNING_STATE:
                     row_object[con.VALIDATION_WARNING].append(warning_or_error_msg)
                 else:
                     row_object[con.VALIDATION_ERROR].append(warning_or_error_msg)
 
-            result_object[row[con.COLUMN_ROW]] = row_object
+            self.result[row[con.COLUMN_ROW]] = row_object
 
-        self.result = result_object
-        self.invalid_row = self.get_key_list_with_condition(result_object)
-        self.error_row = self.get_key_list_with_condition(result_object,con.VALIDATION_ERROR)
-        self.warning_row = self.get_key_list_with_condition(result_object,con.VALIDATION_WARNING)
+        self.invalid_row = self.get_key_list(self.result)
+        self.error_row = self.get_key_list(self.result, con.VALIDATION_ERROR)
+        self.warning_row = self.get_key_list(self.result, con.VALIDATION_WARNING)
 
         return self.result
 
     def generate_action(self):
         """
-        This function geneartes the action to be taken for each validation
+        This function generates the action to be taken for each validation
         result and save the action report as key value pair where key is
         the row number.
 
         :return: dict object
         """
-
         for row in self.warning_row:
-            for entries in self.result[row][con.VALIDATION_WARNING]:
-
-                if entries[1] == con.MISSING_STATE:
-                    if entries[0] not in self.required_column_list:
-                        action = con.VALIDATION_ACTION_FILL_NA
-                    else:
-                        action = con.VALIDATION_ACTION_DROP
-                    entries.append(action)
-                if entries[1] == con.DUPLICATE_STATE:
-                    action = con.VALIDATION_ACTION_DROP
-                    entries.append(action)
+            for each_result in self.result[row][con.VALIDATION_WARNING]:
+                each_result.append(self.get_action_name(each_result))
 
         for row in self.error_row:
-            for entries in self.result[row][con.VALIDATION_ERROR]:
-                action = con.VALIDATION_ACTION_STOP
-                entries.append(action)
+            for each_result in self.result[row][con.VALIDATION_ERROR]:
+                each_result.append(self.get_action_name(each_result))
 
         return self.result
 
@@ -206,10 +199,10 @@ class ValidationReport():
         output_df = df.drop(df.index[row_list], inplace=True)
         return output_df
 
-    @staticmethod
-    def get_unique_row_having_error(self):
+    @classmethod
+    def get_unique_row_having_error(cls):
 
-        return self.report_dataframe.row_number.unique()
+        return cls.self.report_dataframe.row_number.unique()
 
     @staticmethod
     def get_slice_df_with_row(df,row):
@@ -217,8 +210,29 @@ class ValidationReport():
         return df.loc[df[con.COLUMN_ROW] == row]
 
     @staticmethod
-    def get_key_list_with_condition(dict,condition=None):
+    def get_key_list(dict,condition=None):
         if condition:
-            return [key for key in dict.keys() if dict[key][con.VALIDATION_ERROR]]
+            return [key for key in dict.keys() if dict[key][condition]]
         else:
             return dict.keys()
+
+    @staticmethod
+    def get_action_name(result):
+
+        column_name = result[0]
+        state = result[1]
+
+        if state is con.MISSING_STATE:
+
+            if column_name in REQUIRED_COLUMN_LIST:
+                action = con.VALIDATION_ACTION_DROP
+            else:
+                action = con.VALIDATION_ACTION_FILL_NA
+
+        elif state is con.DUPLICATE_STATE:
+            action = con.VALIDATION_ACTION_DROP
+
+        else:
+            action = con.VALIDATION_ACTION_STOP
+
+        return action
