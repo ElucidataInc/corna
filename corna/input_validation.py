@@ -307,8 +307,8 @@ def get_isotopes_name_and_number(label):
     This fucntion take label value and returns isotopes present and
     its corresponding number. It first splits the label from "-label-"
     then take out each isotope and its number.
-    for ex: label = 'C13-N15-label-1-2'
-            label_all_element = 'C13-N15'
+    for ex: label = 'C13N15-label-1-2'
+            label_all_element = 'C13N15'
             label_all_number = '1-2'
             label_isotopes_list = ['C13','N15']
             label_isotope = ['C','N']
@@ -317,8 +317,8 @@ def get_isotopes_name_and_number(label):
     :param label: label value of column
     :return: isotopes in label and number of elements
     """
-    label_all_element, label_all_number = label.split('-label-')
-    label_isotopes_list = list(str(x) for x in label_all_element.split('-'))
+    label_joined_isotopes, label_all_number = label.split('-label-')
+    label_isotopes_list = get_split_isotopes(label_joined_isotopes)
     label_isotopes = get_isotope_name(label_isotopes_list)
     label_number_of_elements = list(int(x) for x in label_all_number.split('-'))
 
@@ -336,3 +336,15 @@ def get_isotope_name(list_of_istope_with_number):
                       for isotope in list_of_istope_with_number]
 
     return label_elements
+
+def get_split_isotopes(joined_isotopes):
+    """
+    This function will split the isotopes. For ex: C13N15 is splitted to ['C13','N15'].
+    :param joined_isotopes: C13N15
+    :return: list of isotpes present
+    """
+
+    split_isotopes = list(''.join(map(str, isotopes))
+                                for isotopes in chemformula_schema.parseString(joined_isotopes))
+
+    return split_isotopes
