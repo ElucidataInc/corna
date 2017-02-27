@@ -1,8 +1,8 @@
 import custom_exception
-from inputs.column_conventions import maven as c
 import os
 import pandas as pd
 
+from inputs.column_conventions import maven as c
 
 REQUIRED_COLUMNS_RAW_DATA = (c.NAME, c.LABEL, c.FORMULA)
 KNOWN_EXTENSION = {'.xls': pd.read_excel,
