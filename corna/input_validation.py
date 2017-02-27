@@ -218,10 +218,13 @@ def check_label_in_formula(label,formula):
 
     if not check_label_column_format(label) == con.VALID_STATE:
         return con.LABEL_STATE_NOT_CORRECT
+
     if not check_formula_is_correct(formula) == con.VALID_STATE :
         return con.FORMULA_STATE_INVALID
+
     if pd.isnull(label) or pd.isnull(formula):
         return con.VALID_STATE
+
     try:
         parsed_label = get_label(label)
         parsed_formula = get_formula(formula)
@@ -248,32 +251,35 @@ def check_label_in_formula(label,formula):
 def get_label(label):
     """
     This function takes label value as an argument and parsed it to
-    save as dictionary in the form of element,value pair. For ex:
-    label= C13N15-label-4-5
-    dict={'C': 4, 'N': 5}
-    First this function splits the label from "-label-" into two list
-    after spliting the two list is parsed and then map correspondingly.
-
+    save as dictionary in the form of element,value pair.
     If there is any exception we are returning NONE , assuming LABEL is
     not in correct format.The none case is handled by the function from
     this fucntion will be called.
+    for ex: label = C13-N15-label-1-2
+            label_isotopes = ['C13','N15']
+            label_number_of_elements = [1,2]
+            label_isotopes = ['C','N']
+            parsed_label = {'C':1,'N':2}
+
     :param label: label value
     :return: dict
     """
 
     if label == con.UNLABELLED_LABEL:
         return con.UNLABELLED_LABEL_DICT
+
     else:
         try:
             label_isotopes,label_number_of_elements = get_isotopes_name_and_number(label)
+
             if len(label_isotopes) != len(label_number_of_elements):
                 return None
-            label_element_pattern = re.compile("([a-zA-Z]+)([0-9]+)")
-            label_elements = [label_element_pattern.match(isotope).group(1)
-                              for isotope in label_isotopes]
+            label_elements = get_isotope_name(label_isotopes)
             parsed_label = dict(zip(label_elements, label_number_of_elements))
+
             return parsed_label
-        except Exception:
+
+        except ValueError:
             return None
 
 
@@ -311,3 +317,17 @@ def get_isotopes_name_and_number(label):
                           for i in chemformula_schema.parseString(label_all_element))
     label_number_of_elements = list(int(x) for x in label_all_number.split('-'))
     return label_isotopes, label_number_of_elements
+
+def get_isotope_name(list_of_istope_with_number):
+    """
+    This function will sepearte isotope from its atomic number and returns the list.
+    :param istope_with_number: istope in the form C13,N15 etc.
+    :return: seperated isotope C,N etc.
+    """
+    label_element_pattern = re.compile("([a-zA-Z]+)([0-9]+)")
+    label_elements = [label_element_pattern.match(isotope).group(1)
+                      for isotope in list_of_istope_with_number]
+
+    return label_elements
+
+
