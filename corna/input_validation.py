@@ -307,7 +307,14 @@ def get_isotopes_name_and_number(label):
     This fucntion take label value and returns isotopes present and
     its corresponding number. It first splits the label from "-label-"
     then take out each isotope and its number.
-    :param label:
+    for ex: label = 'C13-N15-label-1-2'
+            label_all_element = 'C13-N15'
+            label_all_number = '1-2'
+            label_isotopes_list = ['C13','N15']
+            label_isotope = ['C','N']
+            label_number_of_elements = [1,2]
+            
+    :param label: label value of column
     :return: isotopes in label and number of elements
     """
     label_all_element, label_all_number = label.split('-label-')
@@ -329,6 +336,3 @@ def get_isotope_name(list_of_istope_with_number):
                       for isotope in list_of_istope_with_number]
 
     return label_elements
-
-
-
