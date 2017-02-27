@@ -18,7 +18,7 @@ def validate_input_file(path):
     This is the function for checking basic validation of file.
     If any exception raises during validation check , handleError
     decorator will catch it and processed accordingly.
-    :param path:
+    :param path: path of file
     :return: True, if no exception is raised
     """
 
@@ -37,7 +37,7 @@ def validate_df(df, required_columns_name=None):
     This function validates the df. First it checks for df empty ,
     then for the required columns.If any exception raises during validation
     check ,handleError decorator will catch it and processed accordingly.
-    :param path:
+    :param df= dataframe to check
     :return:True, if no exception is raised
     """
     if dataframe_validator.check_df_empty(df):
@@ -87,7 +87,7 @@ def validator_for_two_column(input_data_frame, check_column='', required_column=
     :param input_data_frame: the data frame on which validation is to be applied
     :param check_column: the column on which check is to be performed
     :param required_column: the column which helps in performing check
-    :param function: validatin function
+    :param function: validation function
     :return: resultant dataframe
     """
     resultant_df = get_df()
@@ -123,7 +123,7 @@ def check_duplicate(input_df, axis=0, column_list=[]):
     This function checks for a duplicate value in a column. It
     saves the state duplicate if any duplicate value is found.
     :param input_df: data frame
-    :param axis:
+    :param axis: column or row wise check
     :param column_list: colum for which we need to check duplicacy
     :return: resultant_df of validation check
     """
@@ -134,7 +134,8 @@ def check_duplicate(input_df, axis=0, column_list=[]):
             column_df[con.COLUMN_NAME] = '-'.join(column)
             column_df[con.COLUMN_ROW] = column_df.index
             resultant_df = resultant_df.append(column_df)
-    output_df = get_df_with_invalid_state(resultant_df)
+
+    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] != True]
     output_df[con.COLUMN_STATE] = con.DUPLICATE_STATE
     return output_df
 
