@@ -122,10 +122,10 @@ def check_duplicate(input_df, axis=0, column_list=[]):
     """
     This function checks for a duplicate value in a column. It
     saves the state duplicate if any duplicate value is found.
-    :param input_data_frame:
+    :param input_df: data frame
     :param axis:
-    :param column_list:
-    :return:
+    :param column_list: colum for which we need to check duplicacy
+    :return: resultant_df of validation check
     """
     resultant_df = get_df()
     for column in column_list:
@@ -138,7 +138,20 @@ def check_duplicate(input_df, axis=0, column_list=[]):
     output_df[con.COLUMN_STATE] = con.DUPLICATE_STATE
     return output_df
 
-def check_postive_numerical_value(cell_value):
+
+def check_intensity_value(cell_value):
+    """
+    This function checks for intensity value i.e. only numerical positive
+    value is correct. Here we are converting the value to float so if there is
+    any exception we can assert that this is becuase it is not numerical and after
+    that we are checking if it positive.
+    Example : 0.673 --> Correct
+              0.as34 --> Invalid
+              -0.123 --> Negative
+    :param cell_value:
+    :return: State
+    """
+
     try:
         value = float(cell_value)
         if value < 0:
@@ -150,6 +163,17 @@ def check_postive_numerical_value(cell_value):
 
 
 def check_label_column_format(label):
+    """
+    This function is check if the label is in correct format or not. The
+    correct format is C13-N15-label-1-2. So using get label we extract
+    all the isotopes and then check if they exist. Also if the label column
+    value is missing we are treating it as correct state here becuase that case
+    is handled when checking for missing value. Also the case of label value = 'C12 PARENT'
+    is also correct.
+
+    :param label:
+    :return: State (ex. Invalid, Correct etc.)
+    """
     if label == con.UNLABELLED_LABEL or pd.isnull(label):
         return con.VALID_STATE
     else:
@@ -161,13 +185,23 @@ def check_label_column_format(label):
 
 
 def check_formula_is_correct(formula):
+    """
+    This function is checking for formula values. We are using pre defined
+    function get_formula which will raise exception if the formula is not correct.
+    Also if the label column value is missing we are treating it as correct state
+    because that case is handled when checking for missing value.
+    Example: C2H6O -->correct
+             XY12C2 -->invalid
+    :param formula:
+    :return:
+    """
     try:
         if pd.isnull(formula):
             return con.VALID_STATE
         else:
             get_formula(formula)
             return con.VALID_STATE
-    except:
+    except Exception:
         return con.FORMULA_STATE_INVALID
 
 
