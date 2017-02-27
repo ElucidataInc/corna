@@ -25,7 +25,7 @@ def validate_input_file(path):
     if not dataframe_validator.check_if_file_exist(path):
         raise custom_exception.FileExistError
 
-    if not dataframe_validator.check_file_empty(path):
+    if dataframe_validator.check_file_empty(path):
         raise custom_exception.FileEmptyError
 
     return True
@@ -40,7 +40,7 @@ def validate_df(df, required_columns_name=None):
     :param path:
     :return:True, if no exception is raised
     """
-    if not dataframe_validator.check_df_empty(df):
+    if dataframe_validator.check_df_empty(df):
         raise custom_exception.DataFrameEmptyError
     missing_column_status,missing_columns = dataframe_validator.\
                                              check_required_column(df,*required_columns_name)
@@ -73,7 +73,7 @@ def validator_column_wise(input_data_frame, axis=0, column_list=[], function_lis
             column_df[con.COLUMN_NAME] = column
             column_df[con.COLUMN_ROW] = column_df.index
             resultant_df = resultant_df.append(column_df)
-    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] != con.VALID_STATE]
+    output_df = get_df_with_invalid_state(resultant_df)
     return output_df
 
 @custom_exception.handleError
@@ -97,7 +97,7 @@ def validator_for_two_column(input_data_frame, check_column='', required_column=
 
     resultant_df[con.COLUMN_NAME] = check_column
     resultant_df[con.COLUMN_ROW] = resultant_df.index
-    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] != con.VALID_STATE]
+    output_df = get_df_with_invalid_state(resultant_df)
     return output_df
 
 @custom_exception.handleError
@@ -134,7 +134,7 @@ def check_duplicate(input_df, axis=0, column_list=[]):
             column_df[con.COLUMN_NAME] = '-'.join(column)
             column_df[con.COLUMN_ROW] = column_df.index
             resultant_df = resultant_df.append(column_df)
-    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] == True]
+    output_df = get_df_with_invalid_state(resultant_df)
     output_df[con.COLUMN_STATE] = con.DUPLICATE_STATE
     return output_df
 
@@ -348,3 +348,25 @@ def get_split_isotopes(joined_isotopes):
                                 for isotopes in chemformula_schema.parseString(joined_isotopes))
 
     return split_isotopes
+
+
+def get_df_with_invalid_state(df):
+    """
+    This will return the df containing only invalid states.
+    For ex:
+    input_df = row_number column_name     state
+                  1           label    invalid_label
+                  2           label    invalid_label
+                  3           label    correct
+                  4           label    invalid_label
+
+    output_df = row_number column_name     state
+                  1           label    invalid_label
+                  2           label    invalid_label
+                  4           label    invalid_label
+
+    :param df: input df
+    :return: filtered df
+    """
+
+    return df.loc[df[con.COLUMN_STATE] != con.VALID_STATE]
