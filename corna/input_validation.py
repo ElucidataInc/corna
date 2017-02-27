@@ -283,8 +283,7 @@ def get_df():
      we need a predefined df so then this function can be modified.
     :return:
     """
-    df = pd.DataFrame()
-    return df
+    return pd.DataFrame()
 
 
 def change_df_to_std_report_form(df):
