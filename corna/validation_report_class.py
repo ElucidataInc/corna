@@ -88,11 +88,9 @@ class ValidationReport():
             result_object[row[con.COLUMN_ROW]] = row_object
 
         self.result = result_object
-        self.invalid_row = result_object.keys()
-        self.error_row = [key for key in result_object.keys()
-                          if result_object[key][con.VALIDATION_ERROR]]
-        self.warning_row = [key for key in result_object.keys()
-                            if result_object[key][con.VALIDATION_WARNING]]
+        self.invalid_row = self.get_key_list_with_condition(result_object)
+        self.error_row = self.get_key_list_with_condition(result_object,con.VALIDATION_ERROR)
+        self.warning_row = self.get_key_list_with_condition(result_object,con.VALIDATION_WARNING)
 
         return self.result
 
@@ -217,3 +215,10 @@ class ValidationReport():
     def get_slice_df_with_row(df,row):
 
         return df.loc[df[con.COLUMN_ROW] == row]
+
+    @staticmethod
+    def get_key_list_with_condition(dict,condition=None):
+        if condition:
+            return [key for key in dict.keys() if dict[key][con.VALIDATION_ERROR]]
+        else:
+            return dict.keys()
