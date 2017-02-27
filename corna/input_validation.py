@@ -1,10 +1,12 @@
 import constants as con
-from corna.helpers import chemformula_schema,get_formula
 import custom_exception
 import dataframe_validator
-from inputs.column_conventions import maven
 import pandas as pd
 import re
+
+from corna.helpers import chemformula_schema,get_formula
+from inputs.column_conventions import maven
+
 
 #getting required columns for input file
 REQUIRED_COLUMNS = [maven.NAME, maven.LABEL, maven.FORMULA]
@@ -257,7 +259,7 @@ def get_isotopes_name_and_number(label):
     its corresponding number. It first splits the label from "-label-"
     then take out each isotope and its number.
     :param label:
-    :return:
+    :return: isotopes in label and number of elements
     """
     label_all_element, label_all_number = label.split('-label-')
     label_isotopes = list(''.join(map(str, i))
