@@ -32,16 +32,14 @@ def validate_input_file(path):
 
 
 @custom_exception.handleError
-def validate_df(df, required_columns_name):
+def validate_df(df, required_columns_name=None):
     """
-    This is the function for checking basic validation of file.
-    If any exception raises during validation check , handleError
-    decorator will catch it and processed accordingly.
+    This function validates the df. First it checks for df empty ,
+    then for the required columns.If any exception raises during validation
+    check ,handleError decorator will catch it and processed accordingly.
     :param path:
     :return:True, if no exception is raised
     """
-
-
     if not dataframe_validator.check_df_empty(df):
         raise custom_exception.DataFrameEmptyError
     missing_column_status,missing_columns = dataframe_validator.\
