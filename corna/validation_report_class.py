@@ -104,6 +104,17 @@ class ValidationReport():
         result and save the action report as key value pair where key is
         the row number.
 
+        for example:
+
+        if result = {'1':{'warning': [['label','invalid_label],['formula','invalid_formula]], 'errors':[]},
+                    '4':{'warning':[['label','invalid_label']],'errors':[]},
+                    '19':{'warning':[],'errors':['Sample1','negative]}}
+
+          action = {'1':{'warning': [['label','invalid_label','DROP'],['formula','invalid_formula','DROP']],
+                    'errors':[]},
+                    '4':{'warning':[['label','invalid_label','DROP']],'errors':[]},
+                    '19':{'warning':[],'errors':['Sample1','negative','STOP']}}
+
         :return: dict object
         """
         for row in self.warning_row:
@@ -120,8 +131,25 @@ class ValidationReport():
             to be taken on row i.e it decides if the row is being dropped,
             or individual column action is to be taken. If there is any error then simply it
             save STOP_TOOL and halts there.
-        :param data_frame:
-        :return: dict object
+
+            for ex: result = {'1':{'warning': [['label','invalid_label','DROP'],['formula','invalid_formula','DROP']],
+                                    'errors':[]},
+                              '4':{'warning':[['label','invalid_label','DROP']],'errors':[]},
+                              '19':{'warning':[],'errors':['Sample1','negative','STOP']}}
+
+                    action = {'action': 'STOP_TOOL}
+
+
+               if  result =  {'1':{'warning': [['label','invalid_label','DROP'],['formula','invalid_formula','DROP']],
+                                    'errors':[]},
+                              '4':{'warning':[['label','invalid_label','DROP']],'errors':[]} }
+
+
+                    action = {'action': 'ROW_WISE_ACTION', '1': 'DROP' , '4': 'DROP}
+
+
+        :param data_frame: data frame on which action is to be taken
+        :return: dict object: action list for rowwise
         """
         if self.error_row:
             self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_STOP
@@ -142,12 +170,15 @@ class ValidationReport():
         row also it returns the filtered data frame after performing the action.
         TODO: now using if and else to take the action because only two actions
         are there , need to change this when there are nuber of actions.
+
+        for ex:
         :param data_frame:
         :return: data_frame
         """
 
         output_df = pd.DataFrame()
         list_of_rows_to_drop = []
+
         if not self.action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_STOP:
             resultant_dataframe = data_frame
             for rows in [rows for rows in self.action if rows not in [con.VALIDATION_ACTION]]:
@@ -174,6 +205,7 @@ class ValidationReport():
         """
 
         for row in self.result.keys():
+
             if self.result[row][con.VALIDATION_WARNING]:
                 msg = []
                 for warning in self.result[row][con.VALIDATION_WARNING]:
@@ -243,7 +275,6 @@ class ValidationReport():
                          con.VALIDATION_ACTION: each_result[2]}
 
         return action_object
-
 
     def append_warning_action_to_result(self, row):
 
