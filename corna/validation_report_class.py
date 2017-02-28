@@ -130,12 +130,7 @@ class ValidationReport():
             self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_ROW_WISE
 
             for row in self.warning_row:
-                column_state_action_list = []
-
-                for each_result in self.result[row][con.VALIDATION_WARNING]:
-                        column_state_action_list.append(self.get_action_object(each_result))
-
-                self.action[row] = column_state_action_list
+                self.append_action(row)
         else:
             self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_OK
 
@@ -259,3 +254,12 @@ class ValidationReport():
 
         for each_result in self.result[row][con.VALIDATION_ERROR]:
             each_result.append(self.get_action_name(each_result))
+
+    def append_action(self, row):
+
+        column_state_action_list = []
+
+        for each_result in self.result[row][con.VALIDATION_WARNING]:
+            column_state_action_list.append(self.get_action_object(each_result))
+
+        self.action[row] = column_state_action_list
