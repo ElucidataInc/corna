@@ -128,12 +128,13 @@ class ValidationReport():
 
         elif self.warning_row:
             self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_ROW_WISE
+
             for row in self.warning_row:
                 column_state_action_list = []
-                for entries in self.result[row][con.VALIDATION_WARNING]:
-                    column_state_action_list.append({'column': entries[0],
-                                                     con.COLUMN_STATE: entries[1],
-                                                     con.VALIDATION_ACTION: entries[2]})
+
+                for each_result in self.result[row][con.VALIDATION_WARNING]:
+                        column_state_action_list.append(self.get_action_object(each_result))
+
                 self.action[row] = column_state_action_list
         else:
             self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_OK
@@ -149,7 +150,8 @@ class ValidationReport():
         :param data_frame:
         :return: data_frame
         """
-        resultant_dataframe = pd.DataFrame()
+
+        output_df = pd.DataFrame()
         list_of_rows_to_drop = []
         if not self.action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_STOP:
             resultant_dataframe = data_frame
@@ -157,9 +159,10 @@ class ValidationReport():
                 for each_action in self.action[rows]:
                     if each_action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_DROP:
                         list_of_rows_to_drop.append(rows)
+                        print list_of_rows_to_drop
                         action_msg = "Row is Dropped"
                     else :
-                        resultant_dataframe.set_value(rows, each_action['column'], 0)
+                        resultant_dataframe.set_value(rows, each_action[con.VALIDATION_COLUMN_NAME], 0)
                         action_msg = "Missing value of columns replaced with 0"
                 self.action_messages.append(action_msg)
             output_df = self.action_drop_rows(resultant_dataframe,list_of_rows_to_drop)
@@ -194,8 +197,10 @@ class ValidationReport():
 
     @staticmethod
     def action_drop_rows(df, row_list):
-        output_df = df.drop(df.index[row_list], inplace=True)
-        return output_df
+
+        df.drop(df.index[row_list], inplace=True)
+
+        return df
 
     @staticmethod
     def get_unique_row_having_error(self):
@@ -234,6 +239,16 @@ class ValidationReport():
             action = con.VALIDATION_ACTION_STOP
 
         return action
+
+    @staticmethod
+    def get_action_object(each_result):
+
+        action_object = {con.VALIDATION_COLUMN_NAME: each_result[0],
+                         con.COLUMN_STATE: each_result[1],
+                         con.VALIDATION_ACTION: each_result[2]}
+
+        return action_object
+
 
     def append_warning_action_to_result(self, row):
 
