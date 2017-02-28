@@ -71,6 +71,12 @@ class TestValidationReport():
 
         assert self.validation.get_action_name(result) == 'Stop_Tool'
 
+    def test_get_action_object(self):
+        result = ['Sample','Invalid','Stop_Tool']
+
+        assert self.validation.get_action_object(result) == {'column': 'Sample',
+                                                            'action': 'Stop_Tool',
+                                                            'state': 'Invalid'}
 
 
 
