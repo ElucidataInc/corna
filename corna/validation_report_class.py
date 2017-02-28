@@ -107,12 +107,10 @@ class ValidationReport():
         :return: dict object
         """
         for row in self.warning_row:
-            for each_result in self.result[row][con.VALIDATION_WARNING]:
-                each_result.append(self.get_action_name(each_result))
+            self.append_warning_action_to_result(row)
 
         for row in self.error_row:
-            for each_result in self.result[row][con.VALIDATION_ERROR]:
-                each_result.append(self.get_action_name(each_result))
+            self.append_error_action_to_result(row)
 
         return self.result
 
@@ -199,10 +197,10 @@ class ValidationReport():
         output_df = df.drop(df.index[row_list], inplace=True)
         return output_df
 
-    @classmethod
-    def get_unique_row_having_error(cls):
+    @staticmethod
+    def get_unique_row_having_error(self):
 
-        return cls.self.report_dataframe.row_number.unique()
+        return self.report_dataframe.row_number.unique()
 
     @staticmethod
     def get_slice_df_with_row(df,row):
@@ -236,3 +234,13 @@ class ValidationReport():
             action = con.VALIDATION_ACTION_STOP
 
         return action
+
+    def append_warning_action_to_result(self, row):
+
+        for each_result in self.result[row][con.VALIDATION_WARNING]:
+            each_result.append(self.get_action_name(each_result))
+
+    def append_error_action_to_result(self, row):
+
+        for each_result in self.result[row][con.VALIDATION_ERROR]:
+            each_result.append(self.get_action_name(each_result))
