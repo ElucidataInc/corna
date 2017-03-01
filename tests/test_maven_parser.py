@@ -1,8 +1,11 @@
-from corna.inputs import maven_parser
 import os
-import pandas as pd
-from pandas.util.testing import assert_frame_equal
 import pytest
+import pandas as pd
+
+from pandas.util.testing import assert_frame_equal
+
+from corna.inputs import maven_parser
+
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
 maven_file = os.path.join(dir_path, "test_input_validation_data", "test_maven_upload_acetic.csv")
@@ -12,7 +15,7 @@ metadatafile = os.path.join(dir_path, "test_input_validation_data", "metadata_sa
 def test_read_input_file_all_correct():
 
     test_df_path=os.path.join(dir_path, "test_input_validation_data", "test_mergedf_all_correct.csv")
-    result_df,result_log = maven_parser.read_input_file(maven_file, metadatafile)
+    result_df,result_log = maven_parser.read_maven_file(maven_file, metadatafile)
     test_df = pd.read_csv(test_df_path)
     test_log = {'warning': {'action': [], 'message': []}, 'errors': []}
 
@@ -52,7 +55,7 @@ def test_read_input_file_warning_in_maven():
     test_df_path = os.path.join(dir_path, "test_input_validation_data", "test_mergedf_warning.csv")
     maven_file_path = os.path.join(dir_path, "test_input_validation_data",
                                         "test_maven_upload_duplicate_entry.csv")
-    result_df, result_log = maven_parser.read_input_file(maven_file_path, metadatafile)
+    result_df, result_log = maven_parser.read_maven_file(maven_file_path, metadatafile)
     test_log = {'warning': {'action': ['Row is Dropped', 'Row is Dropped'], 'message':
                 ['Row Number <b>3</b> : column <b>Name-Label</b> has <b>duplicate</b> value',
                  'Row Number <b>4</b> : column <b>Name-Label</b> has <b>duplicate</b> value']},
