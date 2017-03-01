@@ -201,6 +201,22 @@ def get_metadata_df(metadata_path):
         return input_validation.get_df()
 
 
+def get_sample_column(maven_df):
+    """
+    This function will extract out sample column headers
+    from the maven df and returns in the form of list.
+    :param maven_df: maven dataframe
+    :return: sample column headers in the data frame
+    """
+    return [column for column in list(maven_df)
+                     if column not in REQUIRED_COLUMNS_MAVEN]
+
+
+def get_corrected_maven_df(maven_df):
+
+    pass
+
+
 def read_maven_file(maven_file_path, metadata_path):
     """
     This function reads maven and metadata file, convert it to df and
@@ -225,6 +241,8 @@ def read_maven_file(maven_file_path, metadata_path):
         maven_df = filtered_data_frame(input_maven_df,metadata_df)
     else:
         maven_df = input_maven_df
+
+    corrected_maven_df = get_corrected_maven_df(maven_df)
 
 
 
