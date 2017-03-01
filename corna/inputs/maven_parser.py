@@ -184,14 +184,18 @@ def filtered_data_frame(maven_data_frame, metadata_data_frame):
     return filtered_maven_dataframe
 
 
-def read_input_file(maven_file_path, maven_sample_metadata_path):
+def read_maven_file(maven_file_path, maven_sample_metadata_path):
     """
-    This function reads maven and metadata file, convert it to dataframe and
-    checks for validation of files and returns merged output with validation
-    logs.
-    :param maven_file_path:
-    :param maven_sample_metadata_path:
-    :return:
+    This function reads maven and metadata file, convert it to df and
+    checks for validation of files. If validation does not raise any
+    error it returns mergedf with logs and iso-tracer data.
+    :param maven_file_path: absolute path of maven raw file
+    :param maven_sample_metadata_path: absolute path of metadatafile
+    :return: mergedf : pandas df
+             logs: dictionary of errors and warnings
+             iso-tracer : dictionary of iso-tracer
+
+
     """
     vr = ValidationReport()
     input_maven_data_frame = validate_input_file(maven_file_path, required_columns_raw_data)
