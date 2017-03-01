@@ -27,7 +27,8 @@ LOGS = {}
 ISOTRACER = []
 
 COLUMN_DUPLICATE_CHECK = [[c.NAME,c.LABEL]]
-
+COLUMN_DUPLICATE_CHECK = [[c.NAME,c.LABEL]]
+ISOTRACER_COLUMN = 'isotracer'
 VALIDATOR = ValidationReport()
 def maven_merge_dfs(df1, df2):
     """
@@ -44,7 +45,7 @@ def maven_merge_dfs(df1, df2):
     long_form = melt_df(df1)
     try:
         merged_df = merge_two_dfs(long_form, df2, how='left',
-                                  left_on=VAR_COL, right_on=c.SAMPLE)
+                                  left_on=con.VAR_COL, right_on=c.SAMPLE)
     except KeyError:
         raise KeyError(c.SAMPLE + ' column not found in metadata')
 
@@ -223,7 +224,7 @@ def get_corrected_maven_df(maven_df):
     VALIDATOR.append(report_label_in_formula(maven_df))
     VALIDATOR.append(report_formula_column_format(maven_df))
     VALIDATOR.append(report_intensity_values(maven_df))
-
+    VALIDATOR.generate_report()
     VALIDATOR.generate_action()
     VALIDATOR.decide_action()
 
@@ -268,6 +269,34 @@ def report_intensity_values(maven_df):
                               [input_validation.check_intensity_value])
 
 
+def get_validation_logs():
+
+    return VALIDATOR.generate_warning_error_list_of_strings()
+
+
+def get_extracted_isotracer(label):
+
+    return label.split('-label-')[0]
+
+
+def get_extraced_isotracer_df(maven_df):
+
+    return maven_df[c.LABEL].apply(get_extracted_isotracer)
+
+
+def get_isotracer_dict(maven_df):
+
+    isotracer_df = get_extraced_isotracer_df(maven_df)
+    return isotracer_df[ISOTRACER_COLUMN].value_counts().to_dict()
+
+
+def get_merge_df(maven_df,metadata_df):
+
+    if metadata_df:
+        return maven_merge_dfs(maven_df,metadata_df)
+    else:
+        return convert_inputdata_to_stdfrom(maven_df)
+
 
 
 def read_maven_file(maven_file_path, metadata_path):
@@ -287,20 +316,25 @@ def read_maven_file(maven_file_path, metadata_path):
     if input_validation.validate_input_file(maven_file_path):
         input_maven_df = dataframe_validator.read_input_file(maven_file_path)
     else:
-        return input_validation.get_df(), LOGS, ISOTRACER
+        return input_validation.get_df(), None, None
 
     if metadata_path:
         metadata_df = get_metadata_df(metadata_path)
         maven_df = filtered_data_frame(input_maven_df,metadata_df)
     else:
+        metadata_df = None
         maven_df = input_maven_df
 
     corrected_maven_df = get_corrected_maven_df(maven_df)
 
-    validation_logs = VALIDATOR.generate_warning_error_list_of_strings()
+    validation_logs = get_validation_logs()
 
     if not validation_logs[con.VALIDATION_ERROR]:
-
+        isotracer_dict = get_isotracer_dict(corrected_maven_df)
+        merged_df = get_merge_df(corrected_maven_df,metadata_df)
+        return merged_df, validation_logs, isotracer_dict
+    else:
+        return corrected_maven_df,validation_logs,None
 
 
 
