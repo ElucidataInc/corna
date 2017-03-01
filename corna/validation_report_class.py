@@ -1,6 +1,7 @@
 import pandas as pd
 
 from corna import constants as con
+from corna.input_validation import get_df
 from inputs.column_conventions import maven as c
 
 REQUIRED_COLUMN_LIST = [c.NAME, c.LABEL, c.FORMULA]
@@ -17,9 +18,9 @@ class ValidationReport():
     def __init__(self):
         """
         Intialising self global variables here.
-        report_dataframe: appends all the validation dataframe return by
+        report_df: appends all the validation df return by
                          all validation function
-        result: this variable groups report_dataframe and store it in
+        result: this variable groups report_df and store it in
                 dictionary form
         invalid_row: list of all rows which contains errors and warnings
         warning_row: list of all rows which contains warnings
@@ -30,7 +31,7 @@ class ValidationReport():
 
         """
 
-        self.report_dataframe = pd.DataFrame()
+        self.report_df = get_df()
         self.result = {}
         self.required_column_list = [c.NAME, c.LABEL, c.FORMULA]
         self.invalid_row = []
@@ -42,9 +43,12 @@ class ValidationReport():
                                                             con.VALIDATION_ACTION: []},
                                    con.VALIDATION_ERROR: []}
 
-    def append(self, dataframe):
-        # append the data frame to the global report data frame
-        self.report_dataframe = self.report_dataframe.append(dataframe)
+    def append(self, df):
+        """
+        Append the data frame to the global report data frame.
+        :param df: function wise report df
+        """
+        self.report_df = self.report_df.append(df)
 
     def generate_report(self):
         """
@@ -78,7 +82,7 @@ class ValidationReport():
 
         for each_row in row_having_error:
 
-            row_df = self.get_slice_df_with_row(self.report_dataframe,each_row)
+            row_df = self.get_slice_df_with_row(self.report_df,each_row)
             row_object = {con.VALIDATION_WARNING: [], con.VALIDATION_ERROR: []}
 
             for index, row in row_df.iterrows():
@@ -187,11 +191,11 @@ class ValidationReport():
         :return: data_frame
         """
 
-        output_df = pd.DataFrame()
+        output_df = get_df()
         list_of_rows_to_drop = []
 
         if not self.action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_STOP:
-            resultant_dataframe = data_frame
+            resultant_df = data_frame
 
             for rows in [rows for rows in self.action if rows not in [con.VALIDATION_ACTION]]:
 
@@ -203,11 +207,11 @@ class ValidationReport():
                         break
 
                     else:
-                        resultant_dataframe.set_value(rows, each_action[con.VALIDATION_COLUMN_NAME], 0)
+                        resultant_df.set_value(rows, each_action[con.VALIDATION_COLUMN_NAME], 0)
                         action_msg = "Missing value of columns replaced with 0"
 
                 self.action_messages.append(action_msg)
-            output_df = self.action_drop_rows(resultant_dataframe,list_of_rows_to_drop)
+            output_df = self.action_drop_rows(resultant_df,list_of_rows_to_drop)
         self.warning_error_dict[con.VALIDATION_WARNING][con.VALIDATION_ACTION] = self.action_messages
 
         return output_df
@@ -271,7 +275,8 @@ class ValidationReport():
         :param self:
         :return: list of unique value
         """
-        return self.report_dataframe.row_number.unique()
+
+        return self.report_df.row_number.unique()
 
     @staticmethod
     def get_slice_df_with_row(df,row):
@@ -310,14 +315,14 @@ class ValidationReport():
         column_name = result[0]
         state = result[1]
 
-        if state is con.MISSING_STATE:
+        if state == con.MISSING_STATE:
 
             if column_name in REQUIRED_COLUMN_LIST:
                 action = con.VALIDATION_ACTION_DROP
             else:
                 action = con.VALIDATION_ACTION_FILL_NA
 
-        elif state is con.DUPLICATE_STATE:
+        elif state == con.DUPLICATE_STATE:
             action = con.VALIDATION_ACTION_DROP
 
         else:

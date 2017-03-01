@@ -17,7 +17,7 @@ class TestValidationReport():
     def test_append(self):
         df = pd.DataFrame({'column_name': 'Name', 'row_number': 0, 'state': 'missing'}, index=[0])
         self.validation.append(df)
-        assert self.validation.report_dataframe.equals(df)
+        assert self.validation.report_df.equals(df)
 
     def test_generate_report(self):
         df = pd.DataFrame({'column_name': 'Name', 'row_number': 0, 'state': 'missing'}, index=[0])
