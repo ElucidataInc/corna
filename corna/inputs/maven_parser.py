@@ -23,6 +23,8 @@ MavenKey = namedtuple('MavenKey','name formula')
 REQUIRED_COLUMNS_MAVEN = [c.NAME, c.LABEL, c.FORMULA]
 REQUIRED_COLUMNS_MAVEN_METADATA = [c.SAMPLE]
 
+LOGS = {}
+ISOTRACER = []
 
 def maven_merge_dfs(df1, df2):
     """
@@ -58,9 +60,9 @@ def column_manipulation(df):
     Returns:
         df : df with added columns and standard column names
     """
-    df[PARENT_COL] = df[c.NAME]
+    df[con.PARENT_COL] = df[c.NAME]
     df.rename(
-        columns={VAR_COL: SAMPLE_COL, VAL_COL: INTENSITY_COL},
+        columns={con.VAR_COL: con.SAMPLE_COL, con.VAL_COL: con.INTENSITY_COL},
         inplace=True)
 
     return df
@@ -109,7 +111,7 @@ def frag_key(df):
     This function creates a fragment key column in merged data based on parent information.
     """
     try:
-        df[FRAG_COL] = df.apply(lambda x: MavenKey(
+        df[con.FRAG_COL] = df.apply(lambda x: MavenKey(
             x[c.NAME], x[c.FORMULA]), axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
@@ -191,7 +193,15 @@ def filtered_data_frame(maven_data_frame, metadata_data_frame):
     return filtered_maven_dataframe
 
 
-def read_maven_file(maven_file_path, maven_sample_metadata_path):
+def get_metadata_df(metadata_path):
+
+    if input_validation.validate_input_file(metadata_path):
+        return dataframe_validator.read_input_file(metadata_path)
+    else:
+        return input_validation.get_df()
+
+
+def read_maven_file(maven_file_path, metadata_path):
     """
     This function reads maven and metadata file, convert it to df and
     checks for validation of files. If validation does not raise any
@@ -204,4 +214,17 @@ def read_maven_file(maven_file_path, maven_sample_metadata_path):
 
 
     """
+
+    if input_validation.validate_input_file(maven_file_path):
+        input_maven_df = dataframe_validator.read_input_file(maven_file_path)
+    else:
+        return input_validation.get_df(), LOGS, ISOTRACER
+
+    if metadata_path:
+        metadata_df = get_metadata_df(metadata_path)
+        maven_df = filtered_data_frame(input_maven_df,metadata_df)
+    else:
+        maven_df = input_maven_df
+
+
 
