@@ -6,7 +6,7 @@ from column_conventions import maven as c
 from corna import constants as con
 from corna import dataframe_validator
 from corna import input_validation
-from corna import validation_report_class
+from corna import validation_report_class as ValidationReport
 from corna import dataframe_validator
 from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
@@ -25,6 +25,9 @@ REQUIRED_COLUMNS_MAVEN_METADATA = [c.SAMPLE]
 
 LOGS = {}
 ISOTRACER = []
+
+COLUMN_DUPLICATE_CHECK = [[c.NAME,c.LABEL]]
+
 
 def maven_merge_dfs(df1, df2):
     """
@@ -181,12 +184,12 @@ def filtered_data_frame(maven_data_frame, metadata_data_frame):
     :param metadata_data_frame:
     :return:
     """
-    filtered_metadata_frame = metadata_data_frame.drop_duplicates(required_columns_metadata)
+    filtered_metadata_frame = metadata_data_frame.drop_duplicates(REQUIRED_COLUMNS_MAVEN_METADATA)
     metadata_sample_column_set = set(filtered_metadata_frame[c.SAMPLE].tolist())
     maven_sample_list = set(maven_data_frame.columns.values.tolist())
     intersection_sample_list = list(maven_sample_list.intersection(metadata_sample_column_set))
     if intersection_sample_list:
-        maven_data_frame_column = required_columns_raw_data+intersection_sample_list
+        maven_data_frame_column = REQUIRED_COLUMNS_MAVEN+intersection_sample_list
         filtered_maven_dataframe = maven_data_frame[maven_data_frame_column]
     else:
         raise
@@ -214,7 +217,39 @@ def get_sample_column(maven_df):
 
 def get_corrected_maven_df(maven_df):
 
-    pass
+    validator = ValidationReport()
+    # validator.append(check_missing(maven_df))
+    # validator.append(check_duplicate(maven_df, 0, [['Name', 'Label']]))
+    # validator.append(validator_column_wise(maven_df, 0, [c.LABEL], [check_label_column_format]))
+    # validator.append(validator_column_wise(maven_df, 0, [c.FORMULA], [check_formula_is_correct]))
+    # validator.append(validator_for_two_column(maven_df, c.LABEL, c.FORMULA, check_label_in_formula))
+    # validator.append(validator_column_wise(maven_df, 0, sample_column, [check_intensity_value]))
+    #
+
+
+def report_missing_values(maven_df):
+
+    return input_validation.check_missing(maven_df)
+
+
+def report_duplicate_values(maven_df):
+
+    return input_validation.check_duplicate(maven_df,COLUMN_DUPLICATE_CHECK)
+
+
+def report_label_column_format(maven_df):
+
+    return input_validation.validator_column_wise(maven_df, 0,[c.LABEL],
+                              [input_validation.check_label_column_format()])
+
+
+def report_label_in_fromula(maven_df):
+
+    return input_validation.validator_for_two_column(
+            maven_df, c.LABEL, c.FORMULA,
+            input_validation.check_label_in_formula)
+
+
 
 
 def read_maven_file(maven_file_path, metadata_path):
@@ -243,6 +278,8 @@ def read_maven_file(maven_file_path, metadata_path):
         maven_df = input_maven_df
 
     corrected_maven_df = get_corrected_maven_df(maven_df)
+
+
 
 
 
