@@ -1,21 +1,28 @@
-from collections import namedtuple
-from corna.input_validation import check_missing,check_duplicate
-from corna.input_validation import validator_column_wise,validator_for_two_column
-from corna.input_validation import check_formula_is_correct
-from corna.input_validation import check_postive_numerical_value
-from corna.input_validation import check_label_column_format,check_label_in_formula
-from corna.validation_report_class import ValidationReport
-from corna.input_validation import validate_input_file
-
 import pandas as pd
+
+from collections import namedtuple
+
+from column_conventions import maven as c
+from corna import constants as con
+from corna import dataframe_validator
+from corna import input_validation
+from corna import validation_report_class
+from corna import dataframe_validator
+from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
+from corna.helpers import chemformula_schema, check_column_headers
+
+
 
 from . column_conventions import maven as c
 from .. helpers import merge_two_dfs, create_dict_from_isotope_label_list, chemformula_schema, check_column_headers
 #, VAR_COL, VAL_COL, SAMPLE_COL, INTENSITY_COL
 from .. constants import PARENT_COL, VAR_COL, VAL_COL, FRAG_COL, SAMPLE_COL, INTENSITY_COL
 
-
 MavenKey = namedtuple('MavenKey','name formula')
+
+REQUIRED_COLUMNS_MAVEN = [c.NAME, c.LABEL, c.FORMULA]
+REQUIRED_COLUMNS_MAVEN_METADATA = [c.SAMPLE]
+
 
 def maven_merge_dfs(df1, df2):
     """
@@ -197,32 +204,4 @@ def read_maven_file(maven_file_path, maven_sample_metadata_path):
 
 
     """
-    vr = ValidationReport()
-    input_maven_data_frame = validate_input_file(maven_file_path, required_columns_raw_data)
-    if maven_sample_metadata_path:
-        metadata_data_frame = validate_input_file(maven_sample_metadata_path, required_columns_metadata)
-        maven_data_frame = filtered_data_frame(input_maven_data_frame, metadata_data_frame)
-    else:
-        maven_data_frame = input_maven_data_frame
-    vr.append(check_missing(maven_data_frame))
-    vr.append(check_duplicate(maven_data_frame, 0, [['Name', 'Label']]))
-    sample_column = [column for column in list(maven_data_frame)
-                     if column not in required_columns_raw_data]
 
-    vr.append(validator_column_wise(maven_data_frame, 0, sample_column, [check_postive_numerical_value]))
-    vr.append(validator_column_wise(maven_data_frame, 0, [c.LABEL], [check_label_column_format]))
-    vr.append(validator_column_wise(maven_data_frame, 0, [c.FORMULA], [check_formula_is_correct]))
-    vr.append(validator_for_two_column(maven_data_frame, c.LABEL, c.FORMULA, check_label_in_formula))
-    vr.generate_report()
-    vr.generate_action()
-    vr.decide_action()
-    corrected_maven_df = vr.take_action(maven_data_frame)
-    logs = vr.generate_warning_error_list_of_strings()
-    merge_df = pd.DataFrame()
-    if vr.action['action'] != 'Stop_Tool':
-        if maven_sample_metadata_path:
-            merge_df = maven_merge_dfs(corrected_maven_df,metadata_data_frame)
-        else:
-            merge_df = convert_inputdata_to_stdfrom(corrected_maven_df)
-
-    return merge_df, logs
