@@ -6,10 +6,10 @@ from column_conventions import maven as c
 from corna import constants as con
 from corna import dataframe_validator
 from corna import input_validation
-from corna import validation_report_class as ValidationReport
 from corna import dataframe_validator
 from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
+from corna.validation_report_class import ValidationReport
 
 
 
@@ -28,7 +28,7 @@ ISOTRACER = []
 
 COLUMN_DUPLICATE_CHECK = [[c.NAME,c.LABEL]]
 
-
+VALIDATOR = ValidationReport()
 def maven_merge_dfs(df1, df2):
     """
     This function combines the MAVEN input file dataframe and the metadata
@@ -217,14 +217,19 @@ def get_sample_column(maven_df):
 
 def get_corrected_maven_df(maven_df):
 
-    validator = ValidationReport()
-    # validator.append(check_missing(maven_df))
-    # validator.append(check_duplicate(maven_df, 0, [['Name', 'Label']]))
-    # validator.append(validator_column_wise(maven_df, 0, [c.LABEL], [check_label_column_format]))
-    # validator.append(validator_column_wise(maven_df, 0, [c.FORMULA], [check_formula_is_correct]))
-    # validator.append(validator_for_two_column(maven_df, c.LABEL, c.FORMULA, check_label_in_formula))
-    # validator.append(validator_column_wise(maven_df, 0, sample_column, [check_intensity_value]))
-    #
+    VALIDATOR.append(report_missing_values(maven_df))
+    VALIDATOR.append(report_duplicate_values(maven_df))
+    VALIDATOR.append(report_label_column_format(maven_df))
+    VALIDATOR.append(report_label_in_formula(maven_df))
+    VALIDATOR.append(report_formula_column_format(maven_df))
+    VALIDATOR.append(report_intensity_values(maven_df))
+
+    VALIDATOR.generate_action()
+    VALIDATOR.decide_action()
+
+    corrected_df = VALIDATOR.take_action(maven_df)
+
+    return corrected_df
 
 
 def report_missing_values(maven_df):
@@ -291,6 +296,11 @@ def read_maven_file(maven_file_path, metadata_path):
         maven_df = input_maven_df
 
     corrected_maven_df = get_corrected_maven_df(maven_df)
+
+    validation_logs = VALIDATOR.generate_warning_error_list_of_strings()
+
+    if not validation_logs[con.VALIDATION_ERROR]:
+
 
 
 
