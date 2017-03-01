@@ -240,14 +240,27 @@ def report_duplicate_values(maven_df):
 def report_label_column_format(maven_df):
 
     return input_validation.validator_column_wise(maven_df, 0,[c.LABEL],
-                              [input_validation.check_label_column_format()])
+                              [input_validation.check_label_column_format])
 
 
-def report_label_in_fromula(maven_df):
+def report_formula_column_format(maven_df):
+
+    return input_validation.validator_column_wise(maven_df, 0,[c.FORMULA],
+                              [input_validation.check_formula_is_correct])
+
+
+def report_label_in_formula(maven_df):
 
     return input_validation.validator_for_two_column(
             maven_df, c.LABEL, c.FORMULA,
             input_validation.check_label_in_formula)
+
+
+def report_intensity_values(maven_df):
+
+    sample_columns = get_sample_column(maven_df)
+    return input_validation.validator_column_wise(maven_df, 0, sample_columns,
+                              [input_validation.check_intensity_value])
 
 
 
