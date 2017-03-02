@@ -9,7 +9,7 @@ REQUIRED_COLUMN_LIST = [maven_file.NAME, maven_file.LABEL, maven_file.FORMULA]
 
 class ValidationReport():
     """
-    This is validation report class. This can be used to This in generating report of
+    This is validation report class. This can be use to generate report of
     all the warning and error after performing validation check in different formats
     such as waning, error dict or can be row wise df. It also helps deciding what
     action is to be taken.
@@ -19,7 +19,7 @@ class ValidationReport():
         """
         Intialising self global variables here.
         report_df: appends all the validation df return by
-                         all validation function
+                   all validation function
         result: this variable groups report_df and store it in
                 dictionary form
         invalid_row: list of all rows which contains errors and warnings
