@@ -164,10 +164,12 @@ class ValidationReport():
         output_df = get_df()
         list_of_rows_to_drop = []
 
-        if not self.action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_STOP:
+        if not self.check_action_is_stop_tool():
             resultant_df = data_frame
+            rows_to_take_action_on = [rows for rows in self.action
+                                      if rows not in [con.VALIDATION_ACTION]]
 
-            for rows in [rows for rows in self.action if rows not in [con.VALIDATION_ACTION]]:
+            for rows in rows_to_take_action_on:
 
                 for each_action in self.action[rows]:
 
@@ -306,6 +308,12 @@ class ValidationReport():
                          con.VALIDATION_ACTION: each_result[2]}
 
         return action_object
+
+    def check_action_is_stop_tool(self):
+        """
+        This will check if action is not stop_tool
+        """
+        return self.action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_STOP
 
     def append_warning_action_to_result(self, row):
         """
