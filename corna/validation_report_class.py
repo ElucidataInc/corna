@@ -10,9 +10,9 @@ REQUIRED_COLUMN_LIST = [maven_file.NAME, maven_file.LABEL, maven_file.FORMULA]
 class ValidationReport():
     """
     This is validation report class. This can be use to generate report of
-    all the warning and error after performing validation check in different formats
-    such as waning, error dict or can be row wise df. It also helps deciding what
-    action is to be taken.
+    all the warning and error after performing validation check in different
+    formats such as waning, error dict or can be row wise df. It also helps
+    deciding what action is to be taken.
     """
 
     def __init__(self):
@@ -90,15 +90,17 @@ class ValidationReport():
 
         for example:
 
-        if result = {'1':{'warning': [['label','invalid_label],['formula','
-                    invalid_formula']], 'errors':[]},'4':{'warning':[
-                    ['label','invalid_label']],'errors':[]},'19':{'warning':[],
-                    'errors':['Sample1','negative]}}
+        if result
+            {'1':{'warning': [['label','invalid_label],['formula','
+            invalid_formula']], 'errors':[]},'4':{'warning':[
+            ['label','invalid_label']],'errors':[]},'19':{'warning':[],
+            'errors':['Sample1','negative]}}
 
-        final result = {'1':{'warning': [['label','invalid_label','DROP'],['formula',
-                        'invalid_formula','DROP']],'errors':[]},'4':{'warning':[[
-                        'label','invalid_label','DROP']],'errors':[]},'19':{'warning':
-                        [],'errors':['Sample1','negative','STOP']}}
+        final result:
+            {'1':{'warning': [['label','invalid_label','DROP'],['formula',
+            'invalid_formula','DROP']],'errors':[]},'4':{'warning':[[
+            'label','invalid_label','DROP']],'errors':[]},'19':{'warning':
+            [],'errors':['Sample1','negative','STOP']}}
         """
         for row in self.warning_row:
             self.append_warning_action_to_result(row)
@@ -115,18 +117,24 @@ class ValidationReport():
         or individual column action is to be taken. If there is any error then simply it
         save STOP_TOOL and halts there.
 
-        for ex: result = {'1':{'warning': [['label','invalid_label','DROP'],['formula',
-                          'invalid_formula','DROP']],'errors':[]},
-                          '4':{'warning':[['label','invalid_label','DROP']],'errors':[]},
-                          '19':{'warning':[],'errors':['Sample1','negative','STOP']}}
+        for ex: result:
+            {'1':{'warning': [['label','invalid_label','DROP'],['formula',
+            'invalid_formula','DROP']],'errors':[]},
+            '4':{'warning':[['label','invalid_label','DROP']],'errors':[]},
+            '19':{'warning':[],'errors':['Sample1','negative','STOP']}}
+
         action = {'action': 'STOP_TOOL}
-        if  result =  {'1':{'warning': [['label','invalid_label','DROP'],['formula',
-                        'invalid_formula','DROP']],'errors':[]},
-                      '4':{'warning':[['label','invalid_label','DROP']],'errors':[]} }
-        action = {'action': 'ROW_WISE_ACTION',
-                  '1': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'},
-                        {'column': 'Formula', 'state': 'invalid_formula, 'action': 'DROP'}],
-                  '4': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'}]}
+
+        if  result:
+            {'1':{'warning': [['label','invalid_label','DROP'],['formula',
+            'invalid_formula','DROP']],'errors':[]},
+            '4':{'warning':[['label','invalid_label','DROP']],'errors':[]} }
+        action :
+            {'action': 'ROW_WISE_ACTION',
+            '1': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'},
+            {'column': 'Formula', 'state': 'invalid_formula, 'action': 'DROP'}],
+            '4': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'}]}
+
         :param data_frame: data frame on which action is to be taken
         :return: dict object: action list for row wise
         """
@@ -224,9 +232,10 @@ class ValidationReport():
     @staticmethod
     def action_drop_rows(df, row_list):
         """
-        This is used to drop the rows in a df.
-        :param df: DF on ehich action is to be performed
-               row_list: list of row to dropped
+        This is used to drop the rows in a df. Static keyword is used because
+        it is behaving as plain function no need to pass self or cls argument.
+        :param df: DF on which action is to be performed
+        :param row_list: list of row to dropped
         return: DF after row is dropped
         """
 
@@ -355,9 +364,9 @@ class ValidationReport():
             warning_or_error_msg = [row[con.COLUMN_NAME], row[con.COLUMN_STATE]]
 
             if row[con.COLUMN_STATE] in con.WARNING_STATE:
-                warning_error_dict_for_row[con.VALIDATION_WARNING].append\
-                    (warning_or_error_msg)
+                warning_error_dict_for_row[con.VALIDATION_WARNING].\
+                    append(warning_or_error_msg)
             else:
-                warning_error_dict_for_row[con.VALIDATION_ERROR].append\
-                    (warning_or_error_msg)
+                warning_error_dict_for_row[con.VALIDATION_ERROR].\
+                    append(warning_or_error_msg)
         self.result[row[con.COLUMN_ROW]] = warning_error_dict_for_row
