@@ -51,9 +51,11 @@ class ValidationReport():
 
     def generate_report(self):
         """
-        This function generates the report in the form of dict object
-        based on the values of report data frame. First it will find
-        unique row number then for each row it forms a df , then iterating
+        This can be used to generate the validation report in
+        the form of dict object which is previously in the form
+        of df. Also this help getting the row number where error
+        and warnings are present. First it will find unique row
+        number then for each row it forms a df , then iterating
         over that df it saves error and warning.
         For ex:
         if report_df :
@@ -74,18 +76,21 @@ class ValidationReport():
         for each_row in row_having_error:
 
             row_df = self.get_slice_df_with_row(self.report_df, each_row)
-            row_object = {con.VALIDATION_WARNING: [], con.VALIDATION_ERROR: []}
+            warning_error_dict_for_row = {con.VALIDATION_WARNING: [],
+                                          con.VALIDATION_ERROR: []}
 
             for index, row in row_df.iterrows():
 
                 warning_or_error_msg = [row[con.COLUMN_NAME], row[con.COLUMN_STATE]]
 
                 if row[con.COLUMN_STATE] in con.WARNING_STATE:
-                    row_object[con.VALIDATION_WARNING].append(warning_or_error_msg)
+                    warning_error_dict_for_row[con.VALIDATION_WARNING].append\
+                        (warning_or_error_msg)
                 else:
-                    row_object[con.VALIDATION_ERROR].append(warning_or_error_msg)
+                    warning_error_dict_for_row[con.VALIDATION_ERROR].append\
+                        (warning_or_error_msg)
 
-            self.result[row[con.COLUMN_ROW]] = row_object
+            self.result[row[con.COLUMN_ROW]] = warning_error_dict_for_row
 
         self.invalid_row = self.get_key_list(self.result)
         self.error_row = self.get_key_list(self.result, con.VALIDATION_ERROR)
