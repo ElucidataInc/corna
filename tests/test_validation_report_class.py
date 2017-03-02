@@ -80,3 +80,9 @@ class TestValidationReport():
         assert self.validation.get_action_object(result) == {'column': 'Sample',
                                                              'action': 'Stop_Tool',
                                                              'state': 'Invalid'}
+
+    def test_append_other_than_df(self):
+        df = "abcdefg"
+
+        with pytest.raises(TypeError) as e_info:
+            self.validation.append(df)
