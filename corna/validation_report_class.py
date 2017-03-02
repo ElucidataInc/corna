@@ -249,19 +249,19 @@ class ValidationReport():
         return df.loc[df[con.COLUMN_ROW] == row]
 
     @staticmethod
-    def get_key_list(dict, condition=None):
+    def get_key_list(input_dict, condition=None):
         """
-        This is used to get the key list of dict. Also a condition can be given
-        according to which the key is tobe choosen.
+        This is used to get the key list of input_dict. Also a condition
+        can be given according to which the key is to be choosen.
 
         :param dict: dictionary
         :param condition: on which key is to be choosen
-        :return: list of key
+        :return: list of key in a dictionary
         """
         if condition:
-            return [key for key in dict.keys() if dict[key][condition]]
+            return [key for key in input_dict.keys() if input_dict[key][condition]]
         else:
-            return dict.keys()
+            return input_dict.keys()
 
     @staticmethod
     def get_action_name(result):
