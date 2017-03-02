@@ -20,9 +20,9 @@ class TestValidationReport():
     def teardown_class(cls):
         del cls.validation
 
-    def test_append(self):
+    def test_append_df_to_global_df(self):
         df = get_test_df()
-        self.validation.append(df)
+        self.validation.append_df_to_global_df(df)
         assert self.validation.report_df.equals(df)
 
     def test_generate_report(self):
@@ -85,4 +85,4 @@ class TestValidationReport():
         df = "abcdefg"
 
         with pytest.raises(TypeError) as e_info:
-            self.validation.append(df)
+            self.validation.append_df_to_global_df(df)
