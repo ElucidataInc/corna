@@ -173,12 +173,12 @@ class ValidationReport():
 
                     if each_action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_DROP:
                         list_of_rows_to_drop.append(rows)
-                        action_msg = "Row is Dropped"
+                        action_msg = con.VALIDATION_MSG_ROW_DROPPED
                         break
 
                     else:
                         resultant_df.set_value(rows, each_action[con.VALIDATION_COLUMN_NAME], 0)
-                        action_msg = "Missing value of columns replaced with 0"
+                        action_msg = con.VALIDATION_MSG_FILL_NA
 
                 self.action_messages.append(action_msg)
             output_df = self.action_drop_rows(resultant_df, list_of_rows_to_drop)
