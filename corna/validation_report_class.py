@@ -9,9 +9,10 @@ REQUIRED_COLUMN_LIST = [maven_file.NAME, maven_file.LABEL, maven_file.FORMULA]
 
 class ValidationReport():
     """
-    This is validation report class. This class helps in generating report of
-    all the warning and error in different formats. It also helps deciding
-    what action is to be taken after performing all the test.
+    This is validation report class. This can be used to This in generating report of
+    all the warning and error after performing validation check in different formats
+    such as waning, error dict or can be row wise df. It also helps deciding what
+    action is to be taken.
     """
 
     def __init__(self):
@@ -30,14 +31,15 @@ class ValidationReport():
         """
         self.report_df = get_df()
         self.result = {}
-        self.required_column_list = [c.NAME, c.LABEL, c.FORMULA]
+        self.required_column_list = REQUIRED_COLUMN_LIST
         self.invalid_row = []
         self.warning_row = []
         self.error_row = []
         self.action_messages = []
         self.action = {}
-        self.warning_error_dict = {con.VALIDATION_WARNING: {con.VALIDATION_MESSAGE: [],
-                                                            con.VALIDATION_ACTION: []},
+        self.warning_error_dict = {con.VALIDATION_WARNING:
+                                   {con.VALIDATION_MESSAGE: [],
+                                    con.VALIDATION_ACTION: []},
                                    con.VALIDATION_ERROR: []}
 
     def append(self, df):
@@ -160,11 +162,12 @@ class ValidationReport():
         are there , need to change this when there are number of actions.
 
         for ex: action = {'action': 'ROW_WISE_ACTION',
-                              '1': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'},
-                                    {'column': 'Formula', 'state': 'invalid_formula, 'action': 'DROP'}],
-                              '4': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'}]}
+                          '1': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'},
+                                {'column': 'Formula', 'state': 'invalid_formula, 'action': 'DROP'}],
+                          '4': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'}]}
         actions performed are drop row 1, drop row 4.
-        In line 203: We need break because if the row is dropped there is no need of other action
+        In line 203: We need break because if the row is dropped there is no need
+        of other action
         :param data_frame:
         :return: data_frame
         """
@@ -330,7 +333,7 @@ class ValidationReport():
 
     def append_error_action_to_result(self, row):
         """
-        This is just to append error action to result.
+        This is to append error action to result.
         """
         for each_result in self.result[row][con.VALIDATION_ERROR]:
             each_result.append(self.get_action_name(each_result))
@@ -340,8 +343,6 @@ class ValidationReport():
         This is to append action object to action dict.
         """
         column_state_action_list = []
-
         for each_result in self.result[row][con.VALIDATION_WARNING]:
             column_state_action_list.append(self.get_action_object(each_result))
-
         self.action[row] = column_state_action_list
