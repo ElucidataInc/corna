@@ -74,23 +74,7 @@ class ValidationReport():
         row_having_error = self.get_unique_row_having_error(self)
 
         for each_row in row_having_error:
-
-            row_df = self.get_slice_df_with_row(self.report_df, each_row)
-            warning_error_dict_for_row = {con.VALIDATION_WARNING: [],
-                                          con.VALIDATION_ERROR: []}
-
-            for index, row in row_df.iterrows():
-
-                warning_or_error_msg = [row[con.COLUMN_NAME], row[con.COLUMN_STATE]]
-
-                if row[con.COLUMN_STATE] in con.WARNING_STATE:
-                    warning_error_dict_for_row[con.VALIDATION_WARNING].append\
-                        (warning_or_error_msg)
-                else:
-                    warning_error_dict_for_row[con.VALIDATION_ERROR].append\
-                        (warning_or_error_msg)
-
-            self.result[row[con.COLUMN_ROW]] = warning_error_dict_for_row
+            self.append_warning_error_dict_for_row(each_row)
 
         self.invalid_row = self.get_key_list(self.result)
         self.error_row = self.get_key_list(self.result, con.VALIDATION_ERROR)
@@ -106,9 +90,10 @@ class ValidationReport():
 
         for example:
 
-        if result = {'1':{'warning': [['label','invalid_label],['formula','invalid_formula']], 'errors':[]},
-                    '4':{'warning':[['label','invalid_label']],'errors':[]},
-                    '19':{'warning':[],'errors':['Sample1','negative]}}
+        if result = {'1':{'warning': [['label','invalid_label],['formula','
+                    invalid_formula']], 'errors':[]},'4':{'warning':[
+                    ['label','invalid_label']],'errors':[]},'19':{'warning':[],
+                    'errors':['Sample1','negative]}}
 
         final result = {'1':{'warning': [['label','invalid_label','DROP'],['formula',
                         'invalid_formula','DROP']],'errors':[]},'4':{'warning':[[
@@ -130,13 +115,13 @@ class ValidationReport():
         or individual column action is to be taken. If there is any error then simply it
         save STOP_TOOL and halts there.
 
-        for ex: result = {'1':{'warning': [['label','invalid_label','DROP'],['formula','invalid_formula','DROP']],
-                                'errors':[]},
+        for ex: result = {'1':{'warning': [['label','invalid_label','DROP'],['formula',
+                          'invalid_formula','DROP']],'errors':[]},
                           '4':{'warning':[['label','invalid_label','DROP']],'errors':[]},
                           '19':{'warning':[],'errors':['Sample1','negative','STOP']}}
         action = {'action': 'STOP_TOOL}
-        if  result =  {'1':{'warning': [['label','invalid_label','DROP'],['formula','invalid_formula','DROP']],
-                            'errors':[]},
+        if  result =  {'1':{'warning': [['label','invalid_label','DROP'],['formula',
+                        'invalid_formula','DROP']],'errors':[]},
                       '4':{'warning':[['label','invalid_label','DROP']],'errors':[]} }
         action = {'action': 'ROW_WISE_ACTION',
                   '1': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'},
@@ -259,10 +244,7 @@ class ValidationReport():
     @staticmethod
     def get_slice_df_with_row(df, row):
         """
-        This method is used to slice the df.
-        :param df: data_frame
-        :param row: row to be sliced
-        :return:
+        This method is used to slice the df, wrt to row_number
         """
         return df.loc[df[con.COLUMN_ROW] == row]
 
@@ -288,7 +270,7 @@ class ValidationReport():
         predefined conditions.
 
         :param result: dict having state and column name value
-        :return: action name
+        :return: action name according to state and column
         """
         column_name = result[0]
         state = result[1]
@@ -317,8 +299,6 @@ class ValidationReport():
         action_object = {'column': 'label',
                          'state': 'missing',
                          'action':'DROP'}
-        :param each_result:
-        :return: action object
         """
 
         action_object = {con.VALIDATION_COLUMN_NAME: each_result[0],
@@ -330,7 +310,6 @@ class ValidationReport():
     def append_warning_action_to_result(self, row):
         """
         This is just to append warning action to result.
-
         """
 
         for each_result in self.result[row][con.VALIDATION_WARNING]:
@@ -351,3 +330,27 @@ class ValidationReport():
         for each_result in self.result[row][con.VALIDATION_WARNING]:
             column_state_action_list.append(self.get_action_object(each_result))
         self.action[row] = column_state_action_list
+
+    def append_warning_error_dict_for_row(self, each_row):
+        """
+        This function append warning and error dict for each row.
+        Warning or error dictionary is key value pair where for each row
+        specific warning or error message is described.
+        :param each_row: this is row number where warning or error is present
+        :return: warning error dict for each row so that
+        """
+        row_df = self.get_slice_df_with_row(self.report_df, each_row)
+        warning_error_dict_for_row = {con.VALIDATION_WARNING: [],
+                                      con.VALIDATION_ERROR: []}
+
+        for index, row in row_df.iterrows():
+
+            warning_or_error_msg = [row[con.COLUMN_NAME], row[con.COLUMN_STATE]]
+
+            if row[con.COLUMN_STATE] in con.WARNING_STATE:
+                warning_error_dict_for_row[con.VALIDATION_WARNING].append\
+                    (warning_or_error_msg)
+            else:
+                warning_error_dict_for_row[con.VALIDATION_ERROR].append\
+                    (warning_or_error_msg)
+        self.result[row[con.COLUMN_ROW]] = warning_error_dict_for_row
