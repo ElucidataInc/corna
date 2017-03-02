@@ -128,7 +128,7 @@ class ValidationReport():
                         {'column': 'Formula', 'state': 'invalid_formula, 'action': 'DROP'}],
                   '4': [{'column': 'label', 'state': 'invalid_label, 'action': 'DROP'}]}
         :param data_frame: data frame on which action is to be taken
-        :return: dict object: action list for rowwise
+        :return: dict object: action list for row wise
         """
         if self.error_row:
             self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_STOP
@@ -199,7 +199,8 @@ class ValidationReport():
         logs will be = { 'warning': { 'action': ['ROW is DROPPED','ROW is DROPPED],
                        'message': ['ROW number 1: column label has invalid label,
                         column formula has invalid]}'errors' : []}
-        :return: dict object
+        :return: dict where keys are error and warnings, and values are list of
+        messages.
         """
         for row in self.result.keys():
 
@@ -236,7 +237,6 @@ class ValidationReport():
     def get_unique_row_having_error(self):
         """
         This is for getting unique value of row_number
-        :param self:
         :return: list of unique value
         """
         return self.report_df.row_number.unique()
