@@ -42,7 +42,7 @@ class ValidationReport():
                                     con.VALIDATION_ACTION: []},
                                    con.VALIDATION_ERROR: []}
 
-    def append(self, df):
+    def append_df_to_global_df(self, df):
         """
         Append the data frame to the global report data frame.
         :param df: function wise report df
