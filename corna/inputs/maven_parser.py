@@ -2,9 +2,8 @@ import pandas as pd
 
 from collections import namedtuple
 
-from column_conventions import maven as c
+from column_conventions import maven as maven_constants
 from corna import constants as con
-from corna import dataframe_validator
 from corna import input_validation
 from corna import dataframe_validator
 from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
@@ -13,14 +12,13 @@ from corna.validation_report_class import ValidationReport
 
 MavenKey = namedtuple('MavenKey', 'name formula')
 
-REQUIRED_COLUMNS_MAVEN = [c.NAME, c.LABEL, c.FORMULA]
-REQUIRED_COLUMNS_MAVEN_METADATA = [c.SAMPLE]
+REQUIRED_COLUMNS_MAVEN = [maven_constants.NAME, maven_constants.LABEL,
+                          maven_constants.FORMULA]
+REQUIRED_COLUMNS_MAVEN_METADATA = [maven_constants.SAMPLE]
 
 LOGS = {}
 ISOTRACER = []
-COLUMN_DUPLICATE_CHECK = [[c.NAME, c.LABEL]]
-ISOTRACER_COLUMN = 'isotracer'
-VALIDATOR = ValidationReport()
+COLUMN_DUPLICATE_CHECK = [[maven_constants.NAME, maven_constants.LABEL]]
 
 
 def maven_merge_dfs(df1, df2):
@@ -38,9 +36,9 @@ def maven_merge_dfs(df1, df2):
     long_form = melt_df(df1)
     try:
         merged_df = merge_two_dfs(long_form, df2, how='left',
-                                  left_on=con.VAR_COL, right_on=c.SAMPLE)
+                                  left_on=con.VAR_COL, right_on=maven_constants.SAMPLE)
     except KeyError:
-        raise KeyError(c.SAMPLE + ' column not found in metadata')
+        raise KeyError(maven_constants.SAMPLE + ' column not found in metadata')
 
     df_std_form = column_manipulation(merged_df)
     return df_std_form
@@ -57,7 +55,7 @@ def column_manipulation(df):
     Returns:
         df : df with added columns and standard column names
     """
-    df[con.PARENT_COL] = df[c.NAME]
+    df[con.PARENT_COL] = df[maven_constants.NAME]
     df.rename(
         columns={con.VAR_COL: con.SAMPLE_COL, con.VAL_COL: con.INTENSITY_COL},
         inplace=True)
@@ -74,7 +72,7 @@ def melt_df(df1):
         long_form : dataframe in long format
 
     """
-    fixed_cols = [c.NAME, c.LABEL, c.FORMULA]
+    fixed_cols = [maven_constants.NAME, maven_constants.LABEL, maven_constants.FORMULA]
     col_headers = df1.columns.tolist()
     check_column_headers(col_headers, fixed_cols)
     melt_cols = [x for x in col_headers if x not in fixed_cols]
@@ -213,20 +211,34 @@ def get_sample_column(maven_df):
 
 def get_corrected_maven_df(maven_df):
 
-    VALIDATOR.append_df_to_global_df(report_missing_values(maven_df))
-    VALIDATOR.append_df_to_global_df(report_duplicate_values(maven_df))
-    VALIDATOR.append_df_to_global_df(report_label_column_format(maven_df))
-    VALIDATOR.append_df_to_global_df(report_label_in_formula(maven_df))
-    VALIDATOR.append_df_to_global_df(report_formula_column_format(maven_df))
-    VALIDATOR.append_df_to_global_df(report_intensity_values(maven_df))
-    VALIDATOR.generate_report()
-    VALIDATOR.generate_action()
-    VALIDATOR.decide_action()
+    validation_function_list = get_validation_fn_lst()
+    validator = get_df_validator(maven_df,validation_function_list)
 
-    corrected_df = VALIDATOR.take_action(maven_df)
+    validator.generate_report()
+    validator.generate_action()
+    validator.decide_action()
+
+    corrected_df = validator.take_action(maven_df)
+    logs = get_validation_logs(validator)
     print corrected_df
-    return corrected_df
+    return corrected_df,logs
 
+
+def get_df_validator(df,fn_lst):
+    df_validator = ValidationReport()
+
+    for each_fn in fn_lst:
+        df_validator.append_df_to_global_df(each_fn(df))
+
+    return df_validator
+
+
+def get_validation_fn_lst():
+
+    list = [report_missing_values,report_duplicate_values,
+            report_label_column_format,report_label_in_formula,
+            report_formula_column_format,report_intensity_values]
+    return list
 
 def report_missing_values(maven_df):
     return input_validation.check_missing(maven_df)
@@ -237,29 +249,29 @@ def report_duplicate_values(maven_df):
 
 
 def report_label_column_format(maven_df):
-    return input_validation.validator_column_wise(maven_df, 0, [c.LABEL],
-                                                  [input_validation.check_label_column_format])
+    return input_validation.validator_column_wise(maven_df, 0,
+            [maven_constants.LABEL],[input_validation.check_label_column_format])
 
 
 def report_formula_column_format(maven_df):
-    return input_validation.validator_column_wise(maven_df, 0, [c.FORMULA],
-                                                  [input_validation.check_formula_is_correct])
+    return input_validation.validator_column_wise(maven_df, 0,
+            [maven_constants.FORMULA],[input_validation.check_formula_is_correct])
 
 
 def report_label_in_formula(maven_df):
     return input_validation.validator_for_two_column(
-        maven_df, c.LABEL, c.FORMULA,
+        maven_df, maven_constants.LABEL, maven_constants.FORMULA,
         input_validation.check_label_in_formula)
 
 
 def report_intensity_values(maven_df):
     sample_columns = get_sample_column(maven_df)
     return input_validation.validator_column_wise(maven_df, 0, sample_columns,
-                                                  [input_validation.check_intensity_value])
+                                    [input_validation.check_intensity_value])
 
 
-def get_validation_logs():
-    return VALIDATOR.generate_warning_error_list_of_strings()
+def get_validation_logs(validator):
+    return validator.generate_warning_error_list_of_strings()
 
 
 def get_extracted_isotracer(label):
@@ -267,7 +279,7 @@ def get_extracted_isotracer(label):
 
 
 def get_extraced_isotracer_df(maven_df):
-    return maven_df[c.LABEL].apply(get_extracted_isotracer)
+    return maven_df[maven_constants.LABEL].apply(get_extracted_isotracer)
 
 
 def get_isotracer_dict(maven_df):
@@ -306,9 +318,7 @@ def read_maven_file(maven_file_path, metadata_path):
         metadata_df = None
         maven_df = input_maven_df
 
-    corrected_maven_df = get_corrected_maven_df(maven_df)
-
-    validation_logs = get_validation_logs()
+    corrected_maven_df,validation_logs = get_corrected_maven_df(maven_df)
 
     if not validation_logs[con.VALIDATION_ERROR]:
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
@@ -316,4 +326,5 @@ def read_maven_file(maven_file_path, metadata_path):
         return merged_df, validation_logs, isotracer_dict
     else:
         return corrected_maven_df, validation_logs, None
+
 
