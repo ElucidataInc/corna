@@ -69,13 +69,13 @@ def test_filtered_data_frame():
 
 def test_get_df_empty():
 
-    test_df = maven_parser.get_df()
+    test_df = maven_parser.get_df_frm_path()
     assert test_df.empty
 
 
 def test_get_df_path():
 
-    test_df = maven_parser.get_df(maven_file)
+    test_df = maven_parser.get_df_frm_path(maven_file)
     assert test_df.empty == False
 
 
