@@ -198,6 +198,12 @@ def drop_duplicate_rows(df, column):
 
 
 def get_metadata_df(metadata_path):
+    """
+    This function converts metadata file into df. It also validates
+    the input file. If the validation fails it returns a empty df.
+    :param metadata_path:absolute path of metadata info file
+    :return: df of input metadata file
+    """
     if check_basic_validation(metadata_path):
         metadata_df = get_df_frm_path(metadata_path)
     else:
