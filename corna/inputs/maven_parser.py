@@ -11,18 +11,18 @@ from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
 from corna.validation_report_class import ValidationReport
 
-MavenKey = namedtuple('MavenKey','name formula')
+MavenKey = namedtuple('MavenKey', 'name formula')
 
 REQUIRED_COLUMNS_MAVEN = [c.NAME, c.LABEL, c.FORMULA]
 REQUIRED_COLUMNS_MAVEN_METADATA = [c.SAMPLE]
 
 LOGS = {}
 ISOTRACER = []
-
-COLUMN_DUPLICATE_CHECK = [[c.NAME,c.LABEL]]
-COLUMN_DUPLICATE_CHECK = [[c.NAME,c.LABEL]]
+COLUMN_DUPLICATE_CHECK = [[c.NAME, c.LABEL]]
 ISOTRACER_COLUMN = 'isotracer'
 VALIDATOR = ValidationReport()
+
+
 def maven_merge_dfs(df1, df2):
     """
     This function combines the MAVEN input file dataframe and the metadata
@@ -79,9 +79,9 @@ def melt_df(df1):
     check_column_headers(col_headers, fixed_cols)
     melt_cols = [x for x in col_headers if x not in fixed_cols]
 
-    #try:
+    # try:
     long_form = pd.melt(df1, id_vars=fixed_cols, value_vars=melt_cols)
-    #except KeyError():
+    # except KeyError():
     #    raise KeyError('columns {} not found in input data'.format(','.join(fixed_cols)))
     return long_form
 
@@ -116,12 +116,13 @@ def frag_key(df):
 
 
 def convert_std_label_key_to_maven_label(df):
-    #TODO: File format change should lead to removal
-    #of these fucntions
+    # TODO: File format change should lead to removal
+    # of these fucntions
     """
     This function converts the labels C13_1_N15_1 in the form
     C13N15-label-1-1
     """
+
     def process_label(label):
         label_dict = create_dict_from_isotope_label_list(label.split('_'))
         if all(num_isotopes == 0 for num_isotopes in label_dict.values()):
@@ -132,7 +133,7 @@ def convert_std_label_key_to_maven_label(df):
             for isotrac, num_iso in label_dict.iteritems():
                 if num_iso != 0:
                     isotrac_string = isotrac_string + isotrac
-                    num_string = num_string +'-' + str(num_iso)
+                    num_string = num_string + '-' + str(num_iso)
             return isotrac_string + '-label' + num_string
 
     df['Label'] = [process_label(l) for l in df['Label']]
@@ -144,6 +145,7 @@ def convert_labels_to_std(df, iso_tracers):
     This function converts the labels C13N15-label-1-1 in the form
     C13_1_N15_1
     """
+
     def process_label(label):
         if label == 'C12 PARENT':
             return '_'.join('{}_0'.format(t) for t in iso_tracers)
@@ -178,12 +180,13 @@ def filtered_data_frame(maven_data_frame, metadata_data_frame):
     :param metadata_data_frame:
     :return:
     """
-    filtered_metadata_frame = metadata_data_frame.drop_duplicates(REQUIRED_COLUMNS_MAVEN_METADATA)
+    filtered_metadata_frame = metadata_data_frame.\
+        drop_duplicates(REQUIRED_COLUMNS_MAVEN_METADATA)
     metadata_sample_column_set = set(filtered_metadata_frame[c.SAMPLE].tolist())
     maven_sample_list = set(maven_data_frame.columns.values.tolist())
     intersection_sample_list = list(maven_sample_list.intersection(metadata_sample_column_set))
     if intersection_sample_list:
-        maven_data_frame_column = REQUIRED_COLUMNS_MAVEN+intersection_sample_list
+        maven_data_frame_column = REQUIRED_COLUMNS_MAVEN + intersection_sample_list
         filtered_maven_dataframe = maven_data_frame[maven_data_frame_column]
     else:
         raise
@@ -191,7 +194,6 @@ def filtered_data_frame(maven_data_frame, metadata_data_frame):
 
 
 def get_metadata_df(metadata_path):
-
     if input_validation.validate_input_file(metadata_path):
         return dataframe_validator.read_input_file(metadata_path)
     else:
@@ -206,90 +208,78 @@ def get_sample_column(maven_df):
     :return: sample column headers in the data frame
     """
     return [column for column in list(maven_df)
-                     if column not in REQUIRED_COLUMNS_MAVEN]
+            if column not in REQUIRED_COLUMNS_MAVEN]
 
 
 def get_corrected_maven_df(maven_df):
 
-    VALIDATOR.append(report_missing_values(maven_df))
-    VALIDATOR.append(report_duplicate_values(maven_df))
-    VALIDATOR.append(report_label_column_format(maven_df))
-    VALIDATOR.append(report_label_in_formula(maven_df))
-    VALIDATOR.append(report_formula_column_format(maven_df))
-    VALIDATOR.append(report_intensity_values(maven_df))
+    VALIDATOR.append_df_to_global_df(report_missing_values(maven_df))
+    VALIDATOR.append_df_to_global_df(report_duplicate_values(maven_df))
+    VALIDATOR.append_df_to_global_df(report_label_column_format(maven_df))
+    VALIDATOR.append_df_to_global_df(report_label_in_formula(maven_df))
+    VALIDATOR.append_df_to_global_df(report_formula_column_format(maven_df))
+    VALIDATOR.append_df_to_global_df(report_intensity_values(maven_df))
     VALIDATOR.generate_report()
     VALIDATOR.generate_action()
     VALIDATOR.decide_action()
 
     corrected_df = VALIDATOR.take_action(maven_df)
-
+    print corrected_df
     return corrected_df
 
 
 def report_missing_values(maven_df):
-
     return input_validation.check_missing(maven_df)
 
 
 def report_duplicate_values(maven_df):
-
-    return input_validation.check_duplicate(maven_df,COLUMN_DUPLICATE_CHECK)
+    return input_validation.check_duplicate(maven_df, 0, COLUMN_DUPLICATE_CHECK)
 
 
 def report_label_column_format(maven_df):
-
-    return input_validation.validator_column_wise(maven_df, 0,[c.LABEL],
-                              [input_validation.check_label_column_format])
+    return input_validation.validator_column_wise(maven_df, 0, [c.LABEL],
+                                                  [input_validation.check_label_column_format])
 
 
 def report_formula_column_format(maven_df):
-
-    return input_validation.validator_column_wise(maven_df, 0,[c.FORMULA],
-                              [input_validation.check_formula_is_correct])
+    return input_validation.validator_column_wise(maven_df, 0, [c.FORMULA],
+                                                  [input_validation.check_formula_is_correct])
 
 
 def report_label_in_formula(maven_df):
-
     return input_validation.validator_for_two_column(
-            maven_df, c.LABEL, c.FORMULA,
-            input_validation.check_label_in_formula)
+        maven_df, c.LABEL, c.FORMULA,
+        input_validation.check_label_in_formula)
 
 
 def report_intensity_values(maven_df):
-
     sample_columns = get_sample_column(maven_df)
     return input_validation.validator_column_wise(maven_df, 0, sample_columns,
-                              [input_validation.check_intensity_value])
+                                                  [input_validation.check_intensity_value])
 
 
 def get_validation_logs():
-
     return VALIDATOR.generate_warning_error_list_of_strings()
 
 
 def get_extracted_isotracer(label):
-
     return label.split('-label-')[0]
 
 
 def get_extraced_isotracer_df(maven_df):
-
     return maven_df[c.LABEL].apply(get_extracted_isotracer)
 
 
 def get_isotracer_dict(maven_df):
-
     isotracer_df = get_extraced_isotracer_df(maven_df)
-    return isotracer_df[ISOTRACER_COLUMN].value_counts().to_dict()
+    return isotracer_df.value_counts().to_dict()
 
 
-def get_merge_df(maven_df,metadata_df):
-
+def get_merge_df(maven_df, metadata_df):
     if metadata_df:
-        return maven_merge_dfs(maven_df,metadata_df)
+        return maven_merge_dfs(maven_df, metadata_df)
     else:
         return convert_inputdata_to_stdfrom(maven_df)
-
 
 
 def read_maven_file(maven_file_path, metadata_path):
@@ -299,11 +289,9 @@ def read_maven_file(maven_file_path, metadata_path):
     error it returns mergedf with logs and iso-tracer data.
     :param maven_file_path: absolute path of maven raw file
     :param maven_sample_metadata_path: absolute path of metadatafile
-    :return: mergedf : pandas df
+    :return: mergedf : merge df of Maven and Metadata File
              logs: dictionary of errors and warnings
-             iso-tracer : dictionary of iso-tracer
-
-
+             iso-tracer : dictionary of iso-tracer details
     """
 
     if input_validation.validate_input_file(maven_file_path):
@@ -313,7 +301,7 @@ def read_maven_file(maven_file_path, metadata_path):
 
     if metadata_path:
         metadata_df = get_metadata_df(metadata_path)
-        maven_df = filtered_data_frame(input_maven_df,metadata_df)
+        maven_df = filtered_data_frame(input_maven_df, metadata_df)
     else:
         metadata_df = None
         maven_df = input_maven_df
@@ -324,8 +312,8 @@ def read_maven_file(maven_file_path, metadata_path):
 
     if not validation_logs[con.VALIDATION_ERROR]:
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
-        merged_df = get_merge_df(corrected_maven_df,metadata_df)
+        merged_df = get_merge_df(corrected_maven_df, metadata_df)
         return merged_df, validation_logs, isotracer_dict
     else:
-        return corrected_maven_df,validation_logs,None
+        return corrected_maven_df, validation_logs, None
 
