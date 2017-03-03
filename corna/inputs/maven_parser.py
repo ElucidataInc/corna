@@ -320,15 +320,19 @@ def get_isotracer_dict(maven_df):
     return isotracer_df.value_counts().to_dict()
 
 
+def check_df_empty(df):
+    return df.empty
+
+
 def get_merge_df(maven_df, metadata_df):
     """
     This function merge the metadata_df with maven_df. If metadata_df
     is not present it converts the maven df in long format (standard format)
     """
-    if metadata_df:
-        return maven_merge_dfs(maven_df, metadata_df)
-    else:
+    if check_df_empty(metadata_df):
         return convert_inputdata_to_stdfrom(maven_df)
+    else:
+        return maven_merge_dfs(maven_df, metadata_df)
 
 
 def check_error_present(logs):
@@ -437,7 +441,7 @@ def read_maven_file(maven_file_path, metadata_path):
         metadata_df = get_metadata_df(metadata_path)
         maven_df = filtered_data_frame(input_maven_df, metadata_df)
     else:
-        metadata_df = None
+        metadata_df = get_df()
         maven_df = input_maven_df
     corrected_maven_df, validation_logs = get_corrected_maven_df(maven_df)
     if not check_error_present(validation_logs):
