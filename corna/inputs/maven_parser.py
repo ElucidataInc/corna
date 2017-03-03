@@ -180,9 +180,11 @@ def filtered_data_frame(maven_data_frame, metadata_data_frame):
     """
     filtered_metadata_frame = metadata_data_frame.\
         drop_duplicates(REQUIRED_COLUMNS_MAVEN_METADATA)
-    metadata_sample_column_set = set(filtered_metadata_frame[c.SAMPLE].tolist())
+    metadata_sample_column_set = set(filtered_metadata_frame
+                                     [maven_constants.SAMPLE].tolist())
     maven_sample_list = set(maven_data_frame.columns.values.tolist())
-    intersection_sample_list = list(maven_sample_list.intersection(metadata_sample_column_set))
+    intersection_sample_list = list(maven_sample_list.
+                                    intersection(metadata_sample_column_set))
     if intersection_sample_list:
         maven_data_frame_column = REQUIRED_COLUMNS_MAVEN + intersection_sample_list
         filtered_maven_dataframe = maven_data_frame[maven_data_frame_column]
@@ -192,10 +194,15 @@ def filtered_data_frame(maven_data_frame, metadata_data_frame):
 
 
 def get_metadata_df(metadata_path):
-    if input_validation.validate_input_file(metadata_path):
-        return dataframe_validator.read_input_file(metadata_path)
+
+    if check_basic_validation(metadata_path):
+        metadata_df = get_df(metadata_path)
     else:
-        return input_validation.get_df()
+        metadata_df = get_df()
+
+    if input_validation.validate_df(metadata_df,REQUIRED_COLUMNS_MAVEN_METADATA):
+        return metadata_df
+
 
 
 def get_sample_column(maven_df):
@@ -210,6 +217,15 @@ def get_sample_column(maven_df):
 
 
 def get_corrected_maven_df(maven_df):
+    """
+    This function performs validation check on df and return
+    corrected df i.e. df with corrected values. The logs of
+    all the validation function with applied action on warnings
+    is also generated.
+    :param maven_df: df on which validation is to be performed
+    :return: corrected_df: df after validation check
+    :return: logs : logs of all the validation checks
+    """
 
     validation_function_list = get_validation_fn_lst()
     validator = get_df_validator(maven_df,validation_function_list)
@@ -225,6 +241,14 @@ def get_corrected_maven_df(maven_df):
 
 
 def get_df_validator(df,fn_lst):
+    """
+    This function creates instance of ValidationReport, then
+    append all the reports which are generated after validation.
+    It then return the class instance.
+    :param df: df on which validation check is to be performed
+    :param fn_lst: list of validation fn
+    :return:df_validator: class instance of ValidationReport
+    """
     df_validator = ValidationReport()
 
     for each_fn in fn_lst:
@@ -234,11 +258,15 @@ def get_df_validator(df,fn_lst):
 
 
 def get_validation_fn_lst():
-
+    """
+    This function returns list of all the validation function for
+    a df.
+    """
     list = [report_missing_values,report_duplicate_values,
             report_label_column_format,report_label_in_formula,
             report_formula_column_format,report_intensity_values]
     return list
+
 
 def report_missing_values(maven_df):
     return input_validation.check_missing(maven_df)
@@ -271,28 +299,92 @@ def report_intensity_values(maven_df):
 
 
 def get_validation_logs(validator):
+    """
+    This function returns logs of validation.
+    :param validator: class instnce of ValidationReport
+    :return: logs of all the validation checks
+    """
     return validator.generate_warning_error_list_of_strings()
 
 
 def get_extracted_isotracer(label):
+    """
+    This function takes label as an argumnet and returns the
+    iso-tracer present in label. This helps in counting iso-tracer
+    present in label column value.
+    for ex: label = 'C13N15-label-1-2
+            returns = 'C13N15
+    :param label: label column value
+    :return: extracted iso-tracer value
+    """
     return label.split('-label-')[0]
 
 
 def get_extraced_isotracer_df(maven_df):
+    """
+    This function extract iso-tracer information of
+    all the values of label column.
+    :param maven_df: df whose iso-tracer needs to get extracted
+    :return: extracted iso-tracers for each label column value
+    """
     return maven_df[maven_constants.LABEL].apply(get_extracted_isotracer)
 
 
 def get_isotracer_dict(maven_df):
+    """
+    This function counts the iso-tracer in label column of
+     the maven df. Dict with isotracer as key and its number as value
+     is returned.
+    :param maven_df: maven_df whose iso-tracer needs to be counted
+    :return: dict of iso-tracer and its number
+    """
     isotracer_df = get_extraced_isotracer_df(maven_df)
     return isotracer_df.value_counts().to_dict()
 
 
 def get_merge_df(maven_df, metadata_df):
+    """
+    This function merge the metadata_df with maven_df. If metadata_df
+    is not present it converts the maven df in long format (standard format)
+    """
     if metadata_df:
         return maven_merge_dfs(maven_df, metadata_df)
     else:
         return convert_inputdata_to_stdfrom(maven_df)
 
+
+def check_error_present(logs):
+    """
+    This function checks if any error is present in the validation
+    logs.
+    :param logs: validation logs after all the validation checks
+    :return: Boolean True if error is present
+    """
+
+    if logs[con.VALIDATION_ERROR]:
+        return True
+    else:
+        return False
+
+
+def check_basic_validation(path):
+    """
+    This function performs basic validation check of the input file.
+    """
+    return input_validation.validate_input_file(path)
+
+
+def get_df(path=None):
+    """
+    This function converts input file into pandas df. If no path
+    is given it returns a empty df.
+    :param path: path of input file.
+    :return:converted df
+    """
+    if path:
+        return dataframe_validator.read_input_file(path)
+    else:
+        return pd.DataFrame()
 
 def read_maven_file(maven_file_path, metadata_path):
     """
@@ -306,10 +398,10 @@ def read_maven_file(maven_file_path, metadata_path):
              iso-tracer : dictionary of iso-tracer details
     """
 
-    if input_validation.validate_input_file(maven_file_path):
-        input_maven_df = dataframe_validator.read_input_file(maven_file_path)
+    if check_basic_validation(maven_file_path):
+        input_maven_df = get_df(maven_file_path)
     else:
-        return input_validation.get_df(), None, None
+        return get_df(), None, None
 
     if metadata_path:
         metadata_df = get_metadata_df(metadata_path)
@@ -320,7 +412,7 @@ def read_maven_file(maven_file_path, metadata_path):
 
     corrected_maven_df,validation_logs = get_corrected_maven_df(maven_df)
 
-    if not validation_logs[con.VALIDATION_ERROR]:
+    if not check_error_present(validation_logs):
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
         merged_df = get_merge_df(corrected_maven_df, metadata_df)
         return merged_df, validation_logs, isotracer_dict
