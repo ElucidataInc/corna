@@ -107,7 +107,7 @@ def frag_key(df):
     """
     try:
         df[con.FRAG_COL] = df.apply(lambda x: MavenKey(
-            x[c.NAME], x[c.FORMULA]), axis=1)
+            x[maven_constants.NAME], x[maven_constants.FORMULA]), axis=1)
     except KeyError:
         raise KeyError('Missing columns in data')
     return df
@@ -198,9 +198,9 @@ def drop_duplicate_rows(df, column):
 
 def get_metadata_df(metadata_path):
     if check_basic_validation(metadata_path):
-        metadata_df = get_df(metadata_path)
+        metadata_df = get_df_frm_path(metadata_path)
     else:
-        metadata_df = get_df()
+        metadata_df = get_df_frm_path()
 
     if input_validation.validate_df(metadata_df, REQUIRED_COLUMNS_MAVEN_METADATA):
         return metadata_df
@@ -327,6 +327,9 @@ def get_merge_df(maven_df, metadata_df):
     """
     This function merge the metadata_df with maven_df. If metadata_df
     is not present it converts the maven df in long format (standard format)
+    :param mave_df: df of raw maven input file
+    :param metadata_df: df of metadata info file
+    :return merge_df: std wide form df
     """
     if check_df_empty(metadata_df):
         return convert_inputdata_to_stdfrom(maven_df)
@@ -355,7 +358,7 @@ def check_basic_validation(path):
     return input_validation.validate_input_file(path)
 
 
-def get_df(path=None):
+def get_df_frm_path(path=None):
     """
     This function converts input file into pandas df. If no path
     is given it returns a empty df.
@@ -433,15 +436,15 @@ def read_maven_file(maven_file_path, metadata_path):
     """
 
     if check_basic_validation(maven_file_path):
-        input_maven_df = get_df(maven_file_path)
+        input_maven_df = get_df_frm_path(maven_file_path)
     else:
-        return get_df(), None, None
+        return get_df_frm_path(), None, None
 
     if metadata_path:
         metadata_df = get_metadata_df(metadata_path)
         maven_df = filtered_data_frame(input_maven_df, metadata_df)
     else:
-        metadata_df = get_df()
+        metadata_df = get_df_frm_path()
         maven_df = input_maven_df
     corrected_maven_df, validation_logs = get_corrected_maven_df(maven_df)
     if not check_error_present(validation_logs):
