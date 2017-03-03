@@ -384,7 +384,6 @@ def get_corrected_maven_df(maven_df):
 
     corrected_df = validator.take_action(maven_df)
     logs = get_validation_logs(validator)
-    print corrected_df
     return corrected_df, logs
 
 
@@ -441,8 +440,6 @@ def read_maven_file(maven_file_path, metadata_path):
         metadata_df = None
         maven_df = input_maven_df
     corrected_maven_df, validation_logs = get_corrected_maven_df(maven_df)
-    print corrected_maven_df
-    print validation_logs
     if not check_error_present(validation_logs):
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
         merged_df = get_merge_df(corrected_maven_df, metadata_df)
