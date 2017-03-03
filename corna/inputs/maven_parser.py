@@ -11,13 +11,6 @@ from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
 from corna.validation_report_class import ValidationReport
 
-
-
-from . column_conventions import maven as c
-from .. helpers import merge_two_dfs, create_dict_from_isotope_label_list, chemformula_schema, check_column_headers
-#, VAR_COL, VAL_COL, SAMPLE_COL, INTENSITY_COL
-from .. constants import PARENT_COL, VAR_COL, VAL_COL, FRAG_COL, SAMPLE_COL, INTENSITY_COL
-
 MavenKey = namedtuple('MavenKey','name formula')
 
 REQUIRED_COLUMNS_MAVEN = [c.NAME, c.LABEL, c.FORMULA]
@@ -335,8 +328,4 @@ def read_maven_file(maven_file_path, metadata_path):
         return merged_df, validation_logs, isotracer_dict
     else:
         return corrected_maven_df,validation_logs,None
-
-
-
-
 
