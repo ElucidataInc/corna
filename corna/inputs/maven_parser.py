@@ -167,42 +167,43 @@ def convert_labels_to_std(df, iso_tracers):
     return df
 
 
-def filtered_data_frame(maven_data_frame, metadata_data_frame):
-    """
-    This function returns filtered maven_dataframe , only those
-    sample columns is returned which are present in metadata_dataframe
-    sample list. It first get the intersection of maven_data_frame
-    columns with all the entries of Sample in metadataframe.
 
-    :param maven_data_frame:
-    :param metadata_data_frame:
-    :return:
+def get_intersection(first_set,second_set):
     """
-    filtered_metadata_frame = metadata_data_frame.\
-        drop_duplicates(REQUIRED_COLUMNS_MAVEN_METADATA)
-    metadata_sample_column_set = set(filtered_metadata_frame
-                                     [maven_constants.SAMPLE].tolist())
-    maven_sample_list = set(maven_data_frame.columns.values.tolist())
-    intersection_sample_list = list(maven_sample_list.
-                                    intersection(metadata_sample_column_set))
-    if intersection_sample_list:
-        maven_data_frame_column = REQUIRED_COLUMNS_MAVEN + intersection_sample_list
-        filtered_maven_dataframe = maven_data_frame[maven_data_frame_column]
-    else:
-        raise
-    return filtered_maven_dataframe
+     This function returns the intersection of two sets.
+    """
+    return list(first_set.intersection(second_set))
+
+
+def get_column_list(df):
+    """
+    This function returns set of column headers in df.
+    """
+    return set(df.columns.values.tolist())
+
+
+def get_unique_column_value(df,column):
+    """
+    This function return set of unique values in column
+    """
+    return set(df[column].tolist())
+
+def drop_duplicate_rows(df,column):
+    """
+    This function drops the duplicate row in the given column of given
+    df.
+    """
+    return df.drop_duplicates(column)
 
 
 def get_metadata_df(metadata_path):
-
     if check_basic_validation(metadata_path):
         metadata_df = get_df(metadata_path)
     else:
         metadata_df = get_df()
 
-    if input_validation.validate_df(metadata_df,REQUIRED_COLUMNS_MAVEN_METADATA):
+    if input_validation.validate_df(metadata_df, REQUIRED_COLUMNS_MAVEN_METADATA):
         return metadata_df
-
 
 
 def get_sample_column(maven_df):
@@ -216,31 +217,7 @@ def get_sample_column(maven_df):
             if column not in REQUIRED_COLUMNS_MAVEN]
 
 
-def get_corrected_maven_df(maven_df):
-    """
-    This function performs validation check on df and return
-    corrected df i.e. df with corrected values. The logs of
-    all the validation function with applied action on warnings
-    is also generated.
-    :param maven_df: df on which validation is to be performed
-    :return: corrected_df: df after validation check
-    :return: logs : logs of all the validation checks
-    """
-
-    validation_function_list = get_validation_fn_lst()
-    validator = get_df_validator(maven_df,validation_function_list)
-
-    validator.generate_report()
-    validator.generate_action()
-    validator.decide_action()
-
-    corrected_df = validator.take_action(maven_df)
-    logs = get_validation_logs(validator)
-    print corrected_df
-    return corrected_df,logs
-
-
-def get_df_validator(df,fn_lst):
+def get_df_validator(df, fn_lst):
     """
     This function creates instance of ValidationReport, then
     append all the reports which are generated after validation.
@@ -262,9 +239,9 @@ def get_validation_fn_lst():
     This function returns list of all the validation function for
     a df.
     """
-    list = [report_missing_values,report_duplicate_values,
-            report_label_column_format,report_label_in_formula,
-            report_formula_column_format,report_intensity_values]
+    list = [report_missing_values, report_duplicate_values,
+            report_label_column_format, report_label_in_formula,
+            report_formula_column_format, report_intensity_values]
     return list
 
 
@@ -278,12 +255,13 @@ def report_duplicate_values(maven_df):
 
 def report_label_column_format(maven_df):
     return input_validation.validator_column_wise(maven_df, 0,
-            [maven_constants.LABEL],[input_validation.check_label_column_format])
+                                                  [maven_constants.LABEL], [input_validation.check_label_column_format])
 
 
 def report_formula_column_format(maven_df):
     return input_validation.validator_column_wise(maven_df, 0,
-            [maven_constants.FORMULA],[input_validation.check_formula_is_correct])
+                                                  [maven_constants.FORMULA],
+                                                  [input_validation.check_formula_is_correct])
 
 
 def report_label_in_formula(maven_df):
@@ -295,7 +273,7 @@ def report_label_in_formula(maven_df):
 def report_intensity_values(maven_df):
     sample_columns = get_sample_column(maven_df)
     return input_validation.validator_column_wise(maven_df, 0, sample_columns,
-                                    [input_validation.check_intensity_value])
+                                                  [input_validation.check_intensity_value])
 
 
 def get_validation_logs(validator):
@@ -386,6 +364,59 @@ def get_df(path=None):
     else:
         return pd.DataFrame()
 
+def get_corrected_maven_df(maven_df):
+    """
+    This function performs validation check on df and return
+    corrected df i.e. df with corrected values. The logs of
+    all the validation function with applied action on warnings
+    is also generated.
+    :param maven_df: df on which validation is to be performed
+    :return: corrected_df: df after validation check
+    :return: logs : logs of all the validation checks
+    """
+
+    validation_function_list = get_validation_fn_lst()
+    validator = get_df_validator(maven_df, validation_function_list)
+
+    validator.generate_report()
+    validator.generate_action()
+    validator.decide_action()
+
+    corrected_df = validator.take_action(maven_df)
+    logs = get_validation_logs(validator)
+    print corrected_df
+    return corrected_df, logs
+
+
+def filtered_data_frame(maven_df, metadata_df):
+    """
+    This function filters maven df column according to the
+    sample present in metadata df. If there is no intersection
+    between the two df it rises an error.
+
+    :param maven_df: maven df which needs to be filtered
+    :param metadata_df:metadata df whcih contains info about sample
+    :return: filtered maven df according to the sample in metadata_df
+    """
+    filtered_meta_df = drop_duplicate_rows \
+        (metadata_df, REQUIRED_COLUMNS_MAVEN_METADATA)
+
+    metadata_sample_column_set = get_unique_column_value \
+        (filtered_meta_df, maven_constants.SAMPLE)
+
+    maven_sample_list = get_column_list(maven_df)
+
+    intersection_sample_list = get_intersection \
+        (maven_sample_list, metadata_sample_column_set)
+
+    if intersection_sample_list:
+        maven_data_frame_column = REQUIRED_COLUMNS_MAVEN + intersection_sample_list
+        filtered_maven_df = maven_df[maven_data_frame_column]
+    else:
+        raise
+    return filtered_maven_df
+
+
 def read_maven_file(maven_file_path, metadata_path):
     """
     This function reads maven and metadata file, convert it to df and
@@ -409,14 +440,12 @@ def read_maven_file(maven_file_path, metadata_path):
     else:
         metadata_df = None
         maven_df = input_maven_df
-
-    corrected_maven_df,validation_logs = get_corrected_maven_df(maven_df)
-
+    corrected_maven_df, validation_logs = get_corrected_maven_df(maven_df)
+    print corrected_maven_df
+    print validation_logs
     if not check_error_present(validation_logs):
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
         merged_df = get_merge_df(corrected_maven_df, metadata_df)
         return merged_df, validation_logs, isotracer_dict
     else:
         return corrected_maven_df, validation_logs, None
-
-
