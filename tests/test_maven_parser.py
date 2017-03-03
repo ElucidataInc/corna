@@ -37,7 +37,8 @@ def test_read_input_file_error_in_maven_file():
 
     test_log = {'warning': {'action': [], 'message': []},
                 'errors': ['Row Number <b>0</b> : column <b>sample_1</b> has <b>negative</b> value',
-                           'Row Number <b>1</b> : column <b>Label</b> has <b>label_not_in_formula</b> value , column <b>sample_1</b> has <b>invalid_intensity_value</b> value']}
+                 'Row Number <b>1</b> : column <b>Label</b> has <b>label_not_in_formula</b> value , '
+                 'column <b>sample_1</b> has <b>invalid_intensity_value</b> value']}
     assert result_log == test_log
     assert result_df.empty
 
@@ -47,7 +48,9 @@ def test_read_input_file_warning_in_maven():
     maven_file_path = os.path.join(dir_path, "test_input_validation_data",
                                    "test_maven_upload_duplicate_entry.csv")
     result_df, result_log,_= maven_parser.read_maven_file(maven_file_path, metadatafile)
-    test_log = {'warning': {'action': ['Row is Dropped', 'Row is Dropped'], 'message': ['Row Number <b>3</b> : column <b>Name-Label</b> has <b>duplicate</b> value', 'Row Number <b>4</b> : column <b>Name-Label</b> has <b>duplicate</b> value']}, 'errors': []}
+    test_log = {'warning': {'action': ['Row is Dropped', 'Row is Dropped'], 'message':
+        ['Row Number <b>3</b> : column <b>Name-Label</b> has <b>duplicate</b> value',
+         'Row Number <b>4</b> : column <b>Name-Label</b> has <b>duplicate</b> value']}, 'errors': []}
     test_df = pd.read_csv(test_df_path)
     assert result_log == test_log
     assert result_df.equals(test_df)
