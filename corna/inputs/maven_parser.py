@@ -6,6 +6,7 @@ from column_conventions import maven as maven_constants
 from corna import constants as con
 from corna import input_validation
 from corna import dataframe_validator
+from corna.custom_exception import NoIntersectionError
 from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
 from corna.validation_report_class import ValidationReport
@@ -419,7 +420,7 @@ def filtered_data_frame(maven_df, metadata_df):
         maven_data_frame_column = REQUIRED_COLUMNS_MAVEN + intersection_sample_list
         filtered_maven_df = maven_df[maven_data_frame_column]
     else:
-        raise
+        raise NoIntersectionError
     return filtered_maven_df
 
 
