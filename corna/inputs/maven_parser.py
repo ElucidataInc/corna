@@ -36,7 +36,7 @@ def maven_merge_dfs(df1, df2):
     long_form = melt_df(df1)
     try:
         merged_df = merge_two_dfs(long_form, df2, how='left',
-                                  left_on=con.VAR_COL, right_on=maven_constants.SAMPLE)
+                            left_on=con.VAR_COL, right_on=maven_constants.SAMPLE)
     except KeyError:
         raise KeyError(maven_constants.SAMPLE + ' column not found in metadata')
 
@@ -167,28 +167,28 @@ def convert_labels_to_std(df, iso_tracers):
     return df
 
 
-
-def get_intersection(first_set,second_set):
+def get_intersection(first_set, second_set):
     """
      This function returns the intersection of two sets.
     """
     return list(first_set.intersection(second_set))
 
 
-def get_column_list(df):
+def get_column_names_set(df):
     """
     This function returns set of column headers in df.
     """
     return set(df.columns.values.tolist())
 
 
-def get_unique_column_value(df,column):
+def get_unique_column_value(df, column):
     """
     This function return set of unique values in column
     """
     return set(df[column].tolist())
 
-def drop_duplicate_rows(df,column):
+
+def drop_duplicate_rows(df, column):
     """
     This function drops the duplicate row in the given column of given
     df.
@@ -255,13 +255,12 @@ def report_duplicate_values(maven_df):
 
 def report_label_column_format(maven_df):
     return input_validation.validator_column_wise(maven_df, 0,
-                                                  [maven_constants.LABEL], [input_validation.check_label_column_format])
+                    [maven_constants.LABEL],[input_validation.check_label_column_format])
 
 
 def report_formula_column_format(maven_df):
     return input_validation.validator_column_wise(maven_df, 0,
-                                                  [maven_constants.FORMULA],
-                                                  [input_validation.check_formula_is_correct])
+                [maven_constants.FORMULA],[input_validation.check_formula_is_correct])
 
 
 def report_label_in_formula(maven_df):
@@ -272,8 +271,8 @@ def report_label_in_formula(maven_df):
 
 def report_intensity_values(maven_df):
     sample_columns = get_sample_column(maven_df)
-    return input_validation.validator_column_wise(maven_df, 0, sample_columns,
-                                                  [input_validation.check_intensity_value])
+    return input_validation.validator_column_wise(maven_df, 0,
+                    sample_columns, [input_validation.check_intensity_value])
 
 
 def get_validation_logs(validator):
@@ -368,6 +367,7 @@ def get_df(path=None):
     else:
         return pd.DataFrame()
 
+
 def get_corrected_maven_df(maven_df):
     """
     This function performs validation check on df and return
@@ -407,7 +407,7 @@ def filtered_data_frame(maven_df, metadata_df):
     metadata_sample_column_set = get_unique_column_value \
         (filtered_meta_df, maven_constants.SAMPLE)
 
-    maven_sample_list = get_column_list(maven_df)
+    maven_sample_list = get_column_names_set(maven_df)
 
     intersection_sample_list = get_intersection \
         (maven_sample_list, metadata_sample_column_set)
