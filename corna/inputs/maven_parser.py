@@ -217,7 +217,7 @@ def get_sample_column(maven_df):
             if column not in REQUIRED_COLUMNS_MAVEN]
 
 
-def get_df_validator(df, fn_lst):
+def get_validator_cls_obj(df, fn_lst):
     """
     This function creates instance of ValidationReport, then
     append all the reports which are generated after validation.
@@ -380,7 +380,7 @@ def get_corrected_maven_df(maven_df):
     """
 
     validation_function_list = get_validation_fn_lst()
-    validator = get_df_validator(maven_df, validation_function_list)
+    validator = get_validator_cls_obj(maven_df, validation_function_list)
 
     validator.generate_report()
     validator.generate_action()
