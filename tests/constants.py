@@ -10,3 +10,5 @@ maven_file_intensity_incorrect = os.path.join(dir_path, "test_input_validation_d
 test_df_path_warning = os.path.join(dir_path, "test_input_validation_data","test_mergedf_warning.csv")
 maven_file_path_extra_sample = os.path.join(dir_path, "test_input_validation_data","test_maven_upload_acetic_extra_sample.csv")
 maven_file_path_empty_intersection = os.path.join(dir_path, "test_input_validation_data","test_maven_upload_acetic_empty_intersection.csv")
+maven_file_path_duplicate_entry = os.path.join(dir_path, "test_input_validation_data",
+                                   "test_maven_upload_duplicate_entry.csv")
