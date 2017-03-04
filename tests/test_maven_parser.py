@@ -11,10 +11,17 @@ maven_file = os.path.join(dir_path, "test_input_validation_data", "test_maven_up
 metadatafile = os.path.join(dir_path, "test_input_validation_data", "metadata_sample_test_maven.csv")
 
 
+@pytest.fixture()
+def read_csv(path):
+
+    return pd.read_csv(path)
+
+
+
 def test_read_input_file_all_correct():
     test_df_path = os.path.join(dir_path, "test_input_validation_data", "test_mergedf_all_correct.csv")
     result_df, result_log, _ = maven_parser.read_maven_file(maven_file, metadatafile)
-    test_df = pd.read_csv(test_df_path)
+    test_df = read_csv(test_df_path)
     test_log = {'warning': {'action': [], 'message': []}, 'errors': []}
 
     assert result_log == test_log
@@ -23,7 +30,7 @@ def test_read_input_file_all_correct():
 
 def test_read_input_file_no_metadata():
     test_df_path = os.path.join(dir_path, "test_input_validation_data", "test_mergedf_no_metadata.csv")
-    test_df = pd.read_csv(test_df_path)
+    test_df = read_csv(test_df_path)
     test_log = {'warning': {'action': [], 'message': []}, 'errors': []}
     result_df, result_log, _ = maven_parser.read_maven_file(maven_file, None)
     assert result_log == test_log
@@ -51,7 +58,7 @@ def test_read_input_file_warning_in_maven():
     test_log = {'warning': {'action': ['Row is Dropped', 'Row is Dropped'], 'message':
         ['Row Number <b>3</b> : column <b>Name-Label</b> has <b>duplicate</b> value',
          'Row Number <b>4</b> : column <b>Name-Label</b> has <b>duplicate</b> value']}, 'errors': []}
-    test_df = pd.read_csv(test_df_path)
+    test_df = read_csv(test_df_path)
     assert result_log == test_log
     assert result_df.equals(test_df)
 
@@ -59,9 +66,9 @@ def test_read_input_file_warning_in_maven():
 def test_filtered_data_frame():
     maven_file_path = os.path.join(dir_path, "test_input_validation_data",
                                    "test_maven_upload_acetic_extra_sample.csv")
-    maven_df = pd.read_csv(maven_file_path)
-    metadata_df = pd.read_csv(metadatafile)
-    test_df = pd.read_csv(maven_file)
+    maven_df = read_csv(maven_file_path)
+    metadata_df = read_csv(metadatafile)
+    test_df = read_csv(maven_file)
     result_df = maven_parser.filtered_data_frame(maven_df, metadata_df)
 
     assert_frame_equal(result_df.sort(axis=1), test_df.sort(axis=1), check_names=True)
