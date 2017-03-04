@@ -90,8 +90,14 @@ def test_get_intersection():
     test_set_1 = set([1,2,3])
     test_set_2 = set([3,4,5])
     test_intersection = [3]
-
     assert maven_parser.get_intersection(test_set_1,test_set_2) == test_intersection
+
+
+def test_get_intersection_empty():
+    test_set_1 = set([1, 2, 3])
+    test_set_2 = set([6, 4, 5])
+    test_intersection = []
+    assert maven_parser.get_intersection(test_set_1, test_set_2) == test_intersection
 
 
 def test_check_df_empty():
@@ -99,6 +105,5 @@ def test_check_df_empty():
 
 
 def test_check_error_present():
-
     logs = {'errors':['There is one erroe'],'warning':[]}
     assert maven_parser.check_error_present(logs)
