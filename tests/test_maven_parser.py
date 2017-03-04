@@ -4,6 +4,7 @@ import pandas as pd
 
 from pandas.util.testing import assert_frame_equal
 
+from corna import custom_exception
 from corna.inputs import maven_parser
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
@@ -107,3 +108,14 @@ def test_check_df_empty():
 def test_check_error_present():
     logs = {'errors':['There is one erroe'],'warning':[]}
     assert maven_parser.check_error_present(logs)
+
+
+def test_filtered_data_frame_empty_intersection():
+    maven_file_path = os.path.join(dir_path, "test_input_validation_data",
+                                   "test_maven_upload_acetic_empty_intersection.csv")
+    maven_df = read_csv(maven_file_path)
+    metadata_df = read_csv(metadatafile)
+
+    with pytest.raises(custom_exception.NoIntersectionError) as e:
+        maven_parser.filtered_data_frame(maven_df, metadata_df)
+    assert e.value.message == 'Atleast one sample is to be common.'
