@@ -1,0 +1,4 @@
+Name,Label,Formula,Sample,Intensity,info1,info2,Unlabeled Fragment
+Acetic,C12 PARENT,H4C2O2N,sample_1,0.2274,cellline_1,culture_1,Acetic
+Acetic,C13-label-1,H4C2O2N,sample_1,0.4361,cellline_1,culture_1,Acetic
+Acetic,C13-label-2,H4C2O2N,sample_1,0.25405,cellline_1,culture_1,Acetic

@@ -165,7 +165,7 @@ def check_duplicate(input_df, axis=0, column_list=[]):
             column_df[con.COLUMN_ROW] = column_df.index
             resultant_df = resultant_df.append(column_df)
 
-    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] != True]
+    output_df = resultant_df.loc[resultant_df[con.COLUMN_STATE] == True]
     output_df[con.COLUMN_STATE] = con.DUPLICATE_STATE
     return output_df
 

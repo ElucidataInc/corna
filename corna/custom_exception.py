@@ -29,6 +29,9 @@ class MissingRequiredColumnError(Exception):
     def __init__(self, column_list):
         self.message="The required column %s are not present" % ','.join(column_list)
 
+class NoIntersectionError(Exception):
+    def __init__(self, arg = 'Atleast one sample is to be common.'):
+        self.message = arg
 
 def handleError(function):
     def runFunction(*args,**kwargs):
@@ -54,8 +57,13 @@ def handleError(function):
             print e.message
             raise
 
+        except NoIntersectionError as e:
+            print e.message
+            raise
+
         except Exception as f:
             print "Error Not Known"
             raise
+
 
     return runFunction
