@@ -135,6 +135,7 @@ def test_get_istopes_name_and_number():
     assert label_isotopes == ['C','N']
     assert label_number == [1,2]
 
+
 def test_get_split_isotopes():
     joined_isotopes = 'C13N15'
 

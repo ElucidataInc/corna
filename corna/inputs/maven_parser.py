@@ -301,7 +301,10 @@ def get_extracted_isotracer(label):
     :param label: label column value
     :return: extracted iso-tracer value
     """
-    return label.split('-label-')[0]
+    if label == con.UNLABELLED_LABEL:
+        return 'C13N15'
+    else:
+        return label.split('-label-')[0]
 
 
 def get_extraced_isotracer_df(maven_df):

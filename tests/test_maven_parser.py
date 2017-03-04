@@ -134,11 +134,13 @@ def test_column_name_set():
     assert maven_parser.get_column_names_set(maven_df) == set(['Formula',
                                                     'Name', 'sample_1', 'Label'])
 
+
 def test_unique_column_value():
     maven_file_path = os.path.join(dir_path, "test_input_validation_data",
                                    "test_maven_upload_acetic.csv")
     maven_df = read_csv(maven_file_path)
     assert maven_parser.get_unique_column_value(maven_df,'Name') == set(['Acetic'])
+
 
 def test_drop_duplicates():
     maven_file_path = os.path.join(dir_path, "test_input_validation_data",
@@ -148,3 +150,34 @@ def test_drop_duplicates():
                             'Label':['C12 PARENT'],'sample_1':[0.2274]})
     result_df = maven_parser.drop_duplicate_rows(maven_df,'Name')
     assert_frame_equal(result_df.sort(axis=1), test_df.sort(axis=1), check_names=True)
+
+
+def test_get_metadata_df():
+    test_df = read_csv(metadatafile)
+    result_df = maven_parser.get_metadata_df(metadatafile)
+    assert_frame_equal(result_df.sort(axis=1), test_df.sort(axis=1), check_names=True)
+
+
+def test_get_sample_column():
+    maven_df = read_csv(maven_file)
+    assert maven_parser.get_sample_column(maven_df) == ['sample_1']
+
+
+def test_get_validation_fn_lst():
+    assert len(maven_parser.get_validation_fn_lst()) == 6
+
+
+def test_get_extracted_isotracer():
+    assert maven_parser.get_extracted_isotracer('C13-label-1') == 'C13'
+    assert maven_parser.get_extracted_isotracer('C12 PARENT') == 'C13N15'
+
+
+def test_get_extraced_isotracer_df():
+    maven_df = read_csv(maven_file)
+    test_assert =['C13N15','C13','C13']
+    assert list(maven_parser.get_extraced_isotracer_df(maven_df)) == test_assert
+
+
+def test_isotracer_dict():
+    maven_df= read_csv(maven_file)
+    assert maven_parser.get_isotracer_dict(maven_df) == {'C13': 2, 'C13N15': 1}
