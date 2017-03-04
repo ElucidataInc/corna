@@ -13,7 +13,6 @@ metadatafile = os.path.join(dir_path, "test_input_validation_data", "metadata_sa
 
 @pytest.fixture()
 def read_csv(path):
-
     return pd.read_csv(path)
 
 
@@ -23,7 +22,6 @@ def test_read_input_file_all_correct():
     result_df, result_log, _ = maven_parser.read_maven_file(maven_file, metadatafile)
     test_df = read_csv(test_df_path)
     test_log = {'warning': {'action': [], 'message': []}, 'errors': []}
-
     assert result_log == test_log
     assert result_df.equals(test_df)
 
@@ -75,19 +73,16 @@ def test_filtered_data_frame():
 
 
 def test_get_df_empty():
-
     test_df = maven_parser.get_df_frm_path()
     assert test_df.empty
 
 
 def test_get_df_path():
-
     test_df = maven_parser.get_df_frm_path(maven_file)
     assert test_df.empty == False
 
 
 def test_basic_validation():
-
     assert maven_parser.check_basic_validation(maven_file) == True
 
 
@@ -100,7 +95,6 @@ def test_get_intersection():
 
 
 def test_check_df_empty():
-
     assert maven_parser.check_df_empty(pd.DataFrame())
 
 
