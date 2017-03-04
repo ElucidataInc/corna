@@ -119,3 +119,32 @@ def test_filtered_data_frame_empty_intersection():
     with pytest.raises(custom_exception.NoIntersectionError) as e:
         maven_parser.filtered_data_frame(maven_df, metadata_df)
     assert e.value.message == 'Atleast one sample is to be common.'
+
+
+def test_basic_validation():
+    maven_file_path = os.path.join(dir_path, "test_input_validation_data",
+                                   "test_maven_upload_acetic_intensity_incorrect.csv")
+    assert maven_parser.check_basic_validation(maven_file_path)
+
+
+def test_column_name_set():
+    maven_file_path = os.path.join(dir_path, "test_input_validation_data",
+                                   "test_maven_upload_acetic.csv")
+    maven_df = read_csv(maven_file_path)
+    assert maven_parser.get_column_names_set(maven_df) == set(['Formula',
+                                                    'Name', 'sample_1', 'Label'])
+
+def test_unique_column_value():
+    maven_file_path = os.path.join(dir_path, "test_input_validation_data",
+                                   "test_maven_upload_acetic.csv")
+    maven_df = read_csv(maven_file_path)
+    assert maven_parser.get_unique_column_value(maven_df,'Name') == set(['Acetic'])
+
+def test_drop_duplicates():
+    maven_file_path = os.path.join(dir_path, "test_input_validation_data",
+                                   "test_maven_upload_acetic.csv")
+    maven_df = read_csv(maven_file_path)
+    test_df = pd.DataFrame({'Name':['Acetic'],'Formula':['H4C2O2N'],
+                            'Label':['C12 PARENT'],'sample_1':[0.2274]})
+    result_df = maven_parser.drop_duplicate_rows(maven_df,'Name')
+    assert_frame_equal(result_df.sort(axis=1), test_df.sort(axis=1), check_names=True)
