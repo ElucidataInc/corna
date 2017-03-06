@@ -51,6 +51,8 @@ def make_correction_matrix(trac_atom, formuladict, na_dict, indist_elems):
     label_elem: element with input labeling
     indist_elems: elements with identical mass shift
     na_dict: dict of element:expected isotopic distribution
+    :TODO This function relates to issue NCT-247. Need to change the function
+    in more appropriate way.
     """
     M = make_expected_na_matrix(formuladict.get(trac_atom,0), na_dict[trac_atom])
     for e in indist_elems:
