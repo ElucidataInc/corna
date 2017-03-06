@@ -52,7 +52,7 @@ def make_correction_matrix(trac_atom, formuladict, na_dict, indist_elems):
     indist_elems: elements with identical mass shift
     na_dict: dict of element:expected isotopic distribution
     """
-    M = make_expected_na_matrix(formuladict[trac_atom], na_dict[trac_atom])
+    M = make_expected_na_matrix(formuladict.get(trac_atom,0), na_dict[trac_atom])
     for e in indist_elems:
         M = add_indistinguishable_element(M, formuladict[e], na_dict[e])
     return pinv(M)
