@@ -302,7 +302,7 @@ def get_extracted_isotracer(label):
     :return: extracted iso-tracer value
     """
     if label == con.UNLABELLED_LABEL:
-        return 'C13N15'
+        return con.UNLABELLED_LABEL
     else:
         return label.split('-label-')[0]
 
