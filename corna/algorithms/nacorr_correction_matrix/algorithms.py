@@ -56,7 +56,8 @@ def make_correction_matrix(trac_atom, formuladict, na_dict, indist_elems):
     """
     M = make_expected_na_matrix(formuladict.get(trac_atom,0), na_dict[trac_atom])
     for e in indist_elems:
-        M = add_indistinguishable_element(M, formuladict[e], na_dict[e])
+        if e in formuladict:
+            M = add_indistinguishable_element(M, formuladict[e], na_dict[e])
     return pinv(M)
 
 def make_all_corr_matrices(isotracers, formula_dict, na_dict, eleme_corr):
