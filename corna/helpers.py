@@ -5,10 +5,10 @@ import os
 import numpy as np
 import pandas as pd
 
-from . import constants as cs
-from . formula import Formula
-from . formulaschema import FormulaSchema
-from . inputs.column_conventions import multiquant as c
+import constants as cs
+from formula import Formula
+from formulaschema import FormulaSchema
+from inputs.column_conventions import multiquant as c
 
 schema_obj = FormulaSchema()
 chemformula_schema = schema_obj.create_chemicalformula_schema()

@@ -4,7 +4,7 @@ import dataframe_validator
 import pandas as pd
 import re
 
-from corna.helpers import chemformula_schema,get_formula
+from helpers import chemformula_schema,get_formula
 from inputs.column_conventions import maven
 
 

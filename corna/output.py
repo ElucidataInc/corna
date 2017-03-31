@@ -2,13 +2,11 @@ from collections import namedtuple
 
 import pandas as pd
 
-# XXX: Change before showing to Victor
-# Figure out a better way.
-from . inputs.column_conventions import multiquant as c
-from . helpers import concatenate_dataframes_by_col, label_dict_to_key, get_key_from_single_value_dict
-from . constants import LEVEL_0_COL, LEVEL_1_COL
-from . inputs.maven_parser import MavenKey
-from . inputs.multiquant_parser import Multiquantkey
+from inputs.column_conventions import multiquant as c
+from helpers import concatenate_dataframes_by_col, label_dict_to_key, get_key_from_single_value_dict
+from constants import LEVEL_0_COL, LEVEL_1_COL
+from inputs.maven_parser import MavenKey
+from inputs.multiquant_parser import Multiquantkey
 
 
 OutKey = namedtuple('OutKey', 'name formula')

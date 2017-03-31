@@ -1,5 +1,5 @@
 """Store chemical formula in a desirable format"""
-from . formulaschema import FormulaSchema
+from formulaschema import FormulaSchema
 
 
 class Formula(object):

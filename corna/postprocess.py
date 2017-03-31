@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
 
-from .isotopomer import Infopacket
+from isotopomer import Infopacket
 
 def zero_if_negative(num):
     """

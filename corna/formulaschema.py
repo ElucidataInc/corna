@@ -4,7 +4,7 @@
 #
 """Define possible schema for a chemical formula"""
 import pyparsing
-from . import constants
+import constants
 
 
 class FormulaSchema(object):

@@ -1,7 +1,7 @@
 import pandas as pd
 
-from corna import constants as con
-from corna.input_validation import get_df
+import constants as con
+from input_validation import get_df
 from inputs.column_conventions import maven as maven_file
 
 REQUIRED_COLUMN_LIST = [maven_file.NAME, maven_file.LABEL, maven_file.FORMULA]
