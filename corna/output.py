@@ -3,7 +3,8 @@ from collections import namedtuple
 import pandas as pd
 
 from inputs.column_conventions import multiquant as c
-from helpers import concatenate_dataframes_by_col, label_dict_to_key, get_key_from_single_value_dict
+from helpers import concatenate_dataframes_by_col
+from helpers import label_dict_to_key, get_key_from_single_value_dict
 import constants as const
 from inputs.maven_parser import MavenKey
 from inputs.multiquant_parser import Multiquantkey
