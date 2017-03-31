@@ -76,4 +76,5 @@ def test_get_key_from_single_value_dict_len_error():
 def test_get_formula():
     assert help.get_formula('C6H12O6') == {'C':6, 'H':12, 'O':6}
 
-
+def test_get_na_value_dict_O():
+    assert help.get_na_value_dict()['O'] == [0.99757, 0.00038, 0.00205]
