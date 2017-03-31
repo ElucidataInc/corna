@@ -232,6 +232,13 @@ def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
  """
  This function returns the dictionary of default NA values (adapted from wiki)
  for all the isotopes
+ Args:
+     isotope_dict: constant dictionary containing natural abundance information
+     of different isotopes
+ Returns:
+     na_val_dict: dictionary of type {'C':[0.99,0.11], 'H':[0.98,0.02]}. The order
+     of NA values is in increasing order of mass for example 'C': [na(C12), na(C13)]
+     'O': [na(O16), na(O17), na(O18)]
  """
  NA = isotope_dict[cs.KEY_NA]
  amu = isotope_dict[cs.KEY_AMU]
