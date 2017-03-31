@@ -5,7 +5,7 @@ import os
 import numpy as np
 import pandas as pd
 
-import constants as cs
+import constants as const
 from formula import Formula
 from formulaschema import FormulaSchema
 from inputs.column_conventions import multiquant as c
@@ -15,12 +15,12 @@ chemformula_schema = schema_obj.create_chemicalformula_schema()
 polyatomschema = schema_obj.create_polyatom_schema()
 
 #defined here as needed for webtool
-#ISOTOPE_NA_MASS = cs.ISOTOPE_NA_MASS
+#ISOTOPE_NA_MASS = const.ISOTOPE_NA_MASS
 
-LEVEL_0_COL = cs.LEVEL_0_COL
-LEVEL_1_COL = cs.LEVEL_1_COL
-VAR_COL = cs.VAR_COL
-VAL_COL = cs.VAL_COL
+LEVEL_0_COL = const.LEVEL_0_COL
+LEVEL_1_COL = const.LEVEL_1_COL
+VAR_COL = const.VAR_COL
+VAL_COL = const.VAL_COL
 
 
 # def set_global_isotope_dict(isotope_dict):
@@ -28,34 +28,34 @@ VAL_COL = cs.VAL_COL
 #     ISOTOPE_NA_MASS = isotope_dict
 #
 def get_global_isotope_dict():
-     return cs.ISOTOPE_NA_MASS
+     return const.ISOTOPE_NA_MASS
 
 def get_atomic_weight(element):
     try:
-        return cs.ELE_ATOMIC_WEIGHTS[element]
+        return const.ELE_ATOMIC_WEIGHTS[element]
     except KeyError:
         raise KeyError('Element doesnt exist')
 
 
 def check_if_isotope_in_dict(iso):
-    return cs.ISOTOPE_NA_MASS['element'].has_key(iso)
+    return const.ISOTOPE_NA_MASS['element'].has_key(iso)
 
 
 def get_isotope_element(iso):
     try:
-        return cs.ISOTOPE_NA_MASS['element'][iso]
+        return const.ISOTOPE_NA_MASS['element'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 
 def get_isotope_mass(iso):
     try:
-        return cs.ISOTOPE_NA_MASS['amu'][iso]
+        return const.ISOTOPE_NA_MASS['amu'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
 
-def get_isotope_na(iso, isotope_dict=cs.ISOTOPE_NA_MASS):
+def get_isotope_na(iso, isotope_dict=const.ISOTOPE_NA_MASS):
     try:
         return isotope_dict['naValue'][iso]
     except KeyError:
@@ -64,7 +64,7 @@ def get_isotope_na(iso, isotope_dict=cs.ISOTOPE_NA_MASS):
 
 def get_isotope_natural(iso):
     try:
-        return cs.ISOTOPE_NA_MASS['naturalIsotope'][iso]
+        return const.ISOTOPE_NA_MASS['naturalIsotope'][iso]
     except KeyError:
         raise KeyError('Check available isotope list', iso)
 
@@ -228,7 +228,7 @@ def _merge_dfs(df1, df2):
                         c.NAME, c.FORMULA])
 
 
-def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
+def get_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
  """
  This function returns the dictionary of default NA values (adapted from wiki)
  for all the isotopes. NA Correction matrix algorithm requires these lists in
@@ -258,9 +258,9 @@ def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
         O the list becomes [0.99757, 0.00038, 0.00205]
     test for this bug: test_get_na_value_dict_O in test_helpers
  """
- NA = isotope_dict[cs.KEY_NA]
- amu = isotope_dict[cs.KEY_AMU]
- elements = cs.ISOTOPE_NA_MASS[cs.KEY_ELE]
+ NA = isotope_dict[const.KEY_NA]
+ amu = isotope_dict[const.KEY_AMU]
+ elements = const.ISOTOPE_NA_MASS[const.KEY_ELE]
  na_val_dict = {}
  atoms = set(elements.values())
 

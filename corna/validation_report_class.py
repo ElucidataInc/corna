@@ -1,6 +1,6 @@
 import pandas as pd
 
-import constants as con
+import constants as const
 from input_validation import get_df
 from inputs.column_conventions import maven as maven_file
 
@@ -37,10 +37,10 @@ class ValidationReport():
         self.error_row = []
         self.action_messages = []
         self.action = {}
-        self.warning_error_dict = {con.VALIDATION_WARNING:
-                                   {con.VALIDATION_MESSAGE: [],
-                                    con.VALIDATION_ACTION: []},
-                                   con.VALIDATION_ERROR: []}
+        self.warning_error_dict = {const.VALIDATION_WARNING:
+                                   {const.VALIDATION_MESSAGE: [],
+                                    const.VALIDATION_ACTION: []},
+                                   const.VALIDATION_ERROR: []}
 
     def append_df_to_global_df(self, df):
         """
@@ -77,8 +77,8 @@ class ValidationReport():
             self.append_warning_error_dict_for_row(each_row)
 
         self.invalid_row = self.get_key_list(self.result)
-        self.error_row = self.get_key_list(self.result, con.VALIDATION_ERROR)
-        self.warning_row = self.get_key_list(self.result, con.VALIDATION_WARNING)
+        self.error_row = self.get_key_list(self.result, const.VALIDATION_ERROR)
+        self.warning_row = self.get_key_list(self.result, const.VALIDATION_WARNING)
 
         return self.result
 
@@ -139,15 +139,15 @@ class ValidationReport():
         :return: dict object: action list for row wise
         """
         if self.error_row:
-            self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_STOP
+            self.action[const.VALIDATION_ACTION] = const.VALIDATION_ACTION_STOP
 
         elif self.warning_row:
-            self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_ROW_WISE
+            self.action[const.VALIDATION_ACTION] = const.VALIDATION_ACTION_ROW_WISE
 
             for row in self.warning_row:
                 self.append_action(row)
         else:
-            self.action[con.VALIDATION_ACTION] = con.VALIDATION_ACTION_OK
+            self.action[const.VALIDATION_ACTION] = const.VALIDATION_ACTION_OK
 
         return self.action
 
@@ -175,23 +175,23 @@ class ValidationReport():
         if not self.check_action_is_stop_tool():
             resultant_df = data_frame
             rows_to_take_action_on = [rows for rows in self.action
-                                      if rows not in [con.VALIDATION_ACTION]]
+                                      if rows not in [const.VALIDATION_ACTION]]
 
             for rows in rows_to_take_action_on:
 
                 for each_action in self.action[rows]:
 
-                    if each_action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_DROP:
+                    if each_action[const.VALIDATION_ACTION] == const.VALIDATION_ACTION_DROP:
                         list_of_rows_to_drop.append(rows)
-                        action_msg = con.VALIDATION_MSG_ROW_DROPPED
+                        action_msg = const.VALIDATION_MSG_ROW_DROPPED
                         break
                     else:
-                        resultant_df.set_value(rows, each_action[con.VALIDATION_COLUMN_NAME], 0)
-                        action_msg = con.VALIDATION_MSG_FILL_NA
+                        resultant_df.set_value(rows, each_action[const.VALIDATION_COLUMN_NAME], 0)
+                        action_msg = const.VALIDATION_MSG_FILL_NA
 
                 self.action_messages.append(action_msg)
             output_df = self.action_drop_rows(resultant_df, list_of_rows_to_drop)
-        self.warning_error_dict[con.VALIDATION_WARNING][con.VALIDATION_ACTION] = self.action_messages
+        self.warning_error_dict[const.VALIDATION_WARNING][const.VALIDATION_ACTION] = self.action_messages
 
         return output_df
 
@@ -213,19 +213,19 @@ class ValidationReport():
         """
         for row in self.result.keys():
 
-            if self.result[row][con.VALIDATION_WARNING]:
+            if self.result[row][const.VALIDATION_WARNING]:
                 msg = []
-                for warning in self.result[row][con.VALIDATION_WARNING]:
+                for warning in self.result[row][const.VALIDATION_WARNING]:
                     msg.append("column <b>{c[0]}</b> has <b>{c[1]}</b> value".format(c=warning))
                 final_msg = "Row Number <b>%i</b> : " % row + " , ".join(msg)
-                self.warning_error_dict[con.VALIDATION_WARNING][con.VALIDATION_MESSAGE].append(final_msg)
+                self.warning_error_dict[const.VALIDATION_WARNING][const.VALIDATION_MESSAGE].append(final_msg)
 
-            if self.result[row][con.VALIDATION_ERROR]:
+            if self.result[row][const.VALIDATION_ERROR]:
                 msg = []
-                for error in self.result[row][con.VALIDATION_ERROR]:
+                for error in self.result[row][const.VALIDATION_ERROR]:
                     msg.append("column <b>{c[0]}</b> has <b>{c[1]}</b> value".format(c=error))
                 final_msg = "Row Number <b>%i</b> : " % row + " , ".join(msg)
-                self.warning_error_dict[con.VALIDATION_ERROR].append(final_msg)
+                self.warning_error_dict[const.VALIDATION_ERROR].append(final_msg)
 
         return self.warning_error_dict
 
@@ -256,7 +256,7 @@ class ValidationReport():
         """
         This method is used to slice the df, wrt to row_number
         """
-        return df.loc[df[con.COLUMN_ROW] == row]
+        return df.loc[df[const.COLUMN_ROW] == row]
 
     @staticmethod
     def get_key_list(input_dict, condition=None):
@@ -285,18 +285,18 @@ class ValidationReport():
         column_name = result[0]
         state = result[1]
 
-        if state == con.MISSING_STATE:
+        if state == const.MISSING_STATE:
 
             if column_name in REQUIRED_COLUMN_LIST:
-                action = con.VALIDATION_ACTION_DROP
+                action = const.VALIDATION_ACTION_DROP
             else:
-                action = con.VALIDATION_ACTION_FILL_NA
+                action = const.VALIDATION_ACTION_FILL_NA
 
-        elif state == con.DUPLICATE_STATE:
-            action = con.VALIDATION_ACTION_DROP
+        elif state == const.DUPLICATE_STATE:
+            action = const.VALIDATION_ACTION_DROP
 
         else:
-            action = con.VALIDATION_ACTION_STOP
+            action = const.VALIDATION_ACTION_STOP
 
         return action
 
@@ -311,9 +311,9 @@ class ValidationReport():
                          'action':'DROP'}
         """
 
-        action_object = {con.VALIDATION_COLUMN_NAME: each_result[0],
-                         con.COLUMN_STATE: each_result[1],
-                         con.VALIDATION_ACTION: each_result[2]}
+        action_object = {const.VALIDATION_COLUMN_NAME: each_result[0],
+                         const.COLUMN_STATE: each_result[1],
+                         const.VALIDATION_ACTION: each_result[2]}
 
         return action_object
 
@@ -321,21 +321,21 @@ class ValidationReport():
         """
         This will check if action is not stop_tool
         """
-        return self.action[con.VALIDATION_ACTION] == con.VALIDATION_ACTION_STOP
+        return self.action[const.VALIDATION_ACTION] == const.VALIDATION_ACTION_STOP
 
     def append_warning_action_to_result(self, row):
         """
         This is just to append warning action to result.
         """
 
-        for each_result in self.result[row][con.VALIDATION_WARNING]:
+        for each_result in self.result[row][const.VALIDATION_WARNING]:
             each_result.append(self.get_action_name(each_result))
 
     def append_error_action_to_result(self, row):
         """
         This is to append error action to result.
         """
-        for each_result in self.result[row][con.VALIDATION_ERROR]:
+        for each_result in self.result[row][const.VALIDATION_ERROR]:
             each_result.append(self.get_action_name(each_result))
 
     def append_action(self, row):
@@ -343,7 +343,7 @@ class ValidationReport():
         This is to append action object to action dict.
         """
         column_state_action_list = []
-        for each_result in self.result[row][con.VALIDATION_WARNING]:
+        for each_result in self.result[row][const.VALIDATION_WARNING]:
             column_state_action_list.append(self.get_action_object(each_result))
         self.action[row] = column_state_action_list
 
@@ -356,17 +356,17 @@ class ValidationReport():
         :return: warning error dict for each row so that
         """
         row_df = self.get_slice_df_with_row(self.report_df, each_row)
-        warning_error_dict_for_row = {con.VALIDATION_WARNING: [],
-                                      con.VALIDATION_ERROR: []}
+        warning_error_dict_for_row = {const.VALIDATION_WARNING: [],
+                                      const.VALIDATION_ERROR: []}
 
         for index, row in row_df.iterrows():
 
-            warning_or_error_msg = [row[con.COLUMN_NAME], row[con.COLUMN_STATE]]
+            warning_or_error_msg = [row[const.COLUMN_NAME], row[const.COLUMN_STATE]]
 
-            if row[con.COLUMN_STATE] in con.WARNING_STATE:
-                warning_error_dict_for_row[con.VALIDATION_WARNING].\
+            if row[const.COLUMN_STATE] in const.WARNING_STATE:
+                warning_error_dict_for_row[const.VALIDATION_WARNING].\
                     append(warning_or_error_msg)
             else:
-                warning_error_dict_for_row[con.VALIDATION_ERROR].\
+                warning_error_dict_for_row[const.VALIDATION_ERROR].\
                     append(warning_or_error_msg)
-        self.result[row[con.COLUMN_ROW]] = warning_error_dict_for_row
+        self.result[row[const.COLUMN_ROW]] = warning_error_dict_for_row
