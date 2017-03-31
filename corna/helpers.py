@@ -1,4 +1,5 @@
 import collections
+from operator import itemgetter
 import os
 
 import numpy as np
@@ -227,25 +228,26 @@ def _merge_dfs(df1, df2):
                         c.NAME, c.FORMULA])
 
 
-def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
-    """
-    This function returns the dictionary of default NA values (adapted from wiki)
-    for all the isotopes
-    """
-    NA = isotope_dict['naValue']
-    elements = cs.ISOTOPE_NA_MASS['element']
-    na_val_dict = {}
-    atoms = set(elements.values())
+ def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
+     """
+     This function returns the dictionary of default NA values (adapted from wiki)
+     for all the isotopes
+     """
+     NA = isotope_dict['naValue']
+     amu = isotope_dict['amu']
+     elements = cs.ISOTOPE_NA_MASS['element']
+     na_val_dict = {}
+     atoms = set(elements.values())
 
-    for atom in atoms:
-        isotope_list = [isotope for isotope, iso_atom
-                        in elements.iteritems() if iso_atom == atom]
-        na_vals = [NA[val] for val in isotope_list]
-        na_vals.sort(reverse=True)
-        na_val_dict[atom] = na_vals
+     for atom in atoms:
+         isotope_list = [isotope for isotope, iso_atom
+                         in elements.iteritems() if iso_atom == atom]
+         na_val_amu = [(NA[val], amu[val]) for val in isotope_list]
+         na_val_amu.sort(key=itemgetter(1))
+         na_vals = [val_amu[0] for val_amu in na_val_amu]
+         na_val_dict[atom] = na_vals
 
-    return na_val_dict
-
+     return na_val_dict
 
 def check_column_headers(col_headers, col_names):
     """
