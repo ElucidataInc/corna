@@ -231,7 +231,10 @@ def _merge_dfs(df1, df2):
 def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
  """
  This function returns the dictionary of default NA values (adapted from wiki)
- for all the isotopes
+ for all the isotopes. NA Correction matrix algorithm requires these lists in
+ the order of increasing amus ([M, M+1, M+2...]) for proper creation of matrix.
+ The matrix has to maintain an order such that the intensities multiplied to it
+ are increasing masses, therefore order of amu is crucial.
  Args:
      isotope_dict: constant dictionary containing natural abundance information
      of different isotopes
@@ -239,6 +242,21 @@ def get_na_value_dict(isotope_dict = cs.ISOTOPE_NA_MASS):
      na_val_dict: dictionary of type {'C':[0.99,0.11], 'H':[0.98,0.02]}. The order
      of NA values is in increasing order of mass for example 'C': [na(C12), na(C13)]
      'O': [na(O16), na(O17), na(O18)]
+ Correction:
+    In the commit 442662f:
+        The NA dictionary being obtained contains isotope -> NA values as list. These
+        lists are sorted in decreasing order of NA values. It was assumed that this
+        order would be the same as increasing order of amu. For example:
+        C12: 0.989 C13: 0.011, in this case decreasing order of NA values (0.989, 0.011)
+        is equivalent to increasing amu (12, 13). It's also true for many isotopes like
+        H1,H2; O16,O17 when considering only M,M+1 hence went unnoticed while doing the
+        corrections. But for O16,O17,O18 the order of decreasing NA values is not same
+        as increasing amus because O18 is more abundant than O17.
+    In the commit 9422427:
+        Keeping in mind the errorneous order due to incorrect way of sorting, now the
+        sorting is done on amus and corresponding NA values are saved. therefore, for
+        O the list becomes [0.99757, 0.00038, 0.00205]
+    test for this bug: test_get_na_value_dict_O in test_helpers
  """
  NA = isotope_dict[cs.KEY_NA]
  amu = isotope_dict[cs.KEY_AMU]
