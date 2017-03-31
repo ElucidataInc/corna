@@ -1,6 +1,6 @@
 """This module helps to do validation using validation package olmonk"""
 
-from corna.olmonk import basic_validation
+from corna.olmonk import basic_validation, data_validation
 
 def get_validation_df(path, required_columns=None):
 	"""takes path of the file, validates it and returns result
@@ -37,5 +37,28 @@ def basic_validation_result(basic_validator):
 		basic_validator.check_if_convert_to_df()
 	except Exception as e:
 		raise
+
+def data_validation_raw_df(df):
+	"""fun doc here"""
+
+	try:
+		raw_df_validator = data_validation.DataValidator(df)
+		raw_df_validator.missing_data()
+		raw_df_validator.numerical(['Area'])
+		raw_df_validator.pattern_match(['Mass Info'], '\d+.0 \/ \d+.0')
+	except Exception as e:
+		raise
+
+def data_validation_metadata_df(df):
+	"""func doc here"""
+
+	try:
+		metadata_df_validator = data_validation.DataValidator(df)
+		metadata_df_validator.missing_data()
+		metadata_df_validator.chemical_formula(['Formula', 'Parent Formula'])
+		metadata_df_validator.value_in_constant('Isotopic Tracer', ['C13', 'N15'])
+	except Exception as e:
+		raise
+
 
 
