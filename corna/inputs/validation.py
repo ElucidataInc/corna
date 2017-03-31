@@ -2,7 +2,7 @@
 
 from corna.olmonk import basic_validation
 
-def get_validation_df(path):
+def get_validation_df(path, required_columns=None):
 	"""takes path of the file, validates it and returns result
 
 	Using path of the file, it instantiates the validation class
@@ -15,16 +15,16 @@ def get_validation_df(path):
 	Returns: validated df
 	"""
 	try:
-		basic_validator = get_class_inst(basic_validation.BasicValidator, path)
+		basic_validator = get_class_inst(basic_validation.BasicValidator, path, required_columns)
 		basic_validation_result(basic_validator)
-		return basic_validator.df
+		return basic_validator
 	except Exception as e:
 		raise
 
-def get_class_inst(validator_class, class_arg):
+def get_class_inst(validator_class, file_path, required_columns):
 	"""Instantiates class with its argument and returns its instance"""
 
-	return validator_class(class_arg)
+	return validator_class(file_path, required_columns)
 
 def basic_validation_result(basic_validator):
 	"""Takes instance of class, do basic validation and raise error
