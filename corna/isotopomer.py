@@ -1,8 +1,8 @@
 from collections import namedtuple
 import numbers
 
-from . model import Fragment
-from . import helpers as hl
+from model import Fragment
+import helpers as hl
 
 
 Infopacket = namedtuple('Infopacket','frag data unlabeled name')

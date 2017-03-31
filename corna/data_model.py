@@ -1,10 +1,7 @@
 import numpy as np
 
-# XXX: Change before showing to Victor
-# Figure out a better way.
-#from .inputs.column_conventions import multiquant as c
-from . helpers import get_unique_values
-from . constants import FRAG_COL, LABEL_COL, SAMPLE_COL
+from helpers import get_unique_values
+from constants import FRAG_COL, LABEL_COL, SAMPLE_COL
 
 
 def standard_model(df, intensity_col):

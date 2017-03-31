@@ -2,13 +2,12 @@ from collections import namedtuple
 
 import pandas as pd
 
-# XXX: Change before showing to Victor
-# Figure out a better way.
-from . inputs.column_conventions import multiquant as c
-from . helpers import concatenate_dataframes_by_col, label_dict_to_key, get_key_from_single_value_dict
-from . constants import LEVEL_0_COL, LEVEL_1_COL
-from . inputs.maven_parser import MavenKey
-from . inputs.multiquant_parser import Multiquantkey
+from inputs.column_conventions import multiquant as c
+from helpers import concatenate_dataframes_by_col
+from helpers import label_dict_to_key, get_key_from_single_value_dict
+import constants as const
+from inputs.maven_parser import MavenKey
+from inputs.multiquant_parser import Multiquantkey
 
 
 OutKey = namedtuple('OutKey', 'name formula')
@@ -26,11 +25,11 @@ def convert_dict_df(nest_dict):
     for frag_name, label_dict in nest_dict.iteritems():
         df = lists_labeldict(frag_name, label_dict)
     df.rename(columns={
-        LEVEL_0_COL: c.LABEL,
+        const.LEVEL_0_COL: c.LABEL,
         0: c.SAMPLE,
         1: c.INTENSITY},
         inplace=True)
-    df.pop(LEVEL_1_COL)
+    df.pop(const.LEVEL_1_COL)
 
     return df
 
