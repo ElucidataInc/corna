@@ -13,28 +13,6 @@ from corna.inputs import validation
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
 
-# def concat_txts_into_df(directory):
-# 	"""read text files with same column names and merge them to one
-# 	dataframe
-# 	Args:
-# 		directory: path of the directory containing the text files
-# 	Returns:
-# 		merged dataframe
-# 	"""
-# 	txt_files = []
-# 	txt_files += [each for each in os.listdir(directory) if each.endswith('.txt')]
-# 	df_list= []
-# 	col_names = [multiquant.MQ_SAMPLE_NAME, multiquant.MQ_FRAGMENT, multiquant.MASSINFO, multiquant.AREA]
-# 	for files in txt_files:
-# 		df = read_file(directory + '/' + files)
-# 		col_headers =  df.columns.tolist()
-# 		check_column_headers(col_headers, col_names)
-# 		df_list.append(df)
-# 	concat_df = pd.concat(df_list).reset_index(drop=True)
-
-# 	return concat_df
-
-
 def get_validated_merge_df(input_files):
 	"""takes inputting files, validate it and sends back merge df
 
@@ -131,32 +109,6 @@ def get_set_from_df_column(df, col_name):
 	"""creates set of a particular column of a df"""
 
 	return set(list(df[col_name]))
-
-# def read_multiquant(dir_path):
-# 	mq_df = concat_txts_into_df(dir_path)
-# 	return mq_df
-
-# def read_multiquant_metadata(path):
-# 	"""read metadata file"""
-# 	mq_metdata = read_file(path)
-# 	col_headers = mq_metdata.columns.values
-# 	col_names = [multiquant.PARENT, multiquant.MQ_FRAGMENT,
-# 				 multiquant.FORMULA, multiquant.PARENT_FORMULA]
-# 	check_column_headers(col_headers, col_names)
-# 	return mq_metdata
-	# validation.get_validation_df(path)
-
-
-# def read_sample_metadata(path):
-# 	"""read metadata file"""
-# 	std_smpl_metadata = read_file(path)
-# 	col_headers = std_smpl_metadata.columns.values
-# 	col_names = [multiquant.MQ_SAMPLE_NAME]
-# 	check_column_headers(col_headers, col_names)
-
-
-	# return std_smpl_metadata
-
 
 def mq_merge_meta(input_data, metadata):
 	"""
