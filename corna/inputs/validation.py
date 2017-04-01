@@ -12,7 +12,7 @@ def get_validation_df(path, required_columns=None):
 	Args:
 		path: file path for which validation is needed
 
-	Returns: validated df
+	Returns: instance of validated df
 	"""
 	try:
 		basic_validator = get_class_inst(basic_validation.BasicValidator, path, required_columns)
@@ -22,7 +22,7 @@ def get_validation_df(path, required_columns=None):
 		raise
 
 def get_class_inst(validator_class, file_path, required_columns):
-	"""Instantiates class with its argument and returns its instance"""
+	"""Instantiates class with its argument and returns it"""
 
 	return validator_class(file_path, required_columns)
 
@@ -39,8 +39,19 @@ def basic_validation_result(basic_validator):
 		raise
 
 def data_validation_raw_df(df):
-	"""fun doc here"""
+	"""do datavalidtaion for raw_file_df and returns report_df
 
+	It takes df of raw_mq file, creates an instance of DataValidation
+	using this df. It then does validation related to file and returns
+	the report_df.
+
+	Args:
+		df: raw_mq_file df
+
+	Returns:
+		report_df contains report of error & warning in this df
+	"""
+	# :TODO: update doc when this function will be updated
 	try:
 		raw_df_validator = data_validation.DataValidator(df)
 		raw_df_validator.missing_data()
@@ -51,8 +62,19 @@ def data_validation_raw_df(df):
 		raise
 
 def data_validation_metadata_df(df):
-	"""func doc here"""
+	"""do datavalidtaion for metadata_mq_df and returns report_df
 
+	It takes df of metadata_mq file, creates an instance of DataValidation
+	using this df. It then does validation related to file and returns
+	the report_df.
+
+	Args:
+		df: metadata_mq_file df
+
+	Returns:
+		report_df contains report of error & warning in this df
+	"""
+	# :TODO: update doc when this function will be updated
 	try:
 		metadata_df_validator = data_validation.DataValidator(df)
 		metadata_df_validator.missing_data()
