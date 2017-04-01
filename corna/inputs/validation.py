@@ -45,7 +45,8 @@ def data_validation_raw_df(df):
 		raw_df_validator = data_validation.DataValidator(df)
 		raw_df_validator.missing_data()
 		raw_df_validator.numerical(['Area'])
-		raw_df_validator.pattern_match(['Mass Info'], '\d+.0 \/ \d+.0')
+		raw_df_validator.pattern_match('Mass Info', '\d+.0 \/ \d+.0')
+		return raw_df_validator.get_report_df()
 	except Exception as e:
 		raise
 
@@ -57,6 +58,7 @@ def data_validation_metadata_df(df):
 		metadata_df_validator.missing_data()
 		metadata_df_validator.chemical_formula(['Formula', 'Parent Formula'])
 		metadata_df_validator.value_in_constant('Isotopic Tracer', ['C13', 'N15'])
+		return metadata_df_validator.get_report_df()
 	except Exception as e:
 		raise
 
