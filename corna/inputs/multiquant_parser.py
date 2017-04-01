@@ -36,15 +36,60 @@ Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula'
 
 
 def get_validated_merge_df(input_files):
-	"""function doc here"""
+	"""takes inputting files, validate it and sends back merge df
 
-	raw_mq, metadata_mq, sample_metadata_mq = get_instance(input_files)
-	raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
-	validation.data_validation_raw_df(raw_mq_df)
-	validation.data_validation_metadata_df(metadata_mq.df)
+	This function takes input_files in form of dictionary in which
+	each key is name of file has value as path of file stored in
+	local folder. It then validates these file and returns df for
+	all of these files. It then calls a function to merge all of
+	df and returns merged_df to tool.
+
+	Args:
+		input_files: {
+			"mq_file_path": path_of_mq_file,
+			"mq_metadata_path": path_of_metadata_file,
+			"mq_sample_metadata_path": path_of_sample_metadata_file
+		}
+
+	Returns:
+		merged_df: merged_df of all 3 df's
+		logs: warnings and exception raised by olmonk package
+	"""
+
+	# :TODO: return param are missing, will be added when actions will
+	# :TODO: be completed in olmonk
+	# :TODO: Improve doc accordingly
+	try:
+		raw_mq, metadata_mq, sample_metadata_mq = get_instance(input_files)
+		raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
+		validation.data_validation_raw_df(raw_mq_df)
+		validation.data_validation_metadata_df(metadata_mq.df)
+	except Exception as e:
+		raise
 
 def get_instance(input_files):
-	"""function doc here"""
+	"""takes input file, do basic validation and returns instance of basic
+	validation class of olmonk package
+
+	This method gets file_path for dictionary of file_path, using basic
+	validation class validates the file and takes back that instance and
+	returns that instance.
+
+	Args:
+		input_files: {
+			"mq_file_path": path_of_mq_file,
+			"mq_metadata_path": path_of_metadata_file,
+			"mq_sample_metadata_path": path_of_sample_metadata_file
+		}
+
+	Returns:
+		raw_mq: instance of basic_validation class for raw_mq_file
+		metadata_mq: instance of basic_validation class for metadata_mq file
+		sample_metadata_mq: instance of basic_validation class for sample_metadata_mq file
+	"""
+
+	# :TODO: add exception handling in this file
+	# :TODO: move constants to constants.py file
 	mq_file_path = input_files.get("mq_file_path")
 	raw_mq = validation.get_validation_df(mq_file_path)
 	mq_metadata_path = input_files.get("mq_metadata_path")
@@ -58,8 +103,21 @@ def get_instance(input_files):
 	return raw_mq, metadata_mq, sample_metadata_mq
 
 def get_filtered_raw_mq_df(raw_mq, sample_metadata_mq):
-	"""function doc here"""
+	"""takes instance of basic_validation class of raw_mq & sample_metadata_mq
+	do validation and returns updated raw_mq df
 
+	using instance of raw_mq & sample_metadata_mq, it checks for subset and
+	intersection of specific column, which updates the df of raw_mq. It then
+	returns that update df fo raw_mq
+
+	Args:
+		raw_mq: instance of basic_validation class for raw_mq file
+		sample_metadata_mq: instance of basic_validation class for sample_metadata_file
+
+	Returns:
+		raw_mq.df: updates df of raw_mq file
+	"""
+	# :TODO: update doc with exceptions info
 	try:
 		raw_filename_set = get_set_from_df_column(raw_mq.df, 'Original Filename')
 		sample_metadata_mq.check_if_subset('Background Sample', raw_filename_set)
@@ -70,7 +128,8 @@ def get_filtered_raw_mq_df(raw_mq, sample_metadata_mq):
 		raise
 
 def get_set_from_df_column(df, col_name):
-	"""fun doc here"""
+	"""creates set of a particular column of a df"""
+
 	return set(list(df[col_name]))
 
 # def read_multiquant(dir_path):
