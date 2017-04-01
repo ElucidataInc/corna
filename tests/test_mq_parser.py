@@ -4,25 +4,30 @@ import pandas as pd
 from pandas.util.testing import assert_frame_equal
 import pytest
 
-from corna.inputs.multiquant_parser import concat_txts_into_df
+# from corna.inputs.multiquant_parser import concat_txts_into_df
+from corna.inputs import multiquant_parser
+from corna.olmonk import basic_validation, data_validation
 
+DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+MQ_FILE_PATH = os.path.join(DIR_PATH, 'test_input_validation_data', "raw_mq.txt")
+MQ_METADATA_PATH = os.path.join(DIR_PATH, 'test_input_validation_data', "metadata_mq.xlsx")
+MQ_SAMPLE_METADATA_PATH = os.path.join\
+	(DIR_PATH, 'test_input_validation_data', "metadata_sample.xlsx")
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
+def test_get_instance():
+	"""checks if this function returns instance of correct class
 
+	get_instance function takes input_files, validates all files,
+	and returns the instances of class having these files as output.
+	So, it test if returns instance is correct or not.
+	"""
+	# :TODO: add more extensive testing for this function
+	input_files = {"mq_file_path": MQ_FILE_PATH,\
+		"mq_metadata_path": MQ_METADATA_PATH,\
+		"mq_sample_metadata_path": MQ_SAMPLE_METADATA_PATH\
+		}
 
-def test_concat_txts_into_df_single():
-    mq_dir = os.path.join(dir_path,"test_mq_one_file")
-    known_df = pd.read_excel(os.path.join(dir_path,"txt_to_df_test_one_df.xls"))
-    test_df = concat_txts_into_df(mq_dir)
-    assert_frame_equal(known_df.sort_index(axis=1), test_df.sort_index(axis=1), check_names=True)
+	raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser.get_instance(input_files)
 
-def test_concat_txts_into_df_multiple():
-    mq_dir = os.path.join(dir_path, "test_mq_two_files")
-    known_df = pd.read_excel(os.path.join(dir_path, "txt_to_df_test_two_df.xlsx"))
-    test_df = concat_txts_into_df(mq_dir)
-    assert_frame_equal(known_df.sort_index(axis=1), test_df.sort_index(axis=1), check_names=True)
-
-def test_concat_txts_into_df_req_col():
-    mq_dir = os.path.join(dir_path,"test_mq_req_cols_exception")
-    with pytest.raises(AssertionError):
-         concat_txts_into_df(mq_dir)
+	assert isinstance(raw_mq, basic_validation.BasicValidator)
+	assert not isinstance(raw_mq, data_validation.DataValidator)
