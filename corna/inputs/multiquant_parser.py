@@ -40,16 +40,18 @@ def get_validated_merge_df(input_files):
 
 	raw_mq, metadata_mq, sample_metadata_mq = get_instance(input_files)
 	raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
+	validation.data_validation_raw_df(raw_mq_df)
+	validation.data_validation_metadata_df(metadata_mq.df)
 
 def get_instance(input_files):
 	"""function doc here"""
-	mq_file_path = input_files["mq_file_path"]
+	mq_file_path = input_files.get("mq_file_path")
 	raw_mq = validation.get_validation_df(mq_file_path)
-	mq_metadata_path = input_files["mq_metadata_path"]
+	mq_metadata_path = input_files.get("mq_metadata_path")
 	metadata_mq = validation.get_validation_df(mq_metadata_path)
 
 	if 'mq_sample_metadata_path' in input_files:
-		mq_sample_metadata_path = input_files["mq_sample_metadata_path"]
+		mq_sample_metadata_path = input_files.get("mq_sample_metadata_path")
 		sample_metadata_mq = validation.get_validation_df(mq_sample_metadata_path)
 	else:
 		sample_metadata_mq = None
