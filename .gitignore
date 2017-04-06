@@ -9,6 +9,13 @@
 *.pyc
 *.py~
 *.swp
+*.ipynb
+
+# Virtual Environment #
+#######################
+myenv/**
+.idea/**
+.cache/**
 
 # Packages #
 ############
@@ -44,6 +51,7 @@ Thumbs.db
 *.out
 *.*~
 *.sh*
+
 #data base files#
 ################
 *.db
@@ -56,8 +64,16 @@ Thumbs.db
 
 #data formats#
 #############
-*.xlsx
-*.xls
 *.cdat
-*.csv
 *.xml
+*.ipynb
+*.csv
+*.xls
+*.xlsx
+
+.cache/**
+dist/**
+corna.egg-info/**
+build/**
+.ipynb_checkpoints/**
+
