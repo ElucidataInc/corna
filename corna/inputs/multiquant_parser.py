@@ -6,7 +6,7 @@ import warnings
 import pandas as pd
 
 from .column_conventions import multiquant
-import constants
+from corna import constants
 from ..constants import INTENSITY_COL
 from corna.inputs import validation
 from ..data_model import standard_model

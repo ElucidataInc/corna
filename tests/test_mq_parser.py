@@ -28,7 +28,8 @@ def test_get_instance():
                    "mq_sample_metadata_path": MQ_SAMPLE_METADATA_PATH \
                    }
 
-    raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser.get_instance(input_files)
+    raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser.\
+                                                get_basic_validation_instance(input_files)
 
     assert isinstance(raw_mq, basic_validation.BasicValidator)
     assert not isinstance(raw_mq, data_validation.DataValidator)
@@ -38,3 +39,18 @@ def test_get_set_from_df_column():
     df = pd.read_table(MQ_FILE_PATH)
     assert type(multiquant_parser.get_set_from_df_column(df, 'Area')) == set
     assert len(multiquant_parser.get_set_from_df_column(df, 'Area')) == 7236
+
+
+def test_valid():
+    input_files = {"mq_file_path": MQ_FILE_PATH, \
+                   "mq_metadata_path": MQ_METADATA_PATH, \
+                   "mq_sample_metadata_path": MQ_SAMPLE_METADATA_PATH \
+                   }
+    raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser.\
+                                                get_validated_df_and_logs(input_files)
+
+    assert len(raw_mq.logs['warnings']['message']) == 3126
+    assert len(metadata_mq.logs['warnings']['message']) == 0
+    assert raw_mq.df.shape == (11252, 6)
+    assert metadata_mq.df.shape == (75, 5)
+
