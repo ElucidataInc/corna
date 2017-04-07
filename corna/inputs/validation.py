@@ -23,12 +23,12 @@ def get_validation_df(path, required_columns=None):
         raise Exception(e)
 
 
-def get_class_inst(validator_class, file_path, required_columns):
+def get_class_inst(class_name, file_path, required_columns):
     """
     Instantiates class with its argument and returns it
     """
 
-    return validator_class(file_path, required_columns)
+    return class_name(file_path, required_columns)
 
 
 def basic_validation_result(basic_validator):
