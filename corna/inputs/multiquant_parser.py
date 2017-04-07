@@ -26,23 +26,19 @@ def get_validated_df_and_logs(input_files):
 
     Args:
         input_files: {
-            "mq_file_path": path_of_mq_file,
-            "mq_metadata_path": path_of_metadata_file,
-            "mq_sample_metadata_path": path_of_sample_metadata_file
+            "mq_file_path": absolute path_of_mq_file,
+            "mq_metadata_path": absolute path_of_metadata_file,
+            "mq_sample_metadata_path": absolute path_of_sample_metadata_file
         }
 
     Returns:
-        validated_raw_mq: instance of data_validation class containing
+        validated_raw_mq: instance of DATA VALIDATION class containing
             logs & validated_df for raw_mq file.
-        validated_metadata_mq: instance of data_validation class containing
+        validated_metadata_mq: instance of DATA VALIDATION class containing
             logs & validated_df for metadata_mq file.
-        sample_metadata_mq: instance of basic_validation class containing
+        sample_metadata_mq: instance of BASIC VALIDATION class containing
             validated_df for sample_metadata_mq file.                        
     """
-
-    # :TODO: return param are missing, will be added when actions will
-    # :TODO: be completed in olmonk
-    # :TODO: Improve doc accordingly
     try:
         raw_mq, metadata_mq, sample_metadata_mq = get_basic_validation_instance(input_files)
         if sample_metadata_mq:
