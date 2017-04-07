@@ -41,7 +41,7 @@ def test_get_set_from_df_column():
     assert len(multiquant_parser.get_set_from_df_column(df, 'Area')) == 7236
 
 
-def test_valid():
+def test_get_validated_df_and_logs():
     input_files = {"mq_file_path": MQ_FILE_PATH, \
                    "mq_metadata_path": MQ_METADATA_PATH, \
                    "mq_sample_metadata_path": MQ_SAMPLE_METADATA_PATH \
@@ -53,4 +53,22 @@ def test_valid():
     assert len(metadata_mq.logs['warnings']['message']) == 0
     assert raw_mq.df.shape == (11252, 6)
     assert metadata_mq.df.shape == (75, 5)
+    assert sample_metadata_mq.df.shape == (96, 9)
+
+
+def test_get_validated_df_logs_without_sample_metadata():
+    input_files = {"mq_file_path": MQ_FILE_PATH, \
+                   "mq_metadata_path": MQ_METADATA_PATH, \
+                   "mq_sample_metadata_path": None
+                   }
+
+    raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser. \
+        get_validated_df_and_logs(input_files)
+
+    assert len(raw_mq.logs['warnings']['message']) == 3126
+    assert len(metadata_mq.logs['warnings']['message']) == 0
+    assert raw_mq.df.shape == (11252, 6)
+    assert metadata_mq.df.shape == (75, 5)
+    assert sample_metadata_mq == None
+
 
