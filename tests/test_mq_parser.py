@@ -14,7 +14,12 @@ MQ_METADATA_PATH = os.path.join(DIR_PATH, 'test_input_validation_data', "metadat
 MQ_SAMPLE_METADATA_PATH = os.path.join \
     (DIR_PATH, 'test_input_validation_data', "metadata_sample.xlsx")
 
+INPUT_FILES = {"mq_file_path": MQ_FILE_PATH, \
+                   "mq_metadata_path": MQ_METADATA_PATH, \
+                   "mq_sample_metadata_path": MQ_SAMPLE_METADATA_PATH \
+                   }
 
+# TODO : fixtures can be defined for many constants
 def test_get_instance():
     """checks if this function returns instance of correct class
 
@@ -23,13 +28,8 @@ def test_get_instance():
     So, it test if returns instance is correct or not.
     """
     # :TODO: add more extensive testing for this function
-    input_files = {"mq_file_path": MQ_FILE_PATH, \
-                   "mq_metadata_path": MQ_METADATA_PATH, \
-                   "mq_sample_metadata_path": MQ_SAMPLE_METADATA_PATH \
-                   }
-
     raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser.\
-                                                get_basic_validation_instance(input_files)
+                                                get_basic_validation_instance(INPUT_FILES)
 
     assert isinstance(raw_mq, basic_validation.BasicValidator)
     assert not isinstance(raw_mq, data_validation.DataValidator)
@@ -42,12 +42,9 @@ def test_get_set_from_df_column():
 
 
 def test_get_validated_df_and_logs():
-    input_files = {"mq_file_path": MQ_FILE_PATH, \
-                   "mq_metadata_path": MQ_METADATA_PATH, \
-                   "mq_sample_metadata_path": MQ_SAMPLE_METADATA_PATH \
-                   }
+
     raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser.\
-                                                get_validated_df_and_logs(input_files)
+                                                get_validated_df_and_logs(INPUT_FILES)
 
     assert len(raw_mq.logs['warnings']['message']) == 3126
     assert len(metadata_mq.logs['warnings']['message']) == 0
@@ -57,13 +54,9 @@ def test_get_validated_df_and_logs():
 
 
 def test_get_validated_df_logs_without_sample_metadata():
-    input_files = {"mq_file_path": MQ_FILE_PATH, \
-                   "mq_metadata_path": MQ_METADATA_PATH, \
-                   "mq_sample_metadata_path": None
-                   }
 
     raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser. \
-        get_validated_df_and_logs(input_files)
+        get_validated_df_and_logs(INPUT_FILES)
 
     assert len(raw_mq.logs['warnings']['message']) == 3126
     assert len(metadata_mq.logs['warnings']['message']) == 0
