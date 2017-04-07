@@ -20,7 +20,7 @@ def get_validation_df(path, required_columns=None):
         basic_validation_result(basic_validator)
         return basic_validator
     except Exception as e:
-        raise
+        raise Exception(e)
 
 
 def get_class_inst(validator_class, file_path, required_columns):
