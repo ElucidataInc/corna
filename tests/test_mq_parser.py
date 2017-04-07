@@ -36,5 +36,5 @@ def test_get_instance():
 
 def test_get_set_from_df_column():
     df = pd.read_table(MQ_FILE_PATH)
-    print type(multiquant_parser.get_set_from_df_column(df, 'Area'))
-    print len(multiquant_parser.get_set_from_df_column(df, 'Area'))
+    assert type(multiquant_parser.get_set_from_df_column(df, 'Area')) == set
+    assert len(multiquant_parser.get_set_from_df_column(df, 'Area')) == 7236
