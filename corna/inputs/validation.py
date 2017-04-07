@@ -39,7 +39,7 @@ def basic_validation_result(basic_validator):
         basic_validator.check_file_empty()
         basic_validator.check_if_convert_to_df()
     except Exception as e:
-        raise
+        raise Exception(e)
 
 
 def data_validation_raw_df(df):
@@ -64,7 +64,7 @@ def data_validation_raw_df(df):
         raw_df_validator.perform_action_and_generate_logs()
         return raw_df_validator
     except Exception as e:
-        raise
+        raise Exception(e)
 
 
 def data_validation_metadata_df(df):
@@ -89,4 +89,4 @@ def data_validation_metadata_df(df):
         metadata_df_validator.perform_action_and_generate_logs()
         return metadata_df_validator
     except Exception as e:
-        raise
+        raise Exception(e)

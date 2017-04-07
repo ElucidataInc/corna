@@ -53,7 +53,7 @@ def get_validated_df_and_logs(input_files):
         validated_metadata_mq = validation.data_validation_metadata_df(metadata_mq.df)
         return validated_raw_mq, validated_metadata_mq, sample_metadata_mq
     except Exception as e:
-        raise e
+        raise Exception(e)
 
 
 def get_basic_validation_instance(input_files):
@@ -119,7 +119,7 @@ def get_filtered_raw_mq_df(raw_mq, sample_metadata_mq):
         raw_mq.check_if_intersect(constants.ORIGINAL_FILENAME, sample_filename_set)
         return raw_mq.df
     except Exception as e:
-        raise e
+        raise Exception(e)
 
 
 def get_set_from_df_column(df, col_name):
