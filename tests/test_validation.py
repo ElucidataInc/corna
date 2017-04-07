@@ -54,9 +54,7 @@ def test_data_validation_metadata_df_exception():
 
 
 def test_basic_validation_result():
-    required_column = None
-    print '--before class inst'
-    basic_valid_class = basic_validation.BasicValidator('')
-    print '--before exception--'
+    # TODO: This case will fail
+    basic_valid_class = basic_validation.BasicValidator('some_invalid_path')
     with pytest.raises(Exception) as e_info:
         validation.basic_validation_result(basic_valid_class)
