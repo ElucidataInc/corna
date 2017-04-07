@@ -1,7 +1,7 @@
 """This module helps to do validation using validation package olmonk"""
 
+from corna import constants
 from olmonk import basic_validation, data_validation
-
 
 def get_validation_df(path, required_columns=None):
     """takes path of the file, validates it and returns result
@@ -24,14 +24,18 @@ def get_validation_df(path, required_columns=None):
 
 
 def get_class_inst(validator_class, file_path, required_columns):
-    """Instantiates class with its argument and returns it"""
+    """
+    Instantiates class with its argument and returns it
+    """
 
     return validator_class(file_path, required_columns)
 
 
 def basic_validation_result(basic_validator):
-    """Takes instance of class, do basic validation and raise error
-    if any check fails
+    """
+    Takes instance of BASIC VALIDATION class, do basic validation
+    such as if file path exists, is file empty. This function will
+    raise an error if any check fails.
     """
 
     try:
@@ -59,8 +63,9 @@ def data_validation_raw_df(df):
     try:
         raw_df_validator = data_validation.DataValidator(df)
         raw_df_validator.missing_data()
-        raw_df_validator.numerical(['Area'])
-        raw_df_validator.pattern_match('Mass Info', '\d+.0 \/ \d+.0')
+        raw_df_validator.numerical(constants.AREA_COLUMN_RAWFILE)
+        raw_df_validator.pattern_match([constants.MASSINFO_COL],
+                                       constants.PATTERN_MASSINFO_COL)
         raw_df_validator.perform_action_and_generate_logs()
         return raw_df_validator
     except Exception as e:
@@ -68,7 +73,8 @@ def data_validation_raw_df(df):
 
 
 def data_validation_metadata_df(df):
-    """do datavalidtaion for metadata_mq_df and returns report_df
+    """do datavalidtaion for metadata_mq_df and returns instance of
+    DATA VALIDATION class.
 
     It takes df of metadata_mq file, creates an instance of DataValidation
     using this df. It then does validation related to file and returns
@@ -84,8 +90,9 @@ def data_validation_metadata_df(df):
     try:
         metadata_df_validator = data_validation.DataValidator(df)
         metadata_df_validator.missing_data()
-        metadata_df_validator.chemical_formula(['Formula', 'Parent Formula'])
-        metadata_df_validator.value_in_constant('Isotopic Tracer', ['C13', 'N15'])
+        metadata_df_validator.chemical_formula(constants.FORMULA_COL_METADATAFILE)
+        metadata_df_validator.value_in_constant(constants.ISOTRACER_COL,
+                                                constants.ISOTOPE_VALUES)
         metadata_df_validator.perform_action_and_generate_logs()
         return metadata_df_validator
     except Exception as e:
