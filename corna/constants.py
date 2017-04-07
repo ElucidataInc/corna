@@ -51,9 +51,15 @@ WARNING_STATE = [DUPLICATE_STATE,MISSING_STATE]
 VALIDATION_COLUMN_NAME = 'column'
 VALIDATION_MSG_ROW_DROPPED = "Row is Dropped"
 VALIDATION_MSG_FILL_NA = "Missing value of columns replaced with 0"
-
 ##Keys in ISOTOPE_NA_MASS dictionary
 KEY_NA = "naValue"
 KEY_AMU = "amu"
 KEY_ELE = "element"
 KEY_NAT_ISO = "naturalIsotope"
+ORIGINAL_FILENAME = "Original Filename"
+BACKGROUND_SAMPLE = "Background Sample"
+FORMULA_COL_METADATAFILE = ['Formula', 'Parent Formula']
+AREA_COLUMN_RAWFILE = ['Area']
+COLUMN_ISOTOPE_TRACER = 'Isotopic Tracer'
+ISOTOPE_VALUES = ['C13', 'N15']
+PATTERN_MASSINFO_COL = '\d+.0 \/ \d+.0'
