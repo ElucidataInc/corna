@@ -72,3 +72,10 @@ def test_get_validated_df_logs_without_sample_metadata():
     assert sample_metadata_mq == None
 
 
+def test_filtered_raw_mq_df():
+    raw_mq = basic_validation.BasicValidator(MQ_FILE_PATH)
+    sample_metadata = basic_validation.BasicValidator(MQ_SAMPLE_METADATA_PATH)
+
+    df = multiquant_parser.get_filtered_raw_mq_df(raw_mq, sample_metadata)
+
+    assert df.shape == (11252, 6)
