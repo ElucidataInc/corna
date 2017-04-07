@@ -57,11 +57,12 @@ def get_validated_df_and_logs(input_files):
 
 
 def get_basic_validation_instance(input_files):
-    """takes input file, do basic validation and returns instance of basic
-    validation class of olmonk package
+    """takes input file, does basic validation and returns instance of BASIC
+    VALIDATION class of olmonk package
 
-    This method takes dictionary of file_path, using basic validation class
-    it validates the file and returns back that instance.
+    This method takes dictionary of file_path, using BASIC VALIDATION class
+    it validates the file and returns back the BASIC VALIDATION class instance
+    of the file.
 
     Args:
         input_files: {
@@ -92,9 +93,13 @@ def get_basic_validation_instance(input_files):
 
 
 def get_filtered_raw_mq_df(raw_mq, sample_metadata_mq):
-    """takes instance of basic_validation class of raw_mq & sample_metadata_mq
-    do validation and returns updated raw_mq df
+    """
+    This function apply validation on the the raw_mq df using columns of
+    sample_metadata df as arguments and returns a filtered df
+    according to the validation report.
 
+    The function takes instance of basic_validation class of raw_mq &
+    sample_metadata_mq do validation and returns updated raw_mq df
     using instance of raw_mq & sample_metadata_mq, it checks for subset and
     intersection of specific column, which updates the df of raw_mq. It then
     returns updated df of raw_mq
