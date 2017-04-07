@@ -1,27 +1,28 @@
+from collections import namedtuple
 import os
 import warnings
-from collections import namedtuple
+
 
 import pandas as pd
 
 from .column_conventions import multiquant
+import constants
 from ..constants import INTENSITY_COL
+from corna.inputs import validation
 from ..data_model import standard_model
 from ..helpers import read_file, get_unique_values, check_column_headers
 from ..isotopomer import bulk_insert_data_to_fragment
-from corna.inputs import validation
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
 
 
-def get_validated_merge_df(input_files):
-    """takes inputting files, validate it and sends back merge df
+def get_validated_df_and_logs(input_files):
+    """takes input files, validate it and sends back merge df
 
-    This function takes input_files in form of dictionary in which
-    each key is name of file has value as path of file stored in
-    local folder. It then validates these file and returns df for
-    all of these files. It then calls a function to merge all of
-    df and returns merged_df to tool.
+    This function takes input_file path in form of dictionary in which
+    each key is name of the file and value as path of the file stored in
+    local folder. It then validates these file and returns instance of
+    all these files having validated df and its logs
 
     Args:
         input_files: {
@@ -31,15 +32,19 @@ def get_validated_merge_df(input_files):
         }
 
     Returns:
-        merged_df: merged_df of all 3 df's
-        logs: warnings and exception raised by olmonk package
+        validated_raw_mq: instance of data_validation class containing
+            logs & validated_df for raw_mq file.
+        validated_metadata_mq: instance of data_validation class containing
+            logs & validated_df for metadata_mq file.
+        sample_metadata_mq: instance of basic_validation class containing
+            validated_df for sample_metadata_mq file.                        
     """
 
     # :TODO: return param are missing, will be added when actions will
     # :TODO: be completed in olmonk
     # :TODO: Improve doc accordingly
     try:
-        raw_mq, metadata_mq, sample_metadata_mq = get_instance(input_files)
+        raw_mq, metadata_mq, sample_metadata_mq = get_basic_validation_instance(input_files)
         if sample_metadata_mq:
             raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
         else:
@@ -48,16 +53,15 @@ def get_validated_merge_df(input_files):
         validated_metadata_mq = validation.data_validation_metadata_df(metadata_mq.df)
         return validated_raw_mq, validated_metadata_mq, sample_metadata_mq
     except Exception as e:
-        raise
+        raise e
 
 
-def get_instance(input_files):
+def get_basic_validation_instance(input_files):
     """takes input file, do basic validation and returns instance of basic
     validation class of olmonk package
 
-    This method gets file_path for dictionary of file_path, using basic
-    validation class validates the file and takes back that instance and
-    returns that instance.
+    This method takes dictionary of file_path, using basic validation class
+    it validates the file and returns back that instance.
 
     Args:
         input_files: {
@@ -93,7 +97,7 @@ def get_filtered_raw_mq_df(raw_mq, sample_metadata_mq):
 
     using instance of raw_mq & sample_metadata_mq, it checks for subset and
     intersection of specific column, which updates the df of raw_mq. It then
-    returns that update df fo raw_mq
+    returns updated df of raw_mq
 
     Args:
         raw_mq: instance of basic_validation class for raw_mq file
@@ -104,13 +108,13 @@ def get_filtered_raw_mq_df(raw_mq, sample_metadata_mq):
     """
     # :TODO: update doc with exceptions info
     try:
-        raw_filename_set = get_set_from_df_column(raw_mq.df, 'Original Filename')
-        sample_metadata_mq.check_if_subset('Background Sample', raw_filename_set)
-        sample_filename_set = get_set_from_df_column(sample_metadata_mq.df, 'Original Filename')
-        raw_mq.check_if_intersect('Original Filename', sample_filename_set)
+        raw_filename_set = get_set_from_df_column(raw_mq.df, constants.ORIGINAL_FILENAME)
+        sample_metadata_mq.check_if_subset(constants.BACKGROUND_SAMPLE, raw_filename_set)
+        sample_filename_set = get_set_from_df_column(sample_metadata_mq.df, constants.ORIGINAL_FILENAME)
+        raw_mq.check_if_intersect(constants.ORIGINAL_FILENAME, sample_filename_set)
         return raw_mq.df
     except Exception as e:
-        raise
+        raise e
 
 
 def get_set_from_df_column(df, col_name):
