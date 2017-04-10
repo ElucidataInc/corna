@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import pytest
 
+import constants
 from corna.validation_report_class import ValidationReport
 
 
@@ -28,13 +29,15 @@ class TestValidationReport():
     def test_generate_report(self):
         df = get_test_df()
         self.validation.report_dataframe = df
-        test_result = {0: {'warnings': [['Name', 'missing']], 'errors': []}}
+        test_result = {0: {constants.VALIDATION_WARNING: [['Name', 'missing']],
+                           constants.VALIDATION_ERROR: []}}
         assert self.validation.generate_report() == test_result
 
     def test_generate_action(self):
         df = get_test_df()
         self.validation.report_dataframe = df
-        test_result = {0: {'warnings': [['Name', 'missing', 'DROP']], 'errors': []}}
+        test_result = {0: {constants.VALIDATION_WARNING: [['Name', 'missing', 'DROP']],
+                           constants.VALIDATION_ERROR: []}}
         assert self.validation.generate_action() == test_result
 
     def test_decide_action(self):
