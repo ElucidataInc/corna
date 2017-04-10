@@ -4,7 +4,6 @@ import pandas as pd
 
 from pandas.util.testing import assert_frame_equal
 
-import constants
 from corna import custom_exception
 from corna.inputs import maven_parser
 import constants
