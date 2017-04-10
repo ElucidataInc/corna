@@ -64,7 +64,7 @@ def data_validation_raw_df(df):
         raw_df_validator = data_validation.DataValidator(df)
         raw_df_validator.missing_data()
         raw_df_validator.numerical(constants.AREA_COLUMN_RAWFILE)
-        raw_df_validator.pattern_match([constants.MASSINFO_COL],
+        raw_df_validator.pattern_match(constants.MASSINFO_COL,
                                        constants.PATTERN_MASSINFO_COL)
         raw_df_validator.perform_action_and_generate_logs()
         return raw_df_validator
