@@ -28,13 +28,13 @@ class TestValidationReport():
     def test_generate_report(self):
         df = get_test_df()
         self.validation.report_dataframe = df
-        test_result = {0: {'warning': [['Name', 'missing']], 'errors': []}}
+        test_result = {0: {'warnings': [['Name', 'missing']], 'errors': []}}
         assert self.validation.generate_report() == test_result
 
     def test_generate_action(self):
         df = get_test_df()
         self.validation.report_dataframe = df
-        test_result = {0: {'warning': [['Name', 'missing', 'DROP']], 'errors': []}}
+        test_result = {0: {'warnings': [['Name', 'missing', 'DROP']], 'errors': []}}
         assert self.validation.generate_action() == test_result
 
     def test_decide_action(self):
