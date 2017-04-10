@@ -23,3 +23,8 @@ MAVEN_FILE_PATH_EMPTY_INTERSECTION = os.path.join(DIR_PATH, "test_input_validati
 
 MAVEN_FILE_PATH_DUPLICATE_ENTRY = os.path.join(DIR_PATH, "test_input_validation_data",
                                                "test_maven_upload_duplicate_entry.csv")
+
+VALIDATION_WARNING = 'warnings'
+VALIDATION_ERROR = 'errors'
+VALIDATION_MESSAGE = 'message'
+VALIDATION_ACTION = 'action'
