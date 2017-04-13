@@ -3,15 +3,28 @@ from numpy.linalg import pinv
 import pandas as pd
 
 <<<<<<< HEAD:corna/algorithms/matrix_calc.py
+<<<<<<< HEAD:corna/algorithms/matrix_calc.py
 from corna.constants import ISOTOPE_NA_MASS, KEY_ELE
 =======
 >>>>>>> Chnage import statements from relative to absoulte imports:corna/algorithms/nacorr_correction_matrix/algorithms.py
 from corna.inputs.maven_parser import frag_key
 from corna.helpers import get_isotope_element
+=======
+>>>>>>> Add TODO to rename functions and detail documentation of the same:corna/algorithms/nacorr_correction_matrix/algorithms.py
 from corna.data_model import standard_model
+from corna.inputs.maven_parser import frag_key
 from corna.isotopomer import bulk_insert_data_to_fragment, Infopacket
 <<<<<<< HEAD:corna/algorithms/matrix_calc.py
+<<<<<<< HEAD:corna/algorithms/matrix_calc.py
 =======
+=======
+from corna.helpers import get_isotope_element
+
+
+# TODO: Function name needs to change
+# TODO: fragmentsdict_model and fragmentsdicts_model creating confusion
+# TODO: Documentation with examples need to be added for functions
+>>>>>>> Add TODO to rename functions and detail documentation of the same:corna/algorithms/nacorr_correction_matrix/algorithms.py
 
 >>>>>>> Chnage import statements from relative to absoulte imports:corna/algorithms/nacorr_correction_matrix/algorithms.py
 
@@ -160,6 +173,7 @@ def label_sample_df(iso_tracers, fragments_dict):
     sam_lab_df = sam_lab_df.set_index(iso_tracers)
     sam_lab_df.columns.name = 'Sample'
     return sam_lab_df
+
 
 def formuladict(fragments_dict):
     """
