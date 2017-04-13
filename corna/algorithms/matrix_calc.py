@@ -1,13 +1,19 @@
-
 import numpy as np
 from numpy.linalg import pinv
 import pandas as pd
 
+<<<<<<< HEAD:corna/algorithms/matrix_calc.py
 from corna.constants import ISOTOPE_NA_MASS, KEY_ELE
+=======
+>>>>>>> Chnage import statements from relative to absoulte imports:corna/algorithms/nacorr_correction_matrix/algorithms.py
 from corna.inputs.maven_parser import frag_key
 from corna.helpers import get_isotope_element
 from corna.data_model import standard_model
 from corna.isotopomer import bulk_insert_data_to_fragment, Infopacket
+<<<<<<< HEAD:corna/algorithms/matrix_calc.py
+=======
+
+>>>>>>> Chnage import statements from relative to absoulte imports:corna/algorithms/nacorr_correction_matrix/algorithms.py
 
 def make_expected_na_matrix(N, pvec):
     """for a single labeled element, create the matrix M
@@ -17,8 +23,8 @@ def make_expected_na_matrix(N, pvec):
     N: number of atoms of this element
     pvec: expected isotopic distribution (e.g. [0.99,0.01])"""
 
-    max_label=1+(N*(len(pvec)-1))
-    correction_matrix = np.zeros((max_label,N+1))
+    max_label = 1+(N*(len(pvec)-1))
+    correction_matrix = np.zeros((max_label, N+1))
     for i in range(N+1):
         column = np.zeros(i+1)
         column[-1]=1.0
@@ -27,6 +33,7 @@ def make_expected_na_matrix(N, pvec):
         column.resize(max_label)
         correction_matrix[:, i] = column
     return correction_matrix
+
 
 def add_indistinguishable_element(M,n,pvec):
     """to a matrix M formed by make_expected_na_matrix, add additional expected
@@ -43,6 +50,7 @@ def add_indistinguishable_element(M,n,pvec):
             M_new[:, i] = np.convolve(M_new[:, i], pvec)[:M_new.shape[0]]
     #print M_new
     return M_new
+
 
 def make_correction_matrix(trac_atom, formuladict, na_dict, indist_elems):
     """create matrix M such that Mx=y where y is the observed isotopic distribution
@@ -73,6 +81,7 @@ def make_all_corr_matrices(isotracers, formula_dict, na_dict, eleme_corr):
             indist_list = []
         corr_mats[isotracer] = make_correction_matrix(trac_atom, formula_dict, na_dict, indist_list)
     return corr_mats
+
 
 def fragmentsdict_model(merged_df, intensity_col):
     """
