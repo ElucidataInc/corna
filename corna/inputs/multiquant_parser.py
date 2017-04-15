@@ -7,13 +7,13 @@ import warnings
 
 import pandas as pd
 
-from .column_conventions import multiquant
+from corna.inputs.column_conventions import multiquant
 from corna import constants
-from ..constants import INTENSITY_COL
+from corna.constants import INTENSITY_COL
 from corna.inputs import validation
-from ..data_model import standard_model
-from ..helpers import read_file, get_unique_values, check_column_headers
-from ..isotopomer import bulk_insert_data_to_fragment
+from corna.data_model import standard_model
+from corna.helpers import read_file, get_unique_values, check_column_headers
+from corna.isotopomer import bulk_insert_data_to_fragment
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
 
