@@ -89,12 +89,17 @@ def sum_intensities(fragments_dict):
     Returns:
         sum_dict :  dictionary of sum of all corrected intensities for each sample
     """
-    all_values = fragments_dict.values()
-    sample_names = all_values[1].data.keys()
+    all_frag_info = fragments_dict.values()
+
+    sample_names = []
+    for frag in all_frag_info:
+        sample_names.extend(frag.data.keys())
+    sample_names = list(set(sample_names))
+
     sum_dict = {}
 
     for sample_name in sample_names:
-        sum_dict[sample_name] = sum(value.data[sample_name] for value in all_values)
+        sum_dict[sample_name] = sum(value.data.get(sample_name,0) for value in all_frag_info)
 
     return sum_dict
 
