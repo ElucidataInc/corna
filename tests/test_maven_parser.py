@@ -166,3 +166,16 @@ def test_get_extraced_isotracer_df(get_maven_df):
 def test_isotracer_dict(get_maven_df):
     maven_df = get_maven_df
     assert maven_parser.get_isotracer_dict(maven_df) == {'C13': 2, 'C13N15': 1}
+
+
+def test_get_extracted_element():
+
+    assert maven_parser.get_extracted_element('C3H2O6') == {'H': 2, 'C': 3, 'O': 6}
+    assert maven_parser.get_extracted_element('SiH2O6') == {'H': 2, 'Si': 1, 'O': 6}
+    assert maven_parser.get_extracted_element('C3H2KFe') == {'H': 2, 'C': 3, 'K': 1, 'Fe': 1}
+
+
+def test_get_element_list():
+    input_df = read_csv(constants.MAVEN_FILE)
+
+    assert maven_parser.get_element_list(input_df) == ['C', 'H', 'O', 'N']
