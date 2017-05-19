@@ -7,11 +7,11 @@ from corna import constants as con
 from corna import input_validation
 from corna import dataframe_validator
 from corna.custom_exception import NoIntersectionError
+from corna.helpers import get_formula
 from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
 from corna.validation_report_class import ValidationReport
 
-from corna.helpers import get_formula
 
 MavenKey = namedtuple('MavenKey', 'name formula')
 
