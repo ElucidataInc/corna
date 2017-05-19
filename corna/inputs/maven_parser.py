@@ -316,6 +316,7 @@ def get_extracted_element(formula):
     :param formula: Formula to be parsed
     :return: dict with keys containing different elements in the formula
     """
+    # TODO: Similar to get formula can be modified for further advancement
     return get_formula(formula)
 
 
