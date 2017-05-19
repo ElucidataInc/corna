@@ -7,9 +7,11 @@ from corna import constants as con
 from corna import input_validation
 from corna import dataframe_validator
 from corna.custom_exception import NoIntersectionError
+from corna.helpers import get_formula
 from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
 from corna.validation_report_class import ValidationReport
+
 
 MavenKey = namedtuple('MavenKey', 'name formula')
 
@@ -307,6 +309,17 @@ def get_extracted_isotracer(label):
         return label.split('-label-')[0]
 
 
+def get_extracted_element(formula):
+    """
+    This function parse chemical formula and returns different elements
+     in the formula.
+    :param formula: Formula to be parsed
+    :return: dict with keys containing different elements in the formula
+    """
+    # TODO: Similar to get formula can be modified for further advancement
+    return get_formula(formula)
+
+
 def get_extraced_isotracer_df(maven_df):
     """
     This function extract iso-tracer information of
@@ -327,6 +340,20 @@ def get_isotracer_dict(maven_df):
     """
     isotracer_df = get_extraced_isotracer_df(maven_df)
     return isotracer_df.value_counts().to_dict()
+
+
+def get_element_list(maven_df):
+    """
+    This function gives list of uniqu element present in the formula 
+    column of maven df.
+    :param maven_df:  df whose element is to be listed out
+    :return: list of unique element in formula column
+    """
+    element_dict = dict()
+    extracted_formula_series = maven_df[con.FORMULA_COL].apply(get_extracted_element)
+    extracted_formula_series.apply(lambda x: element_dict.update(x))
+
+    return element_dict.keys()
 
 
 def check_df_empty(df):
@@ -460,6 +487,7 @@ def read_maven_file(maven_file_path, metadata_path):
     if not check_error_present(validation_logs):
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
         merged_df = get_merge_df(corrected_maven_df, metadata_df)
-        return merged_df, validation_logs, isotracer_dict
+        unique_element_list = get_element_list(corrected_maven_df)
+        return merged_df, validation_logs, isotracer_dict, unique_element_list
     else:
         return corrected_maven_df, validation_logs, None
