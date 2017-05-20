@@ -11,7 +11,7 @@ from fixtures import *
 
 
 def test_read_input_file_all_correct(get_mergedf_all_correct):
-    result_df, result_log, _ = maven_parser.read_maven_file(constants.MAVEN_FILE, constants.METADATA_FILE)
+    result_df, result_log, _, _ = maven_parser.read_maven_file(constants.MAVEN_FILE, constants.METADATA_FILE)
     test_df = get_mergedf_all_correct
     test_log = {constants.VALIDATION_WARNING: {constants.VALIDATION_ACTION: [],
                                                constants.VALIDATION_MESSAGE: []},
@@ -25,14 +25,14 @@ def test_read_input_file_no_metadata(get_mergedf_no_metadata):
     test_log = {constants.VALIDATION_WARNING: {constants.VALIDATION_ACTION: [],
                                                constants.VALIDATION_MESSAGE: []},
                 constants.VALIDATION_ERROR: []}
-    result_df, result_log, _ = maven_parser.read_maven_file(constants.MAVEN_FILE, None)
+    result_df, result_log, _, _ = maven_parser.read_maven_file(constants.MAVEN_FILE, None)
     assert result_log == test_log
     assert result_df.equals(test_df)
 
 
 def test_read_input_file_error_in_maven_file():
     maven_file_path = constants.MAVEN_FILE_INTENSITY_INCORRECT
-    result_df, result_log, _ = maven_parser.read_maven_file(maven_file_path, constants.METADATA_FILE)
+    result_df, result_log, _, _ = maven_parser.read_maven_file(maven_file_path, constants.METADATA_FILE)
 
     test_log = {constants.VALIDATION_WARNING: {
                 constants.VALIDATION_ACTION: [], constants.VALIDATION_MESSAGE: []},
@@ -46,7 +46,7 @@ def test_read_input_file_error_in_maven_file():
 
 def test_read_input_file_warning_in_maven(get_mergedf_warning):
     maven_file_path = constants.MAVEN_FILE_PATH_DUPLICATE_ENTRY
-    result_df, result_log, _ = maven_parser.read_maven_file(maven_file_path, constants.METADATA_FILE)
+    result_df, result_log, _, _ = maven_parser.read_maven_file(maven_file_path, constants.METADATA_FILE)
     test_log = {constants.VALIDATION_WARNING: {constants.VALIDATION_ACTION:
                                                    ['Row is Dropped', 'Row is Dropped'],
                                                constants.VALIDATION_MESSAGE:
