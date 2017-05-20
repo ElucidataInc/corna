@@ -1,3 +1,11 @@
+"""
+Note: 
+    NA values are referenced from paper Correcting Mass Isotopomer
+    Distributions for Naturally Occurring Isotopes.
+    By: Wouter A. van Winden,1* Christoph Wittmann,2 Elmar Heinzle,2
+    Joseph J. Heijnen
+"""
+
 import os
 import json
 
@@ -63,3 +71,5 @@ AREA_COLUMN_RAWFILE = ['Area']
 COLUMN_ISOTOPE_TRACER = 'Isotopic Tracer'
 ISOTOPE_VALUES = ['C13', 'N15', 'H2', 'S34']
 PATTERN_MASSINFO_COL = '\d+.0 \/ \d+.0'
+
+
