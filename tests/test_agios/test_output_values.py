@@ -1,10 +1,8 @@
-import pytest
 import pandas as pd
-from corna.algorithms.nacorr_correction_matrix.na_correction import na_correction
+import pytest
+
+from corna.algorithms.matrix_nacorr import na_correction
 from corna.output import convert_to_df
-
-
-
 
 single_tracers = ['C13']
 multi_tracers = ['C13', 'N15']

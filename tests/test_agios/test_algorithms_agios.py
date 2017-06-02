@@ -1,12 +1,11 @@
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
 
 import corna.helpers as hl
-from corna.model import Fragment
 import corna.isotopomer as iso
-from corna.algorithms.nacorr_correction_matrix import algorithms as algo
-
+from corna.algorithms import matrix_calc as algo
+from corna.model import Fragment
 
 iso_tracer = ['C13']
 

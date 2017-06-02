@@ -7,10 +7,10 @@ dictionary model which can further be used in post processing function, converti
 import numpy as np
 import pandas as pd
 
+import corna.algorithms.matrix_calc as algo
+from corna.constants import INTENSITY_COL
 from corna.helpers import get_isotope_element, first_sub_second
 from corna.inputs.maven_parser import convert_labels_to_std
-import corna.algorithms.nacorr_correction_matrix.algorithms as algo
-from corna.constants import INTENSITY_COL
 
 
 def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
@@ -30,7 +30,7 @@ def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
 
 def nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict):
     """
-    This function is wrapper around algorithms.py function. It performs na correction
+    This function is wrapper around matrix_calc.py function. It performs na correction
     for single and multiple tracers and creates the output in the form of fragment
     dictionary model with corrected intensities.
 

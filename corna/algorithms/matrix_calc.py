@@ -3,10 +3,10 @@ import numpy as np
 from numpy.linalg import pinv
 import pandas as pd
 
-from ... inputs.maven_parser import frag_key
-from ... helpers import get_isotope_element
-from ... data_model import standard_model
-from ... isotopomer import bulk_insert_data_to_fragment, Infopacket
+from corna.inputs.maven_parser import frag_key
+from corna.helpers import get_isotope_element
+from corna.data_model import standard_model
+from corna.isotopomer import bulk_insert_data_to_fragment, Infopacket
 
 def make_expected_na_matrix(N, pvec):
     """for a single labeled element, create the matrix M

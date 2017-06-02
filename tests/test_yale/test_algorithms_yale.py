@@ -1,7 +1,7 @@
-import corna.algorithms.nacorr_mimosa.algorithms_yale as algo
+import corna.algorithms.mimosa_nacorr as algo
 import corna.isotopomer as iso
-from corna.constants import ISOTOPE_NA_MASS
 import tests.data_constants as data_constants
+from corna.constants import ISOTOPE_NA_MASS
 
 parent_frag_input, daughter_frag_input,\
 fragment_dict, data_input,\
