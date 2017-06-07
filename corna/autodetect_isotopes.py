@@ -1,14 +1,8 @@
-import pandas as pd
 import re
 import warnings
 
-import helpers as hl
-
-
-mass_diff_dict = {'C': {'N': 0.00631, 'O': 0.00087, 'H': 0.00292, 'S': 0.004},
-                  'N': {'C': 0.00631, 'O': 0.00087, 'H': 0.00292, 'S': 0.004},
-                  'H': {'C': 0.00631, 'O': 0.00087, 'N': 0.00292, 'S': 0.004},
-                  'S': {'C': 0.00631, 'O': 0.00087, 'H': 0.00292, 'N': 0.004}}
+import constants as cs
+from helpers import get_formula, get_atomic_weight
 
 
 def get_mol_weight(formula):
@@ -17,13 +11,14 @@ def get_mol_weight(formula):
     :param formula: formula of the metabolite
     :return: molecular weight (float)
     """
-    parsed_formula = hl.get_formula(formula)
+    parsed_formula = get_formula(formula)
     mol_wt = 0
     for sym, qty in parsed_formula.iteritems():
-        mol_wt = mol_wt + hl.get_atomic_weight(sym) * qty
-    if mol_wt == 0.0:
-        raise Exception ('Molecular weight of a metabolite cannot be zero')
-    return mol_wt
+        mol_wt = mol_wt + get_atomic_weight(sym) * qty
+        if mol_wt == 0.0:
+            raise Exception(cs.MOL_MASS_VALIDATE)
+        return mol_wt
+
 
 
 def get_ppm_required(formula, delta_m):
@@ -36,7 +31,7 @@ def get_ppm_required(formula, delta_m):
     :return: required pp
     """
     metabolite_mass = get_mol_weight(formula)
-    required_ppm = (1000000) * (delta_m / metabolite_mass)
+    required_ppm = 1000000 * (delta_m / metabolite_mass)
     return required_ppm
 
 
@@ -48,7 +43,7 @@ def get_elements_from_formula(formula):
     :return: ele_list: list of elements present in
     the formula
     """
-    ele_list = re.findall('([A-Z][a-z]?)', str(formula))
+    ele_list = re.findall(cs.ELEMENT_SYMBOL, str(formula))
     return ele_list
 
 
@@ -62,9 +57,7 @@ def raise_warning(ppm_user_input, required_ppm, formula, ele):
     :param ele:element for which ppm requirements are measured
     """
     if (required_ppm - 0.5) <= ppm_user_input <= (required_ppm + 0.5):
-        warnings.warn('The ppm requirement for ' +
-                      ele + ' is at the borderline. Therefore, ' +
-                      formula + ' is corrected for ' + ele)
+        warnings.warn(cs.PPM_REQUIREMENT_VALIDATION + formula + ':' + ele, UserWarning)
         return True
 
 
@@ -78,7 +71,7 @@ def get_indistinguishable_ele(isotracer, element, formula, ppm_user_input):
     :return:mass difference
     """
     try:
-        mass_diff = mass_diff_dict[isotracer][element]
+        mass_diff = cs.MASS_DIFF_DICT[isotracer][element]
         required_ppm = get_ppm_required(formula, mass_diff)
         validate = ppm_validation(ppm_user_input, required_ppm, formula, element)
         if validate is True:
