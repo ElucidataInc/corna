@@ -11,7 +11,10 @@ import corna.algorithms.matrix_calc as algo
 from corna.constants import INTENSITY_COL
 from corna.helpers import get_isotope_element, first_sub_second
 from corna.inputs.maven_parser import convert_labels_to_std
+from corna.autodetect_isotopes import get_element_correction_dict
 
+from corna.inputs import maven_parser as mv
+from corna.output import convert_to_df
 
 def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
     """
@@ -99,14 +102,18 @@ def multiplying_df_with_matrix(isotracer, corr_mat_for_isotracer, curr_df):
     corr_df.index.name = isotracer
     return corr_df
 
-def na_correction(merged_df, iso_tracers, eleme_corr, na_dict, intensity_col=INTENSITY_COL):
-    eleme_corr_invalid_entry(iso_tracers, eleme_corr)
+
+def na_correction(merged_df, iso_tracers, ppm_input_user, na_dict, eleme_corr, intensity_col=INTENSITY_COL,autodetect=False):
     std_label_df = convert_labels_to_std(merged_df, iso_tracers)
     metabolite_dict = algo.fragmentsdict_model(std_label_df, intensity_col)
-
     na_corr_dict = {}
-    for metabolite, fragments_dict in metabolite_dict.iteritems():
-        na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict)
+    if autodetect is False:
+        for metabolite, fragments_dict in metabolite_dict.iteritems():
+            auto_eleme_corr = get_element_correction_dict(ppm_input_user, metabolite.formula,iso_tracers)
+            na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, auto_eleme_corr, na_dict)
+    else:
+        eleme_corr_invalid_entry(iso_tracers, eleme_corr)
+        for metabolite, fragments_dict in metabolite_dict.iteritems():
+            na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict)
 
     return na_corr_dict
-
