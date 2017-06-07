@@ -71,5 +71,11 @@ AREA_COLUMN_RAWFILE = ['Area']
 COLUMN_ISOTOPE_TRACER = 'Isotopic Tracer'
 ISOTOPE_VALUES = ['C13', 'N15', 'H2', 'S34']
 PATTERN_MASSINFO_COL = '\d+.0 \/ \d+.0'
-
+MASS_DIFF_DICT = {'C': {'N': 0.00631, 'O': 0.00087, 'H': 0.00292, 'S': 0.004},
+                  'N': {'C': 0.00631, 'O': 0.00718, 'H': 0.00924, 'S': 0.0023},
+                  'H': {'C': 0.00292, 'O': 0.00206, 'N': 0.00924, 'S': 0.0069},
+                  'S': {'N': 0.0023, 'O': 0.00482, 'H': 0.00689, 'C': 0.004}}
+ELEMENT_SYMBOL = ('[A-Z][a-z]?')
+MOL_MASS_VALIDATE = 'Molecular weight of a metabolite cannot be zero'
+PPM_REQUIREMENT_VALIDATION = 'The ppm requirement is at the boderline for '
 
