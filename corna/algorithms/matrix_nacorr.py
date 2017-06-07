@@ -13,8 +13,6 @@ from corna.helpers import get_isotope_element, first_sub_second
 from corna.inputs.maven_parser import convert_labels_to_std
 from corna.autodetect_isotopes import get_element_correction_dict
 
-from corna.inputs import maven_parser as mv
-from corna.output import convert_to_df
 
 def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
     """
