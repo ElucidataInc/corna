@@ -1,14 +1,15 @@
 import pandas as pd
-from helpers import get_formula as parse_formula
-import helpers as hl
 import re
 import warnings
 
-mass_diff_dict = {'C13': {'N': 0.00631, 'O': 0.00087, 'H': 0.00292, 'S': 0.004},
-                  'N15': {'C': 0.00631, 'O': 0.00087, 'H': 0.00292, 'S': 0.004},
-                  'H2' : {'C': 0.00631, 'O': 0.00087, 'N': 0.00292, 'S': 0.004},
-                  'S34': {'C': 0.00631, 'O': 0.00087, 'H': 0.00292, 'N': 0.004}
-                 }
+import helpers as hl
+
+
+mass_diff_dict = {'C': {'N': 0.00631, 'O': 0.00087, 'H': 0.00292, 'S': 0.004},
+                  'N': {'C': 0.00631, 'O': 0.00087, 'H': 0.00292, 'S': 0.004},
+                  'H': {'C': 0.00631, 'O': 0.00087, 'N': 0.00292, 'S': 0.004},
+                  'S': {'C': 0.00631, 'O': 0.00087, 'H': 0.00292, 'N': 0.004}}
+
 
 def get_mol_weight(formula):
     """
@@ -16,7 +17,7 @@ def get_mol_weight(formula):
     :param formula: formula of the metabolite
     :return: molecular weight (float)
     """
-    parsed_formula = parse_formula(formula)
+    parsed_formula = hl.get_formula(formula)
     mol_wt = 0
     for sym, qty in parsed_formula.iteritems():
         mol_wt = mol_wt + hl.get_atomic_weight(sym) * qty
@@ -64,5 +65,63 @@ def raise_warning(ppm_user_input, required_ppm, formula, ele):
         warnings.warn('The ppm requirement for ' +
                       ele + ' is at the borderline. Therefore, ' +
                       formula + ' is corrected for ' + ele)
+        return True
 
 
+def get_mass_diff(isotracer, element):
+    """
+    This function calculates the mass difference (delta m)
+    between between the isotracer and element.
+    :param isotracer:labeled element for
+           which na correction is done
+    :param element:element in the formula
+    :return:mass difference
+    """
+    try:
+        mass_diff = mass_diff_dict[isotracer][element]
+        return mass_diff
+    except KeyError:
+        return None
+
+
+def ppm_validation(ppm_user_input, required_ppm, formula, ele):
+    """
+    This function validates the requirements for adding
+    the element indistinguishable isotope list.
+    :param ppm_user_input : ppm of machine
+    :param required_ppm: ppm required
+    :param formula: formula of the metabolite
+    :param ele : element for which validation is carried out
+    :return: boolean value if the requirement is met
+    """
+    if raise_warning(ppm_user_input, required_ppm, formula, ele) == True:
+        return True
+    if ppm_user_input > required_ppm:
+        return True
+
+
+def get_element_correction_dict(ppm_user_input, formula, isotracer):
+    """
+    This function returns a dictionary with all isotracer elements
+    as key and indistinguishable isotopes as values.
+    :param ppm_user_input:ppm of the machine used.
+    :param formula:formula of the metabolite
+    :param isotracer:labelled element which is to be corrected
+    :return:element correction dictionary.
+    """
+    element_correction_dict = {}
+    ele_list = get_elements_from_formula(formula)
+    isotracer_ele = get_elements_from_formula(isotracer)
+    for element in isotracer_ele:
+        ele_list_without_isotracer = list(set(ele_list) - set(element))
+        element_correction_dict[element] = []
+        for ele in ele_list_without_isotracer:
+            mass_diff = get_mass_diff(element, ele)
+            if type(mass_diff) == float:
+                required_ppm = get_ppm_required(formula, mass_diff)
+                validate = ppm_validation(ppm_user_input, required_ppm, formula, ele)
+                if validate is True:
+                    element_correction_dict.get(element).append(ele)
+    return element_correction_dict
+
+#print get_element_correction_dict(30, 'C21H29N7O14P2', ['C13', 'N15'])
