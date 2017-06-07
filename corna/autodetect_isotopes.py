@@ -68,7 +68,7 @@ def raise_warning(ppm_user_input, required_ppm, formula, ele):
         return True
 
 
-def get_mass_diff(isotracer, element):
+def get_indistinguishable_ele(isotracer, element, formula, ppm_user_input):
     """
     This function calculates the mass difference (delta m)
     between between the isotracer and element.
@@ -79,7 +79,10 @@ def get_mass_diff(isotracer, element):
     """
     try:
         mass_diff = mass_diff_dict[isotracer][element]
-        return mass_diff
+        required_ppm = get_ppm_required(formula, mass_diff)
+        validate = ppm_validation(ppm_user_input, required_ppm, formula, element)
+        if validate is True:
+            return element
     except KeyError:
         return None
 
@@ -94,7 +97,7 @@ def ppm_validation(ppm_user_input, required_ppm, formula, ele):
     :param ele : element for which validation is carried out
     :return: boolean value if the requirement is met
     """
-    if raise_warning(ppm_user_input, required_ppm, formula, ele) == True:
+    if raise_warning(ppm_user_input, required_ppm, formula, ele) is True:
         return True
     if ppm_user_input > required_ppm:
         return True
@@ -116,12 +119,7 @@ def get_element_correction_dict(ppm_user_input, formula, isotracer):
         ele_list_without_isotracer = list(set(ele_list) - set(element))
         element_correction_dict[element] = []
         for ele in ele_list_without_isotracer:
-            mass_diff = get_mass_diff(element, ele)
-            if type(mass_diff) == float:
-                required_ppm = get_ppm_required(formula, mass_diff)
-                validate = ppm_validation(ppm_user_input, required_ppm, formula, ele)
-                if validate is True:
-                    element_correction_dict.get(element).append(ele)
+            indis_element = get_indistinguishable_ele(element, ele,formula,ppm_user_input)
+            if indis_element is not None:
+                element_correction_dict.get(element).append(indis_element)
     return element_correction_dict
-
-#print get_element_correction_dict(30, 'C21H29N7O14P2', ['C13', 'N15'])
