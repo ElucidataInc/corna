@@ -1,6 +1,7 @@
 import warnings
 
 import constants as cs
+import helpers as hl
 from model import Ion
 
 
@@ -137,12 +138,13 @@ def get_element_correction_dict(ppm_user_input, formula, isotracer):
 
     element_correction_dict = {}
     ele_list = get_elements_from_formula(formula)
-    isotracer_ele = get_elements_from_formula(isotracer)
-    for element in isotracer_ele:
-        ele_list_without_isotracer = list(set(ele_list) - set(element))
+    for element in isotracer:
+        isotracer_ele = hl.get_isotope_element(element)
+        ele_list_without_isotracer = list(set(ele_list) - set(isotracer_ele))
         element_correction_dict[element] = []
         for ele in ele_list_without_isotracer:
             indis_element = get_indistinguishable_ele(element, ele,formula,ppm_user_input)
             if indis_element is not None:
                 element_correction_dict.get(element).append(indis_element)
     return element_correction_dict
+
