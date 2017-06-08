@@ -2,23 +2,7 @@ import re
 import warnings
 
 import constants as cs
-from helpers import get_formula, get_atomic_weight
-
-
-def get_mol_weight(formula):
-    """
-    This function returns molecular weight of a metabolite.
-    :param formula: formula of the metabolite
-    :return: molecular weight (float)
-    """
-    parsed_formula = get_formula(formula)
-    mol_wt = 0
-    for sym, qty in parsed_formula.iteritems():
-        mol_wt = mol_wt + get_atomic_weight(sym) * qty
-        if mol_wt == 0.0:
-            raise Exception(cs.MOL_MASS_VALIDATE)
-        return mol_wt
-
+from model import Ion
 
 
 def get_ppm_required(formula, delta_m):
@@ -30,7 +14,8 @@ def get_ppm_required(formula, delta_m):
     :param delta_m: mass diff. between the two elements
     :return: required pp
     """
-    metabolite_mass = get_mol_weight(formula)
+    Ion_object = Ion('',formula)
+    metabolite_mass = Ion.get_mol_weight(Ion_object)
     required_ppm = 1000000 * (delta_m / metabolite_mass)
     return required_ppm
 
