@@ -32,7 +32,7 @@ def get_elements_from_formula(formula):
     return ele_list
 
 
-def raise_warning(ppm_user_input, required_ppm, formula, ele):
+def borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele):
     """
     This function raises warning when the required ppm and
     user input ppm are nearly equal.
@@ -75,7 +75,7 @@ def ppm_validation(ppm_user_input, required_ppm, formula, ele):
     :param ele : element for which validation is carried out
     :return: boolean value if the requirement is met
     """
-    if raise_warning(ppm_user_input, required_ppm, formula, ele) is True:
+    if borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele) is True:
         return True
     if ppm_user_input > required_ppm:
         return True
