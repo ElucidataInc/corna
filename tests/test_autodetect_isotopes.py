@@ -45,12 +45,12 @@ def test_ppm_validation():
 def get_element_correction_dict():
     assert get_element_correction_dict(400, 'C14H65O9', ['C13']) == {'C': ['H', 'O']}
 
-def test_raise_warning():
-    assert auto.raise_warning(30,30.1, 'C5H5', 'H') is True
+def test_borderline_ppm_warning():
+    assert auto.borderline_ppm_warning(30, 30.1, 'C5H5', 'H') is True
 
 
-def test_raise_warning():
-    assert auto.raise_warning(30,300.1, 'C5H5', 'H') is None
+def test_borderline_ppm_warning():
+    assert auto.borderline_ppm_warning(30, 300.1, 'C5H5', 'H') is None
 
 
 
