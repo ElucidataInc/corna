@@ -116,10 +116,9 @@ def get_indistinguishable_ele(isotracer, element, formula, ppm_user_input):
     """
 
     mass_diff = get_mass_diff(isotracer,element)
-    if mass_diff is not None:
+    if mass_diff:
         required_ppm = get_ppm_required(formula, mass_diff)
-        validate = ppm_validation(ppm_user_input, required_ppm, formula, element)
-        if validate is True:
+        if ppm_validation(ppm_user_input, required_ppm, formula, element):
             return element
 
 
