@@ -8,7 +8,7 @@ def test_get_ppm_required():
 
 
 def test_get_elements_from_formula():
-    assert auto.get_elements_from_formula('C6H6') == ['C', 'H']
+    assert auto.get_elements_from_formula('C6H6') == ['H', 'C']
 
 
 def test_get_indistinguishable_ele():
