@@ -18,7 +18,7 @@ def get_ppm_required(formula, delta_m):
         required_ppm: ppm required to distinguish two elements.
     """
 
-    Ion_object = Ion('',formula)
+    Ion_object = Ion('', formula)
     metabolite_mass = Ion.get_mol_weight(Ion_object)
     required_ppm = 1000000 * (delta_m / metabolite_mass)
     return required_ppm
@@ -143,8 +143,7 @@ def get_element_correction_dict(ppm_user_input, formula, isotracer):
         ele_list_without_isotracer = list(set(ele_list) - set(isotracer_ele))
         element_correction_dict[element] = []
         for ele in ele_list_without_isotracer:
-            indis_element = get_indistinguishable_ele(element, ele,formula,ppm_user_input)
+            indis_element = get_indistinguishable_ele(isotracer_ele, ele, formula, ppm_user_input)
             if indis_element is not None:
                 element_correction_dict.get(element).append(indis_element)
     return element_correction_dict
-
