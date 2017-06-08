@@ -1,21 +1,10 @@
 import pytest
-import warnings
 
 from corna import autodetect_isotopes as auto
 
 
-def test_get_mol_weight():
-    assert auto.get_mol_weight('C6H12O6') == 180.15588
-
-
-def test_get_mol_weight():
-    with pytest.raises(Exception) as err:
-        auto.get_mol_weight('C0H0')
-    assert err.value.message == 'Molecular weight of a metabolite cannot be zero'
-
-
 def test_get_ppm_required():
-    assert auto.get_ppm_required('C6H6O', 0.0002) == 33.07075156590008
+    assert auto.get_ppm_required('C6H6O', 0.0002) == 2.1251446692233573
 
 
 def test_get_elements_from_formula():
@@ -51,6 +40,12 @@ def test_borderline_ppm_warning():
 
 def test_borderline_ppm_warning():
     assert auto.borderline_ppm_warning(30, 300.1, 'C5H5', 'H') is None
+
+def test_get_mass_diff():
+    assert auto.get_mass_diff('C','N') is 0.00631
+
+def test_get_mass_diff():
+    assert auto.get_mass_diff('C','P') is None
 
 
 
