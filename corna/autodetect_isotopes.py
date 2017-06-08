@@ -1,4 +1,3 @@
-import re
 import warnings
 
 import constants as cs
@@ -6,17 +5,16 @@ from model import Ion
 
 
 def get_ppm_required(formula, delta_m):
-    """
-    This function calculates the ppm required to
+    """This function calculates the ppm required to
     distinguish between the two elements in a
     metabolite.
 
     Args:
-        formula : formula of the metabolite
-        delta_m : mass diff. between the two elements
+        formula: formula of the metabolite
+        delta_m: mass diff. between the two elements
 
     Returns:
-        required_ppm : ppm required to distinguish two elements.
+        required_ppm: ppm required to distinguish two elements.
     """
 
     Ion_object = Ion('',formula)
@@ -37,7 +35,8 @@ def get_elements_from_formula(formula):
         ele_list : list of elements in the formula
     """
 
-    ele_list = re.findall(cs.ELEMENT_SYMBOL, str(formula))
+    Ion_object = Ion('', formula)
+    ele_list = Ion.get_formula(Ion_object).keys()
     return ele_list
 
 
@@ -100,9 +99,8 @@ def ppm_validation(ppm_user_input, required_ppm, formula, ele):
         boolean value if the requirement is met
     """
 
-    if borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele) is True:
-        return True
-    if ppm_user_input > required_ppm:
+    if (borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele)) \
+       or (ppm_user_input > required_ppm):
         return True
 
 
