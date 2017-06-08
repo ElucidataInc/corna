@@ -125,9 +125,10 @@ def get_element_correction_dict(ppm_user_input, formula, isotracer):
     for element in isotracer:
         isotracer_ele = hl.get_isotope_element(element)
         ele_list_without_isotracer = list(set(ele_list) - set(isotracer_ele))
-        element_correction_dict[element] = []
+        element_correction_dict[isotracer_ele] = []
         for ele in ele_list_without_isotracer:
             indis_element = get_indistinguishable_ele(isotracer_ele, ele, formula, ppm_user_input)
             if indis_element is not None:
-                element_correction_dict.get(element).append(indis_element)
+                element_correction_dict.get(isotracer_ele).append(indis_element)
     return element_correction_dict
+
