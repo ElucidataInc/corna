@@ -28,7 +28,20 @@ def test_ppm_validation_False():
 
 
 def get_element_correction_dict():
-    assert get_element_correction_dict(400, 'C14H65O9', ['C13']) == {'C': ['H', 'O']}
+    assert auto.get_element_correction_dict(400, 'C14H65O9', ['C13']) == {'C': ['H', 'O']}
+
+
+def get_element_correction_dict_two_isotracer():
+    assert auto.get_element_correction_dict(2, 'C6H6NO', ['C13','N15']) == {'C13': [], 'N15': []}
+
+
+def get_element_correction_dict_without_isotracer():
+    assert auto.get_element_correction_dict(2, 'C6H6NO', []) == {}
+
+
+def get_element_correction_dict_KeyError():
+    assert get_element_correction_dict(200, 'C6H6NOP', ['S34']) == {'S34': ['N']}
+
 
 def test_raise_borderline_ppm_warning():
     assert auto.borderline_ppm_warning(30, 30.1, 'C5H5', 'H')
@@ -42,10 +55,3 @@ def test_get_mass_diff():
 
 def test_get_mass_diff_Keyerror():
     assert auto.get_mass_diff('C','P') == None
-
-
-
-
-
-
-
