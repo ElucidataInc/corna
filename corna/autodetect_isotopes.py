@@ -24,22 +24,6 @@ def get_ppm_required(formula, delta_m):
     return required_ppm
 
 
-def get_elements_from_formula(formula):
-    """This functions creates a list of all the elements
-    present in the formula
-
-    Args:
-        formula: formula of the metabolite
-
-    Returns:
-        ele_list: list of elements in the formula
-    """
-
-    Ion_object = Ion('', formula)
-    ele_list = Ion.get_formula(Ion_object).keys()
-    return ele_list
-
-
 def borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele):
     """This function raises warning when the required ppm and
     user input ppm are nearly equal.
@@ -136,7 +120,8 @@ def get_element_correction_dict(ppm_user_input, formula, isotracer):
     """
 
     element_correction_dict = {}
-    ele_list = get_elements_from_formula(formula)
+    Ion_object = Ion('', formula)
+    ele_list = (Ion_object.get_formula()).keys()
     for element in isotracer:
         isotracer_ele = hl.get_isotope_element(element)
         ele_list_without_isotracer = list(set(ele_list) - set(isotracer_ele))
