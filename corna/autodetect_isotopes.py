@@ -46,6 +46,14 @@ def borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele):
         return True
 
 
+def get_mass_diff(isotracer,element):
+    try:
+        mass_diff = cs.MASS_DIFF_DICT[isotracer][element]
+        return mass_diff
+    except KeyError:
+        return None
+
+
 def get_indistinguishable_ele(isotracer, element, formula, ppm_user_input):
     """
     This function calculates the mass difference (delta m)
@@ -55,14 +63,12 @@ def get_indistinguishable_ele(isotracer, element, formula, ppm_user_input):
     :param element:element in the formula
     :return:mass difference
     """
-    try:
-        mass_diff = cs.MASS_DIFF_DICT[isotracer][element]
+    mass_diff = get_mass_diff(isotracer,element)
+    if mass_diff is not None:
         required_ppm = get_ppm_required(formula, mass_diff)
         validate = ppm_validation(ppm_user_input, required_ppm, formula, element)
         if validate is True:
             return element
-    except KeyError:
-        return None
 
 
 def ppm_validation(ppm_user_input, required_ppm, formula, ele):
