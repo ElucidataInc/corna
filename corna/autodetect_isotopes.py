@@ -24,15 +24,14 @@ def get_ppm_required(formula, delta_m):
 
 
 def get_elements_from_formula(formula):
-    """
-    This functions creates a list of all the elements
+    """This functions creates a list of all the elements
     present in the formula
 
     Args:
-        formula : formula of the metabolite
+        formula: formula of the metabolite
 
     Returns:
-        ele_list : list of elements in the formula
+        ele_list: list of elements in the formula
     """
 
     Ion_object = Ion('', formula)
@@ -41,21 +40,20 @@ def get_elements_from_formula(formula):
 
 
 def borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele):
-    """
-    This function raises warning when the required ppm and
+    """This function raises warning when the required ppm and
     user input ppm are nearly equal.
 
     Args:
-        ppm_user_input : ppm of the machine used by the user
-        required_ppm : ppm required to distinguish between the two elements
-        formula : formula for which the elements are distinguished
-        ele : element for which ppm requirements are measured
+        ppm_user_input: ppm of the machine used by the user
+        required_ppm: ppm required to distinguish between the two elements
+        formula: formula for which the elements are distinguished
+        ele: element for which ppm requirements are measured
 
     Returns:
-        boolean value : if borderline conditions are met
+        boolean value: if borderline conditions are met
 
     Raises:
-        UserWarning : if borderline conditions are met
+        UserWarning: if borderline conditions are met
     """
     if (required_ppm - 0.5) <= ppm_user_input <= (required_ppm + 0.5):
         warnings.warn(cs.PPM_REQUIREMENT_VALIDATION + formula + ':' + ele, UserWarning)
@@ -63,19 +61,18 @@ def borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele):
 
 
 def get_mass_diff(isotracer,element):
-    """
-    This function fetches mass difference between
+    """This function fetches mass difference between
     elements.
 
     Args:
-        isotracer : labelled element
-        element : indistinguishable element
+        isotracer: labelled element
+        element: indistinguishable element
 
     Returns:
-        mass_diff : mass difference between elements
+        mass_diff: mass difference between elements
 
     Excepts: KeyError
-        returns : None
+        returns: None
     """
     try:
         mass_diff = cs.MASS_DIFF_DICT[isotracer][element]
@@ -85,15 +82,14 @@ def get_mass_diff(isotracer,element):
 
 
 def ppm_validation(ppm_user_input, required_ppm, formula, ele):
-    """
-    This function validates the ppm requirement for a particular
+    """This function validates the ppm requirement for a particular
     element to be indistinguishable.
 
     Args:
-        ppm_user_input : ppm of machine
-        required_ppm : ppm required
-        formula : formula of the metabolite
-        ele : element for which validation is carried out
+        ppm_user_input: ppm of machine
+        required_ppm: ppm required
+        formula: formula of the metabolite
+        ele: element for which validation is carried out
 
     Returns:
         boolean value if the requirement is met
@@ -105,15 +101,14 @@ def ppm_validation(ppm_user_input, required_ppm, formula, ele):
 
 
 def get_indistinguishable_ele(isotracer, element, formula, ppm_user_input):
-    """
-    This function returns element which is indistinguishable for
+    """This function returns element which is indistinguishable for
     a particular isotracer
 
     Args:
-        isotracer : labeled element
-        element : element in the formula
-        formula : formula of the metabolite
-        ppm_user_input : ppm of the machine
+        isotracer: labeled element
+        element: element in the formula
+        formula: formula of the metabolite
+        ppm_user_input: ppm of the machine
 
     Returns:
         element which is indistinguishable
@@ -128,17 +123,16 @@ def get_indistinguishable_ele(isotracer, element, formula, ppm_user_input):
 
 
 def get_element_correction_dict(ppm_user_input, formula, isotracer):
-    """
-    This function returns a dictionary with all isotracer elements
+    """This function returns a dictionary with all isotracer elements
     as key and indistinguishable isotopes as values.
 
     Args:
-        ppm_user_input : ppm of the machine used.
-        formula : formula of the metabolite
-        isotracer : labelled element which is to be corrected
+        ppm_user_input: ppm of the machine used.
+        formula: formula of the metabolite
+        isotracer: labelled element which is to be corrected
 
     Returns:
-        element_correction_dict : element correction dictionary.
+        element_correction_dict: element correction dictionary.
     """
 
     element_correction_dict = {}
