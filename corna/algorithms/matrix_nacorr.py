@@ -102,7 +102,7 @@ def multiplying_df_with_matrix(isotracer, corr_mat_for_isotracer, curr_df):
 
 
 def na_correction(merged_df, iso_tracers, ppm_input_user, na_dict, eleme_corr,
-                  intensity_col=INTENSITY_COL,autodetect=True):
+                  intensity_col=INTENSITY_COL,autodetect=False):
     std_label_df = convert_labels_to_std(merged_df, iso_tracers)
     metabolite_dict = algo.fragmentsdict_model(std_label_df, intensity_col)
     na_corr_dict = {}
