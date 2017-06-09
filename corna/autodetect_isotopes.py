@@ -40,7 +40,7 @@ def borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele):
     Raises:
         UserWarning: if borderline conditions are met
     """
-    if (required_ppm - 0.5) <= ppm_user_input <= (required_ppm + 0.5):
+    if (required_ppm - cs.BORDERLINE_LIMIT) <= ppm_user_input <= (required_ppm + cs.BORDERLINE_LIMIT):
         warnings.warn(cs.PPM_REQUIREMENT_VALIDATION + formula + ':' + ele, UserWarning)
         return True
 
@@ -105,6 +105,24 @@ def get_indistinguishable_ele(isotracer, element, formula, ppm_user_input):
         if ppm_validation(ppm_user_input, required_ppm, formula, element):
             return element
 
+def get_isotope_element_list(isotracer):
+    """
+    This function returns list of elements present in labelled
+    isotopes.
+    Args:
+        isotracer: list of labelled isotopes
+
+    Returns:
+        isotracer_ele_list: list of elements present
+                            in isotracer.
+
+    """
+    isotracer_ele_list = []
+    for label in isotracer:
+        isotracer_ele = hl.get_isotope_element(label)
+        isotracer_ele_list.append(isotracer_ele)
+    return isotracer_ele_list
+
 
 def get_element_correction_dict(ppm_user_input, formula, isotracer):
     """This function returns a dictionary with all isotracer elements
@@ -122,13 +140,13 @@ def get_element_correction_dict(ppm_user_input, formula, isotracer):
     element_correction_dict = {}
     Ion_object = Ion('', formula)
     ele_list = (Ion_object.get_formula()).keys()
-    for element in isotracer:
-        isotracer_ele = hl.get_isotope_element(element)
-        ele_list_without_isotracer = list(set(ele_list) - set(isotracer_ele))
-        element_correction_dict[isotracer_ele] = []
-        for ele in ele_list_without_isotracer:
-            indis_element = get_indistinguishable_ele(isotracer_ele, ele, formula, ppm_user_input)
-            if indis_element is not None:
-                element_correction_dict.get(isotracer_ele).append(indis_element)
+    isotracer_ele_list = get_isotope_element_list(isotracer)
+    for element in isotracer_ele_list:
+        if element in ele_list:
+            ele_list_without_isotracer = list(set(ele_list) - set(isotracer_ele_list))
+            element_correction_dict[element] = []
+            for ele in ele_list_without_isotracer:
+                indis_element = get_indistinguishable_ele(element, ele, formula, ppm_user_input)
+                if indis_element is not None:
+                    element_correction_dict.get(element).append(indis_element)
     return element_correction_dict
-
