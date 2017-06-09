@@ -8,10 +8,10 @@ import numpy as np
 import pandas as pd
 
 import corna.algorithms.matrix_calc as algo
+from corna.autodetect_isotopes import get_element_correction_dict
 from corna.constants import INTENSITY_COL
 from corna.helpers import get_isotope_element, first_sub_second
 from corna.inputs.maven_parser import convert_labels_to_std
-from corna.autodetect_isotopes import get_element_correction_dict
 
 
 def eleme_corr_invalid_entry(iso_tracers, eleme_corr):
@@ -101,11 +101,12 @@ def multiplying_df_with_matrix(isotracer, corr_mat_for_isotracer, curr_df):
     return corr_df
 
 
-def na_correction(merged_df, iso_tracers, ppm_input_user, na_dict, eleme_corr, intensity_col=INTENSITY_COL,autodetect=True):
+def na_correction(merged_df, iso_tracers, ppm_input_user, na_dict, eleme_corr,
+                  intensity_col=INTENSITY_COL,autodetect=True):
     std_label_df = convert_labels_to_std(merged_df, iso_tracers)
     metabolite_dict = algo.fragmentsdict_model(std_label_df, intensity_col)
     na_corr_dict = {}
-    if autodetect is True:
+    if autodetect:
         for metabolite, fragments_dict in metabolite_dict.iteritems():
             auto_eleme_corr = get_element_correction_dict(ppm_input_user, metabolite.formula,iso_tracers)
             na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, auto_eleme_corr, na_dict)
@@ -115,6 +116,3 @@ def na_correction(merged_df, iso_tracers, ppm_input_user, na_dict, eleme_corr, i
             na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict)
 
     return na_corr_dict
-
-
-
