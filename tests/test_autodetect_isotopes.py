@@ -12,7 +12,7 @@ def test_indistinguishable_ele_none():
 
 
 def test_get_indistinguishable_ele():
-    assert auto.get_indistinguishable_ele('C', 'N', 'C16H16O23N12',  2000) == 'N'
+    assert auto.get_indistinguishable_ele('C', 'N', 'C16H16O23N12',  2000) == None
 
 
 def test_ppm_validation_borderline():
@@ -40,7 +40,7 @@ def test_get_element_correction_dict_without_isotracer():
 
 
 def test_get_element_correction_dict_keyerror():
-    assert auto.get_element_correction_dict(20, 'C6H6NOP', ['S34']) == {'S': ['N']}
+    assert auto.get_element_correction_dict(20, 'C6H6NOPS', ['S34']) == {'S': ['N']}
 
 
 def test_raise_borderline_ppm_warning():
@@ -55,3 +55,7 @@ def test_get_mass_diff():
 
 def test_get_mass_diff_keyerror():
     assert auto.get_mass_diff('C','P') == None
+
+
+def test_get_isotope_element_list():
+    assert auto.get_isotope_element_list(['C13', 'N15']) == ['C', 'N']
