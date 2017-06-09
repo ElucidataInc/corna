@@ -85,7 +85,7 @@ def ppm_validation(ppm_user_input, required_ppm, formula, ele):
         return True
 
 
-def get_indistinguishable_ele(isotracer, element, formula, ppm_user_input):
+def get_indistinguishable_ele(isotracer, formula, ppm_user_input,element):
     """This function returns element which is indistinguishable for
     a particular isotracer
 
@@ -138,15 +138,16 @@ def get_element_correction_dict(ppm_user_input, formula, isotracer):
     """
 
     element_correction_dict = {}
-    Ion_object = Ion('', formula)
-    ele_list = (Ion_object.get_formula()).keys()
-    isotracer_ele_list = get_isotope_element_list(isotracer)
-    for element in isotracer_ele_list:
-        if element in ele_list:
-            ele_list_without_isotracer = list(set(ele_list) - set(isotracer_ele_list))
-            element_correction_dict[element] = []
-            for ele in ele_list_without_isotracer:
-                indis_element = get_indistinguishable_ele(element, ele, formula, ppm_user_input)
-                if indis_element is not None:
-                    element_correction_dict.get(element).append(indis_element)
+    ion_object = Ion('', formula)
+    ele_list = (ion_object.get_formula()).keys()
+    isotracer_list = get_isotope_element_list(isotracer)
+    ele_list_without_isotracer = set(ele_list) - set(isotracer_list)
+    isotracer_list = list(set(isotracer_list).intersection(set(ele_list)))
+    for isotope in isotracer_list:
+            element_correction_dict[isotope] = []
+            indis_ele_list = list(ele_list_without_isotracer.intersection(set(cs.MASS_DIFF_DICT.keys())))
+            get_ele = lambda iso: get_indistinguishable_ele(isotope, formula, ppm_user_input, iso)
+            indis_element = map(get_ele, indis_ele_list)
+            indis_element = filter(None, indis_element)
+            element_correction_dict[isotope] = indis_element
     return element_correction_dict
