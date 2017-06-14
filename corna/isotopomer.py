@@ -5,7 +5,7 @@ from model import Fragment
 import helpers as hl
 
 
-Infopacket = namedtuple('Infopacket','frag data unlabeled name')
+Infopacket = namedtuple('Infopacket','frag data unlabeled name indis_isotope')
 
 def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
     if molecular_mass != None:
@@ -55,11 +55,11 @@ def validate_data(data):
         raise TypeError('Intensities should be numerical values')
 
 
-def add_data_fragment(fragment_dict, data, label_info, name):
+def add_data_fragment(fragment_dict, data, label_info, name, ele_corr):
     frag_key, frag = fragment_dict.items()[0]
     assert isinstance(data, dict)
     validate_data(data)
-    return {frag_key: Infopacket(frag, data, label_info, name)}
+    return {frag_key: Infopacket(frag, data, label_info, name, ele_corr)}
 
 
 def parse_label_number(label_number):
@@ -85,21 +85,21 @@ def insert_data_to_fragment_mass(frag_info, label, sample_dict, mode=None):
     return add_data_fragment(frag, sample_dict, label_info, frag_info.parent)
 
 
-def insert_data_to_fragment_number(frag_info, label, sample_dict):
+def insert_data_to_fragment_number(frag_info, label, sample_dict, ele_corr):
     label_number_dict = parse_label_number(label)
     frag_name = frag_info.name + '_' + label
     frag = create_fragment_from_number(frag_name, frag_info.formula, label_number_dict)
     frag_key, frag_value = frag.items()[0]
     label_info = frag_value.check_if_unlabel()
-    return add_data_fragment(frag, sample_dict, label_info, frag_info.name)
+    return add_data_fragment(frag, sample_dict, label_info, frag_info.name, ele_corr)
 
 
-def bulk_insert_data_to_fragment(frag_info, list_data_dict, mass=False, number=False):
+def bulk_insert_data_to_fragment(frag_info, list_data_dict, ele_corr, mass=False, number=False):
     fragment_list = {}
     for key, value in list_data_dict.iteritems():
         if number:
             fragment_list.update(
-                insert_data_to_fragment_number(frag_info, key, value))
+                insert_data_to_fragment_number(frag_info, key, value, ele_corr))
         elif mass:
             fragment_list.update(
                 insert_data_to_fragment_mass(frag_info, key, value))
