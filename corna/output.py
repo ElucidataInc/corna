@@ -80,7 +80,6 @@ def convert_to_df(dict_output, parent, colname='col_name'):
         :param parent:
     """
     df_list = []
-
     for metabolite, fragment_dict in dict_output.iteritems():
         std_model = fragment_dict_to_std_model(fragment_dict, parent)
         model_to_df = convert_dict_df(std_model)
@@ -91,6 +90,36 @@ def convert_to_df(dict_output, parent, colname='col_name'):
         columns={c.INTENSITY: str(colname)}, inplace=True)
 
     return model_to_df
+
+
+def convert_to_df_nacorr(dict_output, parent, colname='col_name'):
+    """
+    This function convert the dictionary output from na_correction function, postprocessing
+    and frac_enrichment_dict to dataframe
+
+    Args:
+        dict_output : dictionary model to be converted into df
+        colname : specify name of column from which computation, the dictionary is obtained
+
+    Returns:
+        model_to_df : a pandas dataframe
+        :param parent:
+    """
+    ele_corr_dict ={}
+    df_list = []
+    for metabolite, fragment_dict in dict_output.iteritems():
+        std_model = fragment_dict_to_std_model(fragment_dict, parent)
+        model_to_df = convert_dict_df(std_model)
+        df_list.append(model_to_df)
+        model_to_df = concatenate_dataframes_by_col(df_list)
+        for key1, value1 in fragment_dict.iteritems():
+            ele_corr_dict[metabolite.name] = value1.indis_isotope
+
+    model_to_df.rename(
+        columns={c.INTENSITY: str(colname)}, inplace=True)
+    model_to_df['Indistinguishale_isotope'] = model_to_df['Name'].map(ele_corr_dict)
+    return model_to_df
+
 
 
 def save_to_csv(df, path):
