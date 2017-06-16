@@ -3,6 +3,7 @@ import warnings
 
 from isotopomer import Infopacket
 
+
 def zero_if_negative(num):
     """
     This function replaces negative numbers by zero_if_negative
@@ -53,7 +54,7 @@ def replace_negative_to_zero(corrected_dict):
         sample_int_dict = frag_info.data
         dict_replaced_vals = replace_vals(sample_int_dict)
         post_proc_dict[frag_key] = Infopacket(
-            frag_info.frag, dict_replaced_vals, frag_info.unlabeled, frag_info.name, frag_info.indis_isotope)
+            frag_info.frag, dict_replaced_vals, frag_info.unlabeled, frag_info.name)
 
     return post_proc_dict
 
@@ -132,7 +133,7 @@ def enrichment(fragments_dict, decimals):
                 warnings.warn("{} {} {} {}".format('sum of labels is zero for sample ', sample_name.encode('utf-8'),
                                                    ' of ', (value.name).encode('utf-8')))
         fragments_fractional[key] = Infopacket(
-            value.frag, fractional_data, value.unlabeled, value.name, value.indis_isotope)
+            value.frag, fractional_data, value.unlabeled, value.name)
 
     return fragments_fractional
 
@@ -157,3 +158,6 @@ def fractional_enrichment(post_processed_out, decimals=4):
         frac_enrichment_dict[metabolite] = enrichment(fragment_dict, decimals)
 
     return frac_enrichment_dict
+
+
+
