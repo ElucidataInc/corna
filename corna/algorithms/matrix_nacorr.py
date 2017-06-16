@@ -54,7 +54,7 @@ def nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict):
     corr_mats = algo.make_all_corr_matrices(iso_tracers, formula_dict, na_dict, eleme_corr)
     df_corr_C_N = correct_label_sample_df(iso_tracers, lab_samp_df, corr_mats)
     nacorr_dict_model = algo.fragmentdict_model(
-        iso_tracers, fragments_dict, df_corr_C_N, eleme_corr)
+        iso_tracers, fragments_dict, df_corr_C_N)
     return nacorr_dict_model
 
 
@@ -77,6 +77,7 @@ def correct_label_sample_df(isotracers, lab_samp_df, corr_mats):
             curr_df.index = curr_df.index.reorder_levels(lab_samp_df.index.names)
 
     return curr_df.to_dict(orient='index')
+
 
 def multiplying_df_with_matrix(isotracer, corr_mat_for_isotracer, curr_df):
     """This function takes the correction matrix for given isotracer and multiplies
@@ -104,14 +105,19 @@ def multiplying_df_with_matrix(isotracer, corr_mat_for_isotracer, curr_df):
 def na_correction(merged_df, iso_tracers, ppm_input_user, na_dict, eleme_corr,
                   intensity_col=INTENSITY_COL,autodetect=False):
     std_label_df = convert_labels_to_std(merged_df, iso_tracers)
-    metabolite_dict = algo.fragmentsdict_model(std_label_df, intensity_col, eleme_corr)
+    metabolite_dict = algo.fragmentsdict_model(std_label_df, intensity_col)
     na_corr_dict = {}
+    eleme_corr_dict = {}
     if autodetect:
         for metabolite, fragments_dict in metabolite_dict.iteritems():
             auto_eleme_corr = get_element_correction_dict(ppm_input_user, metabolite.formula,iso_tracers)
             na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, auto_eleme_corr, na_dict)
+            eleme_corr_dict[metabolite.name] = auto_eleme_corr
     else:
         eleme_corr_invalid_entry(iso_tracers, eleme_corr)
         for metabolite, fragments_dict in metabolite_dict.iteritems():
             na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, eleme_corr, na_dict)
-    return na_corr_dict
+            eleme_corr_dict[metabolite.name] = eleme_corr
+
+    return na_corr_dict, eleme_corr_dict
+
