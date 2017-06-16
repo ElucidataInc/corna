@@ -92,7 +92,7 @@ def convert_to_df(dict_output, parent, colname='col_name'):
     return model_to_df
 
 
-def convert_to_df_nacorr(dict_output, parent, colname='col_name'):
+def convert_to_df_nacorr(dict_output, ele_corr_dict, parent, colname='col_name'):
     """
     This function convert the dictionary output from na_correction function, postprocessing
     and frac_enrichment_dict to dataframe
@@ -105,15 +105,12 @@ def convert_to_df_nacorr(dict_output, parent, colname='col_name'):
         model_to_df : a pandas dataframe
         :param parent:
     """
-    ele_corr_dict ={}
     df_list = []
     for metabolite, fragment_dict in dict_output.iteritems():
         std_model = fragment_dict_to_std_model(fragment_dict, parent)
         model_to_df = convert_dict_df(std_model)
         df_list.append(model_to_df)
         model_to_df = concatenate_dataframes_by_col(df_list)
-        for key1, value1 in fragment_dict.iteritems():
-            ele_corr_dict[metabolite.name] = value1.indis_isotope
 
     model_to_df.rename(
         columns={c.INTENSITY: str(colname)}, inplace=True)
@@ -143,10 +140,10 @@ def fragment_to_output_model_mass(infopacket):
     return {key_tuple: {label_dict_key: infopacket.data}}
 
 
-def fragment_to_output_model_number(infopacket_LCMS):
-    key_tuple = OutKey(infopacket_LCMS.name, infopacket_LCMS.frag.formula)
-    label_dict_key = label_dict_to_key(infopacket_LCMS.frag.label_dict)
-    return {key_tuple: {label_dict_key: infopacket_LCMS.data}}
+def fragment_to_output_model_number(infopacket):
+    key_tuple = OutKey(infopacket.name, infopacket.frag.formula)
+    label_dict_key = label_dict_to_key(infopacket.frag.label_dict)
+    return {key_tuple: {label_dict_key: infopacket.data}}
 
 
 def fragment_dict_to_std_model(fragment_dict, parent):
