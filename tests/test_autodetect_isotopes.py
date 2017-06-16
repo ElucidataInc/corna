@@ -28,7 +28,7 @@ def test_ppm_validation_false():
 
 
 def test_get_element_correction_dict():
-    assert auto.get_element_correction_dict(400, 'C14H65O9', ['C13']) == {'C': ['H', 'O']}
+    assert auto.get_element_correction_dict(400, 'C14H65O9', ['C13']) == {'C': ['O17', 'H']}
 
 
 def test_get_element_correction_dict_two_isotracer():
@@ -51,11 +51,14 @@ def test_borderline_ppm_warning():
     assert auto.borderline_ppm_warning(30, 300.1, 'C5H5', 'H') == None
 
 def test_get_mass_diff():
-    assert auto.get_mass_diff('C','N') == 0.00631
+    assert auto.get_mass_diff('C13', 'N') == 0.00631
 
 def test_get_mass_diff_keyerror():
-    assert auto.get_mass_diff('C','P') == None
+    assert auto.get_mass_diff('C13','P') == None
 
 
 def test_get_isotope_element_list():
     assert auto.get_isotope_element_list(['C13', 'N15']) == ['C', 'N']
+
+def test_add_isotopes_list():
+    assert auto.add_isotopes_list(['O', 'C']) == ['O17', 'C', 'O18']
