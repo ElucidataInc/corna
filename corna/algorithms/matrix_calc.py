@@ -6,7 +6,7 @@ import pandas as pd
 from corna.inputs.maven_parser import frag_key
 from corna.helpers import get_isotope_element
 from corna.data_model import standard_model
-from corna.isotopomer import bulk_insert_data_to_fragment, Infopacket_LCMS
+from corna.isotopomer import bulk_insert_data_to_fragment, Infopacket
 
 def make_expected_na_matrix(N, pvec):
     """for a single labeled element, create the matrix M
@@ -74,7 +74,7 @@ def make_all_corr_matrices(isotracers, formula_dict, na_dict, eleme_corr):
         corr_mats[isotracer] = make_correction_matrix(trac_atom, formula_dict, na_dict, indist_list)
     return corr_mats
 
-def fragmentsdict_model(merged_df, intensity_col, ele_corr):
+def fragmentsdict_model(merged_df, intensity_col):
     """
     This function converts the dataframe into fragment dictionary model
     Args:
@@ -90,7 +90,7 @@ def fragmentsdict_model(merged_df, intensity_col, ele_corr):
         fragments_dict[metabolite_name] = {}
         for label, data in label_dict.iteritems():
             fragments_dict[metabolite_name].update(
-                bulk_insert_data_to_fragment(metabolite_name, {label: data}, ele_corr, number=True))
+                bulk_insert_data_to_fragment(metabolite_name, {label: data}, number=True))
     return fragments_dict
 
 
@@ -170,7 +170,7 @@ def formuladict(fragments_dict):
     return formula_dict
 
 
-def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict, ele_corr):
+def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
     """
     This function creates a model of fragments dictionary on which model functions can
     applied
@@ -201,7 +201,7 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict, ele_corr):
                 raise KeyError(
                     'Name, Formula or Sample not found in input data file')
 
-        nacorr_fragment_dict[frag_name] = Infopacket_LCMS(frag_info.frag, lab_samp_dict[lab_tup_key],
-                                                     frag_info.unlabeled, frag_info.name, ele_corr)
+        nacorr_fragment_dict[frag_name] = Infopacket(frag_info.frag, lab_samp_dict[lab_tup_key],
+                                                     frag_info.unlabeled, frag_info.name)
     return nacorr_fragment_dict
 
