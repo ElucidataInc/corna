@@ -6,7 +6,7 @@ import pandas as pd
 from corna.inputs.maven_parser import frag_key
 from corna.helpers import get_isotope_element
 from corna.data_model import standard_model
-from corna.isotopomer import bulk_insert_data_to_fragment, Infopacket
+from corna.isotopomer import bulk_insert_data_to_fragment, Infopacket_LCMS
 
 def make_expected_na_matrix(N, pvec):
     """for a single labeled element, create the matrix M
@@ -56,9 +56,12 @@ def make_correction_matrix(trac_atom, formuladict, na_dict, indist_elems):
     """
     M = make_expected_na_matrix(formuladict.get(trac_atom, 0), na_dict[trac_atom])
     for e in indist_elems:
-        if e in formuladict:
+        if len(e) > 1:
+            M = add_indistinguishable_element(M, formuladict[e[0]], na_dict[e])
+        else:
             M = add_indistinguishable_element(M, formuladict[e], na_dict[e])
     return pinv(M)
+
 
 def make_all_corr_matrices(isotracers, formula_dict, na_dict, eleme_corr):
     corr_mats = {}
@@ -198,7 +201,7 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict, ele_corr):
                 raise KeyError(
                     'Name, Formula or Sample not found in input data file')
 
-        nacorr_fragment_dict[frag_name] = Infopacket(frag_info.frag, lab_samp_dict[lab_tup_key],
+        nacorr_fragment_dict[frag_name] = Infopacket_LCMS(frag_info.frag, lab_samp_dict[lab_tup_key],
                                                      frag_info.unlabeled, frag_info.name, ele_corr)
     return nacorr_fragment_dict
 
