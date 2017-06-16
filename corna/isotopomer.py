@@ -5,7 +5,8 @@ from model import Fragment
 import helpers as hl
 
 
-Infopacket = namedtuple('Infopacket','frag data unlabeled name indis_isotope')
+Infopacket = namedtuple('Infopacket', 'frag data unlabeled name')
+Infopacket_LCMS = namedtuple('Infopacket_LCMS', 'frag data unlabeled name indis_isotope')
 
 def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
     if molecular_mass != None:
@@ -55,11 +56,19 @@ def validate_data(data):
         raise TypeError('Intensities should be numerical values')
 
 
-def add_data_fragment(fragment_dict, data, label_info, name, ele_corr):
+def add_data_fragment_LCMS(fragment_dict, data, label_info, name, ele_corr):
     frag_key, frag = fragment_dict.items()[0]
     assert isinstance(data, dict)
     validate_data(data)
-    return {frag_key: Infopacket(frag, data, label_info, name, ele_corr)}
+    return {frag_key: Infopacket_LCMS(frag, data, label_info, name, ele_corr)}
+
+
+def add_data_fragment(fragment_dict, data, label_info, name):
+    frag_key, frag = fragment_dict.items()[0]
+    assert isinstance(data, dict)
+    validate_data(data)
+    return {frag_key: Infopacket(frag, data, label_info, name)}
+
 
 
 def parse_label_number(label_number):
@@ -91,7 +100,7 @@ def insert_data_to_fragment_number(frag_info, label, sample_dict, ele_corr):
     frag = create_fragment_from_number(frag_name, frag_info.formula, label_number_dict)
     frag_key, frag_value = frag.items()[0]
     label_info = frag_value.check_if_unlabel()
-    return add_data_fragment(frag, sample_dict, label_info, frag_info.name, ele_corr)
+    return add_data_fragment_LCMS(frag, sample_dict, label_info, frag_info.name, ele_corr)
 
 
 def bulk_insert_data_to_fragment(frag_info, list_data_dict, ele_corr, mass=False, number=False):
