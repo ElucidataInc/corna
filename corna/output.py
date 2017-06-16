@@ -143,10 +143,10 @@ def fragment_to_output_model_mass(infopacket):
     return {key_tuple: {label_dict_key: infopacket.data}}
 
 
-def fragment_to_output_model_number(infopacket):
-    key_tuple = OutKey(infopacket.name, infopacket.frag.formula)
-    label_dict_key = label_dict_to_key(infopacket.frag.label_dict)
-    return {key_tuple: {label_dict_key: infopacket.data}}
+def fragment_to_output_model_number(infopacket_LCMS):
+    key_tuple = OutKey(infopacket_LCMS.name, infopacket_LCMS.frag.formula)
+    label_dict_key = label_dict_to_key(infopacket_LCMS.frag.label_dict)
+    return {key_tuple: {label_dict_key: infopacket_LCMS.data}}
 
 
 def fragment_dict_to_std_model(fragment_dict, parent):
@@ -168,3 +168,4 @@ def fragment_dict_to_std_model(fragment_dict, parent):
             except KeyError:
                 output_fragment_dict.update(label_dict)
     return output_fragment_dict
+
