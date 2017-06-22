@@ -89,6 +89,10 @@ ISOTOPE_DICT = {'O': ['O17', 'O18'], 'S': ['S33', 'S34']}
 ##List for isotopic elements that are added in na_dict
 ISOTOPE_LIST = ['O17', 'O18', 'S33', 'S34']
 
+##Output column names
+INDIS_ISOTOPE_COL = 'Indistinguishale_isotope'
+POOL_TOTAL_COL = 'Pool_total'
+
 
 
 
