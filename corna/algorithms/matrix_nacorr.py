@@ -110,7 +110,7 @@ def na_correction(merged_df, iso_tracers, ppm_input_user, na_dict, eleme_corr,
     eleme_corr_dict = {}
     if autodetect:
         for metabolite, fragments_dict in metabolite_dict.iteritems():
-            auto_eleme_corr = get_element_correction_dict(ppm_input_user, metabolite.formula,iso_tracers)
+            auto_eleme_corr = get_element_correction_dict(int(ppm_input_user), metabolite.formula,iso_tracers)
             na_corr_dict[metabolite] = nacorr_each_metab(fragments_dict, iso_tracers, auto_eleme_corr, na_dict)
             eleme_corr_dict[metabolite.name] = auto_eleme_corr
     else:
@@ -120,3 +120,4 @@ def na_correction(merged_df, iso_tracers, ppm_input_user, na_dict, eleme_corr,
             eleme_corr_dict[metabolite.name] = eleme_corr
 
     return na_corr_dict, eleme_corr_dict
+
