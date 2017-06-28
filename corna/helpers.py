@@ -251,7 +251,6 @@ def get_isotope_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
     return isotope_na_value_dict
 
 
-
 def get_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
     """
     This function returns the dictionary of default NA values (adapted from wiki)
@@ -280,7 +279,7 @@ def get_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
             Keeping in mind the errorneous order due to incorrect way of sorting, now the
         sorting is done on amus and corresponding NA values are saved. therefore, for
         O the list becomes [0.99757, 0.00038, 0.00205]
-    test for this bug: test_get_na_value_dict_O in test_helpers
+        test for this bug: test_get_na_value_dict_O in test_helpers
     """
     NA = isotope_dict[const.KEY_NA]
     amu = isotope_dict[const.KEY_AMU]
@@ -290,6 +289,7 @@ def get_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
     for atom in atoms:
          isotope_list = [isotope for isotope, iso_atom
                      in elements.iteritems() if iso_atom == atom or isotope == atom]
+         isotope_list = list(set(isotope_list) - set(elements.values()))
          na_val_amu = [(NA[val], amu[val]) for val in isotope_list]
          na_val_amu.sort(key=itemgetter(1))
          na_vals = [val_amu[0] for val_amu in na_val_amu]
@@ -299,6 +299,7 @@ def get_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
 
     return na_val_dict
 
+
 def check_column_headers(col_headers, col_names):
     """
     This function verifies that all defasult columns are present in input
@@ -306,6 +307,7 @@ def check_column_headers(col_headers, col_names):
     """
     err_msg = """Required column/s not found, Column: {!r}""".format(list(set(col_names) - set(col_headers)))
     assert set(col_names).issubset(set(col_headers)), err_msg
+
 
 def first_sub_second(a, b):
     return [item for item in a if item not in b]
