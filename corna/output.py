@@ -2,10 +2,12 @@ from collections import namedtuple
 
 import pandas as pd
 
-from inputs.column_conventions import multiquant as c
+import constants as const
 from helpers import concatenate_dataframes_by_col
 from helpers import label_dict_to_key, get_key_from_single_value_dict
-import constants as const
+from inputs.column_conventions import multiquant as c
+from inputs.column_conventions.maven import NAME, SAMPLE
+from postprocess import pool_total
 from inputs.maven_parser import MavenKey
 from inputs.multiquant_parser import Multiquantkey
 
@@ -114,7 +116,9 @@ def convert_to_df_nacorr(dict_output, ele_corr_dict, parent, colname='col_name')
 
     model_to_df.rename(
         columns={c.INTENSITY: str(colname)}, inplace=True)
-    model_to_df['Indistinguishale_isotope'] = model_to_df['Name'].map(ele_corr_dict)
+    pool_total_df = pool_total(model_to_df, str(colname))
+    model_to_df[const.INDIS_ISOTOPE_COL] = model_to_df[NAME].map(ele_corr_dict)
+    model_to_df[const.POOL_TOTAL_COL] = model_to_df.apply(lambda x: pool_total_df[x[NAME]][x[SAMPLE]], axis=1)
     return model_to_df
 
 

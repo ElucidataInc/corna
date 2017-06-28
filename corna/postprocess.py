@@ -1,6 +1,8 @@
 import numpy as np
+import pandas as pd
 import warnings
 
+from inputs.column_conventions.maven import NAME, SAMPLE
 from isotopomer import Infopacket
 
 
@@ -159,5 +161,19 @@ def fractional_enrichment(post_processed_out, decimals=4):
 
     return frac_enrichment_dict
 
+
+def pool_total(na_corr_df, colname):
+    """
+    This function calculates the pool total for each metabolite in a sample
+    Args:
+        na_corr_df: data frame with corrected intensities
+        colname: Name of the column that contains corrected intensities
+
+    Returns: grouped data frame with pool total
+
+    """
+    pool_total_df = na_corr_df.groupby(([NAME, SAMPLE]))
+    pool_total_df = pool_total_df.apply(lambda x: x[x[colname] >= 0][colname].sum())
+    return pool_total_df
 
 
