@@ -121,6 +121,32 @@ def convert_to_df_nacorr(dict_output, ele_corr_dict, parent, colname='col_name')
     model_to_df[const.POOL_TOTAL_COL] = model_to_df.apply(lambda x: pool_total_df[x[NAME]][x[SAMPLE]], axis=1)
     return model_to_df
 
+def convert_to_df_nacorr_MSMS(dict_output, parent, colname='col_name'):
+    """
+    This function convert the dictionary output from na_correction function, postprocessing
+    and frac_enrichment_dict to dataframe
+
+    Args:
+        dict_output : dictionary model to be converted into df
+        colname : specify name of column from which computation, the dictionary is obtained
+
+    Returns:
+        model_to_df : a pandas dataframe
+        :param parent:
+    """
+    df_list = []
+    for metabolite, fragment_dict in dict_output.iteritems():
+        std_model = fragment_dict_to_std_model(fragment_dict, parent)
+        model_to_df = convert_dict_df(std_model)
+        df_list.append(model_to_df)
+        model_to_df = concatenate_dataframes_by_col(df_list)
+
+    model_to_df.rename(
+        columns={c.INTENSITY: str(colname)}, inplace=True)
+    pool_total_df = pool_total(model_to_df, str(colname))
+    model_to_df[const.POOL_TOTAL_COL] = model_to_df.apply(lambda x: pool_total_df[x[NAME]][x[SAMPLE]], axis=1)
+    return model_to_df
+
 
 
 def save_to_csv(df, path):
