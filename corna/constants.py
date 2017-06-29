@@ -103,6 +103,7 @@ ISOTOPE_LIST = ['O17', 'O18', 'S33', 'S34', 'Si29', 'Si30']
 ##Output column names
 INDIS_ISOTOPE_COL = 'Indistinguishale_isotope'
 POOL_TOTAL_COL = 'Pool_total'
+METABOLITE_NAME = 'metab_name'
 
 
 
