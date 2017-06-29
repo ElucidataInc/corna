@@ -7,7 +7,7 @@ from helpers import concatenate_dataframes_by_col
 from helpers import label_dict_to_key, get_key_from_single_value_dict
 from inputs.column_conventions import multiquant as c
 from inputs.column_conventions.maven import NAME, SAMPLE
-from postprocess import pool_total
+from postprocess import pool_total, pool_total_MSMS
 from inputs.maven_parser import MavenKey
 from inputs.multiquant_parser import Multiquantkey
 
@@ -143,8 +143,8 @@ def convert_to_df_nacorr_MSMS(dict_output, parent, colname='col_name'):
 
     model_to_df.rename(
         columns={c.INTENSITY: str(colname)}, inplace=True)
-    pool_total_df = pool_total(model_to_df, str(colname))
-    model_to_df[const.POOL_TOTAL_COL] = model_to_df.apply(lambda x: pool_total_df[x[NAME]][x[SAMPLE]], axis=1)
+    pool_total_df = pool_total_MSMS(model_to_df, str(colname))
+    model_to_df[const.POOL_TOTAL_COL] = model_to_df.apply(lambda x: pool_total_df[x[const.METABOLITE_NAME]][x[SAMPLE]], axis=1)
     return model_to_df
 
 
