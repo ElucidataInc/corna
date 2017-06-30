@@ -35,8 +35,6 @@ def borderline_ppm_warning(ppm_user_input, required_ppm, formula, ele):
     Returns:
         boolean value: if borderline conditions are met
 
-    Raises:
-        UserWarning: if borderline conditions are met
     """
     if (required_ppm - cs.BORDERLINE_LIMIT) <= ppm_user_input <= (required_ppm + cs.BORDERLINE_LIMIT):
         print cs.PPM_REQUIREMENT_VALIDATION + formula + ':' + ele
@@ -130,17 +128,18 @@ def add_isotopes_list(indis_ele_list):
     then tested for indistinguishable isotopes.
     Args:
         indis_ele_list: List of indistinguishable
-        elements. 
+        elements.
 
     Returns:
         list with isotopes of the elements.
 
     """
+    temp_indis_ele_list = indis_ele_list
     for ele in indis_ele_list:
         if ele in cs.ISOTOPE_DICT.keys():
-            indis_ele_list_isotopes = list((set(indis_ele_list)-set([ele])) | set(cs.ISOTOPE_DICT[ele]))
+            indis_ele_list_isotopes = list((set(temp_indis_ele_list)-set([ele]))) + list(set(cs.ISOTOPE_DICT[ele]))
+            temp_indis_ele_list = indis_ele_list_isotopes
     return indis_ele_list_isotopes
-
 
 
 def get_element_correction_dict(ppm_user_input, formula, isotracer):

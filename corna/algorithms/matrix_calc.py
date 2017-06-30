@@ -3,6 +3,7 @@ import numpy as np
 from numpy.linalg import pinv
 import pandas as pd
 
+from corna.constants import ISOTOPE_NA_MASS, KEY_ELE
 from corna.inputs.maven_parser import frag_key
 from corna.helpers import get_isotope_element
 from corna.data_model import standard_model
@@ -56,10 +57,9 @@ def make_correction_matrix(trac_atom, formuladict, na_dict, indist_elems):
     """
     M = make_expected_na_matrix(formuladict.get(trac_atom, 0), na_dict[trac_atom])
     for e in indist_elems:
-        if len(e) > 1:
-            M = add_indistinguishable_element(M, formuladict[e[0]], na_dict[e])
-        else:
-            M = add_indistinguishable_element(M, formuladict[e], na_dict[e])
+        if e in formuladict:
+            e1 = ISOTOPE_NA_MASS[KEY_ELE][e]
+            M = add_indistinguishable_element(M, formuladict[e1], na_dict[e])
     return pinv(M)
 
 
