@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import warnings
 
+from constants import METABOLITE_NAME
+from helpers import get_metabolite
 from inputs.column_conventions.maven import NAME, SAMPLE
 from isotopomer import Infopacket
 
@@ -177,3 +179,17 @@ def pool_total(na_corr_df, colname):
     return pool_total_df
 
 
+def pool_total_MSMS(na_corr_df, colname):
+    """
+    This function calculates the pool total for each metabolite in a sample
+    Args:
+        na_corr_df: data frame with corrected intensities
+        colname: Name of the column that contains corrected intensities
+
+    Returns: grouped data frame with pool total
+
+    """
+    na_corr_df[METABOLITE_NAME] = na_corr_df[NAME].apply(get_metabolite)
+    pool_total_df = na_corr_df.groupby(([METABOLITE_NAME, SAMPLE]))
+    pool_total_df = pool_total_df.apply(lambda x: x[x[colname] >= 0][colname].sum())
+    return pool_total_df

@@ -7,7 +7,7 @@ from helpers import concatenate_dataframes_by_col
 from helpers import label_dict_to_key, get_key_from_single_value_dict
 from inputs.column_conventions import multiquant as c
 from inputs.column_conventions.maven import NAME, SAMPLE
-from postprocess import pool_total
+from postprocess import pool_total, pool_total_MSMS
 from inputs.maven_parser import MavenKey
 from inputs.multiquant_parser import Multiquantkey
 
@@ -119,6 +119,32 @@ def convert_to_df_nacorr(dict_output, ele_corr_dict, parent, colname='col_name')
     pool_total_df = pool_total(model_to_df, str(colname))
     model_to_df[const.INDIS_ISOTOPE_COL] = model_to_df[NAME].map(ele_corr_dict)
     model_to_df[const.POOL_TOTAL_COL] = model_to_df.apply(lambda x: pool_total_df[x[NAME]][x[SAMPLE]], axis=1)
+    return model_to_df
+
+def convert_to_df_nacorr_MSMS(dict_output, parent, colname='col_name'):
+    """
+    This function convert the dictionary output from na_correction function, postprocessing
+    and frac_enrichment_dict to dataframe
+
+    Args:
+        dict_output : dictionary model to be converted into df
+        colname : specify name of column from which computation, the dictionary is obtained
+
+    Returns:
+        model_to_df : a pandas dataframe
+        :param parent:
+    """
+    df_list = []
+    for metabolite, fragment_dict in dict_output.iteritems():
+        std_model = fragment_dict_to_std_model(fragment_dict, parent)
+        model_to_df = convert_dict_df(std_model)
+        df_list.append(model_to_df)
+        model_to_df = concatenate_dataframes_by_col(df_list)
+
+    model_to_df.rename(
+        columns={c.INTENSITY: str(colname)}, inplace=True)
+    pool_total_df = pool_total_MSMS(model_to_df, str(colname))
+    model_to_df[const.POOL_TOTAL_COL] = model_to_df.apply(lambda x: pool_total_df[x[const.METABOLITE_NAME]][x[SAMPLE]], axis=1)
     return model_to_df
 
 
