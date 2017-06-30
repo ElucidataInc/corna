@@ -5,7 +5,8 @@ from model import Fragment
 import helpers as hl
 
 
-Infopacket = namedtuple('Infopacket','frag data unlabeled name')
+Infopacket = namedtuple('Infopacket', 'frag data unlabeled name')
+
 
 def create_fragment_from_mass(name, formula, isotope, isotope_mass, molecular_mass=None, mode=None):
     if molecular_mass != None:
@@ -60,6 +61,7 @@ def add_data_fragment(fragment_dict, data, label_info, name):
     assert isinstance(data, dict)
     validate_data(data)
     return {frag_key: Infopacket(frag, data, label_info, name)}
+
 
 
 def parse_label_number(label_number):
