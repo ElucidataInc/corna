@@ -165,8 +165,7 @@ def test_get_extraced_isotracer_df(get_maven_df):
 
 def test_isotracer_dict(get_maven_df):
     maven_df = get_maven_df
-<<<<<<< HEAD
-    assert maven_parser.get_isotracer_dict(maven_df) == {'C13': 2, 'C13N15': 1}
+    assert maven_parser.get_isotracer_dict(maven_df) == {'C13': 2, 'C12 PARENT': 1}
 
 
 def test_get_extracted_element():
@@ -178,8 +177,5 @@ def test_get_extracted_element():
 
 def test_get_element_list():
     input_df = read_csv(constants.MAVEN_FILE)
-
     assert maven_parser.get_element_list(input_df) == ['C', 'H', 'O', 'N']
-=======
-    assert maven_parser.get_isotracer_dict(maven_df) == {'C13': 2, 'C12 PARENT': 1}
->>>>>>> Fix: Change assert statement according to new changes to make the test cases pass
+
