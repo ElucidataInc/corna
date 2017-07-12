@@ -1,9 +1,9 @@
 """
 Note: 
-    NA values are referenced from paper Correcting Mass Isotopomer
-    Distributions for Naturally Occurring Isotopes.
-    By: Wouter A. van Winden,1* Christoph Wittmann,2 Elmar Heinzle,2
-    Joseph J. Heijnen
+    NA values are referenced from:
+    CRC Handbook of Chemistry and Physics (83rd ed.). Boca Raton, FL: CRC Press. ISBN 0-8493-0483-0.
+    by Lide, D. R.
+    ed. (2002) 
 """
 
 import os
