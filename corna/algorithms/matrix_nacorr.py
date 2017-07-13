@@ -104,6 +104,25 @@ def multiplying_df_with_matrix(isotracer, corr_mat_for_isotracer, curr_df):
 
 def na_correction(merged_df, iso_tracers, ppm_input_user, na_dict, eleme_corr,
                   intensity_col=INTENSITY_COL,autodetect=False):
+    """
+    This function performs na correction on the input data.
+    Args:
+        merged_df: data frame which contains intensities which are to be corrected
+        iso_tracers: list of labeled elements. eg ['C13', 'N15']
+        ppm_input_user: ppm resolution of the machine required when user
+                        selects autodetect = True, else a blank parameter
+                        can be given.
+        na_dict: dictionary with natural abundance values of the elements.
+        eleme_corr: if user selects autodetect=False, they can give a standard
+                    dict of indistinguishable elements for correction.
+                    eg - {'C13':['H','O']}
+        autodetect:It takes boolean value for auto detection. By default it is False.
+
+    Returns:
+        na_corr_dict: na corrected dict
+        eleme_corr_dict : dictionary od indistinguishable isotopes used for correction
+
+    """
     std_label_df = convert_labels_to_std(merged_df, iso_tracers)
     metabolite_dict = algo.fragmentsdict_model(std_label_df, intensity_col)
     na_corr_dict = {}

@@ -204,4 +204,3 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
         nacorr_fragment_dict[frag_name] = Infopacket(frag_info.frag, lab_samp_dict[lab_tup_key],
                                                      frag_info.unlabeled, frag_info.name)
     return nacorr_fragment_dict
-

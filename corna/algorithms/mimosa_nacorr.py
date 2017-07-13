@@ -61,4 +61,3 @@ def na_correction_mimosa(metabolite_frag_dict, isotope_dict=ISOTOPE_NA_MASS, dec
         na_corr_dict[metabolite] = na_correction_mimosa_by_fragment(fragments_dict, isotope_dict, decimals)
 
     return na_corr_dict
-

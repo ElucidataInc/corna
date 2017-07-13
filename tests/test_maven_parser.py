@@ -154,18 +154,18 @@ def test_get_validation_fn_lst():
 
 def test_get_extracted_isotracer():
     assert maven_parser.get_extracted_isotracer('C13-label-1') == 'C13'
-    assert maven_parser.get_extracted_isotracer('C12 PARENT') == 'C13N15'
+    assert maven_parser.get_extracted_isotracer('C12 PARENT') == 'C12 PARENT'
 
 
 def test_get_extraced_isotracer_df(get_maven_df):
     maven_df = get_maven_df
-    test_assert = ['C13N15', 'C13', 'C13']
+    test_assert = ['C12 PARENT', 'C13', 'C13']
     assert list(maven_parser.get_extraced_isotracer_df(maven_df)) == test_assert
 
 
 def test_isotracer_dict(get_maven_df):
     maven_df = get_maven_df
-    assert maven_parser.get_isotracer_dict(maven_df) == {'C13': 2, 'C13N15': 1}
+    assert maven_parser.get_isotracer_dict(maven_df) == {'C13': 2, 'C12 PARENT': 1}
 
 
 def test_get_extracted_element():
@@ -177,5 +177,5 @@ def test_get_extracted_element():
 
 def test_get_element_list():
     input_df = read_csv(constants.MAVEN_FILE)
-
     assert maven_parser.get_element_list(input_df) == ['C', 'H', 'O', 'N']
+

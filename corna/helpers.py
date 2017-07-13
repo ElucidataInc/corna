@@ -1,6 +1,7 @@
 import collections
 from operator import itemgetter
 import os
+from operator import itemgetter
 
 import numpy as np
 import pandas as pd
@@ -227,7 +228,6 @@ def _merge_dfs(df1, df2):
                     on=[c.LABEL, c.SAMPLE,
                         c.NAME, c.FORMULA])
 
-
 def get_isotope_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
     """
     This function returns a dictionary of isotopes as keys with na values of the
@@ -249,7 +249,6 @@ def get_isotope_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
         isotope_na_value_dict[isotope] = [NA[natural_iso], NA[isotope]]
 
     return isotope_na_value_dict
-
 
 def get_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
     """
