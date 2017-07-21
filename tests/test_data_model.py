@@ -1,6 +1,7 @@
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
+
 
 import corna.data_model as fp
 from corna.inputs.maven_parser import MavenKey, frag_key
@@ -15,14 +16,14 @@ def test_std_model():
 		'Sample': {0: 'sample_1', 1: 'sample_1', 2: 'sample_1'}})
     df = frag_key(merged_df)
     std_model = {MavenKey(name='Acetic', formula='H4C2O2'): {'C13_2': {'sample_1': 0.59724999999999995},
-															 'C13_1': {'sample_1': 0.040349999999999997}, 'C13_0': {'sample_1': 0.3624}}}
+	'C13_1': {'sample_1': 0.040349999999999997}, 'C13_0': {'sample_1': 0.3624}}}
     std_model_out = fp.standard_model(df, intensity_col='INTENSITY_COL')
     assert std_model_out == std_model
 
 
 def test_to_float():
 	np_array = np.array([1, 2])
-	assert fp._to_float(np_array) == 1 
+	assert fp._to_float(np_array) == 1
 
 
 
