@@ -25,6 +25,7 @@ LEVEL_0_COL = "level_0"
 LEVEL_1_COL = "level_1"
 INTENSITY_COL = 'Intensity'
 SAMPLE_COL = 'Sample'
+SAMPLE_NAME = 'Sample Name'
 PARENT_COL = 'Unlabeled Fragment'
 LABEL_COL = 'Label'
 FRAG_COL = 'frag_keys'
@@ -44,6 +45,7 @@ FORMULA_STATE_INVALID = 'formula not correct'
 COLUMN_STATE = 'state'
 COLUMN_ROW = 'row_number'
 COLUMN_NAME = 'column_name'
+COMPONENT_NAME = 'COMPONENT NAME'
 UNLABELLED_LABEL_DICT = {'C': 0,'N': 0}
 INTENSITY_STATE_NEGATIVE = 'negative'
 INTENSITY_STATE_INVALID = 'invalid_intensity_value'
@@ -95,6 +97,10 @@ ISOTOPE_LIST = ['O17', 'O18', 'S33', 'S34', 'Si29', 'Si30']
 INDIS_ISOTOPE_COL = 'Indistinguishale_isotope'
 POOL_TOTAL_COL = 'Pool_total'
 METABOLITE_NAME = 'metab_name'
+
+##summary tab
+SUMMARY_LABEL = 'label'
+SUMMARY_VAL = 'value'
 
 
 
