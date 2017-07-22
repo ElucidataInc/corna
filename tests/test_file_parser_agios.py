@@ -33,4 +33,4 @@ def test_frag_keys():
 	df1 = pd.DataFrame({'Name': [1,2,3], 'Formula': [1,2,3]})
 	fragkey_col = fp.frag_key(df1)
 	assert fragkey_col.equals(frag_key_data)
-	
+
