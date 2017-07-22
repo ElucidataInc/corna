@@ -1,77 +1,53 @@
-import pandas
+import pandas as pd
 
 import constants as cs
 
+def create_list_of_dict(list_of_fields, fields_dict):
+    summary_list = []
+    for i in range(0, len(list_of_fields)):
+        summary_dict = {}
+        summary_dict[cs.SUMMARY_LABEL] = list_of_fields[i]
+        summary_dict[cs.SUMMARY_VAL] = fields_dict[list_of_fields[i]]
+        summary_list.append(summary_dict)
+    return summary_list
+
 
 def summary_raw_intensity_msms(raw_intensity_df):
-    summary_list = []
-    dict1 = {'Number of rows': raw_intensity_df[cs.ORIGINAL_FILENAME].count(),
-             'Number of samples': len(raw_intensity_df[cs.ORIGINAL_FILENAME].unique()),
-             'Number of cohorts': len(raw_intensity_df[cs.SAMPLE_NAME].unique()),
-             'Number of metabolites': len(raw_intensity_df[cs.COMPONENT_NAME].unique())}
-    dict_label_list = dict1.keys()
-    for i in range(0, len(dict_label_list)):
-        dict2 = {}
-        dict2[cs.SUMMARY_LABEL] = dict_label_list[i]
-        dict2[cs.SUMMARY_VAL] = dict1[dict_label_list[i]]
-        summary_list.append(dict2)
-    return summary_list
+    field_dict = {cs.RAW_FIELD_SUMMARY_LIST[0]: raw_intensity_df[cs.ORIGINAL_FILENAME].count(),
+                  cs.RAW_FIELD_SUMMARY_LIST[1]: len(raw_intensity_df[cs.ORIGINAL_FILENAME].unique()),
+                  cs.RAW_FIELD_SUMMARY_LIST[2]: len(raw_intensity_df[cs.SAMPLE_NAME].unique()),
+                  cs.RAW_FIELD_SUMMARY_LIST[3]: len(raw_intensity_df[cs.COMPONENT_NAME].unique())}
+    dict_label_list = field_dict.keys()
+    return create_list_of_dict(dict_label_list, field_dict)
 
 
 def summary_metadata_mq(metadata_mq_df):
-    summary_list = []
-    dict1 = {'Number of fragments': metadata_mq_df['Component Name'].count(),
-             'Number of unlabeled fragments': len(metadata_mq_df['Unlabeled Fragment'].unique()),
-             'isotopic tracer': list((metadata_mq_df['Isotopic Tracer'].unique()))
+    field_dict = {cs.META_FIELD_SUMMARY_LIST[0]: metadata_mq_df[cs.COMPONENT_NAME].count(),
+                  cs.META_FIELD_SUMMARY_LIST[1]: len(metadata_mq_df[cs.PARENT_COL].unique()),
+                  cs.META_FIELD_SUMMARY_LIST[2]: list((metadata_mq_df[cs.ISOTRACER_COL].unique()))
             }
-    dict_label_list = dict1.keys()
-    for i in range(0, len(dict_label_list)):
-        dict2 = {}
-        dict2[cs.SUMMARY_LABEL] = dict_label_list[i]
-        dict2[cs.cs.SUMMARY_VAL] = dict1[dict_label_list[i]]
-        summary_list.append(dict2)
-    return summary_list
+    dict_label_list = field_dict.keys()
+    return create_list_of_dict(dict_label_list, field_dict)
 
 
 def summary_sample_metadata(metadata_std_df):
-    summary_list = []
-    dict1 = {'Number of background samples': len(metadata_std_df['Background Sample'].unique()),
-             'Fields in metadata': ", ".join(list(metadata_std_df)),
-            }
-    dict_label_list = dict1.keys()
-    for i in range(0, len(dict_label_list)):
-        dict2 = {}
-        dict2[cs.SUMMARY_LABEL] = dict_label_list[i]
-        dict2[cs.SUMMARY_VAL] = dict1[dict_label_list[i]]
-        summary_list.append(dict2)
-    return summary_list
+    field_dict = {cs.SAMPLE_FIELD_SUMMARY_LIST[0]: len(metadata_std_df[cs.BACKGROUND_SAMPLE].unique()),
+                  cs.SAMPLE_FIELD_SUMMARY_LIST[1]: ", ".join(list(metadata_std_df)),
+                 }
+    dict_label_list = field_dict.keys()
+    return create_list_of_dict(dict_label_list, field_dict)
 
 
 def summary_raw_intensity_lcms(raw_intensity_df):
-    summary_list = []
-    dict1 = {'Number of metabolites': len(raw_intensity_df['Name'].unique()),
-             'Number of samples': (len(list(raw_intensity_df)) - 3),
-             'Number of blank intensity cells': raw_intensity_df.isnull().values.ravel().sum(),
-             #'Number of labelled elements': len(raw_intensity_df['Component Name'].unique()),
-             'Number of rows': raw_intensity_df['Label'].count()}
-    dict_label_list = dict1.keys()
-    for i in range(0, len(dict_label_list)):
-        dict2 = {}
-        dict2[cs.SUMMARY_LABEL] = dict_label_list[i]
-        dict2[cs.SUMMARY_VAL] = dict1[dict_label_list[i]]
-        summary_list.append(dict2)
-    return summary_list
+    field_dict = {cs.LCMS_RAW_FIELD_SUMMARY[0]: len(raw_intensity_df[cs.NAME_COL].unique()),
+                  cs.LCMS_RAW_FIELD_SUMMARY[1]: (len(list(raw_intensity_df)) - 3),
+                  cs.LCMS_RAW_FIELD_SUMMARY[2]: raw_intensity_df.isnull().values.ravel().sum(),
+                  cs.LCMS_RAW_FIELD_SUMMARY[3]: raw_intensity_df[cs.LABEL_COL].count()}
+    dict_label_list = field_dict.keys()
+    return create_list_of_dict(dict_label_list, field_dict)
 
 def lcms_metadata(meta_df):
-    summary_list = []
-    dict1 = {'Fields in metadata': ", ".join(list(meta_df)),
-             'Number of rows in metadata': list(meta_df[[0]].count())[0],
-             }
-    dict_label_list = dict1.keys()
-    for i in range(0, len(dict_label_list)):
-        dict2 = {}
-        dict2[cs.SUMMARY_LABEL] = dict_label_list[i]
-        dict2[cs.cs.SUMMARY_VAL] = dict1[dict_label_list[i]]
-        summary_list.append(dict2)
-    return summary_list
-
+    field_dict = {cs.LCMS_META_FILED_SUMMARY[0]: ", ".join(list(meta_df)),
+                  cs.LCMS_META_FILED_SUMMARY[1]: list(meta_df[[0]].count())[0],}
+    dict_label_list = field_dict.keys()
+    return create_list_of_dict(dict_label_list, field_dict)
