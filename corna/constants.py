@@ -102,10 +102,19 @@ METABOLITE_NAME = 'metab_name'
 ##summary tab
 SUMMARY_LABEL = 'label'
 SUMMARY_VAL = 'value'
+SUMMARY_TITLE = 'title'
+SUMMARY = 'summary'
 RAW_FIELD_SUMMARY_LIST = ['Number of rows', 'Number of samples', 'Number of cohorts', 'Number of metabolites']
 META_FIELD_SUMMARY_LIST = ['Number of fragments', 'Number of unlabeled fragments', 'isotopic tracer']
 SAMPLE_FIELD_SUMMARY_LIST = ['Number of background samples', 'Fields in metadata']
 LCMS_RAW_FIELD_SUMMARY = ['Number of metabolites', 'Number of samples', 'Number of blank intensity cells', 'Number of rows']
 LCMS_META_FILED_SUMMARY = ['Fields in metadata', 'Number of rows in metadata']
+
+## file type
+RAW_MSMS = 'INPUT DATA'
+META_MSMS = 'METADATA'
+SMP_MSMS = 'SAMPLE DATA'
+RAW_LCMS = 'INPUTDATA'
+META_LCMS = 'METADATA'
 
 
