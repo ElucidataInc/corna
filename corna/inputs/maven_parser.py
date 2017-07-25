@@ -478,7 +478,7 @@ def read_maven_file(maven_file_path, metadata_path):
         summary[con.RAW_LCMS] = {con.SUMMARY_TITLE: con.RAW_LCMS,
                                  con.SUMMARY: create_summary(input_maven_df, con.RAW_LCMS)}
     else:
-        return get_df_frm_path(), None, None, None
+        return get_df_frm_path(), None, None, None, None
 
     if metadata_path:
         metadata_df = get_metadata_df(metadata_path)
@@ -493,7 +493,6 @@ def read_maven_file(maven_file_path, metadata_path):
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
         merged_df = get_merge_df(corrected_maven_df, metadata_df)
         unique_element_list = get_element_list(corrected_maven_df)
-        print summary
         return merged_df, validation_logs, isotracer_dict, unique_element_list, summary
     else:
         return corrected_maven_df, validation_logs, None, None, summary
