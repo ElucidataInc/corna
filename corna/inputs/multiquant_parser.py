@@ -9,6 +9,7 @@ import pandas as pd
 
 from .column_conventions import multiquant
 from corna import constants
+from corna import summary as sm
 from ..constants import INTENSITY_COL
 from corna.inputs import validation
 from ..data_model import standard_model
@@ -41,15 +42,25 @@ def get_validated_df_and_logs(input_files):
         sample_metadata_mq: instance of BASIC VALIDATION class containing
             validated_df for sample_metadata_mq file.                        
     """
+    summary = {}
     try:
         raw_mq, metadata_mq, sample_metadata_mq = get_basic_validation_instance(input_files)
         if sample_metadata_mq:
             raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
+            summary[constants.SMP_MSMS] = {constants.SUMMARY_TITLE: constants.SMP_MSMS,
+                                           constants.SUMMARY: sm.create_summary(sample_metadata_mq.df,
+                                                                                constants.SMP_MSMS)}
         else:
             raw_mq_df = raw_mq.df
         validated_raw_mq = validation.data_validation_raw_df(raw_mq_df)
+        summary[constants.RAW_MSMS] = {constants.SUMMARY_TITLE: constants.RAW_MSMS,
+                                       constants.SUMMARY: sm.create_summary(raw_mq_df,
+                                                                            constants.RAW_MSMS)}
         validated_metadata_mq = validation.data_validation_metadata_df(metadata_mq.df)
-        return validated_raw_mq, validated_metadata_mq, sample_metadata_mq
+        summary[constants.META_MSMS] = {constants.SUMMARY_TITLE: constants.META_MSMS,
+                                        constants.SUMMARY: sm.create_summary(metadata_mq.df,
+                                                                             constants.META_MSMS)}
+        return validated_raw_mq, validated_metadata_mq, sample_metadata_mq, summary
     except Exception as e:
         raise Exception(e)
 
