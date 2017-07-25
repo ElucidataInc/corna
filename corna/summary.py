@@ -6,89 +6,114 @@ import constants as cs
 def create_list_of_dict(list_of_fields, fields_dict):
     """
     It returns a list of dictionaries defining fields (rows,
-    columns, metabolites) in the dataframe
+    columns, metabolites) in the data frame
     :param list_of_fields:list of fields to be displayed
            example : ['number of rows']
     :param fields_dict: dictionary with field as key and
     corresponding function as value
     :return: list of dictionary
+
     """
     summary_list = []
     for i in range(0, len(list_of_fields)):
+
         summary_dict = {}
         summary_dict[cs.SUMMARY_LABEL] = list_of_fields[i]
         summary_dict[cs.SUMMARY_VAL] = fields_dict[list_of_fields[i]]
         summary_list.append(summary_dict)
+
     return summary_list
 
 
-def summary_raw_intensity_msms(raw_intensity_df):
+def summary_raw_msms(raw_df):
     """
-    This function returns summary list for lcms/ms raw
-     intensity file
-    :param raw_intensity_df: raw intensity input file
-    :return: summary list
+    This function creates a dictionary of functions
+    to be performed on raw intensity df
+    :param raw_df: input data frame
+    :return: dictionary of data frame operations
+
     """
-    field_dict = {cs.RAW_FIELD_SUMMARY_LIST[0]: raw_intensity_df[cs.ORIGINAL_FILENAME].count(),
-                  cs.RAW_FIELD_SUMMARY_LIST[1]: len(raw_intensity_df[cs.ORIGINAL_FILENAME].unique()),
-                  cs.RAW_FIELD_SUMMARY_LIST[2]: len(raw_intensity_df[cs.SAMPLE_NAME].unique()),
-                  cs.RAW_FIELD_SUMMARY_LIST[3]: len(raw_intensity_df[cs.COMPONENT_NAME].unique())}
-    dict_label_list = field_dict.keys()
-    return create_list_of_dict(dict_label_list, field_dict)
+    summary_dict = {cs.RAW_FIELD_SUMMARY_LIST[0]: raw_df[cs.ORIGINAL_FILENAME].count(),
+                    cs.RAW_FIELD_SUMMARY_LIST[1]: len(raw_df[cs.ORIGINAL_FILENAME].unique()),
+                    cs.RAW_FIELD_SUMMARY_LIST[2]: len(raw_df[cs.SAMPLE_NAME].unique()),
+                    cs.RAW_FIELD_SUMMARY_LIST[3]: len(raw_df[cs.COMPONENT_NAME].unique())}
+    return summary_dict
 
 
-def summary_metadata_mq(metadata_mq_df):
+def summary_meta_msms(raw_df):
     """
-    This function returns summary list for lcms/ms
-        metadata mq file
-    :param metadata_mq_df: metadata mq input file
-    :return: summary list
+    This function creates a dictionary of functions
+    to be performed on metadata mq df
+    :param raw_df: input data frame
+    :return: dictionary of data frame operations
+
     """
-    field_dict = {cs.META_FIELD_SUMMARY_LIST[0]: metadata_mq_df[cs.COMPONENT_NAME].count(),
-                  cs.META_FIELD_SUMMARY_LIST[1]: len(metadata_mq_df[cs.PARENT_COL].unique()),
-                  cs.META_FIELD_SUMMARY_LIST[2]: list((metadata_mq_df[cs.ISOTRACER_COL].unique()))
-            }
-    dict_label_list = field_dict.keys()
-    return create_list_of_dict(dict_label_list, field_dict)
+    summary_dict = {cs.META_FIELD_SUMMARY_LIST[0]: raw_df[cs.COMPONENT_NAME].count(),
+                    cs.META_FIELD_SUMMARY_LIST[1]: len(raw_df[cs.PARENT_COL].unique())}
+    if cs.COLUMN_ISOTOPE_TRACER in list(raw_df):
+        summary_dict[cs.META_FIELD_SUMMARY_LIST[2]] = (raw_df[cs.COLUMN_ISOTOPE_TRACER].unique()).item()
+    return summary_dict
 
 
-def summary_sample_metadata(metadata_std_df):
+def summary_smp_msms(raw_df):
     """
-    This function returns summary list for lcms/ms sample
-        metadata file
-    :param metadata_std_df: raw intensity input file
-    :return: summary list
+    This function creates a dictionary of functions
+    to be performed on sample metadata df
+    :param raw_df: input data frame
+    :return: dictionary of data frame operations
+
     """
-    field_dict = {cs.SAMPLE_FIELD_SUMMARY_LIST[0]: len(metadata_std_df[cs.BACKGROUND_SAMPLE].unique()),
-                  cs.SAMPLE_FIELD_SUMMARY_LIST[1]: ", ".join(list(metadata_std_df)),
-                 }
-    dict_label_list = field_dict.keys()
-    return create_list_of_dict(dict_label_list, field_dict)
+    summary_dict = {cs.SAMPLE_FIELD_SUMMARY_LIST[0]: len(raw_df[cs.BACKGROUND_SAMPLE].unique()),
+                    cs.SAMPLE_FIELD_SUMMARY_LIST[1]: ", ".join(list(raw_df))}
+    return summary_dict
 
 
-def summary_raw_intensity_lcms(raw_intensity_df):
+def summary_raw_lcms(raw_df):
     """
-    This function returns summary list for lcms raw
-        intensity file
-    :param raw_intensity_df: raw intensity input file
-    :return: summary list
+    This function creates a dictionary of functions
+    to be performed on raw intensity df
+    :param raw_df: input data frame
+    :return: dictionary of data frame operations
+
     """
-    field_dict = {cs.LCMS_RAW_FIELD_SUMMARY[0]: len(raw_intensity_df[cs.NAME_COL].unique()),
-                  cs.LCMS_RAW_FIELD_SUMMARY[1]: (len(list(raw_intensity_df)) - 3),
-                  cs.LCMS_RAW_FIELD_SUMMARY[2]: raw_intensity_df.isnull().values.ravel().sum(),
-                  cs.LCMS_RAW_FIELD_SUMMARY[3]: raw_intensity_df[cs.LABEL_COL].count()}
-    dict_label_list = field_dict.keys()
-    return create_list_of_dict(dict_label_list, field_dict)
+    summary_dict = {cs.LCMS_RAW_FIELD_SUMMARY[0]: len(raw_df[cs.NAME_COL].unique()),
+                    cs.LCMS_RAW_FIELD_SUMMARY[1]: (len(list(raw_df)) - 3),
+                    cs.LCMS_RAW_FIELD_SUMMARY[2]: raw_df.isnull().values.ravel().sum(),
+                    cs.LCMS_RAW_FIELD_SUMMARY[3]: raw_df[cs.LABEL_COL].count()}
+    return summary_dict
 
 
-def lcms_metadata(meta_df):
+def summary_meta_lcms(raw_df):
     """
-    This function returns summary list for lcms
-          metadata file
-    :param meta_df: lcms metadata input file
-    :return: summary list
+
+    This function creates a dictionary of functions
+    to be performed on metadata df
+    :param raw_df: input data frame
+    :return: dictionary of data frame operations
+
     """
-    field_dict = {cs.LCMS_META_FILED_SUMMARY[0]: ", ".join(list(meta_df)),
-                  cs.LCMS_META_FILED_SUMMARY[1]: list(meta_df[[0]].count())[0],}
-    dict_label_list = field_dict.keys()
-    return create_list_of_dict(dict_label_list, field_dict)
+    summary_dict = {cs.LCMS_META_FILED_SUMMARY[0]: ", ".join(list(raw_df)),
+                    cs.LCMS_META_FILED_SUMMARY[1]: list(raw_df[[0]].count())[0]}
+    return summary_dict
+
+
+def create_summary(raw_df, df_type):
+    """
+
+    This function returns details of input df to be
+    displayed on summary tab.
+    :param raw_df: input data frame
+    :param df_type: file type of data frame
+    :return: array of fields (eg. number of rows) in the input data frame
+
+    """
+    summary_filetype_dict = {cs.RAW_MSMS: summary_raw_msms,
+                             cs.META_MSMS: summary_meta_msms,
+                             cs.SMP_MSMS: summary_smp_msms,
+                             cs.RAW_LCMS: summary_raw_lcms,
+                             cs.META_LCMS: summary_meta_lcms}
+
+    summary_field_dict = summary_filetype_dict[df_type].__call__(raw_df)
+    dict_label_list = summary_field_dict.keys()
+
+    return create_list_of_dict(dict_label_list, summary_field_dict)
