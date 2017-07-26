@@ -10,7 +10,7 @@ from corna.custom_exception import NoIntersectionError
 from corna.helpers import get_formula
 from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
-from corna.summary import create_summary
+from corna.summary import return_summary_dict
 from corna.validation_report_class import ValidationReport
 
 
@@ -475,16 +475,14 @@ def read_maven_file(maven_file_path, metadata_path):
     summary = {}
     if check_basic_validation(maven_file_path):
         input_maven_df = get_df_frm_path(maven_file_path)
-        summary[con.RAW_LCMS] = {con.SUMMARY_TITLE: con.RAW_LCMS,
-                                 con.SUMMARY: create_summary(input_maven_df, con.RAW_LCMS)}
+        summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df)
     else:
         return get_df_frm_path(), None, None, None, None
 
     if metadata_path:
         metadata_df = get_metadata_df(metadata_path)
         maven_df = filtered_data_frame(input_maven_df, metadata_df)
-        summary[con.META_LCMS] = {con.SUMMARY_TITLE: con.META_LCMS,
-                                  con.SUMMARY: create_summary(metadata_df, con.META_LCMS)}
+        summary[con.META_LCMS] = return_summary_dict(con.META_LCMS, metadata_df)
     else:
         metadata_df = get_df_frm_path()
         maven_df = input_maven_df
@@ -495,4 +493,5 @@ def read_maven_file(maven_file_path, metadata_path):
         unique_element_list = get_element_list(corrected_maven_df)
         return merged_df, validation_logs, isotracer_dict, unique_element_list, summary
     else:
+        print summary
         return corrected_maven_df, validation_logs, None, None, summary
