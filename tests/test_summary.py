@@ -67,7 +67,7 @@ def test_create_summary():
     raw_df = pd.DataFrame({'Original Filename': [1, 2],
                            'Sample Name': ['a', 'b'],
                            'Component Name': ['aa', 'bb']})
-    df_type = 'INPUT DATA'
+    df_type = 'InputData'
     assert sm.create_summary(raw_df, df_type) == [{'label': 'Number of samples', 'value': 2},
                                                   {'label': 'Number of rows', 'value': 2},
                                                   {'label': 'Number of metabolites', 'value': 2},
@@ -78,10 +78,10 @@ def test_return_summary_dict():
     raw_df = pd.DataFrame({'Original Filename': [1, 2],
                            'Sample Name': ['a', 'b'],
                            'Component Name': ['aa', 'bb']})
-    assert sm.return_summary_dict('INPUT DATA', raw_df) == {'summary': [{'value': 2, 'label': 'Number of samples'},
+    assert sm.return_summary_dict('InputData', raw_df) == {'summary': [{'value': 2, 'label': 'Number of samples'},
                                                                         {'value': 2, 'label': 'Number of rows'},
                                                                         {'value': 2, 'label': 'Number of metabolites'},
                                                                         {'value': 2, 'label': 'Number of cohorts'}],
-                                                            'title': 'INPUT DATA'}
+                                                            'title': 'InputData'}
 
 
