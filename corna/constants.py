@@ -111,10 +111,11 @@ LCMS_RAW_FIELD_SUMMARY = ['Number of metabolites', 'Number of samples', 'Number 
 LCMS_META_FILED_SUMMARY = ['Fields in metadata', 'Number of rows in metadata']
 
 ## file type
-RAW_MSMS = 'INPUT DATA'
-META_MSMS = 'METADATA'
-SMP_MSMS = 'SAMPLE DATA'
-RAW_LCMS = 'INPUTDATA'
-META_LCMS = 'METADATA'
+RAW_MSMS = 'InputData'
+META_MSMS = 'MetaData'
+SMP_MSMS = 'SampleData'
+RAW_LCMS = 'Input_Data'
+META_LCMS = 'Meta_Data'
+
 
 
