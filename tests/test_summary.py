@@ -73,3 +73,15 @@ def test_create_summary():
                                                   {'label': 'Number of metabolites', 'value': 2},
                                                   {'label': 'Number of cohorts', 'value': 2}]
 
+
+def test_return_summary_dict():
+    raw_df = pd.DataFrame({'Original Filename': [1, 2],
+                           'Sample Name': ['a', 'b'],
+                           'Component Name': ['aa', 'bb']})
+    assert sm.return_summary_dict('INPUT DATA', raw_df) == {'summary': [{'value': 2, 'label': 'Number of samples'},
+                                                                        {'value': 2, 'label': 'Number of rows'},
+                                                                        {'value': 2, 'label': 'Number of metabolites'},
+                                                                        {'value': 2, 'label': 'Number of cohorts'}],
+                                                            'title': 'INPUT DATA'}
+
+
