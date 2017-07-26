@@ -28,7 +28,7 @@ def create_list_of_dict(list_of_fields, fields_dict):
 def summary_raw_msms(raw_df):
     """
     This function creates a dictionary of functions
-    to be performed on raw intensity df
+    to be performed on input df
     :param raw_df: input data frame
     :return: dictionary of data frame operations
 
@@ -117,3 +117,17 @@ def create_summary(raw_df, df_type):
     dict_label_list = summary_field_dict.keys()
 
     return create_list_of_dict(dict_label_list, summary_field_dict)
+
+
+def return_summary_dict(df_type, df):
+    """
+    This function returns summary of type
+    {title: INPUT DATA, summary: ['number of rows': 3]}
+    :param df_type: type of df like input df, metadata df
+    :param df: data frame
+    :return: summary dictionary
+    """
+    summary_dict = {cs.SUMMARY_TITLE: df_type,
+                    cs.SUMMARY: create_summary(df, df_type)}
+
+    return summary_dict
