@@ -74,6 +74,16 @@ def test_create_summary():
                                                   {'label': 'Number of cohorts', 'value': 2}]
 
 
+def test_create_summary_none():
+    raw_df = pd.DataFrame({'OriginalFilename': [1, 2],
+                           'Sample Name': ['a', 'b'],
+                           'Component Name': ['aa', 'bb']})
+    df_type = 'InputData'
+    assert sm.create_summary(raw_df, df_type) == None
+
+
+
+
 def test_return_summary_dict():
     raw_df = pd.DataFrame({'Original Filename': [1, 2],
                            'Sample Name': ['a', 'b'],
