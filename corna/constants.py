@@ -25,6 +25,7 @@ LEVEL_0_COL = "level_0"
 LEVEL_1_COL = "level_1"
 INTENSITY_COL = 'Intensity'
 SAMPLE_COL = 'Sample'
+SAMPLE_NAME = 'Sample Name'
 PARENT_COL = 'Unlabeled Fragment'
 LABEL_COL = 'Label'
 FRAG_COL = 'frag_keys'
@@ -44,6 +45,8 @@ FORMULA_STATE_INVALID = 'formula not correct'
 COLUMN_STATE = 'state'
 COLUMN_ROW = 'row_number'
 COLUMN_NAME = 'column_name'
+COMPONENT_NAME = 'Component Name'
+NAME_COL = 'Name'
 UNLABELLED_LABEL_DICT = {'C': 0,'N': 0}
 INTENSITY_STATE_NEGATIVE = 'negative'
 INTENSITY_STATE_INVALID = 'invalid_intensity_value'
@@ -95,6 +98,24 @@ ISOTOPE_LIST = ['O17', 'O18', 'S33', 'S34', 'Si29', 'Si30']
 INDIS_ISOTOPE_COL = 'Indistinguishale_isotope'
 POOL_TOTAL_COL = 'Pool_total'
 METABOLITE_NAME = 'metab_name'
+
+##summary tab
+SUMMARY_LABEL = 'label'
+SUMMARY_VAL = 'value'
+SUMMARY_TITLE = 'title'
+SUMMARY = 'summary'
+RAW_FIELD_SUMMARY_LIST = ['Number of rows', 'Number of samples', 'Number of cohorts', 'Number of metabolites']
+META_FIELD_SUMMARY_LIST = ['Number of fragments', 'Number of unlabeled fragments', 'isotopic tracer']
+SAMPLE_FIELD_SUMMARY_LIST = ['Number of background samples', 'Fields in metadata']
+LCMS_RAW_FIELD_SUMMARY = ['Number of metabolites', 'Number of samples', 'Number of blank intensity cells', 'Number of rows']
+LCMS_META_FILED_SUMMARY = ['Fields in metadata', 'Number of rows in metadata']
+
+## file type
+RAW_MSMS = 'InputData'
+META_MSMS = 'MetaData'
+SMP_MSMS = 'SampleData'
+RAW_LCMS = 'Input_Data'
+META_LCMS = 'Meta_Data'
 
 
 

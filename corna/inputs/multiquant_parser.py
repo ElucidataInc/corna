@@ -9,6 +9,7 @@ import pandas as pd
 
 from .column_conventions import multiquant
 from corna import constants
+from corna import summary as sm
 from ..constants import INTENSITY_COL
 from corna.inputs import validation
 from ..data_model import standard_model
@@ -41,15 +42,19 @@ def get_validated_df_and_logs(input_files):
         sample_metadata_mq: instance of BASIC VALIDATION class containing
             validated_df for sample_metadata_mq file.                        
     """
+    summary = {}
     try:
         raw_mq, metadata_mq, sample_metadata_mq = get_basic_validation_instance(input_files)
         if sample_metadata_mq:
             raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
+            summary[constants.SMP_MSMS] = sm.return_summary_dict(constants.SMP_MSMS, sample_metadata_mq.df)
         else:
             raw_mq_df = raw_mq.df
         validated_raw_mq = validation.data_validation_raw_df(raw_mq_df)
+        summary[constants.RAW_MSMS] = sm.return_summary_dict(constants.RAW_MSMS, raw_mq_df)
         validated_metadata_mq = validation.data_validation_metadata_df(metadata_mq.df)
-        return validated_raw_mq, validated_metadata_mq, sample_metadata_mq
+        summary[constants.META_MSMS] = sm.return_summary_dict(constants.META_MSMS, metadata_mq.df)
+        return validated_raw_mq, validated_metadata_mq, sample_metadata_mq, summary
     except Exception as e:
         raise Exception(e)
 
