@@ -493,5 +493,4 @@ def read_maven_file(maven_file_path, metadata_path):
         unique_element_list = get_element_list(corrected_maven_df)
         return merged_df, validation_logs, isotracer_dict, unique_element_list, summary
     else:
-        print summary
         return corrected_maven_df, validation_logs, None, None, summary
