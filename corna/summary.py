@@ -113,7 +113,11 @@ def create_summary(raw_df, df_type):
                              cs.RAW_LCMS: summary_raw_lcms,
                              cs.META_LCMS: summary_meta_lcms}
 
-    summary_field_dict = summary_filetype_dict[df_type].__call__(raw_df)
+    try:
+        summary_field_dict = summary_filetype_dict[df_type].__call__(raw_df)
+    except KeyError:
+        return None
+
     dict_label_list = summary_field_dict.keys()
 
     return create_list_of_dict(dict_label_list, summary_field_dict)
