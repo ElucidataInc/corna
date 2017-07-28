@@ -156,7 +156,7 @@ def create_dict_from_isotope_label_list(isonumlist):
             get_isotope_element(isonumlist[i])
             label_dict.update({isonumlist[i]: int(isonumlist[i + 1])})
         except KeyError:
-            raise KeError('The key must be an isotope')
+            raise KeyError('The key must be an isotope')
         except ValueError:
             raise ValueError('The number of labels should be integer')
     return label_dict
