@@ -7,7 +7,7 @@ def test_get_atomic_weight():
 
 def test_get_atomic_weight_wildcard():
     with pytest.raises(KeyError) as err:
-        help.get_atomic_weight('R')
+        help.get_atomic_weight('PP')
     assert err.value.message == 'Element doesnt exist'
 
 def test_check_if_isotope_in_dict():
@@ -20,7 +20,7 @@ def test_get_isotope_details():
     assert help.get_isotope_element('C13') == 'C'
 
 def test_get_isotope_na():
-    assert help.get_isotope_na('C13') == 0.011
+    assert help.get_isotope_na('C13') == 0.0111
 
 def    test_get_isotope_mass():
     assert help.get_isotope_mass('C13') == 13
@@ -77,4 +77,4 @@ def test_get_formula():
     assert help.get_formula('C6H12O6') == {'C':6, 'H':12, 'O':6}
 
 def test_get_na_value_dict_O():
-    assert help.get_na_value_dict()['O'] == [0.99757, 0.00038, 0.00205]
+    assert help.get_na_value_dict()['O'] == [0.9976, 0.0004, 0.002]
