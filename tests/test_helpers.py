@@ -173,3 +173,9 @@ def test_merge_multiple_df():
     assert result_df.equals(df_2)
 
 
+def test_get_metabolite_fragment():
+    assert help.get_metabolite('Citrate 191/111') == 'Citrate'
+
+
+def test_first_sub_second():
+    assert help.first_sub_second([1, 2], [3, 4]) == [1, 2]
