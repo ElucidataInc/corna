@@ -81,14 +81,13 @@ def test_read_file_ext():
 
 def test_read_file_csv():
     input_file_path = os.path.join(os.path.dirname(__file__), 'test_data/Data_lcms.csv')
-    assert list(help.read_file(input_file_path)) == ['Name', 'Formula', 'Label', 'Area']
+    assert list(help.read_file(input_file_path)) == ['Label', 'Name', 'Formula', 'Area']
 
 
 def test_read_file_txt():
     input_file_path = os.path.join(os.path.dirname(__file__), 'test_data/test_data.txt')
-    assert list(help.read_file(input_file_path)) == ['Original Filename', 'Sample Name', 'Glucose Concentration',
-                                                     'Time', 'Component Name', 'Mass Info', 'Area']
-
+    assert list(help.read_file(input_file_path)) == ['Original Filename', 'Sample Name', 'Glucose Concentration', 'Time',
+                                                     'Component Name', 'Mass Info', 'Area', 'Modified']
 
 def test_filter_df_error():
     df = pd.DataFrame({'col1': [1, 2, 3], 'col2': [2, 2, 2]})
