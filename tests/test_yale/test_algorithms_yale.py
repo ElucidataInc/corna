@@ -2,13 +2,15 @@ import corna.algorithms.mimosa_nacorr as algo
 import corna.isotopomer as iso
 import tests.data_constants as data_constants
 from corna.constants import ISOTOPE_NA_MASS
+from corna.isotopomer import Infopacket
 
-parent_frag_input, daughter_frag_input,\
+parent_frag_input, daughter_frag_input, \
 fragment_dict, data_input,\
 parent_frag_unlabeled,\
 daughter_frag_unlabeled, data_unlabel,\
-corrected_fragment_dict, metabolite_frag_dict,\
-corrected_fragment_dict_dhap, corrected_fragment_dict = data_constants.algorithms_yale_constants()
+corrected_fragment_dict_1, metabolite_frag_dict,\
+corrected_fragment_dict_dhap, \
+corrected_fragment_dict = data_constants.algorithms_yale_constants()
 
 def test_na_correct_mimosa_array():
     assert algo.na_correct_mimosa_algo_array(parent_frag_input, daughter_frag_input, 1967.77,
@@ -21,7 +23,8 @@ def test_arrange_fragments_by_mass():
                                                                                       data = data_unlabel, unlabeled=True, name='2PG 185/79')}
 
 def test_na_correction_mimosa_by_fragment():
-    assert algo.na_correction_mimosa_by_fragment(fragment_dict, ISOTOPE_NA_MASS, 2) == corrected_fragment_dict
+    frag_dict = algo.na_correction_mimosa_by_fragment(fragment_dict, ISOTOPE_NA_MASS, 2)[(186.0, 79.0)]
+    assert frag_dict.data == corrected_fragment_dict[(186.0, 79.0)].data
 
 def test_na_correction_mimosa():
     test_dict = algo.na_correction_mimosa(metabolite_frag_dict)
@@ -33,3 +36,4 @@ def test_na_correction_mimosa():
         assert corrected_fragment_dict[key].data == value.data
         assert corrected_fragment_dict[key].unlabeled == value.unlabeled
         assert corrected_fragment_dict[key].name == value.name
+
