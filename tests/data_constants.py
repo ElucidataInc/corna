@@ -95,12 +95,22 @@ def algorithms_yale_constants():
 
     fragment_dict = dict(unlabeled_fragment, **input_fragment)
 
-    corrected_fragment_dict = {(186.0, 79.0): iso.Infopacket(frag=[parent_frag_input, daughter_frag_input],
-                                                             data=corrected_data_input, unlabeled=False,
-                                                             name='2PG 185/79'),
-                               (185.0, 79.0): iso.Infopacket(frag=[parent_frag_unlabeled, daughter_frag_unlabeled],
-                                                             data=corrected_data_unlabel, unlabeled=True,
-                                                             name='2PG 185/79')}
+    corrected_fragment_dict = {(186.0, 79.0): Infopacket(frag=['C3H6O7P', 'O3P'],
+                                                         data={'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': -73.459999999999994,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': -473.81999999999999,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': -1231.96,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': -112.37,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': 25.82,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': -1228.3},
+                                                         unlabeled=False, name='2PG 185/79'),
+                               (185.0, 79.0): Infopacket(frag=['C3H6O7P', 'O3P'],
+                                                         data={'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 64694.910000000003,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': 60592.709999999999,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': 61946.339999999997,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 64601.919999999998,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': 61677.68,
+                                                               'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': 59104.760000000002},
+                                                         unlabeled=True, name='2PG 185/79')}
 
     unlabeled_fragment_dhap = iso.insert_data_to_fragment_mass(
         Multiquantkey('DHAP 169/97', 'H2O4P', 'DHAP 169/97', 'C3H6O6P'), 'C13_169.0_97.0',
@@ -120,19 +130,19 @@ def algorithms_yale_constants():
          'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 1511.67,
          'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 1946.67})
 
-    corrected_data_unlabel_dhap = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': 53375.11,
-                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': 54087.88,
-                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': 54273.82,
-                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': 58447.14,
-                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 54315.14,
-                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 60936.67}
+    corrected_data_unlabel_dhap = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':  53390.610000000001,
+                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': 54103.589999999997,
+                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': 54289.580000000002,
+                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': 58464.110000000001,
+                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 54330.910000000003,
+                                   'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 60954.370000000003}
 
-    corrected_data_input_dhap = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': -384.00,
-                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': -806.37,
-                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': -412.71,
-                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': -366.16,
-                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': -190.21,
-                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 42.83}
+    corrected_data_input_dhap = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': -399.24000000000001,
+                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': -821.89999999999998,
+                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': -428.20999999999998,
+                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': -382.83999999999997,
+                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': -205.68000000000001,
+                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 25.52}
 
     parent_frag_input_dhap = input_fragment_dhap[('DHAP 170/97_170.0', 'DHAP 170/97_97.0')][0][0]
     daughter_frag_input_dhap = input_fragment_dhap[('DHAP 170/97_170.0', 'DHAP 170/97_97.0')][0][1]
