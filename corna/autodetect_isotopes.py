@@ -135,6 +135,7 @@ def add_isotopes_list(indis_ele_list):
 
     """
     temp_indis_ele_list = indis_ele_list
+    indis_ele_list_isotopes = []
     for ele in indis_ele_list:
         if ele in cs.ISOTOPE_DICT.keys():
             indis_ele_list_isotopes = list((set(temp_indis_ele_list)-set([ele]))) + list(set(cs.ISOTOPE_DICT[ele]))
