@@ -5,6 +5,7 @@ import corna.algorithms.mimosa_bgcorr as preproc
 import corna.isotopomer as iso
 from corna.constants import ISOTOPE_NA_MASS
 from corna.inputs.multiquant_parser import Multiquantkey
+from corna.isotopomer import Infopacket
 
 unlabeled_fragment = iso.insert_data_to_fragment_mass(Multiquantkey('2PG 185/79', 'O3P', '2PG 185/79', 'C3H6O7P'), 'C13_185.0_79.0',
                                                       {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':59689.272,
@@ -144,37 +145,66 @@ def test_backround_subtraction():
 def test_background():
     background_dict = preproc.background(list_of_replicates, input_fragment[('2PG 186/79_186.0', '2PG 186/79_79.0')],
                                          unlabeled_fragment[('2PG 185/79_185.0', '2PG 185/79_79.0')], isotope_dict=ISOTOPE_NA_MASS)
-    assert all(val == 777.05402400000048 for val in background_dict.values())
+    output = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 759.14724240000032,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': 759.14724240000032,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': 759.14724240000032,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 759.14724240000032,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': 759.14724240000032,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': 759.14724240000032}
+    assert background_dict == output
 
 def test_background_correction():
-    assert preproc.background_correction(replicates, sample_background, sample_data, 2) == {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 34)':  443.31,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 35)':  617.27,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)':  1968.44,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 18)':  923.35,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 82)':  1315.75,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)':  1446.55,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)':  748.07,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 50)':  1577.35,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 51)':  355.67,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)':  1926.58,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 2)':  530.95,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':  1969.75,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 83)':  1357.6,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 19)':  1795.78,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 67)':  835.71,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 66)':  838.33,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)':  661.75,
-     'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 3)':  1054.15}
+    result = preproc.background_correction(replicates, sample_background, sample_data, 0)
+    output = {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 34)': 443.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 35)': 617.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 1968.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 18)': 923.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 82)': 1316.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': 1447.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': 748.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 50)': 1577.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 51)': 356.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 1927.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 2)': 531.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': 1970.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 83)': 1358.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 19)': 1796.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 67)': 836.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 66)': 838.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': 662.0,
+              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 3)': 1054.0}
+    assert result == output
 
 
 def test_bulk_background_correction():
     test_dict = preproc.bulk_background_correction(fragment_dict, list_of_replicates, sample_background, ISOTOPE_NA_MASS, 0)
-    for key, value in test_dict.iteritems():
-        assert corrected_fragment_dict[key].data == value.data
+    assert test_dict[('2PG 185/79_185.0', '2PG 185/79_79.0')].data == {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 62608.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': 58642.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': 59951.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 62521.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': 59689.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': 57204.0}
+
+    assert test_dict[('2PG 186/79_186.0', '2PG 186/79_79.0')].data == {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 1986.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': 1464.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': 766.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 1944.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)':1988.0,
+                                                                       'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': 680.0}
+
 
 def test_met_background_correction():
     test_dict = preproc.met_background_correction(metabolite_frag_dict, list_of_replicates, sample_background)
-    for key, value in test_dict['dhap'].iteritems():
-        assert corrected_fragment_dict_dhap[key].data == value.data
-    for key, value in test_dict['2pg'].iteritems():
-        assert corrected_fragment_dict[key].data == value.data
+    assert test_dict['dhap'][('DHAP 170/97_170.0', 'DHAP 170/97_97.0')].data == {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 1529.0,
+                                                                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': 1486.0,
+                                                                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': 919.0,
+                                                                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 1964.0,
+                                                                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': 1310.0,
+                                                                                 'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': 1310.0}
+
+    assert test_dict['2pg'][('2PG 185/79_185.0', '2PG 185/79_79.0')].data == {'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 65)': 62608.0,
+                                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 49)': 58642.0,
+                                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 17)': 59951.0,
+                                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 81)': 62521.0,
+                                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 1)': 59689.0,
+                                                                              'TA_SCS-ATP BCH_19May16_1June16.wiff (sample 33)': 57204.0}

@@ -11,13 +11,21 @@ from fixtures import *
 
 
 def test_read_input_file_all_correct(get_mergedf_all_correct):
-    result_df, result_log, _, _ = maven_parser.read_maven_file(constants.MAVEN_FILE, constants.METADATA_FILE)
+    result_df, result_log, _, _, summary = maven_parser.read_maven_file(constants.MAVEN_FILE, constants.METADATA_FILE)
     test_df = get_mergedf_all_correct
     test_log = {constants.VALIDATION_WARNING: {constants.VALIDATION_ACTION: [],
                                                constants.VALIDATION_MESSAGE: []},
                 constants.VALIDATION_ERROR: []}
     assert result_log == test_log
     assert result_df.equals(test_df)
+    assert summary == {'Input_Data': {'summary': [{'value': 1, 'label': 'Number of metabolites'},
+                                                  {'value': 0, 'label': 'Number of blank intensity cells'},
+                                                  {'value': 3, 'label': 'Number of rows'},
+                                                  {'value': 1, 'label': 'Number of samples'}],
+                                      'title': 'Input_Data'},
+                       'Meta_Data': {'summary': [{'value': 'Sample, info1, info2', 'label': 'Fields in metadata'},
+                                                 {'value': 12, 'label': 'Number of rows in metadata'}],
+                                     'title': 'Meta_Data'}}
 
 
 def test_read_input_file_no_metadata(get_mergedf_no_metadata):
@@ -25,14 +33,14 @@ def test_read_input_file_no_metadata(get_mergedf_no_metadata):
     test_log = {constants.VALIDATION_WARNING: {constants.VALIDATION_ACTION: [],
                                                constants.VALIDATION_MESSAGE: []},
                 constants.VALIDATION_ERROR: []}
-    result_df, result_log, _, _ = maven_parser.read_maven_file(constants.MAVEN_FILE, None)
+    result_df, result_log, _, _, _ = maven_parser.read_maven_file(constants.MAVEN_FILE, None)
     assert result_log == test_log
     assert result_df.equals(test_df)
 
 
 def test_read_input_file_error_in_maven_file():
     maven_file_path = constants.MAVEN_FILE_INTENSITY_INCORRECT
-    result_df, result_log, _, _ = maven_parser.read_maven_file(maven_file_path, constants.METADATA_FILE)
+    result_df, result_log, _, _, _ = maven_parser.read_maven_file(maven_file_path, constants.METADATA_FILE)
 
     test_log = {constants.VALIDATION_WARNING: {
                 constants.VALIDATION_ACTION: [], constants.VALIDATION_MESSAGE: []},
@@ -46,7 +54,7 @@ def test_read_input_file_error_in_maven_file():
 
 def test_read_input_file_warning_in_maven(get_mergedf_warning):
     maven_file_path = constants.MAVEN_FILE_PATH_DUPLICATE_ENTRY
-    result_df, result_log, _, _ = maven_parser.read_maven_file(maven_file_path, constants.METADATA_FILE)
+    result_df, result_log, _, _, _ = maven_parser.read_maven_file(maven_file_path, constants.METADATA_FILE)
     test_log = {constants.VALIDATION_WARNING: {constants.VALIDATION_ACTION:
                                                    ['Row is Dropped', 'Row is Dropped'],
                                                constants.VALIDATION_MESSAGE:
@@ -102,15 +110,6 @@ def test_check_error_present():
     logs = {constants.VALIDATION_ERROR: ['There is one erroe'],
             constants.VALIDATION_WARNING: []}
     assert maven_parser.check_error_present(logs)
-
-
-def test_filtered_data_frame_empty_intersection(get_maven_file_empty_intersection, get_metadata_df):
-    maven_df = get_maven_file_empty_intersection
-    metadata_df = get_metadata_df
-
-    with pytest.raises(custom_exception.NoIntersectionError) as e:
-        maven_parser.filtered_data_frame(maven_df, metadata_df)
-    assert e.value.message == 'Atleast one sample is to be common.'
 
 
 def test_basic_validation():

@@ -18,6 +18,9 @@ INPUT_FILES = {"mq_file_path": MQ_FILE_PATH, \
                    "mq_metadata_path": MQ_METADATA_PATH, \
                    "mq_sample_metadata_path": MQ_SAMPLE_METADATA_PATH \
                    }
+INPUT_FILES_WITHOUT_METADATA = {"mq_file_path": MQ_FILE_PATH,
+                                "mq_metadata_path": MQ_METADATA_PATH,
+                                "mq_sample_metadata_path": ''}
 
 # TODO : fixtures can be defined for many constants
 def test_get_instance():
@@ -43,7 +46,7 @@ def test_get_set_from_df_column():
 
 def test_get_validated_df_and_logs():
 
-    raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser.\
+    raw_mq, metadata_mq, sample_metadata_mq, summary = multiquant_parser.\
                                                 get_validated_df_and_logs(INPUT_FILES)
 
     assert len(raw_mq.logs['warnings']['message']) == 3126
@@ -51,12 +54,25 @@ def test_get_validated_df_and_logs():
     assert raw_mq.df.shape == (11252, 6)
     assert metadata_mq.df.shape == (75, 5)
     assert sample_metadata_mq.df.shape == (96, 9)
+    assert summary == {'SampleData': {'summary': [{'value': u'Original Filename, Metadata, Sampletype, Glucose Conc, Gln/Glc, Activator, Time, Background Sample, Sample Name',
+                                                   'label': 'Fields in metadata'},
+                                                  {'value': 12, 'label': 'Number of background samples'}],
+                                      'title': 'SampleData'},
+                       'InputData': {'summary': [{'value': 116, 'label': 'Number of samples'},
+                                                 {'value': 11252, 'label': 'Number of rows'},
+                                                 {'value': 97, 'label': 'Number of metabolites'},
+                                                 {'value': 26, 'label': 'Number of cohorts'}],
+                                     'title': 'InputData'},
+                       'MetaData': {'summary': [{'value': u'C13', 'label': 'isotopic tracer'},
+                                                {'value': 75, 'label': 'Number of fragments'},
+                                                {'value': 12, 'label': 'Number of unlabeled fragments'}],
+                                    'title': 'MetaData'}}
 
 
 def test_get_validated_df_logs_without_sample_metadata():
 
-    raw_mq, metadata_mq, sample_metadata_mq = multiquant_parser. \
-        get_validated_df_and_logs(INPUT_FILES)
+    raw_mq, metadata_mq, sample_metadata_mq, summary = multiquant_parser. \
+        get_validated_df_and_logs(INPUT_FILES_WITHOUT_METADATA)
 
     assert len(raw_mq.logs['warnings']['message']) == 3126
     assert len(metadata_mq.logs['warnings']['message']) == 0
@@ -68,7 +84,7 @@ def test_get_validated_df_logs_without_sample_metadata():
 def test_filtered_raw_mq_df():
     raw_mq = basic_validation.BasicValidator(MQ_FILE_PATH)
     sample_metadata = basic_validation.BasicValidator(MQ_SAMPLE_METADATA_PATH)
+    with pytest.raises(Exception) as e:
+        multiquant_parser.get_filtered_raw_mq_df(raw_mq, sample_metadata)
 
-    df = multiquant_parser.get_filtered_raw_mq_df(raw_mq, sample_metadata)
 
-    assert df.shape == (11252, 6)

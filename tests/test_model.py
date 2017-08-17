@@ -1,5 +1,6 @@
 from __future__ import print_function
 import pytest
+import warnings
 
 from corna.model import Ion
 from corna.model import Label
@@ -10,7 +11,7 @@ class TestIonClass:
     @classmethod
     def setup_class(cls):
         cls.ion = Ion('Glucose', 'C6H12O6')
-        cls.ion_err = Ion('OrganicCompund', 'CH2R')
+        cls.ion_err = Ion('OrganicCompund', 'G')
 
     @classmethod
     def teardown_class(cls):
@@ -23,7 +24,7 @@ class TestIonClass:
         assert self.ion.number_of_atoms('C') == 6
 
     def test_number_of_atoms_wildcard(self):
-        with pytest.raises(KeyError):
+        with pytest.warns(UserWarning):
             self.ion.number_of_atoms('N')
 
     def test_molecular_weight(self):
@@ -98,15 +99,12 @@ class TestFragmentClass:
         assert err.value.message == 'Fragment should contain label information'
 
     def test_valid_label_wildcard(self):
-        with pytest.raises(KeyError) as err:
-            self.fragment.check_if_valid_label({'C12':3, 'C13':2, 'P31':2})
-        assert err.value.message == 'Labeled element not in formula'
+        with pytest.warns(UserWarning) as err:
+            self.fragment.check_if_valid_label({'C12': 3, 'C13': 2, 'P31': 2})
 
     def test_fragment_sensible_label_number(self):
-         with pytest.raises(OverflowError) as err:
+         with pytest.raises(OverflowError):
              self.fragment.check_if_valid_label({'C12':3, 'C13':4})
-         assert err.value.message == 'Number of labeled atoms must be ' \
-                                     'less than/equal to total number of atoms'
 
     def test_effective_mol_mass(self):
         assert self.fragment.effective_mol_mass('pos', None) == 149.2034
@@ -135,3 +133,4 @@ class TestFragmentClass:
 
     def test_check_if_unlabel(self):
         assert self.fragment.check_if_unlabel() == False
+
