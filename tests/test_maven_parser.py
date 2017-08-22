@@ -18,14 +18,14 @@ def test_read_input_file_all_correct(get_mergedf_all_correct):
                 constants.VALIDATION_ERROR: []}
     assert result_log == test_log
     assert result_df.equals(test_df)
-    assert summary == {'Input_Data': {'summary': [{'value': 1, 'label': 'Number of metabolites'},
+    assert summary == {'InputFile': {'summary': [{'value': 1, 'label': 'Number of metabolites'},
                                                   {'value': 0, 'label': 'Number of blank intensity cells'},
                                                   {'value': 3, 'label': 'Number of rows'},
                                                   {'value': 1, 'label': 'Number of samples'}],
-                                      'title': 'Input_Data'},
-                       'Meta_Data': {'summary': [{'value': 'Sample, info1, info2', 'label': 'Fields in metadata'},
+                                      'title': 'InputFile'},
+                       'MetadataFile': {'summary': [{'value': 'Sample, info1, info2', 'label': 'Fields in metadata'},
                                                  {'value': 12, 'label': 'Number of rows in metadata'}],
-                                     'title': 'Meta_Data'}}
+                                     'title': 'MetadataFile'}}
 
 
 def test_read_input_file_no_metadata(get_mergedf_no_metadata):
