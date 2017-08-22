@@ -114,8 +114,8 @@ LCMS_META_FILED_SUMMARY = ['Fields in metadata', 'Number of rows in metadata']
 RAW_MSMS = 'InputData'
 META_MSMS = 'MetaData'
 SMP_MSMS = 'SampleData'
-RAW_LCMS = 'Input_Data'
-META_LCMS = 'Meta_Data'
+RAW_LCMS = 'InputFile'
+META_LCMS = 'MetadataFile'
 
 
 
