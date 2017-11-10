@@ -473,16 +473,12 @@ def read_maven_file(maven_file_path, metadata_path):
              logs: dictionary of errors and warnings
              iso-tracer : dictionary of iso-tracer details
     """
-    print "In the read maven function"
-    print "**********************************"
     summary = {}
     try:
-        print "in the try block"
         input_maven_df = get_df_frm_path(maven_file_path)
         corrected_maven_df, logs = dat_alg.convert_maven_to_required_df(maven_file_path,
-                                                           'na_lcms')
-        print "hahhahahaha==========================="
-        print corrected_maven_df
+                                                           con.NA_LCMS)
+
         if metadata_path:
             metadata_df = get_metadata_df(metadata_path)
             maven_df = filtered_data_frame(input_maven_df, metadata_df)
@@ -491,7 +487,7 @@ def read_maven_file(maven_file_path, metadata_path):
         return corrected_maven_df, logs, None, None, summary
 
     except:
-        print "in the exception block"
+
         if check_basic_validation(maven_file_path):
             input_maven_df = get_df_frm_path(maven_file_path)
             summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df)

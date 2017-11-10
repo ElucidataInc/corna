@@ -1,7 +1,7 @@
 """This module helps to do validation using validation package olmonk"""
 
 from corna import constants
-from olmonk import basic_validation, data_validation
+# from olmonk import basic_validation, data_validation
 
 def get_validation_df(path, required_columns=None):
     """takes path of the file, validates it and returns result
