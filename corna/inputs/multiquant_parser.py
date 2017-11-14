@@ -15,11 +15,14 @@ from corna.inputs import validation
 from ..data_model import standard_model
 from ..helpers import read_file, get_unique_values, check_column_headers
 from ..isotopomer import bulk_insert_data_to_fragment
+from datum import algorithms as dat_alg
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
+validated_raw_tuple = namedtuple('validated_raw_mq', 'df logs')
+validated_metadata_tuple = namedtuple('validated_metadata_mq', 'df logs')
+metadata_mq_tuple = namedtuple('metadata_mq', 'df logs')
 
-
-def get_validated_df_and_logs(input_files):
+def get_validated_df_and_logs(input_files, isMetadata_present):
     """takes input files, validate it and sends back merge df
 
     This function takes input_file path in form of dictionary in which
@@ -40,26 +43,42 @@ def get_validated_df_and_logs(input_files):
         validated_metadata_mq: instance of DATA VALIDATION class containing
             logs & validated_df for metadata_mq file.
         sample_metadata_mq: instance of BASIC VALIDATION class containing
-            validated_df for sample_metadata_mq file.                        
+            validated_df for sample_metadata_mq file.
     """
     summary = {}
+
     try:
-        raw_mq, metadata_mq, sample_metadata_mq = get_basic_validation_instance(input_files)
-        if sample_metadata_mq:
+        raw_mq, metadata_mq, sample_metadata_mq = get_basic_validation_instance(
+                                                            input_files,
+                                                            isMetadata_present)
+        if not sample_metadata_mq.empty:
             raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
-            summary[constants.SMP_MSMS] = sm.return_summary_dict(constants.SMP_MSMS, sample_metadata_mq.df)
+            summary[constants.SMP_MSMS] = sm.return_summary_dict(constants.SMP_MSMS, sample_metadata_mq)
         else:
-            raw_mq_df = raw_mq.df
-        validated_raw_mq = validation.data_validation_raw_df(raw_mq_df)
+            raw_mq_df = raw_mq['df']
+        validated_raw_mq = validated_raw_tuple(
+            df = validation.data_validation_raw_df(input_files['mq_file_path'])[0],
+            logs = validation.data_validation_raw_df(input_files['mq_file_path'])[1]
+            )
         summary[constants.RAW_MSMS] = sm.return_summary_dict(constants.RAW_MSMS, raw_mq_df)
-        validated_metadata_mq = validation.data_validation_metadata_df(metadata_mq.df)
-        summary[constants.META_MSMS] = sm.return_summary_dict(constants.META_MSMS, metadata_mq.df)
+        if isMetadata_present:
+            validated_metadata_mq = validated_metadata_tuple(
+                df = validation.data_validation_metadata_df(input_files['mq_metadata_path'])[0],
+                logs = validation.data_validation_metadata_df(input_files['mq_metadata_path'])[1]
+                )
+            summary[constants.META_MSMS] = sm.return_summary_dict(constants.META_MSMS, validated_metadata_mq.df)
+        else:
+            validated_metadata_mq = metadata_mq_tuple(
+                df = metadata_mq[0],
+                logs = metadata_mq[1]
+            )
+            summary[constants.META_MSMS] = sm.return_summary_dict(constants.META_MSMS, metadata_mq[0])
         return validated_raw_mq, validated_metadata_mq, sample_metadata_mq, summary
     except Exception as e:
         raise Exception(e)
 
 
-def get_basic_validation_instance(input_files):
+def get_basic_validation_instance(input_files, is_metadata_mq_present):
     """takes input file, does basic validation and returns instance of BASIC
     VALIDATION class of olmonk package
 
@@ -84,8 +103,11 @@ def get_basic_validation_instance(input_files):
     # :TODO: move constants to constants.py file
     mq_file_path = input_files.get("mq_file_path")
     raw_mq = validation.get_validation_df(mq_file_path)
-    mq_metadata_path = input_files.get("mq_metadata_path")
-    metadata_mq = validation.get_validation_df(mq_metadata_path)
+    if is_metadata_mq_present:
+        mq_metadata_path = input_files.get("mq_metadata_path")
+        metadata_mq = validation.get_validation_df(mq_metadata_path)
+    else:
+        metadata_mq = dat_alg.na_create_fragment_mapping(raw_mq)
 
     if input_files['mq_sample_metadata_path']:
         mq_sample_metadata_path = input_files.get('mq_sample_metadata_path')
@@ -116,11 +138,11 @@ def get_filtered_raw_mq_df(raw_mq, sample_metadata_mq):
     """
     # :TODO: update doc with exceptions info
     try:
-        raw_filename_set = get_set_from_df_column(raw_mq.df, constants.ORIGINAL_FILENAME)
-        sample_metadata_mq.check_if_subset(constants.BACKGROUND_SAMPLE, raw_filename_set)
-        sample_filename_set = get_set_from_df_column(sample_metadata_mq.df, constants.ORIGINAL_FILENAME)
-        raw_mq.check_if_intersect(constants.ORIGINAL_FILENAME, sample_filename_set)
-        return raw_mq.df
+        raw_filename_set = get_set_from_df_column(raw_mq, constants.ORIGINAL_FILENAME)
+        set([constants.BACKGROUND_SAMPLE]).issubset(raw_filename_set)
+        sample_filename_set = get_set_from_df_column(sample_metadata_mq, constants.ORIGINAL_FILENAME)
+        set([constants.ORIGINAL_FILENAME]).issubset(sample_filename_set)
+        return raw_mq
     except Exception as e:
         raise Exception(e)
 

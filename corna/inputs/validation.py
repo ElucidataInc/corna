@@ -1,7 +1,10 @@
 """This module helps to do validation using validation package olmonk"""
 
-from corna import constants
-# from olmonk import basic_validation, data_validation
+from corna import constants as const
+from olmonk import ConfigDataValidator as CDV
+from olmonk import helpers as hlp
+from datum import helpers as dat_hlp
+
 
 def get_validation_df(path, required_columns=None):
     """takes path of the file, validates it and returns result
@@ -15,10 +18,10 @@ def get_validation_df(path, required_columns=None):
 
     Returns: instance of validated df
     """
+    # TODO: add olmonk 0.1.3 CDV to this
     try:
-        basic_validator = get_class_inst(basic_validation.BasicValidator, path, required_columns)
-        basic_validation_result(basic_validator)
-        return basic_validator
+        validated_df = dat_hlp.read_file(path)
+        return validated_df
     except Exception as e:
         raise Exception(e)
 
@@ -46,7 +49,7 @@ def basic_validation_result(basic_validator):
         raise Exception(e)
 
 
-def data_validation_raw_df(df):
+def data_validation_raw_df(path):
     """do datavalidtaion for raw_file_df and returns report_df
 
     It takes df of raw_mq file, creates an instance of DataValidation
@@ -61,18 +64,17 @@ def data_validation_raw_df(df):
     """
     # :TODO: update doc when this function will be updated
     try:
-        raw_df_validator = data_validation.DataValidator(df)
-        raw_df_validator.missing_data()
-        raw_df_validator.numerical(constants.AREA_COLUMN_RAWFILE)
-        raw_df_validator.pattern_match(constants.MASSINFO_COL,
-                                       constants.PATTERN_MASSINFO_COL)
-        raw_df_validator.perform_action_and_generate_logs()
-        return raw_df_validator
+        raw_mq_dict = dict(const.RAW_MQ_DICT)
+        raw_mq_dict[const.FILE_PATH] = path
+        df = hlp.get_df(path)
+        cdv = CDV(raw_mq_dict)
+        cdv.validate()
+        return cdv.dv.corrected_df, cdv.dv.logs
     except Exception as e:
         raise Exception(e)
 
 
-def data_validation_metadata_df(df):
+def data_validation_metadata_df(path):
     """do datavalidtaion for metadata_mq_df and returns instance of
     DATA VALIDATION class.
 
@@ -88,12 +90,10 @@ def data_validation_metadata_df(df):
     """
     # :TODO: update doc when this function will be updated
     try:
-        metadata_df_validator = data_validation.DataValidator(df)
-        metadata_df_validator.missing_data()
-        metadata_df_validator.chemical_formula(constants.FORMULA_COL_METADATAFILE)
-        metadata_df_validator.value_in_constant(constants.ISOTRACER_COL,
-                                                constants.ISOTOPE_VALUES)
-        metadata_df_validator.perform_action_and_generate_logs()
-        return metadata_df_validator
+        metadata_dict = dict(const.METADATA_MQ_DICT)
+        metadata_dict[const.FILE_PATH] = path
+        cdv = CDV(metadata_dict)
+        cdv.validate()
+        return cdv.dv.corrected_df, cdv.dv.logs
     except Exception as e:
         raise Exception(e)

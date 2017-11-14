@@ -6,7 +6,7 @@ import pytest
 
 # from corna.inputs.multiquant_parser import concat_txts_into_df
 from corna.inputs import multiquant_parser
-from olmonk import basic_validation, data_validation
+# from olmonk import basic_validation, data_validation
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 MQ_FILE_PATH = os.path.join(DIR_PATH, 'test_input_validation_data', "raw_mq.txt")
@@ -86,5 +86,3 @@ def test_filtered_raw_mq_df():
     sample_metadata = basic_validation.BasicValidator(MQ_SAMPLE_METADATA_PATH)
     with pytest.raises(Exception) as e:
         multiquant_parser.get_filtered_raw_mq_df(raw_mq, sample_metadata)
-
-

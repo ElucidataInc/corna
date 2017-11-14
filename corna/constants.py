@@ -117,3 +117,41 @@ META_MSMS = 'MetaData'
 SMP_MSMS = 'SampleData'
 RAW_LCMS = 'Input_Data'
 META_LCMS = 'Meta_Data'
+
+FILE_PATH = 'file_path'
+RAW_MQ_DICT = {
+    'file_path': '',
+    'required_columns': [],
+    'warnings': {
+        'missing': 'FILL_NA',
+        'duplicate': 'DROP',
+    },
+    'functions': {
+        'numerical': {'column_list': AREA_COLUMN_RAWFILE,
+                      'negative state': 'negative',
+                      'invalid state': 'invalid num'},
+        'pattern_match': {'column_name': MASSINFO_COL,
+                          'regex_pattern': PATTERN_MASSINFO_COL,
+                          'state':'not in correct format'},
+        'missing_data': {'state': 'missing'},
+    }
+
+}
+
+METADATA_MQ_DICT = {
+    'file_path': '',
+    'required_columns': [],
+    'warnings': {
+        'missing': 'FILL_NA',
+        'duplicate': 'DROP',
+    },
+    'functions': {
+        'chemical_formula': {'column_list': FORMULA_COL_METADATAFILE,
+                            'state': 'invalid formula'},
+        'value_in_constant': {'column_name': ISOTRACER_COL,
+                              'constant_list' : ISOTOPE_VALUES,
+                              'state' : 'invalid'},
+        'missing_data': {'state': 'missing'},
+        }
+
+}

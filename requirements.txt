@@ -1,6 +1,6 @@
 appdirs==1.4.3
 numpy==1.12.1
-olmonk==0.1.0
+olmonk==0.1.6
 packaging==16.8
 pandas==0.19.2
 Pint==0.7.2
