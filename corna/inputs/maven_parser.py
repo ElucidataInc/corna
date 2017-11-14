@@ -12,7 +12,7 @@ from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
 from corna.summary import return_summary_dict
 from corna.validation_report_class import ValidationReport
-# from datum import algorithms as dat_alg
+from datum import algorithms as dat_alg
 
 
 MavenKey = namedtuple('MavenKey', 'name formula')
