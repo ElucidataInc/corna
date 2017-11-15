@@ -155,3 +155,8 @@ METADATA_MQ_DICT = {
         }
 
 }
+
+MAVEN_REQUIRED_COL_LIST = ['compound', 'note', 'label', 'metaGroupId', 'groupId',
+                     'maxQuality', 'compoundId', 'expectedRtDiff',
+                     'ppmDiff', 'medRt', 'parent', 'goodPeakCount',
+                     'medMz', 'formula']
