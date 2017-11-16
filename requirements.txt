@@ -9,7 +9,7 @@ corna==0.1.11
 cornaconvertor==0.1.17
 coverage==4.4.1
 cycler==0.10.0
-datum==0.0.10
+datum==0.0.13
 decorator==4.0.9
 entrypoints==0.2.2
 funcsigs==1.0.2

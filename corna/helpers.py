@@ -315,8 +315,3 @@ def first_sub_second(a, b):
 def get_metabolite(fragment):
     metab_name = fragment.split(' ')
     return metab_name[0]
-
-def is_maven_file(df):
-    set_required = set(const.MAVEN_REQUIRED_COL_LIST)
-    set_df = set(list(df))
-    return set_required.issubset(set_df)

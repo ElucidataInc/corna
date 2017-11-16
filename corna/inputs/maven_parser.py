@@ -9,7 +9,7 @@ from corna import dataframe_validator
 from corna.custom_exception import NoIntersectionError
 from corna.helpers import get_formula
 from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
-from corna.helpers import chemformula_schema, check_column_headers, is_maven_file
+from corna.helpers import chemformula_schema, check_column_headers
 from corna.summary import return_summary_dict
 from corna.validation_report_class import ValidationReport
 from datum import algorithms as dat_alg
@@ -476,7 +476,7 @@ def read_maven_file(maven_file_path, metadata_path):
     """
     summary = {}
     input_df = dat_hlp.read_file(maven_file_path)
-    if is_maven_file(input_df):
+    if dat_hlp.is_maven_file(input_df):
         input_maven_df, logs = dat_alg.convert_maven_to_required_df(maven_file_path,
                                                             con.NA_LCMS)
         summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df )
