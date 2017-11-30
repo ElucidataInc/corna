@@ -8,7 +8,7 @@ configparser==3.5.0
 cornaconvertor==0.1.21
 coverage==4.4.1
 cycler==0.10.0
-datum==0.0.13
+datum==0.0.19
 decorator==4.0.9
 entrypoints==0.2.2
 funcsigs==1.0.2

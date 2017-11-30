@@ -66,6 +66,7 @@ VALIDATION_MSG_ROW_DROPPED = "Row is Dropped"
 VALIDATION_MSG_FILL_NA = "Missing value of columns replaced with 0"
 MOL_MASS_VALIDATE = 'Molecular weight of a metabolite cannot be zero'
 PPM_REQUIREMENT_VALIDATION = 'The ppm requirement is at the boderline for '
+MISSING_COMPONENTS = "missing_components"
 ##Keys in ISOTOPE_NA_MASS dictionary
 KEY_NA = "naValue"
 KEY_AMU = "amu"
