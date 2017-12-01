@@ -52,12 +52,12 @@ def get_validated_df_and_logs(input_files, isMetadata_present, edited_data):
                                                             input_files,
                                                             isMetadata_present,
                                                             edited_data)
-        if not sample_metadata_mq.empty:
+        if not sample_metadata_mq is None:
             raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
             summary[constants.SMP_MSMS] = sm.return_summary_dict(constants.SMP_MSMS, sample_metadata_mq)
 
         else:
-            raw_mq_df = raw_mq['df']
+            raw_mq_df = raw_mq
         validated_raw_mq = validated_raw_tuple(
             df = validation.data_validation_raw_df(input_files['mq_file_path'])[0],
             logs = validation.data_validation_raw_df(input_files['mq_file_path'])[1]
