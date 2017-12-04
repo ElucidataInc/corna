@@ -35,6 +35,9 @@ def get_validated_df_and_logs(input_files, isMetadata_present, edited_data):
             "mq_metadata_path": absolute path_of_metadata_file,
             "mq_sample_metadata_path": absolute path_of_sample_metadata_file
         }
+        isMetadata_present: boolean to check if metadata is present or not
+        edited_data: list of dictionaries containing metadata to be appended
+            to the auto-created dataframe.
 
     Returns:
         validated_raw_mq: instance of DATA VALIDATION class containing
@@ -43,6 +46,9 @@ def get_validated_df_and_logs(input_files, isMetadata_present, edited_data):
             logs & validated_df for metadata_mq file.
         sample_metadata_mq: instance of BASIC VALIDATION class containing
             validated_df for sample_metadata_mq file.
+        summary: dictionary containing all the information about data uploaded
+        missing_comp_logs: list of dictionaries containing missing Component
+            from metadata file
     """
     summary = {}
 
@@ -93,11 +99,18 @@ def get_basic_validation_instance(input_files, is_metadata_mq_present, edited_da
             "mq_metadata_path": path_of_metadata_file,
             "mq_sample_metadata_path": path_of_sample_metadata_file
         }
+        isMetadata_present: boolean to check if metadata is present or not
+        edited_data: list of dictionaries containing metadata to be appended
+            to the auto-created dataframe.
+
 
     Returns:
         raw_mq: instance of basic_validation class for raw_mq_file
         metadata_mq: instance of basic_validation class for metadata_mq file
-        sample_metadata_mq: instance of basic_validation class for sample_metadata_mq file
+        sample_metadata_mq: instance of basic_validation class for
+            sample_metadata_mq file
+        missing_comp_logs: list of dictionaries containing missing Component
+            from metadata file
     """
 
     # :TODO: add exception handling in this file
