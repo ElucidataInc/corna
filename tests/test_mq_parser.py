@@ -45,6 +45,7 @@ def test_get_set_from_df_column():
 
 
 def test_get_validated_df_and_logs():
+    # TODO: update test case as per the new params
 
     raw_mq, metadata_mq, sample_metadata_mq, summary = multiquant_parser.\
                                                 get_validated_df_and_logs(INPUT_FILES)
@@ -70,6 +71,7 @@ def test_get_validated_df_and_logs():
 
 
 def test_get_validated_df_logs_without_sample_metadata():
+    # TODO: update test case as per the new params
 
     raw_mq, metadata_mq, sample_metadata_mq, summary = multiquant_parser. \
         get_validated_df_and_logs(INPUT_FILES_WITHOUT_METADATA)

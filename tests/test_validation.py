@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 
 from corna.inputs import validation
-from olmonk import basic_validation, data_validation
+from olmonk import data_validation
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 MQ_FILE_PATH = os.path.join(DIR_PATH, 'test_input_validation_data', "raw_mq.txt")
