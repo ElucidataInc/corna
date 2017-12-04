@@ -1,6 +1,8 @@
-import pandas as pd
-
 from collections import namedtuple
+
+from datum import algorithms as dat_alg
+from datum import helpers as dat_hlp
+import pandas as pd
 
 from column_conventions import maven as maven_constants
 from corna import constants as con
@@ -12,6 +14,7 @@ from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
 from corna.summary import return_summary_dict
 from corna.validation_report_class import ValidationReport
+
 
 
 MavenKey = namedtuple('MavenKey', 'name formula')
@@ -345,7 +348,7 @@ def get_isotracer_dict(maven_df):
 
 def get_element_list(maven_df):
     """
-    This function gives list of uniqu element present in the formula 
+    This function gives list of uniqu element present in the formula
     column of maven df.
     :param maven_df:  df whose element is to be listed out
     :return: list of unique element in formula column
@@ -473,11 +476,18 @@ def read_maven_file(maven_file_path, metadata_path):
              iso-tracer : dictionary of iso-tracer details
     """
     summary = {}
-    if check_basic_validation(maven_file_path):
-        input_maven_df = get_df_frm_path(maven_file_path)
-        summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df)
+    input_df = dat_hlp.read_file(maven_file_path)
+    if dat_hlp.is_maven_file(input_df):
+        input_maven_df, logs = dat_alg.convert_maven_to_required_df(maven_file_path,
+                                                            con.NA_LCMS)
+        summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df )
+
     else:
-        return get_df_frm_path(), None, None, None, None
+        if check_basic_validation(maven_file_path):
+            input_maven_df = get_df_frm_path(maven_file_path)
+            summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df)
+        else:
+            return get_df_frm_path(), None, None, None, None
 
     if metadata_path:
         metadata_df = get_metadata_df(metadata_path)
@@ -493,4 +503,4 @@ def read_maven_file(maven_file_path, metadata_path):
         unique_element_list = get_element_list(corrected_maven_df)
         return merged_df, validation_logs, isotracer_dict, unique_element_list, summary
     else:
-        return corrected_maven_df, validation_logs, None, None, summary
+        return corrected_maven_df, logs, None, None, summary

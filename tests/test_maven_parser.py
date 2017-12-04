@@ -11,6 +11,7 @@ from fixtures import *
 
 
 def test_read_input_file_all_correct(get_mergedf_all_correct):
+    # TODO: update test case as per the new params
     result_df, result_log, _, _, summary = maven_parser.read_maven_file(constants.MAVEN_FILE, constants.METADATA_FILE)
     test_df = get_mergedf_all_correct
     test_log = {constants.VALIDATION_WARNING: {constants.VALIDATION_ACTION: [],
@@ -177,4 +178,3 @@ def test_get_extracted_element():
 def test_get_element_list():
     input_df = read_csv(constants.MAVEN_FILE)
     assert maven_parser.get_element_list(input_df) == ['C', 'H', 'O', 'N']
-
