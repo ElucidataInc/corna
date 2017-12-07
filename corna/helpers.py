@@ -1,6 +1,7 @@
 import collections
 from operator import itemgetter
 import os
+from operator import itemgetter
 
 import numpy as np
 import pandas as pd
@@ -227,23 +228,44 @@ def _merge_dfs(df1, df2):
                     on=[c.LABEL, c.SAMPLE,
                         c.NAME, c.FORMULA])
 
+def get_isotope_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
+    """
+    This function returns a dictionary of isotopes as keys with na values of the
+    isotope and their natural isotopes.
+    Args:
+        isotope_dict: constant dictionary containing natural abundance information
+        of different isotopes
+
+    Returns:
+        isotope_na_val_dict: dictionary of type {'017':[0.99757,0.00038].
+
+    """
+    isotope_na_value_dict = {}
+    NA = isotope_dict[const.KEY_NA]
+    NAT_ISO = isotope_dict[const.KEY_NAT_ISO]
+
+    for isotope in const.ISOTOPE_LIST:
+        natural_iso = NAT_ISO[isotope]
+        isotope_na_value_dict[isotope] = [NA[natural_iso], NA[isotope]]
+
+    return isotope_na_value_dict
 
 def get_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
- """
- This function returns the dictionary of default NA values (adapted from wiki)
- for all the isotopes. NA Correction matrix algorithm requires these lists in
- the order of increasing amus ([M, M+1, M+2...]) for proper creation of matrix.
- The matrix has to maintain an order such that the intensities multiplied to it
- are increasing masses, therefore order of amu is crucial.
- Args:
-     isotope_dict: constant dictionary containing natural abundance information
-     of different isotopes
- Returns:
-     na_val_dict: dictionary of type {'C':[0.99,0.11], 'H':[0.98,0.02]}. The order
-     of NA values is in increasing order of mass for example 'C': [na(C12), na(C13)]
-     'O': [na(O16), na(O17), na(O18)]
- Correction:
-    In the commit 442662f:
+    """
+    This function returns the dictionary of default NA values (adapted from wiki)
+    for all the isotopes. NA Correction matrix algorithm requires these lists in
+    the order of increasing amus ([M, M+1, M+2...]) for proper creation of matrix.
+    The matrix has to maintain an order such that the intensities multiplied to it
+    are increasing masses, therefore order of amu is crucial.
+    Args:
+         isotope_dict: constant dictionary containing natural abundance information
+        of different isotopes
+    Returns:
+         na_val_dict: dictionary of type {'C':[0.99,0.11], 'H':[0.98,0.02]}. The order
+        of NA values is in increasing order of mass for example 'C': [na(C12), na(C13)]
+        'O': [na(O16), na(O17), na(O18)]
+    Correction:
+        In the commit 442662f:
         The NA dictionary being obtained contains isotope -> NA values as list. These
         lists are sorted in decreasing order of NA values. It was assumed that this
         order would be the same as increasing order of amu. For example:
@@ -252,27 +274,30 @@ def get_na_value_dict(isotope_dict = const.ISOTOPE_NA_MASS):
         H1,H2; O16,O17 when considering only M,M+1 hence went unnoticed while doing the
         corrections. But for O16,O17,O18 the order of decreasing NA values is not same
         as increasing amus because O18 is more abundant than O17.
-    In the commit 9422427:
-        Keeping in mind the errorneous order due to incorrect way of sorting, now the
+        In the commit 9422427:
+            Keeping in mind the errorneous order due to incorrect way of sorting, now the
         sorting is done on amus and corresponding NA values are saved. therefore, for
         O the list becomes [0.99757, 0.00038, 0.00205]
-    test for this bug: test_get_na_value_dict_O in test_helpers
- """
- NA = isotope_dict[const.KEY_NA]
- amu = isotope_dict[const.KEY_AMU]
- elements = const.ISOTOPE_NA_MASS[const.KEY_ELE]
- na_val_dict = {}
- atoms = set(elements.values())
+        test for this bug: test_get_na_value_dict_O in test_helpers
+    """
+    NA = isotope_dict[const.KEY_NA]
+    amu = isotope_dict[const.KEY_AMU]
+    elements = const.ISOTOPE_NA_MASS[const.KEY_ELE]
+    na_val_dict = {}
+    atoms = set(elements.values())
+    for atom in atoms:
+         isotope_list = [isotope for isotope, iso_atom
+                     in elements.iteritems() if iso_atom == atom or isotope == atom]
+         isotope_list = list(set(isotope_list) - set(elements.values()))
+         na_val_amu = [(NA[val], amu[val]) for val in isotope_list]
+         na_val_amu.sort(key=itemgetter(1))
+         na_vals = [val_amu[0] for val_amu in na_val_amu]
+         na_val_dict[atom] = na_vals
 
- for atom in atoms:
-     isotope_list = [isotope for isotope, iso_atom
-                     in elements.iteritems() if iso_atom == atom]
-     na_val_amu = [(NA[val], amu[val]) for val in isotope_list]
-     na_val_amu.sort(key=itemgetter(1))
-     na_vals = [val_amu[0] for val_amu in na_val_amu]
-     na_val_dict[atom] = na_vals
+    na_val_dict.update(get_isotope_na_value_dict())
 
- return na_val_dict
+    return na_val_dict
+
 
 def check_column_headers(col_headers, col_names):
     """
@@ -282,7 +307,11 @@ def check_column_headers(col_headers, col_names):
     err_msg = """Required column/s not found, Column: {!r}""".format(list(set(col_names) - set(col_headers)))
     assert set(col_names).issubset(set(col_headers)), err_msg
 
+
 def first_sub_second(a, b):
     return [item for item in a if item not in b]
 
 
+def get_metabolite(fragment):
+    metab_name = fragment.split(' ')
+    return metab_name[0]

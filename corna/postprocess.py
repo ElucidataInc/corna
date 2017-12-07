@@ -1,7 +1,12 @@
 import numpy as np
+import pandas as pd
 import warnings
 
+from constants import METABOLITE_NAME
+from helpers import get_metabolite
+from inputs.column_conventions.maven import NAME, SAMPLE
 from isotopomer import Infopacket
+
 
 def zero_if_negative(num):
     """
@@ -89,12 +94,17 @@ def sum_intensities(fragments_dict):
     Returns:
         sum_dict :  dictionary of sum of all corrected intensities for each sample
     """
-    all_values = fragments_dict.values()
-    sample_names = all_values[1].data.keys()
+    all_frag_info = fragments_dict.values()
+
+    sample_names = []
+    for frag in all_frag_info:
+        sample_names.extend(frag.data.keys())
+    sample_names = list(set(sample_names))
+
     sum_dict = {}
 
     for sample_name in sample_names:
-        sum_dict[sample_name] = sum(value.data[sample_name] for value in all_values)
+        sum_dict[sample_name] = sum(value.data.get(sample_name,0) for value in all_frag_info)
 
     return sum_dict
 
@@ -152,3 +162,34 @@ def fractional_enrichment(post_processed_out, decimals=4):
         frac_enrichment_dict[metabolite] = enrichment(fragment_dict, decimals)
 
     return frac_enrichment_dict
+
+
+def pool_total(na_corr_df, colname):
+    """
+    This function calculates the pool total for each metabolite in a sample
+    Args:
+        na_corr_df: data frame with corrected intensities
+        colname: Name of the column that contains corrected intensities
+
+    Returns: grouped data frame with pool total
+
+    """
+    pool_total_df = na_corr_df.groupby(([NAME, SAMPLE]))
+    pool_total_df = pool_total_df.apply(lambda x: x[x[colname] >= 0][colname].sum())
+    return pool_total_df
+
+
+def pool_total_MSMS(na_corr_df, colname):
+    """
+    This function calculates the pool total for each metabolite in a sample
+    Args:
+        na_corr_df: data frame with corrected intensities
+        colname: Name of the column that contains corrected intensities
+
+    Returns: grouped data frame with pool total
+
+    """
+    na_corr_df[METABOLITE_NAME] = na_corr_df[NAME].apply(get_metabolite)
+    pool_total_df = na_corr_df.groupby(([METABOLITE_NAME, SAMPLE]))
+    pool_total_df = pool_total_df.apply(lambda x: x[x[colname] >= 0][colname].sum())
+    return pool_total_df

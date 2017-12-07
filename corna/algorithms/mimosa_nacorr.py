@@ -1,9 +1,9 @@
 from functools import partial
 
 import numpy as np
-from ... import helpers
-from ... isotopomer import Infopacket
-from ...constants import ISOTOPE_NA_MASS
+from corna import helpers
+from corna.isotopomer import Infopacket
+from corna.constants import ISOTOPE_NA_MASS
 
 def na_correct_mimosa_algo_array(parent_frag_m, daughter_frag_n, intensity_m_n, intensity_m_1_n, intensity_m_1_n_1,
                                  isotope, na, decimals):
@@ -61,4 +61,3 @@ def na_correction_mimosa(metabolite_frag_dict, isotope_dict=ISOTOPE_NA_MASS, dec
         na_corr_dict[metabolite] = na_correction_mimosa_by_fragment(fragments_dict, isotope_dict, decimals)
 
     return na_corr_dict
-

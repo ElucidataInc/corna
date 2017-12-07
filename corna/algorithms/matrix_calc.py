@@ -3,10 +3,11 @@ import numpy as np
 from numpy.linalg import pinv
 import pandas as pd
 
-from ... inputs.maven_parser import frag_key
-from ... helpers import get_isotope_element
-from ... data_model import standard_model
-from ... isotopomer import bulk_insert_data_to_fragment, Infopacket
+from corna.constants import ISOTOPE_NA_MASS, KEY_ELE
+from corna.inputs.maven_parser import frag_key
+from corna.helpers import get_isotope_element
+from corna.data_model import standard_model
+from corna.isotopomer import bulk_insert_data_to_fragment, Infopacket
 
 def make_expected_na_matrix(N, pvec):
     """for a single labeled element, create the matrix M
@@ -34,12 +35,12 @@ def add_indistinguishable_element(M,n,pvec):
     M: previous matrix formed by make_expected_na_matrix
     n: number of atoms of new element
     pvec: expected isotopic distribution of new element (e.g. [0.99,0.01])"""
-    max_label=(n*(len(pvec)-1))
-    M_new=np.zeros((M.shape[0]+max_label,M.shape[1]))
-    M_new[:M.shape[0],:]=M
+    max_label = (n*(len(pvec)-1))
+    M_new = np.zeros((M.shape[0]+max_label, M.shape[1]))
+    M_new[:M.shape[0], :] = M
     for i in range(M.shape[1]):
         for j in range(n):
-            M_new[:,i]=np.convolve(M_new[:,i],pvec)[:M_new.shape[0]]
+            M_new[:, i] = np.convolve(M_new[:, i], pvec)[:M_new.shape[0]]
     #print M_new
     return M_new
 
@@ -54,11 +55,13 @@ def make_correction_matrix(trac_atom, formuladict, na_dict, indist_elems):
     :TODO This function relates to issue NCT-247. Need to change the function
     in more appropriate way.
     """
-    M = make_expected_na_matrix(formuladict.get(trac_atom,0), na_dict[trac_atom])
+    M = make_expected_na_matrix(formuladict.get(trac_atom, 0), na_dict[trac_atom])
     for e in indist_elems:
         if e in formuladict:
-            M = add_indistinguishable_element(M, formuladict[e], na_dict[e])
+            e1 = ISOTOPE_NA_MASS[KEY_ELE][e]
+            M = add_indistinguishable_element(M, formuladict[e1], na_dict[e])
     return pinv(M)
+
 
 def make_all_corr_matrices(isotracers, formula_dict, na_dict, eleme_corr):
     corr_mats = {}
@@ -87,8 +90,7 @@ def fragmentsdict_model(merged_df, intensity_col):
         fragments_dict[metabolite_name] = {}
         for label, data in label_dict.iteritems():
             fragments_dict[metabolite_name].update(
-                bulk_insert_data_to_fragment(metabolite_name, {label: data},  number=True))
-
+                bulk_insert_data_to_fragment(metabolite_name, {label: data}, number=True))
     return fragments_dict
 
 
@@ -200,5 +202,5 @@ def fragmentdict_model(iso_tracers, fragments_dict, lab_samp_dict):
                     'Name, Formula or Sample not found in input data file')
 
         nacorr_fragment_dict[frag_name] = Infopacket(frag_info.frag, lab_samp_dict[lab_tup_key],
-                                           frag_info.unlabeled, frag_info.name)
+                                                     frag_info.unlabeled, frag_info.name)
     return nacorr_fragment_dict

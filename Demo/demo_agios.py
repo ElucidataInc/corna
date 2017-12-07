@@ -45,7 +45,7 @@ na_dict = corna.get_na_value_dict()
 
 # NA correction
 na_corr_dict = corna.na_correction(merge_mv_metdata, iso_tracers, eleme_corr, na_dict)
-na_corr_df = corna.convert_to_df(na_corr_dict, parent=False, colname='NA corrected')
+na_corr_df = corna.convert_to_df_nacorr(na_corr_dict, parent=False, colname='NA corrected')
 
 
 # Replace negative values by zero on NA corrected data - optional
