@@ -79,7 +79,7 @@ AREA_COLUMN_RAWFILE = ['Area']
 COLUMN_ISOTOPE_TRACER = 'Isotopic Tracer'
 ISOTOPE_VALUES = ['C13', 'N15', 'H2', 'S34']
 BORDERLINE_LIMIT = 0.5
-PATTERN_MASSINFO_COL = '\d+.\d+\s*\/\s*\d+.\d+'
+PATTERN_MASSINFO_COL = '\d+.*\d+\s*\/\s*\d+.*\d+'
 ## Dict storing mass diff between isotopes
 MASS_DIFF_DICT = {'O17': {'N': 0.0044, 'H': 0.0025, 'S34': 0.0894, 'S33': 0.0548, 'C': 0.0194, 'Si29': 0.1216, 'Si30': 0.1059},
                   'N15': {'O17': 0.0044, 'H': 0.0069, 'S34': 0.085, 'S33': 0.0504, 'O18': 0.0028, 'C': 0.015, 'Si29': 0.1172, 'Si30': 0.1015},
