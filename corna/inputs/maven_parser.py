@@ -477,17 +477,24 @@ def read_maven_file(maven_file_path, metadata_path):
     """
     summary = {}
     input_df = dat_hlp.read_file(maven_file_path)
+
     if dat_hlp.is_maven_file(input_df):
         input_maven_df, logs = dat_alg.convert_maven_to_required_df(maven_file_path,
                                                             con.NA_LCMS)
         summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df )
 
     else:
-        if check_basic_validation(maven_file_path):
+        try:
+            check_basic_validation(maven_file_path)
             input_maven_df = get_df_frm_path(maven_file_path)
+            input_validation.validate_df(input_maven_df, REQUIRED_COLUMNS_MAVEN)
             summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df)
-        else:
-            return get_df_frm_path(), None, None, None, None
+        except Exception as e:
+            logs = {"errors": [e.message], "warning": {"action":[],
+                                                      "message":[]
+                                                      }
+                    }
+            return get_df_frm_path(), logs, None, None, None
 
     if metadata_path:
         metadata_df = get_metadata_df(metadata_path)
