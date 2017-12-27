@@ -490,7 +490,7 @@ def read_maven_file(maven_file_path, metadata_path):
             input_validation.validate_df(input_maven_df, REQUIRED_COLUMNS_MAVEN)
             summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df)
         except Exception as e:
-            logs = {"errors": [e.message], "warning": {"action":[],
+            logs = {"errors": [e.message], "warnings": {"action":[],
                                                       "message":[]
                                                       }
                     }
