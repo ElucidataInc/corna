@@ -473,8 +473,6 @@ def check_duplicates_in_list(given_list):
     :param given_list:
     :return: duplicate_list : list of all the duplicates in given list
     """
-    print "inside check duplicate in list"
-    print given_list
     first_occurrence = set()
     duplicate_list = set()
     first_occurrence_add = first_occurrence.add
