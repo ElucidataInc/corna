@@ -217,14 +217,16 @@ class ValidationReport():
                 msg = []
                 for warning in self.result[row][const.VALIDATION_WARNING]:
                     msg.append("column <b>{c[0]}</b> has <b>{c[1]}</b> value".format(c=warning))
-                final_msg = "Row Number <b>%i</b> : " % row + " , ".join(msg)
+                actual_row_number = row + 2
+                final_msg = "Row Number <b>%i</b> : " % actual_row_number + " , ".join(msg)
                 self.warning_error_dict[const.VALIDATION_WARNING][const.VALIDATION_MESSAGE].append(final_msg)
 
             if self.result[row][const.VALIDATION_ERROR]:
                 msg = []
                 for error in self.result[row][const.VALIDATION_ERROR]:
                     msg.append("column <b>{c[0]}</b> has <b>{c[1]}</b> value".format(c=error))
-                final_msg = "Row Number <b>%i</b> : " % row + " , ".join(msg)
+                actual_row_number = row + 2
+                final_msg = "Row Number <b>%i</b> : " % actual_row_number + " , ".join(msg)
                 self.warning_error_dict[const.VALIDATION_ERROR].append(final_msg)
 
         return self.warning_error_dict
