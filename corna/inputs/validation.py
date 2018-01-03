@@ -1,9 +1,12 @@
 """This module helps to do validation using validation package olmonk"""
 
-from corna import constants as const
+import pandas as pd
+
+from datum import helpers as dat_hlp
 from olmonk import ConfigDataValidator as CDV
 from olmonk import helpers as hlp
-from datum import helpers as dat_hlp
+
+from corna import constants as const
 
 
 def get_validation_df(path, required_columns=None):
@@ -71,7 +74,11 @@ def data_validation_raw_df(path):
         cdv.validate()
         return cdv.dv.corrected_df, cdv.dv.logs
     except Exception as e:
-        raise Exception(e)
+        logs = logs = {"errors": [e.message], "warnings": {"action": [],
+                                                           "message": []
+                                                           }
+                       }
+        return pd.DataFrame(), logs
 
 
 def data_validation_metadata_df(path):

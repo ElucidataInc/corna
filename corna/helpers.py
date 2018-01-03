@@ -80,12 +80,13 @@ def label_dict_to_key(label_dict):
     return key
 
 
-def read_file(path):
+def read_file(path, head=0):
     """
     This function reads the input file in xls, xlsx, txt and csv
     format
     Args:
         path : path to input file
+        head: header of df, default is None
 
     Returns:
          input_file : input file in the form of pandas dataframe
@@ -94,13 +95,13 @@ def read_file(path):
     excel = ['.xls', '.xlsx']
 
     if os.path.splitext(path)[1] in excel:
-        input_file = pd.read_excel(path, header=0)
+        input_file = pd.read_excel(path, header=head)
 
     elif os.path.splitext(path)[1] == '.csv':
-        input_file = pd.read_csv(path, header=0)
+        input_file = pd.read_csv(path, header=head)
 
     elif os.path.splitext(path)[1] == '.txt':
-        input_file = pd.read_table(path, header=0)
+        input_file = pd.read_table(path, header=head)
 
     else:
         raise IOError('only csv/xls/xlsx/txt extensions are allowed')
