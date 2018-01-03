@@ -9,7 +9,7 @@ from corna import constants as con
 from corna import input_validation
 from corna import dataframe_validator
 from corna.custom_exception import NoIntersectionError
-from corna.helpers import get_formula
+from corna.helpers import get_formula, read_file
 from corna.helpers import merge_two_dfs, create_dict_from_isotope_label_list
 from corna.helpers import chemformula_schema, check_column_headers
 from corna.summary import return_summary_dict
@@ -464,6 +464,29 @@ def filtered_data_frame(maven_df, metadata_df):
     return filtered_maven_df
 
 
+def check_duplicates_in_list(given_list):
+    """
+    This function checks for duplicates in the given list.
+    It iterates over the list and whenever a new element is found,
+    we add that to first_occurrence
+
+    :param given_list:
+    :return: duplicate_list : list of all the duplicates in given list
+    """
+    print "inside check duplicate in list"
+    print given_list
+    first_occurrence = set()
+    duplicate_list = set()
+    first_occurrence_add = first_occurrence.add
+    duplicate_list_add = duplicate_list.add
+    for item in given_list:
+        if item in first_occurrence:
+            duplicate_list_add(item)
+        else:
+            first_occurrence_add(item)
+    return list(duplicate_list)
+
+
 def read_maven_file(maven_file_path, metadata_path):
     """
     This function reads maven and metadata file, convert it to df and
@@ -477,7 +500,9 @@ def read_maven_file(maven_file_path, metadata_path):
     """
     summary = {}
     input_df = dat_hlp.read_file(maven_file_path)
-
+    raw_df_with_no_header = read_file(maven_file_path, head=None)
+    list_of_columns = list(raw_df_with_no_header.iloc[0])
+    duplicate_column_list = check_duplicates_in_list(list_of_columns)
     if dat_hlp.is_maven_file(input_df):
         input_maven_df, logs = dat_alg.convert_maven_to_required_df(maven_file_path,
                                                             con.NA_LCMS)
@@ -508,6 +533,11 @@ def read_maven_file(maven_file_path, metadata_path):
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
         merged_df = get_merge_df(corrected_maven_df, metadata_df)
         unique_element_list = get_element_list(corrected_maven_df)
+        if duplicate_column_list:
+            duplicate_message = "Found column " + ','.join(duplicate_column_list) + " are duplicated"
+            action_mesaage = "Column are renamed and appended"
+            validation_logs['warnings']['message'].append(duplicate_message)
+            validation_logs['warnings']['action'].append(action_mesaage)
         return merged_df, validation_logs, isotracer_dict, unique_element_list, summary
     else:
-        return corrected_maven_df, logs, None, None, summary
+        return corrected_maven_df, validation_logs, None, None, summary
