@@ -170,6 +170,13 @@ def get_set_from_df_column(df, col_name):
     return set(list(df[col_name]))
 
 
+def split_to_float(mass_info):
+    mass_list = mass_info.split("/")
+    float_mass_list = [str(float(x)) for x in mass_list]
+    edited_mass_info = "/".join((float_mass_list))
+    return edited_mass_info
+
+
 def mq_merge_meta(input_data, metadata):
     """
     This function combines the MQ input file dataframe and the metadata
@@ -188,11 +195,12 @@ def mq_merge_meta(input_data, metadata):
         merged_df = input_data.merge(metadata, how='inner',
                                      left_on=multiquant.MQ_FRAGMENT,
                                      right_on=multiquant.MQ_FRAGMENT)
+        merged_df[multiquant.MASSINFO] = merged_df[multiquant.MASSINFO].apply(lambda x: split_to_float(x))
         if merged_df.empty:
             raise Exception('Empty Merge, no common entries to process, please check input files')
     except KeyError:
         raise KeyError('Missing columns: ' + multiquant.MQ_FRAGMENT)
-    merged_df[multiquant.MASSINFO] = merged_df[multiquant.MASSINFO].str.replace(' / ', "_")
+    merged_df[multiquant.MASSINFO] = merged_df[multiquant.MASSINFO].str.replace('/', "_")
     return merged_df
 
 
