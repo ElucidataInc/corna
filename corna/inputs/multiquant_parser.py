@@ -171,6 +171,20 @@ def get_set_from_df_column(df, col_name):
 
 
 def split_to_float(mass_info):
+    """
+    This function takes a string splits it around /
+    and converts the value into float to create labels in
+    the format 76.0/30.0.
+
+    Paramter
+    ---------
+        mass_info: string
+            mass info of the metabolite
+    return
+    -------
+        edited_mass_info: string
+            changed mass_info with float values
+    """
     mass_list = mass_info.split("/")
     float_mass_list = [str(float(x)) for x in mass_list]
     edited_mass_info = "/".join((float_mass_list))
