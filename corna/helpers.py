@@ -316,3 +316,24 @@ def first_sub_second(a, b):
 def get_metabolite(fragment):
     metab_name = fragment.split(' ')
     return metab_name[0]
+
+
+def check_duplicates_in_list(given_list):
+    """
+    This function checks for duplicates in the given list.
+    It iterates over the list and whenever a new element is found,
+    we add that to first_occurrence
+
+    :param given_list:
+    :return: duplicate_list : list of all the duplicates in given list
+    """
+    first_occurrence = set()
+    duplicate_list = set()
+    first_occurrence_add = first_occurrence.add
+    duplicate_list_add = duplicate_list.add
+    for item in given_list:
+        if item in first_occurrence:
+            duplicate_list_add(item)
+        else:
+            first_occurrence_add(item)
+    return list(duplicate_list)

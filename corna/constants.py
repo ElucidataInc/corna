@@ -48,6 +48,7 @@ COLUMN_NAME = 'column_name'
 COMPONENT_NAME = 'Component Name'
 NAME_COL = 'Name'
 NA_LCMS = 'na_lcms'
+NA_MSMS = 'na_msms'
 UNLABELLED_LABEL_DICT = {'C': 0,'N': 0}
 INTENSITY_STATE_NEGATIVE = 'negative'
 INTENSITY_STATE_INVALID = 'invalid_intensity_value'

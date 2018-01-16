@@ -5,6 +5,7 @@ import os
 import warnings
 
 from datum import algorithms as dat_alg
+from datum import helpers as dat_hlp
 import pandas as pd
 
 from .column_conventions import multiquant
@@ -13,7 +14,8 @@ from corna import summary as sm
 from ..constants import INTENSITY_COL
 from corna.inputs import validation
 from ..data_model import standard_model
-from ..helpers import read_file, get_unique_values, check_column_headers
+from ..helpers import read_file, get_unique_values, check_column_headers,\
+                     check_duplicates_in_list
 from ..isotopomer import bulk_insert_data_to_fragment
 
 Multiquantkey = namedtuple('MultiquantKey', 'name formula parent parent_formula')
@@ -51,22 +53,25 @@ def get_validated_df_and_logs(input_files, isMetadata_present, edited_data):
             from metadata file
     """
     summary = {}
-
     try:
         raw_mq, metadata_mq, sample_metadata_mq, missing_comp_logs = get_basic_validation_instance(
                                                             input_files,
                                                             isMetadata_present,
                                                             edited_data)
+        print raw_mq.to_string(index=False)
+        raw_mq.to_csv("/Users/harshit/Downloads/conv_test.csv")
         if not sample_metadata_mq is None:
             raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
             summary[constants.SMP_MSMS] = sm.return_summary_dict(constants.SMP_MSMS, sample_metadata_mq)
 
         else:
             raw_mq_df = raw_mq
+
         validated_raw_mq = validated_raw_tuple(
             df = validation.data_validation_raw_df(input_files['mq_file_path'])[0],
             logs = validation.data_validation_raw_df(input_files['mq_file_path'])[1]
             )
+
         summary[constants.RAW_MSMS] = sm.return_summary_dict(constants.RAW_MSMS, raw_mq_df)
         if isMetadata_present:
             validated_metadata_mq = validated_metadata_tuple(
@@ -118,6 +123,9 @@ def get_basic_validation_instance(input_files, is_metadata_mq_present, edited_da
     missing_comp_logs = {}
     mq_file_path = input_files.get("mq_file_path")
     raw_mq = validation.get_validation_df(mq_file_path)
+    if dat_hlp.is_maven_file_msms(raw_mq):
+        raw_mq, logs = dat_alg.convert_maven_to_required_df(mq_file_path,
+                                                            constants.NA_MSMS)
     if is_metadata_mq_present:
         mq_metadata_path = input_files.get("mq_metadata_path")
         metadata_mq = validation.get_validation_df(mq_metadata_path)
