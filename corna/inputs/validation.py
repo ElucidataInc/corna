@@ -52,7 +52,7 @@ def basic_validation_result(basic_validator):
         raise Exception(e)
 
 
-def data_validation_raw_df(path):
+def data_validation_raw_df(input_df):
     """do datavalidtaion for raw_file_df and returns report_df
 
     It takes df of raw_mq file, creates an instance of DataValidation
@@ -68,13 +68,12 @@ def data_validation_raw_df(path):
     # :TODO: update doc when this function will be updated
     try:
         raw_mq_dict = dict(const.RAW_MQ_DICT)
-        raw_mq_dict[const.FILE_PATH] = path
-        df = hlp.get_df(path)
+        raw_mq_dict["df"] = input_df
         cdv = CDV(raw_mq_dict)
         cdv.validate()
         return cdv.dv.corrected_df, cdv.dv.logs
     except Exception as e:
-        logs = logs = {"errors": [e.message], "warnings": {"action": [],
+        logs = {"errors": [e.message], "warnings": {"action": [],
                                                            "message": []
                                                            }
                        }

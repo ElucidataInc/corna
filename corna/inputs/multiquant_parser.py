@@ -58,20 +58,16 @@ def get_validated_df_and_logs(input_files, isMetadata_present, edited_data):
                                                             input_files,
                                                             isMetadata_present,
                                                             edited_data)
-        print raw_mq.to_string(index=False)
-        raw_mq.to_csv("/Users/harshit/Downloads/conv_test.csv")
         if not sample_metadata_mq is None:
             raw_mq_df = get_filtered_raw_mq_df(raw_mq, sample_metadata_mq)
             summary[constants.SMP_MSMS] = sm.return_summary_dict(constants.SMP_MSMS, sample_metadata_mq)
 
         else:
             raw_mq_df = raw_mq
-
         validated_raw_mq = validated_raw_tuple(
-            df = validation.data_validation_raw_df(input_files['mq_file_path'])[0],
-            logs = validation.data_validation_raw_df(input_files['mq_file_path'])[1]
+            df = validation.data_validation_raw_df(raw_mq_df)[0],
+            logs = validation.data_validation_raw_df(raw_mq_df)[1]
             )
-
         summary[constants.RAW_MSMS] = sm.return_summary_dict(constants.RAW_MSMS, raw_mq_df)
         if isMetadata_present:
             validated_metadata_mq = validated_metadata_tuple(
@@ -126,6 +122,7 @@ def get_basic_validation_instance(input_files, is_metadata_mq_present, edited_da
     if dat_hlp.is_maven_file_msms(raw_mq):
         raw_mq, logs = dat_alg.convert_maven_to_required_df(mq_file_path,
                                                             constants.NA_MSMS)
+
     if is_metadata_mq_present:
         mq_metadata_path = input_files.get("mq_metadata_path")
         metadata_mq = validation.get_validation_df(mq_metadata_path)

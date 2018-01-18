@@ -122,7 +122,7 @@ META_LCMS = 'Meta_Data'
 
 FILE_PATH = 'file_path'
 RAW_MQ_DICT = {
-    'file_path': '',
+    'file_path': None,
     'required_columns': [],
     'warnings': {
         'missing': 'FILL_NA',
