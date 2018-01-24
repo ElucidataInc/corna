@@ -4,6 +4,8 @@ import dataframe_validator
 import pandas as pd
 import re
 
+from olmonk import ConfigDataValidator as CDV
+
 from helpers import chemformula_schema,get_formula
 from inputs.column_conventions import maven
 
@@ -48,6 +50,38 @@ def validate_df(df, required_columns_name=None):
         raise custom_exception.MissingRequiredColumnError(missing_columns)
 
     return True
+
+
+def validate_maven_file(input_maven_df):
+    """
+    Olmonk validation for the maven file input to 
+    the read_maven file. 
+    
+    Parameter
+    ---------
+        input_maven_df: dataframe
+
+    Return
+    -------
+        corrected_dataframe: dataframe
+        logs: dict: error logs
+    """
+
+    try:
+        maven_dict = maven.MAVEN_DICT
+        maven_dict["df"] = input_maven_df
+        cdv = CDV(maven_dict)
+        cdv.validate()
+        return cdv.dv.corrected_df, cdv.dv.logs
+    except Exception as e:
+        logs = {"errors": [e.message], "warnings": {"action": [],
+                                                    "message": []
+                                                    }
+                       }
+        return pd.DataFrame(), logs
+
+
+
 
 
 @custom_exception.handleError

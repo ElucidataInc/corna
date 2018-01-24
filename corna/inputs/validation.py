@@ -74,9 +74,9 @@ def data_validation_raw_df(input_df):
         return cdv.dv.corrected_df, cdv.dv.logs
     except Exception as e:
         logs = {"errors": [e.message], "warnings": {"action": [],
-                                                           "message": []
-                                                           }
-                       }
+                                                    "message": []
+                                                    }
+                }
         return pd.DataFrame(), logs
 
 

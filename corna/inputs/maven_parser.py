@@ -511,8 +511,12 @@ def read_maven_file(maven_file_path, metadata_path):
             check_basic_validation(maven_file_path)
             input_maven_df = get_df_frm_path(maven_file_path)
             input_validation.validate_df(input_maven_df, REQUIRED_COLUMNS_MAVEN)
+            corrected_maven_df, validation_logs = get_corrected_maven_df(input_maven_df)
+            if validation_logs['errors']:
+                return get_df_frm_path(), validation_logs, None, None, None
             summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df)
         except Exception as e:
+            print "exc"
             logs = {"errors": [e.message], "warnings": {"action":[],
                                                       "message":[]
                                                       }
@@ -526,7 +530,6 @@ def read_maven_file(maven_file_path, metadata_path):
     else:
         metadata_df = get_df_frm_path()
         maven_df = input_maven_df
-    corrected_maven_df, validation_logs = get_corrected_maven_df(maven_df)
     if not check_error_present(validation_logs):
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
         merged_df = get_merge_df(corrected_maven_df, metadata_df)

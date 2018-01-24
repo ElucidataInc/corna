@@ -36,7 +36,7 @@ VALID_STATE = 'correct'
 MISSING_STATE = 'missing'
 DUPLICATE_STATE = 'duplicate'
 LABEL_STATE_INVALID = 'invalid label data'
-LABEL_STATE_NOT_CORRECT = 'label not correct'
+LABEL_STATE_NOT_CORRECT = 'a required format "C13-Label-1"'
 LABEL_STATE_NOT_FORMULA = 'label_not_in_formula'
 LABEL_STATE_NUMBER_MORE_FORMULA = 'element_in_label_more_than_formula'
 ELEMENT_LIST = set(['C','N','H','S', 'O'])
@@ -123,7 +123,7 @@ META_LCMS = 'Meta_Data'
 FILE_PATH = 'file_path'
 RAW_MQ_DICT = {
     'file_path': None,
-    'required_columns': [],
+    'required_columns': ['Original Filename'],
     'warnings': {
         'missing': 'FILL_NA',
         'duplicate': 'DROP',
@@ -137,7 +137,6 @@ RAW_MQ_DICT = {
                           'state':'not in correct format'},
         'missing_data': {'state': 'missing'},
     }
-
 }
 
 METADATA_MQ_DICT = {

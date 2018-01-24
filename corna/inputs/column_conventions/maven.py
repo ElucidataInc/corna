@@ -3,3 +3,21 @@ NAME = 'Name'
 FORMULA = 'Formula'
 LABEL = 'Label'
 SAMPLE = 'Sample'
+
+REQUIRED_COLUMNS = [NAME, LABEL, FORMULA]
+
+LABEL_COL_PATTERN =  '([A-Z]\d\d)|([A-Z]\d\d)((\sPARENT)|(\-label-\d|(\-\d)))'
+
+MAVEN_DICT = {
+    'file_path': None,
+    'required_columns': REQUIRED_COLUMNS,
+    'warnings': {
+        'missing': 'FILL_NA',
+        'duplicate': 'DROP',
+    },
+    'functions': {
+        'chemical_formula': {'column_list': [FORMULA],
+                            'state': 'invalid formula'},
+        'missing_data': {'state': 'missing'},
+    }
+}
