@@ -5,8 +5,13 @@ LABEL = 'Label'
 SAMPLE = 'Sample'
 
 REQUIRED_COLUMNS = [NAME, LABEL, FORMULA]
-
+NAME_COL_PATTERN = '^([a-zA-Z0-9_\s\-]*)$'
 LABEL_COL_PATTERN =  '([A-Z]\d\d)|([A-Z]\d\d)((\sPARENT)|(\-label-\d|(\-\d)))'
+
+MAVEN_OUTPUT_REQUIRED_COLS = ['compound', 'label', 'note', 'IsotopeLabel', 'metaGroupId', 'groupId',
+                     'maxQuality', 'compoundId', 'expectedRtDiff',
+                     'ppmDiff', 'medRt', 'parent', 'goodPeakCount',
+                     'medMz', 'formula']
 
 MAVEN_DICT = {
     'file_path': None,
@@ -18,6 +23,9 @@ MAVEN_DICT = {
     'functions': {
         'chemical_formula': {'column_list': [FORMULA],
                             'state': 'invalid formula'},
+        'pattern_match': {'column_name': NAME,
+                          'regex_pattern': NAME_COL_PATTERN,
+                          'state':'not in correct format'},
         'missing_data': {'state': 'missing'},
     }
 }
