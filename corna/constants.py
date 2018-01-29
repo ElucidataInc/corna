@@ -81,6 +81,7 @@ COLUMN_ISOTOPE_TRACER = 'Isotopic Tracer'
 ISOTOPE_VALUES = ['C13', 'N15', 'H2', 'S34']
 BORDERLINE_LIMIT = 0.5
 PATTERN_MASSINFO_COL = '\d+.*\d+\s*\/\s*\d+.*\d+'
+SAMPLE_NAME_COL_PATTERN = '^([a-zA-Z0-9_\s\-]*)$'
 ## Dict storing mass diff between isotopes
 MASS_DIFF_DICT = {'O17': {'N': 0.0044, 'H': 0.0025, 'S34': 0.0894, 'S33': 0.0548, 'C': 0.0194, 'Si29': 0.1216, 'Si30': 0.1059},
                   'N15': {'O17': 0.0044, 'H': 0.0069, 'S34': 0.085, 'S33': 0.0504, 'O18': 0.0028, 'C': 0.015, 'Si29': 0.1172, 'Si30': 0.1015},
@@ -121,6 +122,9 @@ RAW_LCMS = 'Input_Data'
 META_LCMS = 'Meta_Data'
 
 FILE_PATH = 'file_path'
+
+SAMPLE_METADATA_REQUIRED_COLS = ['Original Filename', 'Sample Name', 'Background Sample',\
+                                 'Phenotype', 'Sample_no', 'Time Course']
 RAW_MQ_DICT = {
     'file_path': None,
     'required_columns': ['Original Filename'],
@@ -135,6 +139,11 @@ RAW_MQ_DICT = {
         'pattern_match': {'column_name': MASSINFO_COL,
                           'regex_pattern': PATTERN_MASSINFO_COL,
                           'state':'not in correct format'},
+        'pattern_match': {
+            'column_name': SAMPLE_NAME,
+            'regex_pattern': SAMPLE_NAME_COL_PATTERN,
+            'state': 'not in correct format'
+        },
         'missing_data': {'state': 'missing'},
     }
 }
@@ -155,4 +164,18 @@ METADATA_MQ_DICT = {
         'missing_data': {'state': 'missing'},
         }
 
+}
+
+SAMPLE_METADATA_DICT = {
+    'file_path': '',
+    'required_columns': SAMPLE_METADATA_REQUIRED_COLS,
+    'warnings': {
+        'missing': 'FILL_NA',
+        'duplicate': 'DROP',
+    },
+    'functions': {
+        'chemical_formula': {'column_list': ORIGINAL_FILENAME,
+                            'state': 'invalid formula'},
+        'missing_data': {'state': 'missing'},
+        }
 }

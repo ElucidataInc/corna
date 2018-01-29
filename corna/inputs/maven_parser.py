@@ -501,26 +501,30 @@ def read_maven_file(maven_file_path, metadata_path):
     raw_df_with_no_header = read_file(maven_file_path, head=None)
     list_of_columns = list(raw_df_with_no_header.iloc[0])
     duplicate_column_list = check_duplicates_in_list(list_of_columns)
-    if dat_hlp.is_maven_file(input_df):
-        input_maven_df, logs = dat_alg.convert_maven_to_required_df(maven_file_path,
+    input_col_set = set(list(input_df))
+    diff_set = list(set(maven_constants.MAVEN_OUTPUT_REQUIRED_COLS) - input_col_set)
+    if dat_hlp.is_maven_file(input_df) or len(diff_set) != 15:
+        corrected_maven_df, validation_logs = dat_alg.convert_maven_to_required_df(maven_file_path,
                                                             con.NA_LCMS)
-        summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df )
-
+        if validation_logs[con.VALIDATION_ERROR]:
+            return get_df_frm_path(), validation_logs, None, None, None
+        summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, corrected_maven_df )
     else:
         try:
             check_basic_validation(maven_file_path)
             input_maven_df = get_df_frm_path(maven_file_path)
             input_validation.validate_df(input_maven_df, REQUIRED_COLUMNS_MAVEN)
             corrected_maven_df, validation_logs = get_corrected_maven_df(input_maven_df)
-            if validation_logs['errors']:
+            logs = input_validation.validate_maven_file(input_maven_df)[1]
+            if logs[con.VALIDATION_ERROR] or validation_logs[con.VALIDATION_ERROR]:
+                validation_logs[con.VALIDATION_ERROR] = validation_logs[con.VALIDATION_ERROR] + logs[con.VALIDATION_ERROR]
                 return get_df_frm_path(), validation_logs, None, None, None
-            summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, input_maven_df)
+            summary[con.RAW_LCMS] = return_summary_dict(con.RAW_LCMS, corrected_maven_df)
         except Exception as e:
-            print "exc"
-            logs = {"errors": [e.message], "warnings": {"action":[],
-                                                      "message":[]
-                                                      }
+            logs = {con.VALIDATION_ERROR: [e.message], con.VALIDATION_WARNING: {"action":[],
+                    con.VALIDATION_MESSAGE:[]
                     }
+                }
             return get_df_frm_path(), logs, None, None, None
 
     if metadata_path:
@@ -529,7 +533,7 @@ def read_maven_file(maven_file_path, metadata_path):
         summary[con.META_LCMS] = return_summary_dict(con.META_LCMS, metadata_df)
     else:
         metadata_df = get_df_frm_path()
-        maven_df = input_maven_df
+        maven_df = corrected_maven_df
     if not check_error_present(validation_logs):
         isotracer_dict = get_isotracer_dict(corrected_maven_df)
         merged_df = get_merge_df(corrected_maven_df, metadata_df)
