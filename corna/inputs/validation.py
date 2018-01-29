@@ -103,3 +103,70 @@ def data_validation_metadata_df(path):
         return cdv.dv.corrected_df, cdv.dv.logs
     except Exception as e:
         raise Exception(e)
+
+
+def data_validation_sample_metadata_df(path):
+    """do datavalidtaion for metadata_mq_df and returns instance of
+    DATA VALIDATION class.
+
+    It takes df of metadata_mq file, creates an instance of DataValidation
+    using this df. It then does validation related to file and returns
+    the report_df.
+
+    Args:
+        df: metadata_mq_file df
+
+    Returns:
+        report_df contains report of error & warning in this df
+    """
+    # :TODO: update doc when this function will be updated
+    try:
+        sample_metadata_dict = dict(const.SAMPLE_METADATA_DICT)
+        sample_metadata_dict[const.FILE_PATH] = path
+        cdv = CDV(sample_metadata_dict)
+        cdv.validate()
+        return cdv.dv.corrected_df, cdv.dv.logs
+    except Exception as e:
+        raise Exception(e)
+
+
+def data_validation_metadata_df(path):
+    """do datavalidtaion for metadata_mq_df and returns instance of
+    DATA VALIDATION class.
+
+    It takes df of metadata_mq file, creates an instance of DataValidation
+    using this df. It then does validation related to file and returns
+    the report_df.
+
+    Args:
+        df: metadata_mq_file df
+
+    Returns:
+        report_df contains report of error & warning in this df
+    """
+    # :TODO: update doc when this function will be updated
+    try:
+        sample_metadata_dict = dict(const.SAMPLE_METADATA_DICT)
+        sample_metadata_dict[const.FILE_PATH] = path
+        cdv = CDV(sample_metadata_dict)
+        cdv.validate()
+        return cdv.dv.corrected_df, cdv.dv.logs
+    except Exception as e:
+        logs = {"errors": [e.message], "warnings": {"action": [],
+                                                    "message": []
+                                                    }
+                }
+        return pd.DataFrame(), logs
+
+
+
+def find_missing_samples(raw_df, meta_sample_df):
+    """
+    """
+    raw_samples_set = set(raw_df[const.SAMPLE_NAME])
+    meta_sample_set = set(meta_sample_df[const.SAMPLE_NAME])
+    raw_missing_samples = raw_samples_set - meta_sample_set
+    meta_missing_samples = meta_sample_set - raw_samples_set
+    missing_sample_logs = {'raw_missing_samples': raw_samples_set, 'meta_missing_samples': meta_sample_set}
+    return missing_sample_logs
+

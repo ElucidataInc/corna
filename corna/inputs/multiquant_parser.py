@@ -134,6 +134,7 @@ def get_basic_validation_instance(input_files, is_metadata_mq_present, edited_da
     if input_files['mq_sample_metadata_path']:
         mq_sample_metadata_path = input_files.get('mq_sample_metadata_path')
         sample_metadata_mq = validation.get_validation_df(mq_sample_metadata_path)
+
     else:
         sample_metadata_mq = None
     return raw_mq, metadata_mq, sample_metadata_mq, missing_comp_logs
