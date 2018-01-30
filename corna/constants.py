@@ -207,7 +207,7 @@ SAMPLE_METADATA_REQUIRED_COLS = ['Original Filename', 'Sample Name', 'Background
 METADATA_MQ_REQUIRED_COLS = ['Component Name', 'Unlabeled Fragment', 'Isotopic Tracer', 'Name', 'Formula',
                              'Parent Formula']
 
-RAW_FILE_REQUIRED_COLS = ['Original Filename', 'Area', 'Mass Info', 'Sample Name', 'Component Name'],
+RAW_FILE_REQUIRED_COLS = ['Original Filename', 'Area', 'Mass Info', 'Sample Name', 'Component Name']
 
 RAW_MQ_DICT = {
     'file_path': None,
