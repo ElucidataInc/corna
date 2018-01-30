@@ -8,7 +8,7 @@ configparser==3.5.0
 cornaconvertor==0.1.21
 coverage==4.4.1
 cycler==0.10.0
-datum==0.0.23
+datum==0.0.33
 decorator==4.0.9
 entrypoints==0.2.2
 funcsigs==1.0.2
@@ -20,7 +20,7 @@ MarkupSafe==0.23
 mistune==0.7.2
 mock==2.0.0
 numpy==1.12.1
-olmonk==0.1.6
+olmonk==0.0.95
 packaging==16.8
 pandas==0.19.2
 pathlib2==2.1.0

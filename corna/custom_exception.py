@@ -27,7 +27,7 @@ class DataFrameEmptyError(Exception):
 
 class MissingRequiredColumnError(Exception):
     def __init__(self, column_list):
-        self.message="The required column %s are not present" % ','.join(column_list)
+        self.message="Missing or Misspelled column(s): %s Kindly check and retry." % ','.join(column_list)
 
 class NoIntersectionError(Exception):
     def __init__(self, arg = 'Atleast one sample is to be common.'):

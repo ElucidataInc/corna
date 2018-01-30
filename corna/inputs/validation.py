@@ -102,35 +102,14 @@ def data_validation_metadata_df(path):
         cdv.validate()
         return cdv.dv.corrected_df, cdv.dv.logs
     except Exception as e:
-        raise Exception(e)
+        logs = {"errors": [e.message], "warnings": {"action": [],
+                                                    "message": []
+                                                    }
+                }
+        return pd.DataFrame(), logs
 
 
 def data_validation_sample_metadata_df(path):
-    """do datavalidtaion for metadata_mq_df and returns instance of
-    DATA VALIDATION class.
-
-    It takes df of metadata_mq file, creates an instance of DataValidation
-    using this df. It then does validation related to file and returns
-    the report_df.
-
-    Args:
-        df: metadata_mq_file df
-
-    Returns:
-        report_df contains report of error & warning in this df
-    """
-    # :TODO: update doc when this function will be updated
-    try:
-        sample_metadata_dict = dict(const.SAMPLE_METADATA_DICT)
-        sample_metadata_dict[const.FILE_PATH] = path
-        cdv = CDV(sample_metadata_dict)
-        cdv.validate()
-        return cdv.dv.corrected_df, cdv.dv.logs
-    except Exception as e:
-        raise Exception(e)
-
-
-def data_validation_metadata_df(path):
     """do datavalidtaion for metadata_mq_df and returns instance of
     DATA VALIDATION class.
 
@@ -157,7 +136,6 @@ def data_validation_metadata_df(path):
                                                     }
                 }
         return pd.DataFrame(), logs
-
 
 
 def find_missing_samples(raw_df, meta_sample_df):

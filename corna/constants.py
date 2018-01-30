@@ -203,6 +203,10 @@ FILE_PATH = 'file_path'
 
 SAMPLE_METADATA_REQUIRED_COLS = ['Original Filename', 'Sample Name', 'Background Sample',\
                                  'Phenotype', 'Sample_no', 'Time Course']
+
+METADATA_MQ_REQUIRED_COLS = ['Component Name', 'Unlabeled Fragment', 'Isotopic Tracer', 'Name', 'Formula',
+                             'Parent Formula']
+
 RAW_MQ_DICT = {
     'file_path': None,
     'required_columns': ['Original Filename'],
@@ -217,18 +221,13 @@ RAW_MQ_DICT = {
         'pattern_match': {'column_name': MASSINFO_COL,
                           'regex_pattern': PATTERN_MASSINFO_COL,
                           'state':'not in correct format'},
-        'pattern_match': {
-            'column_name': SAMPLE_NAME,
-            'regex_pattern': SAMPLE_NAME_COL_PATTERN,
-            'state': 'not in correct format'
-        },
         'missing_data': {'state': 'missing'},
     }
 }
 
 METADATA_MQ_DICT = {
     'file_path': '',
-    'required_columns': [],
+    'required_columns': METADATA_MQ_REQUIRED_COLS,
     'warnings': {
         'missing': 'FILL_NA',
         'duplicate': 'DROP',
