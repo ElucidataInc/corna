@@ -60,7 +60,7 @@ six==1.10.0
 subprocess32==3.2.7
 terminado==0.6
 texttable==0.8.4
-tornado==4.3
+tornado==6.3.2
 traitlets==4.2.1
 widgetsnbextension==1.2.2
 xlrd==1.0.0
